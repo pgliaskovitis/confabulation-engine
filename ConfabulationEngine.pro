@@ -31,7 +31,9 @@ SOURCES += \
     KnowledgeManager.cpp \
     SentenceTokenizer.cpp \
     SymbolAttribute.cpp \
-    TextReader.cpp
+    TextReader.cpp \
+    sparse_structures/CompressedSparseColumnMatrix.cpp \
+    sparse_structures/MatrixInterface.cpp
 
 HEADERS += \
     ConfabulationTest.h \
@@ -40,4 +42,6 @@ HEADERS += \
     KnowledgeManager.h \
     SentenceTokenizer.h \
     SymbolAttribute.h \
-    TextReader.h
+    TextReader.h \
+    sparse_structures/CompressedSparseColumnMatrix.h \
+    sparse_structures/MatrixInterface.h
