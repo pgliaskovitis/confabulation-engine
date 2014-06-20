@@ -1,12 +1,12 @@
-#ifndef MATRIXINTERFACE_H
-#define MATRIXINTERFACE_H
+#ifndef IKNOWLEDGELINKS_H
+#define IKNOWLEDGELINKS_H
 
 #include <string>
 #include <set>
 #include <tuple>
 
 template <typename T>
-class MatrixInterface
+class IKnowledgeLinks
 {
 public:
     virtual void SetElement(size_t l, size_t c, T& value) = 0;
@@ -47,4 +47,4 @@ public:
 
 };
 
-#endif // MATRIXINTERFACE_H
+#endif // IKNOWLEDGELINKS_H

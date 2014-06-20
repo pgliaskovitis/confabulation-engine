@@ -3,10 +3,10 @@
 
 #include <vector>
 
-#include "MatrixInterface.h"
+#include "IKnowledgeLinks.h"
 
 template <typename T>
-class CompressedSparseColumnMatrix: public MatrixInterface<T>
+class CompressedSparseColumnMatrix: public IKnowledgeLinks<T>
 {
 public:
 
