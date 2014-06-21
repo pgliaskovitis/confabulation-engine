@@ -1,4 +1,0 @@
-#ifndef CSCLINKSMATRIX_H
-#define CSCLINKSMATRIX_H
-
-#endif // CSCLINKSMATRIX_H
