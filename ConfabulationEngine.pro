@@ -31,9 +31,7 @@ SOURCES += \
     KnowledgeManager.cpp \
     SentenceTokenizer.cpp \
     SymbolAttribute.cpp \
-    TextReader.cpp \
-    sparse_structures/CSRLinksMatrix.cpp \
-    sparse_structures/DOKExcitationVector.cpp
+    TextReader.cpp
 
 HEADERS += \
     ConfabulationTest.h \
@@ -45,5 +43,7 @@ HEADERS += \
     TextReader.h \
     sparse_structures/IExcitationVector.h \
     sparse_structures/IKnowledgeLinks.h \
-    sparse_structures/CSRLinksMatrix.h \
-    sparse_structures/DOKExcitationVector.h
+    sparse_structures/CSRLinksMatrix.hpp \
+    sparse_structures/DOKExcitationVector.hpp \
+    sparse_structures/CSRLinksMatrixImpl.hpp \
+    sparse_structures/DOKExcitationVectorImpl.h
