@@ -43,7 +43,11 @@ const T& DOKExcitationVector<T>::GetElementQuick(size_t r) const
 template <typename T>
 std::set<std::pair<size_t, T>> DOKExcitationVector<T>::GetNzElements()
 {
-    std::set<std::pair<size_t, T>> result;
+    std::unordered_set<std::pair<size_t, T>> result;
+    for (std::unordered_map<size_t, T>::iterator it = map_.begin(); it != map_.end(); ++it)
+        result.insert(*it);
+
+    return result;
 }
 
 #endif // DOKEXCITATIONVECTORIMPL_H

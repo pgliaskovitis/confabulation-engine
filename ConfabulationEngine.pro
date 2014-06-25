@@ -46,4 +46,4 @@ HEADERS += \
     sparse_structures/CSRLinksMatrix.hpp \
     sparse_structures/DOKExcitationVector.hpp \
     sparse_structures/CSRLinksMatrixImpl.hpp \
-    sparse_structures/DOKExcitationVectorImpl.h
+    sparse_structures/DOKExcitationVectorImpl.hpp
