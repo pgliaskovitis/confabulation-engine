@@ -1,6 +1,7 @@
 #ifndef IEXCITATIONVECTOR_H
 #define IEXCITATIONVECTOR_H
 
+#include <stdexcept>
 #include <string>
 #include <set>
 
@@ -17,12 +18,10 @@ public:
     virtual size_t get_num_rows() = 0;
     virtual size_t getnnz() = 0;
 
-    bool CheckBounds(size_t r)
+    void CheckBounds(size_t r)
     {
         if (r < 0 || r >= get_num_rows())
-            return false;
-
-        return true;
+            throw std::out_of_range("1D Out of Range");
     }
 
     void add(IExcitationVector& other);

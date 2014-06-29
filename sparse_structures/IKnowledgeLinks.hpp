@@ -5,7 +5,7 @@
 #include <set>
 #include <tuple>
 
-#include "IExcitationVector.h"
+#include "IExcitationVector.hpp"
 
 template <typename T>
 class IKnowledgeLinks
@@ -21,12 +21,10 @@ public:
     virtual size_t get_num_cols() = 0;
     virtual size_t getnnz() = 0;
 
-    bool CheckBounds(size_t r, size_t c)
+    void CheckBounds(size_t r, size_t c)
     {
         if (r < 0 || c < 0 || r >= get_num_rows() || c >= get_num_cols())
-            return false;
-
-        return true;
+            throw std::out_of_range("2D Out of Range");
     }
 
     virtual IExcitationVector<T> multiply(IExcitationVector<T>& vec) = 0;
