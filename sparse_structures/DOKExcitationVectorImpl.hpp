@@ -5,7 +5,7 @@
 #include "DOKExcitationVector.hpp"
 
 template <typename T>
-DOKExcitationVector<T>::DOKExcitationVector(size_t n_rows) : num_rows_(num_rows)
+DOKExcitationVector<T>::DOKExcitationVector(size_t num_rows) : num_rows_(num_rows)
 {}
 
 template <typename T>
@@ -18,9 +18,9 @@ DOKExcitationVector<T>::DOKExcitationVector(IExcitationVector<T>& base) : num_ro
 template <typename T>
 void DOKExcitationVector<T>::SetElement(size_t r, T& value)
 {
-    CheckBounds(r);
+    IExcitationVector<T>::CheckBounds(r);
     if (IsNearlyEqual(value, 0)) {
-        std::unordered_map<size_t, T>::iterator it = map_.find(value);
+        typename std::unordered_map<size_t, T>::iterator it = map_.find(value);
         if (it != map_.end())
             map_.erase(it);
     } else
@@ -30,34 +30,26 @@ void DOKExcitationVector<T>::SetElement(size_t r, T& value)
 template <typename T>
 void DOKExcitationVector<T>::SetElementQuick(size_t r, T& value)
 {
-    // no bounds checking
-    // no zero value checking
     map_[r] = value;
 }
 
 template <typename T>
 const T& DOKExcitationVector<T>::GetElement(size_t r) const
 {
-    CheckBounds(r);
-    return GetElementQuick(r);
+    return map_.at(r);
 }
 
 template <typename T>
 const T& DOKExcitationVector<T>::GetElementQuick(size_t r) const
 {
-    // no bounds checking
-    std::unordered_map<size_t, T>::iterator = map_.find(value);
-    if (it != map_.end())
-        return map_[r];
-    else
-        return 0;
+    return map_.at(r);
 }
 
 template <typename T>
 std::set<std::pair<size_t, T>> DOKExcitationVector<T>::GetNzElements()
 {
-    std::unordered_set<std::pair<size_t, T>> result;
-    for (std::unordered_map<size_t, T>::iterator it = map_.begin(); it != map_.end(); ++it)
+    typename std::set<std::pair<size_t, T>> result;
+    for (typename std::unordered_map<size_t, T>::iterator it = map_.begin(); it != map_.end(); ++it)
         result.insert(*it);
 
     return result;

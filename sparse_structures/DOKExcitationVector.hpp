@@ -4,13 +4,13 @@
 #include <unordered_set>
 #include <unordered_map>
 
-#include "IExcitationVector.h"
+#include "IExcitationVector.hpp"
 
 template <typename T>
 class DOKExcitationVector : public IExcitationVector<T>
 {
 public:
-    DOKExcitationVector(size_t n_rows);
+    DOKExcitationVector(size_t num_rows);
     DOKExcitationVector(IExcitationVector<T>& base);
 
     DOKExcitationVector(const DOKExcitationVector& rhs) = delete;

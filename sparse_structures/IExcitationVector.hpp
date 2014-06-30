@@ -15,12 +15,12 @@ public:
     virtual const T& GetElement(size_t r) const = 0;
     virtual const T& GetElementQuick(size_t r) const = 0;
 
-    virtual size_t get_num_rows() = 0;
-    virtual size_t getnnz() = 0;
+    virtual size_t get_num_rows() const = 0;
+    virtual size_t getnnz() const = 0;
 
-    void CheckBounds(size_t r)
+    void CheckBounds(size_t r) const
     {
-        if (r < 0 || r >= get_num_rows())
+        if (r >= get_num_rows())
             throw std::out_of_range("1D Out of Range");
     }
 
@@ -28,7 +28,7 @@ public:
 
     virtual std::set<std::pair<size_t, T>> GetNzElements() = 0;
 
-    std::string ToString()
+    std::string ToString() const
     {
         const size_t num_rows = get_num_rows();
 
