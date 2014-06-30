@@ -3,12 +3,13 @@
 
 #include <vector>
 
-#include "IKnowledgeLinks.h"
+#include "IKnowledgeLinks.hpp"
 
 template <typename T>
 class CSRLinksMatrix: public IKnowledgeLinks<T>
 {
 public:
+    CSRLinksMatrix(size_t, num_rows, num_cols);
     CSRLinksMatrix(IKnowledgeLinks<T>& base);
 
     CSRLinksMatrix(const CSRLinksMatrix& rhs) = delete;

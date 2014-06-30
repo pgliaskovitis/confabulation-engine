@@ -17,13 +17,13 @@ public:
     virtual const T& GetElement(size_t r, size_t c) const = 0;
     virtual const T& GetElementQuick(size_t r, size_t c) const = 0;
 
-    virtual size_t get_num_rows() = 0;
-    virtual size_t get_num_cols() = 0;
-    virtual size_t getnnz() = 0;
+    virtual size_t get_num_rows() const = 0;
+    virtual size_t get_num_cols() const = 0;
+    virtual size_t getnnz() const = 0;
 
-    void CheckBounds(size_t r, size_t c)
+    void CheckBounds(size_t r, size_t c) const
     {
-        if (r < 0 || c < 0 || r >= get_num_rows() || c >= get_num_cols())
+        if (r >= get_num_rows() || c >= get_num_cols())
             throw std::out_of_range("2D Out of Range");
     }
 
@@ -31,7 +31,7 @@ public:
 
     virtual std::set<std::tuple<size_t, size_t, T>> GetNzElements() = 0;
 
-    std::string ToString()
+    std::string ToString() const
     {
         const size_t num_rows = get_num_rows();
         const size_t num_cols = get_num_cols();
