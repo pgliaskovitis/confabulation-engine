@@ -5,18 +5,18 @@
 #include "DOKExcitationVector.hpp"
 
 template <typename T>
-DOKExcitationVector<T>::DOKExcitationVector(size_t num_rows) : num_rows_(num_rows)
+DOKExcitationVector<T>::DOKExcitationVector(const size_t num_rows) : num_rows_(num_rows)
 {}
 
 template <typename T>
-DOKExcitationVector<T>::DOKExcitationVector(IExcitationVector<T>& base) : num_rows_(base.get_num_rows())
+DOKExcitationVector<T>::DOKExcitationVector(const IExcitationVector<T> &base) : num_rows_(base.get_num_rows())
 {
-    for (std::pair<size_t, T> element: base.GetNzElements())
+    for (const std::pair<size_t, T>& element: base.GetNzElements())
         map_[element.first] = element.second;
 }
 
 template <typename T>
-void DOKExcitationVector<T>::SetElement(size_t r, T& value)
+void DOKExcitationVector<T>::SetElement(const size_t r, const T& value)
 {
     IExcitationVector<T>::CheckBounds(r);
     if (IsNearlyEqual(value, 0)) {
@@ -28,28 +28,35 @@ void DOKExcitationVector<T>::SetElement(size_t r, T& value)
 }
 
 template <typename T>
-void DOKExcitationVector<T>::SetElementQuick(size_t r, T& value)
+void DOKExcitationVector<T>::SetElementQuick(const size_t r, const T &value)
 {
     map_[r] = value;
 }
 
 template <typename T>
-const T& DOKExcitationVector<T>::GetElement(size_t r) const
+const T& DOKExcitationVector<T>::GetElement(const size_t r) const
 {
     return map_.at(r);
 }
 
 template <typename T>
-const T& DOKExcitationVector<T>::GetElementQuick(size_t r) const
+const T& DOKExcitationVector<T>::GetElementQuick(const size_t r) const
 {
     return map_.at(r);
 }
 
 template <typename T>
-std::set<std::pair<size_t, T>> DOKExcitationVector<T>::GetNzElements()
+void DOKExcitationVector<T>::Add(const IExcitationVector<T>& other) {
+    for (const std::pair<size_t, T>& element : other.GetNzElements()) {
+        SetElement(element.first, element.second + GetElement(element.first));
+    }
+}
+
+template <typename T>
+std::set<std::pair<size_t, T>> DOKExcitationVector<T>::GetNzElements() const
 {
     typename std::set<std::pair<size_t, T>> result;
-    for (typename std::unordered_map<size_t, T>::iterator it = map_.begin(); it != map_.end(); ++it)
+    for (typename std::unordered_map<size_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it)
         result.insert(*it);
 
     return result;
