@@ -44,9 +44,8 @@ HEADERS += \
     TextReader.h \
     sparse_structures/CSRLinksMatrix.hpp \
     sparse_structures/DOKExcitationVector.hpp \
-    sparse_structures/CSRLinksMatrixImpl.hpp \
-    sparse_structures/DOKExcitationVectorImpl.hpp \
     sparse_structures/IExcitationVector.hpp \
     sparse_structures/IKnowledgeLinks.hpp \
     Utils.h \
-    TemplateInstantiations.h
+    TemplateInstantiations.h \
+    sparse_structures/DOKLinksMatrix.hpp

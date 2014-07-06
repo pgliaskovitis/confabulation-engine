@@ -3,7 +3,7 @@
 
 #include <string>
 #include <set>
-#include <tuple>
+#include <memory>
 
 #include "IExcitationVector.hpp"
 
@@ -28,8 +28,7 @@ public:
             throw std::out_of_range("2D Out of Range");
     }
 
-    virtual IExcitationVector<T> multiply(const IExcitationVector<T>& vec) = 0;
-
+    virtual std::unique_ptr<IExcitationVector<T>> multiply(const IExcitationVector<T>& vec) const = 0;
     virtual std::set<std::pair<std::pair<size_t, size_t>, T>> GetNzElements() const = 0;
 
     std::string ToString() const
