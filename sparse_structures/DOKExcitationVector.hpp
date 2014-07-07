@@ -1,7 +1,6 @@
 #ifndef DOKEXCITATIONVECTOR_H
 #define DOKEXCITATIONVECTOR_H
 
-#include <unordered_set>
 #include <unordered_map>
 
 #include "Utils.h"
@@ -70,13 +69,21 @@ void DOKExcitationVector<T>::SetElementQuick(const size_t r, const T &value)
 template <typename T>
 const T& DOKExcitationVector<T>::GetElement(const size_t r) const
 {
-    return map_.at(r);
+    IExcitationVector<T>::CheckBounds(r);
+    return GetElementQuick(r);
 }
 
 template <typename T>
 const T& DOKExcitationVector<T>::GetElementQuick(const size_t r) const
 {
-    return map_.at(r);
+    T result;
+    try {
+        result = map_.at(r);
+    } catch (const std::out_of_range& oor) {
+        result = 0;
+    }
+
+    return result;
 }
 
 template <typename T>

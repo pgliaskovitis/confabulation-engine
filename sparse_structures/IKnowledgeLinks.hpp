@@ -39,7 +39,7 @@ public:
         std::string str = std::string("LinksMatrix [num_lines=") + std::to_string(num_rows) + ", num_cols=" + std::string(num_cols) + "]\n";
         for (size_t r = 0; r < num_rows; ++r) {
             for (size_t c = 0; c < num_cols; ++c)
-                str += GetElement(r, c) + " ";
+                str += std::to_string(GetElement(r, c)) + " ";
 
             str += "\n";
         }

@@ -87,8 +87,13 @@ const T& CSRLinksMatrix<T>::GetElementQuick(size_t r, size_t c) const
 {
     std::vector<size_t>::const_iterator begin_it = ja_.begin() + ia_[r];
     std::vector<size_t>::const_iterator end_it = ja_.begin() + ia_[r + 1];
+
     const size_t index = BinarySearch(begin_it, end_it, c);
-    return a_[index];
+
+    if (IsNearlyEqual(a_[index], c))
+        return a_[index];
+    else
+        return 0;
 }
 
 template <typename T>

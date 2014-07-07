@@ -59,7 +59,15 @@ const T& DOKLinksMatrix<T>::GetElement(size_t r, size_t c) const
 template <typename T>
 const T& DOKLinksMatrix<T>::GetElementQuick(size_t r, size_t c) const
 {
-    return map_.at(std::make_pair(r, c));
+    T result;
+
+    try {
+        result = map_.at(std::make_pair(r, c));
+    } catch (const std::out_of_range& oor) {
+        result = 0;
+    }
+
+    return result;
 }
 
 template <typename T>

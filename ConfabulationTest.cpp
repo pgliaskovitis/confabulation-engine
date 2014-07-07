@@ -12,6 +12,7 @@
 #include "KnowledgeBase.h"
 #include "KnowledgeManager.h"
 #include "Globals.h"
+#include "sparse_structures/DOKExcitationVector.hpp"
 
 int ConfabulationTest::TestSharedPointer() const
 {
@@ -82,7 +83,33 @@ int ConfabulationTest::TestMultipleFiles(const Symbol& symbolfile, const Symbol&
     reader->HandleSymbolFile(symbolfile);
     reader->HandleAllTextFiles(masterfile);
 
-	return 0;
+    return 0;
+}
+
+void ConfabulationTest::TestDOKExcitationVector() const
+{
+     std::unique_ptr<IExcitationVector<float>> my_vec_ptr1(new DOKExcitationVector<float>(10));
+
+     my_vec_ptr1->SetElement(1, 1.0);
+     my_vec_ptr1->SetElement(2, 2.0);
+     my_vec_ptr1->SetElement(9, 9.0);
+
+     try {
+        my_vec_ptr1->SetElement(10, 10.0);
+     } catch (const std::out_of_range& oor) {
+     }
+
+     std::cout << "Before addition:" << std::endl << my_vec_ptr1->ToString();
+
+     std::unique_ptr<IExcitationVector<float>> my_vec_ptr2(new DOKExcitationVector<float>(10));
+
+     my_vec_ptr2->SetElement(1, 1.0);
+     my_vec_ptr2->SetElement(2, 2.0);
+     my_vec_ptr2->SetElement(9, 9.0);
+
+     my_vec_ptr1->Add(*my_vec_ptr2);
+
+     std::cout << "After addition:" << std::endl << my_vec_ptr1->ToString();
 }
 
 void ConfabulationTest::TestTokenizePersistedKnowledge() const
@@ -151,6 +178,8 @@ int main()
 	//test1->testFixedFile("text_data/ascii_symbols.txt", "text_data/sample1.txt");
 
 	//test1->testMultipleFiles("text_data/ascii_symbols.txt", "text_data/sample_master.txt");
+
+    test1->TestDOKExcitationVector();
 
 	//test1->testTokenizePersistedKnowledge();
 
@@ -245,7 +274,7 @@ int main()
 	allCopyFeeds->push_back(feed20);
 
     //test1->testSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
-    test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->testConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", *allCopyFeeds);
     //test1->testConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
     //test1->testConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);

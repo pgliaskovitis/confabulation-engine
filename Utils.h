@@ -14,7 +14,7 @@ namespace
             // see Knuth section 4.2.2 pages 217-218
     }
 
-    size_t BinarySearch(std::vector<size_t>::const_iterator& begin_it, std::vector<size_t>::const_iterator& end_it, size_t key)
+    size_t BinarySearch(const std::vector<size_t>::const_iterator& begin_it, const std::vector<size_t>::const_iterator& end_it, size_t key)
     {
         std::vector<size_t>::const_iterator lower = begin_it;
         std::vector<size_t>::const_iterator upper = end_it - 1;

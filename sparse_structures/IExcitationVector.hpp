@@ -35,7 +35,7 @@ public:
 
         std::string str = std::string("ExcitationVector [num_lines=") + std::to_string(num_rows) + "]\n";
         for (size_t r = 0; r < num_rows; ++r) {
-            str += GetElement(r) + " ";
+            str += std::to_string(GetElement(r)) + " ";
             str += "\n";
         }
         return str;
