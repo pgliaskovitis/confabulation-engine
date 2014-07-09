@@ -13,6 +13,7 @@
 #include "KnowledgeManager.h"
 #include "Globals.h"
 #include "sparse_structures/DOKExcitationVector.hpp"
+#include "sparse_structures/DOKLinksMatrix.hpp"
 
 int ConfabulationTest::TestSharedPointer() const
 {
@@ -112,6 +113,29 @@ void ConfabulationTest::TestDOKExcitationVector() const
      std::cout << "After addition:" << std::endl << my_vec_ptr1->ToString();
 }
 
+void ConfabulationTest::TestDOKLinksMatrix() const
+{
+    std::unique_ptr<IKnowledgeLinks<float>> my_matrix_ptr(new DOKLinksMatrix<float>(3, 4));
+
+    my_matrix_ptr->SetElement(0, 1 , 1.0);
+    my_matrix_ptr->SetElement(1, 3, 1.0);
+    my_matrix_ptr->SetElement(2, 2, 1.0);
+
+    std::cout << "Before multiplication:" << std::endl << my_matrix_ptr->ToString();
+
+    std::unique_ptr<IExcitationVector<float>> my_vec_ptr(new DOKExcitationVector<float>(4));
+
+    my_vec_ptr->SetElement(0, 1.0);
+    my_vec_ptr->SetElement(1, 2.0);
+    my_vec_ptr->SetElement(3, 4.0);
+
+    std::cout << "Before multiplication:" << std::endl << my_vec_ptr->ToString();
+
+    std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = std::move(my_matrix_ptr->Multiply(*my_vec_ptr));
+
+    std::cout << "After multiplication:" << std::endl << my_result_vec_ptr->ToString();
+}
+
 void ConfabulationTest::TestTokenizePersistedKnowledge() const
 {
 	Symbol knowledgeFragment = "New:::York{1765|||2308}---->Haven{7|||201}---->Year{1111|||6538}";
@@ -180,6 +204,8 @@ int main()
 	//test1->testMultipleFiles("text_data/ascii_symbols.txt", "text_data/sample_master.txt");
 
     test1->TestDOKExcitationVector();
+
+    test1->TestDOKLinksMatrix();
 
 	//test1->testTokenizePersistedKnowledge();
 

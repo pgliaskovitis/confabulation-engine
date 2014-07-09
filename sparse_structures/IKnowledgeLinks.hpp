@@ -28,7 +28,7 @@ public:
             throw std::out_of_range("2D Out of Range");
     }
 
-    virtual std::unique_ptr<IExcitationVector<T>> multiply(const IExcitationVector<T>& vec) const = 0;
+    virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const = 0;
     virtual std::set<std::pair<std::pair<size_t, size_t>, T>> GetNzElements() const = 0;
 
     std::string ToString() const
@@ -36,7 +36,7 @@ public:
         const size_t num_rows = get_num_rows();
         const size_t num_cols = get_num_cols();
 
-        std::string str = std::string("LinksMatrix [num_lines=") + std::to_string(num_rows) + ", num_cols=" + std::string(num_cols) + "]\n";
+        std::string str = std::string("LinksMatrix [num_lines=") + std::to_string(num_rows) + ", num_cols=" + std::to_string(num_cols) + "]\n";
         for (size_t r = 0; r < num_rows; ++r) {
             for (size_t c = 0; c < num_cols; ++c)
                 str += std::to_string(GetElement(r, c)) + " ";

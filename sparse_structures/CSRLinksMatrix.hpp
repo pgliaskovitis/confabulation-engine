@@ -18,8 +18,8 @@ public:
     CSRLinksMatrix(CSRLinksMatrix&& rhs) = delete;
     CSRLinksMatrix&& operator=(CSRLinksMatrix&& rhs) = delete;
 
-    virtual void SetElement(size_t r, size_t c, T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
-    virtual void SetElementQuick(size_t r, size_t c, T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
+    virtual void SetElement(size_t r, size_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
+    virtual void SetElementQuick(size_t r, size_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
 
     virtual const T& GetElement(size_t r, size_t c) const;
     virtual const T& GetElementQuick(size_t r, size_t c) const;

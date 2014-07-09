@@ -17,18 +17,18 @@ public:
     DOKLinksMatrix(DOKLinksMatrix&& rhs) = delete;
     DOKLinksMatrix&& operator=(DOKLinksMatrix&& rhs) = delete;
 
-    virtual void SetElement(size_t r, size_t c, T& value);
-    virtual void SetElementQuick(size_t r, size_t c, T& value);
+    virtual void SetElement(size_t r, size_t c, const T& value);
+    virtual void SetElementQuick(size_t r, size_t c, const T& value);
 
     virtual const T& GetElement(size_t r, size_t c) const;
     virtual const T& GetElementQuick(size_t r, size_t c) const;
 
-    virtual size_t get_num_rows() { return num_rows_; }
-    virtual size_t get_num_cols() { return num_cols_; }
+    virtual size_t get_num_rows() const { return num_rows_; }
+    virtual size_t get_num_cols() const { return num_cols_; }
 
-    virtual size_t GetNnz() { return map_.size(); }
+    virtual size_t GetNnz() const { return map_.size(); }
 
-    virtual std::unique_ptr<IExcitationVector<T>> multiply(const IExcitationVector<T>& vec) const;
+    virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const;
     virtual std::set<std::pair<std::pair<size_t, size_t>, T>> GetNzElements() const;
 
 private:
@@ -71,7 +71,7 @@ const T& DOKLinksMatrix<T>::GetElementQuick(size_t r, size_t c) const
 }
 
 template <typename T>
-void DOKLinksMatrix<T>::SetElement(size_t r, size_t c, T& value)
+void DOKLinksMatrix<T>::SetElement(size_t r, size_t c, const T &value)
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
     if (IsNearlyEqual(value, 0)) {
@@ -83,13 +83,13 @@ void DOKLinksMatrix<T>::SetElement(size_t r, size_t c, T& value)
 }
 
 template <typename T>
-void DOKLinksMatrix<T>::SetElementQuick(size_t r, size_t c, T& value)
+void DOKLinksMatrix<T>::SetElementQuick(size_t r, size_t c, const T& value)
 {
     map_[std::make_pair(r, c)] = value;
 }
 
 template <typename T>
-std::unique_ptr<IExcitationVector<T>> DOKLinksMatrix<T>::multiply(const IExcitationVector<T>& vec) const
+std::unique_ptr<IExcitationVector<T>> DOKLinksMatrix<T>::Multiply(const IExcitationVector<T>& vec) const
 {
     std::set<std::pair<size_t, T>> vec_elements = vec.GetNzElements();
 
