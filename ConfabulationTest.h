@@ -36,6 +36,7 @@ public:
     int TestMultipleFiles(const Symbol& symbolfile, const Symbol& masterfile) const;
     void TestDOKExcitationVector() const;
     void TestDOKLinksMatrix() const;
+    void TestCSRLinksMatrix() const;
     void TestTokenizePersistedKnowledge() const;
     void TestSimpleConfabulation(const Symbol& symbolfile, const Symbol& masterfile, const std::vector<Symbol>& sentences) const;
     void TestConfabulationWithPersistedKnowledge(const Symbol& symbolfile, const Symbol& supplementfile, const std::vector<Symbol>& sentences) const;

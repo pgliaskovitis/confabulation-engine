@@ -24,12 +24,12 @@ public:
     virtual const T& GetElement(size_t r, size_t c) const;
     virtual const T& GetElementQuick(size_t r, size_t c) const;
 
-    virtual size_t get_num_rows() { return num_rows_; }
-    virtual size_t get_num_cols() { return num_cols_; }
+    virtual size_t get_num_rows() const { return num_rows_; }
+    virtual size_t get_num_cols() const { return num_cols_; }
 
-    virtual size_t GetNnz() { return a_.size(); }
+    virtual size_t GetNnz() const { return a_.size(); }
 
-    virtual std::unique_ptr<IExcitationVector<T>> multiply(const IExcitationVector<T>& vec) const;
+    virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const;
     virtual std::set<std::pair<std::pair<size_t, size_t>, T>> GetNzElements() const;
 
 private:
@@ -97,7 +97,7 @@ const T& CSRLinksMatrix<T>::GetElementQuick(size_t r, size_t c) const
 }
 
 template <typename T>
-std::unique_ptr<IExcitationVector<T>> CSRLinksMatrix<T>::multiply(const IExcitationVector<T>& vec) const
+std::unique_ptr<IExcitationVector<T>> CSRLinksMatrix<T>::Multiply(const IExcitationVector<T>& vec) const
 {
     std::unique_ptr<IExcitationVector<T>> result(new DOKExcitationVector<T>(num_rows_));
     T row_sum;

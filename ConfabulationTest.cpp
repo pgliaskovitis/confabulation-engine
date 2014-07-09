@@ -14,6 +14,7 @@
 #include "Globals.h"
 #include "sparse_structures/DOKExcitationVector.hpp"
 #include "sparse_structures/DOKLinksMatrix.hpp"
+#include "sparse_structures/CSRLinksMatrix.hpp"
 
 int ConfabulationTest::TestSharedPointer() const
 {
@@ -136,6 +137,19 @@ void ConfabulationTest::TestDOKLinksMatrix() const
     std::cout << "After multiplication:" << std::endl << my_result_vec_ptr->ToString();
 }
 
+void ConfabulationTest::TestCSRLinksMatrix() const
+{
+    std::unique_ptr<IKnowledgeLinks<float>> my_dok_matrix_ptr(new DOKLinksMatrix<float>(3, 4));
+
+    my_dok_matrix_ptr->SetElement(0, 1 , 1.0);
+    my_dok_matrix_ptr->SetElement(1, 3, 1.0);
+    my_dok_matrix_ptr->SetElement(2, 2, 1.0);
+
+    std::unique_ptr<IKnowledgeLinks<float>> my_csr_matrix_ptr(new CSRLinksMatrix<float>(*my_dok_matrix_ptr));
+
+    std::cout << "Before multiplication:" << std::endl << my_csr_matrix_ptr->ToString();
+}
+
 void ConfabulationTest::TestTokenizePersistedKnowledge() const
 {
 	Symbol knowledgeFragment = "New:::York{1765|||2308}---->Haven{7|||201}---->Year{1111|||6538}";
@@ -206,6 +220,8 @@ int main()
     test1->TestDOKExcitationVector();
 
     test1->TestDOKLinksMatrix();
+
+    test1->TestCSRLinksMatrix();
 
 	//test1->testTokenizePersistedKnowledge();
 
