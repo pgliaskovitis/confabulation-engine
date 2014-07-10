@@ -101,7 +101,7 @@ void ConfabulationTest::TestDOKExcitationVector() const
      } catch (const std::out_of_range& oor) {
      }
 
-     std::cout << "Before addition:" << std::endl << my_vec_ptr1->ToString();
+     std::cout << "Vector before addition:" << std::endl << my_vec_ptr1->ToString();
 
      std::unique_ptr<IExcitationVector<float>> my_vec_ptr2(new DOKExcitationVector<float>(10));
 
@@ -111,18 +111,18 @@ void ConfabulationTest::TestDOKExcitationVector() const
 
      my_vec_ptr1->Add(*my_vec_ptr2);
 
-     std::cout << "After addition:" << std::endl << my_vec_ptr1->ToString();
+     std::cout << "Vector after addition:" << std::endl << my_vec_ptr1->ToString();
 }
 
 void ConfabulationTest::TestDOKLinksMatrix() const
 {
     std::unique_ptr<IKnowledgeLinks<float>> my_matrix_ptr(new DOKLinksMatrix<float>(3, 4));
 
-    my_matrix_ptr->SetElement(0, 1 , 1.0);
+    my_matrix_ptr->SetElement(0, 1, 1.0);
     my_matrix_ptr->SetElement(1, 3, 1.0);
     my_matrix_ptr->SetElement(2, 2, 1.0);
 
-    std::cout << "Before multiplication:" << std::endl << my_matrix_ptr->ToString();
+    std::cout << "Matrix before multiplication:" << std::endl << my_matrix_ptr->ToString();
 
     std::unique_ptr<IExcitationVector<float>> my_vec_ptr(new DOKExcitationVector<float>(4));
 
@@ -130,11 +130,11 @@ void ConfabulationTest::TestDOKLinksMatrix() const
     my_vec_ptr->SetElement(1, 2.0);
     my_vec_ptr->SetElement(3, 4.0);
 
-    std::cout << "Before multiplication:" << std::endl << my_vec_ptr->ToString();
+    std::cout << "Vector before multiplication:" << std::endl << my_vec_ptr->ToString();
 
     std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = std::move(my_matrix_ptr->Multiply(*my_vec_ptr));
 
-    std::cout << "After multiplication:" << std::endl << my_result_vec_ptr->ToString();
+    std::cout << "Vector after multiplication:" << std::endl << my_result_vec_ptr->ToString();
 }
 
 void ConfabulationTest::TestCSRLinksMatrix() const
@@ -147,7 +147,20 @@ void ConfabulationTest::TestCSRLinksMatrix() const
 
     std::unique_ptr<IKnowledgeLinks<float>> my_csr_matrix_ptr(new CSRLinksMatrix<float>(*my_dok_matrix_ptr));
 
-    std::cout << "Before multiplication:" << std::endl << my_csr_matrix_ptr->ToString();
+    std::cout << "Matrix before multiplication:" << std::endl << my_csr_matrix_ptr->ToString();
+
+    std::unique_ptr<IExcitationVector<float>> my_vec_ptr(new DOKExcitationVector<float>(4));
+
+    my_vec_ptr->SetElement(0, 1.0);
+    my_vec_ptr->SetElement(1, 2.0);
+    my_vec_ptr->SetElement(3, 4.0);
+
+    std::cout << "Vector before multiplication:" << std::endl << my_vec_ptr->ToString();
+
+    std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = std::move(my_csr_matrix_ptr->Multiply(*my_vec_ptr));
+
+    std::cout << "Vector after multiplication:" << std::endl << my_result_vec_ptr->ToString();
+
 }
 
 void ConfabulationTest::TestTokenizePersistedKnowledge() const
