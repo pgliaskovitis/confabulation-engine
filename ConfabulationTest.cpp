@@ -18,7 +18,6 @@
 
 int ConfabulationTest::TestSharedPointer() const
 {
-
 	std::shared_ptr<C> foo;
 	std::shared_ptr<C> bar (new C);
 
@@ -37,7 +36,6 @@ int ConfabulationTest::TestSharedPointer() const
 
 int ConfabulationTest::TestFixedString(const Symbol& input) const
 {
-
 	SentenceTokenizer tok(input);
 
     while (tok.Tokenize(Globals::kSentenceDelimiters))
@@ -48,7 +46,6 @@ int ConfabulationTest::TestFixedString(const Symbol& input) const
 
 int ConfabulationTest::TestSymbolFile(const Symbol& input) const
 {
-
 	Globals globals;
 	TextReader reader(globals);
 
@@ -59,7 +56,6 @@ int ConfabulationTest::TestSymbolFile(const Symbol& input) const
 
 int ConfabulationTest::TestFixedFile(const Symbol& symbolfile, const Symbol& textfile) const
 {
-
 	Globals globals;
 	std::shared_ptr<TextReader> reader(new TextReader(globals));
 	std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
@@ -160,7 +156,6 @@ void ConfabulationTest::TestCSRLinksMatrix() const
     std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = std::move(my_csr_matrix_ptr->Multiply(*my_vec_ptr));
 
     std::cout << "Vector after multiplication:" << std::endl << my_result_vec_ptr->ToString();
-
 }
 
 void ConfabulationTest::TestTokenizePersistedKnowledge() const
@@ -271,7 +266,7 @@ int main()
 	Symbol feed37 = "Unconventionally, the knight decided to kill the maiden and marry the ";
 	Symbol feed38 = "The council of the void sent out its darkest agents to accomplish this ";
 	Symbol feed39 = "Enlightenment, he said, goes hand in hand with a bowl of good ";
-	Symbol feed40 = "The captain was listening indifferently for a while, but then ";
+    Symbol feed40 = "The captain was listening indifferently for a while, but then he ";
 
 	allOriginalFeeds->push_back(feed1);
 	allOriginalFeeds->push_back(feed2);
