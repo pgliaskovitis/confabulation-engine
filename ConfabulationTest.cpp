@@ -221,19 +221,45 @@ int main()
 
 	//test1->testSymbolFile("text_data/ascii_symbols.txt");
 
-	//test1->testFixedFile("text_data/ascii_symbols.txt", "text_data/sample1.txt");
+    //test1->testFixedFile("text_data/ascii_symbols.txt", "text_data/Balzac_1.txt");
 
-	//test1->testMultipleFiles("text_data/ascii_symbols.txt", "text_data/sample_master.txt");
+    //test1->testMultipleFiles("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
-    test1->TestDOKExcitationVector();
+    //test1->TestDOKExcitationVector();
 
-    test1->TestDOKLinksMatrix();
+    //test1->TestDOKLinksMatrix();
 
-    test1->TestCSRLinksMatrix();
+    //test1->TestCSRLinksMatrix();
 
 	//test1->testTokenizePersistedKnowledge();
 
+    Symbol copy_feed1 = "The umbrella was a black and prosaic "; //bundle
+    Symbol copy_feed2 = "I will accept the post three times and refuse it "; //afterwards
+    Symbol copy_feed3 = "He scuttled across the room rather like a "; //rabbit
+    Symbol copy_feed4 = "In short, there is in life an element of elfin "; //coincidence
+    Symbol copy_feed5 = "At night the wicket gate is replaced by a solid "; //door
+    Symbol copy_feed6 = "In his own mind he had completely surrendered "; //himself
+    Symbol copy_feed7 = "Every one is grave in public, and funny in "; //private
+    Symbol copy_feed8 = "He had seen a great poet prostituting his muse to "; //journalism
+    Symbol copy_feed9 = "It was clear that they were the accursed of all men, and they knew not "; //why
+    Symbol copy_feed10 = "His long bare neck and sloping shoulders were the shape of a champagne "; //bottle
+
+    std::shared_ptr<std::vector<Symbol>> allCopyFeeds(new std::vector<Symbol>());
+
+    allCopyFeeds->push_back(copy_feed1);
+    allCopyFeeds->push_back(copy_feed2);
+    allCopyFeeds->push_back(copy_feed3);
+    allCopyFeeds->push_back(copy_feed4);
+    allCopyFeeds->push_back(copy_feed5);
+    allCopyFeeds->push_back(copy_feed6);
+    allCopyFeeds->push_back(copy_feed7);
+    allCopyFeeds->push_back(copy_feed8);
+    allCopyFeeds->push_back(copy_feed9);
+    allCopyFeeds->push_back(copy_feed10);
+
 	std::shared_ptr<std::vector<Symbol>> allOriginalFeeds(new std::vector<Symbol>());
+
+    test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
 	Symbol feed1 = "The hooded men were steadily chanting beneath the ";
 	Symbol feed2 = "An army of little insects gathered on top of ";
@@ -246,27 +272,27 @@ int main()
 	Symbol feed9 = "She clumsily looked at her stained dress and ";
 	Symbol feed10 = "She had not only her husband killed but also her ";
 
-	Symbol feed21 = "The harsh realization that only writers could write well, threw him into a ";
-	Symbol feed22 = "He looked at her, the love of his life, and whispered ";
-	Symbol feed23 = "He collapsed impulsively, crying like a ";
-	Symbol feed24 = "Alas, the bird's nest was too high up in the mountain for him to ";
-	Symbol feed25 = "Suffocating in a sea of uninspired people, he started a ";
-	Symbol feed26 = "She walked her wild paths without ";
-	Symbol feed27 = "The clan and the khan were ";
-	Symbol feed28 = "The beauty and the ";
-	Symbol feed29 = "Yes, supreme effort had helped him get away from the ";
-	Symbol feed30 = "Hosts of archers stood ready along the ";
+    Symbol feed11 = "The harsh realization that only writers could write well, threw him into a ";
+    Symbol feed12 = "He looked at her, the love of his life, and whispered ";
+    Symbol feed13 = "He collapsed impulsively, crying like a ";
+    Symbol feed14 = "Alas, the bird's nest was too high up in the mountain for him to ";
+    Symbol feed15 = "Suffocating in a sea of uninspired people, he started a ";
+    Symbol feed16 = "She walked her wild paths without ";
+    Symbol feed17 = "The clan and the khan were ";
+    Symbol feed18 = "The beauty and the ";
+    Symbol feed19 = "Yes, supreme effort had helped him get away from the ";
+    Symbol feed20 = "Hosts of archers stood ready along the ";
 
-	Symbol feed31 = "The joker laughed out loud and squeezed the "; 
-	Symbol feed32 = "She moaned with desire when he ";
-	Symbol feed33 = "The thief stabbed Frederick viciously while he was ";
-	Symbol feed34 = "The green hat swirled and landed on the ";
-	Symbol feed35 = "Ominous waves surrounded us, just before we jumped ";
-	Symbol feed36 = "He was mesmerized by her ";
-	Symbol feed37 = "Unconventionally, the knight decided to kill the maiden and marry the ";
-	Symbol feed38 = "The council of the void sent out its darkest agents to accomplish this ";
-	Symbol feed39 = "Enlightenment, he said, goes hand in hand with a bowl of good ";
-    Symbol feed40 = "The captain was listening indifferently for a while, but then he ";
+    Symbol feed21 = "The joker laughed out loud and squeezed the ";
+    Symbol feed22 = "She moaned with desire when he ";
+    Symbol feed23 = "The thief stabbed Frederick viciously while he was ";
+    Symbol feed24 = "The green hat swirled and landed on the ";
+    Symbol feed25 = "Ominous waves surrounded us, just before we jumped ";
+    Symbol feed26 = "He was mesmerized by her ";
+    Symbol feed27 = "Unconventionally, the knight decided to kill the maiden and marry the ";
+    Symbol feed28 = "The council of the void sent out its darkest agents to accomplish this ";
+    Symbol feed29 = "Enlightenment, he said, goes hand in hand with a bowl of good ";
+    Symbol feed30 = "The captain was listening indifferently for a while, but then he ";
 
 	allOriginalFeeds->push_back(feed1);
 	allOriginalFeeds->push_back(feed2);
@@ -278,56 +304,30 @@ int main()
 	allOriginalFeeds->push_back(feed8);
 	allOriginalFeeds->push_back(feed9);
 	allOriginalFeeds->push_back(feed10);
-	allOriginalFeeds->push_back(feed21);
-	allOriginalFeeds->push_back(feed22);
-	allOriginalFeeds->push_back(feed23);
-	allOriginalFeeds->push_back(feed24);
-	allOriginalFeeds->push_back(feed25);
-	allOriginalFeeds->push_back(feed26);
-	allOriginalFeeds->push_back(feed27);
-	allOriginalFeeds->push_back(feed28);
-	allOriginalFeeds->push_back(feed29);
-	allOriginalFeeds->push_back(feed30);
-	allOriginalFeeds->push_back(feed31);
-	allOriginalFeeds->push_back(feed32);
-	allOriginalFeeds->push_back(feed33);
-	allOriginalFeeds->push_back(feed34);
-	allOriginalFeeds->push_back(feed35);
-	allOriginalFeeds->push_back(feed36);
-	allOriginalFeeds->push_back(feed37);
-	allOriginalFeeds->push_back(feed38);
-	allOriginalFeeds->push_back(feed39);
-	allOriginalFeeds->push_back(feed40);
+    allOriginalFeeds->push_back(feed11);
+    allOriginalFeeds->push_back(feed12);
+    allOriginalFeeds->push_back(feed13);
+    allOriginalFeeds->push_back(feed14);
+    allOriginalFeeds->push_back(feed15);
+    allOriginalFeeds->push_back(feed16);
+    allOriginalFeeds->push_back(feed17);
+    allOriginalFeeds->push_back(feed18);
+    allOriginalFeeds->push_back(feed19);
+    allOriginalFeeds->push_back(feed20);
+    allOriginalFeeds->push_back(feed21);
+    allOriginalFeeds->push_back(feed22);
+    allOriginalFeeds->push_back(feed23);
+    allOriginalFeeds->push_back(feed24);
+    allOriginalFeeds->push_back(feed25);
+    allOriginalFeeds->push_back(feed26);
+    allOriginalFeeds->push_back(feed27);
+    allOriginalFeeds->push_back(feed28);
+    allOriginalFeeds->push_back(feed29);
+    allOriginalFeeds->push_back(feed30);
 
-	std::shared_ptr<std::vector<Symbol>> allCopyFeeds(new std::vector<Symbol>());
-
-	Symbol feed11 = "The umbrella was a black and incomprehensible "; //bundle
-	Symbol feed12 = "I will accept the post three times and refuse it "; //afterwards
-	Symbol feed13 = "He scuttled across the room rather like a "; //rabbit
-	Symbol feed14 = "In short, there is in life an element of elfin "; //coincidence
-	Symbol feed15 = "At night the wicket gate is replaced by a solid "; //door
-	Symbol feed16 = "In his own mind he had completely surrendered "; //himself
-	Symbol feed17 = "Every one is grave in public, and funny in "; //private
-	Symbol feed18 = "He had seen a great poet prostituting his muse to "; //journalism
-	Symbol feed19 = "It was clear that they were the accursed of all men, and they knew not "; //why
-	Symbol feed20 = "His long bare neck and sloping shoulders were the shape of a champagne "; //bottle
-
-	allCopyFeeds->push_back(feed11);
-	allCopyFeeds->push_back(feed12);
-	allCopyFeeds->push_back(feed13);
-	allCopyFeeds->push_back(feed14);
-	allCopyFeeds->push_back(feed15);
-	allCopyFeeds->push_back(feed16);
-	allCopyFeeds->push_back(feed17);
-	allCopyFeeds->push_back(feed18);
-	allCopyFeeds->push_back(feed19);
-	allCopyFeeds->push_back(feed20);
-
-    //test1->testSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
-    //test1->testConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", *allCopyFeeds);
-    //test1->testConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
-    //test1->testConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
+    //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
+    //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
 
 	return 0;
 

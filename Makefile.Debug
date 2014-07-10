@@ -91,7 +91,7 @@ $(DESTDIR_TARGET):  $(OBJECTS)
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) $(OBJECTS)  $(LIBS)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ CONFIG+=debug -o Makefile.Debug ConfabulationEngine.pro
+	@$(QMAKE) -spec win32-g++ -o Makefile.Debug ConfabulationEngine.pro
 
 qmake_all: FORCE
 
@@ -130,7 +130,10 @@ debug/ConfabulationTest.o: ConfabulationTest.cpp ConfabulationTest.h \
 		Globals.h \
 		sparse_structures/DOKExcitationVector.hpp \
 		Utils.h \
-		sparse_structures/IExcitationVector.hpp
+		sparse_structures/IExcitationVector.hpp \
+		sparse_structures/DOKLinksMatrix.hpp \
+		sparse_structures/IKnowledgeLinks.hpp \
+		sparse_structures/CSRLinksMatrix.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\ConfabulationTest.o ConfabulationTest.cpp
 
 debug/Globals.o: Globals.cpp Globals.h \
