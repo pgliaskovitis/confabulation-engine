@@ -91,11 +91,11 @@ void TextReader::handleAllSentences(const Symbol& filename)
 		l_file.open(filename.c_str());
         InitializeFileStream(l_file);
         if (l_file.is_open()) {
-			std::shared_ptr<Symbol> leftOverSentence = NULL;
+            std::shared_ptr<Symbol> leftOverSentence = nullptr;
             while (l_file.good()) {
 				std::stringstream l_string;
 
-				if (leftOverSentence != NULL)
+                if (leftOverSentence != nullptr)
 					l_string << *leftOverSentence;
 
 				Symbol::size_type endOfSentence = Symbol::npos;
@@ -111,23 +111,19 @@ void TextReader::handleAllSentences(const Symbol& filename)
 
                 endOfDelimiter = l_string.str().find_first_not_of(Globals::kSentenceDelimiters, endOfSentence);
 
-                if ((endOfDelimiter != Symbol::npos) && (endOfDelimiter != endOfSentence)) {
-					//std::cout << " (large delimiter: " << l_string.str().at(endOfDelimiter - 1) << ")" << l_string.str().substr(0, endOfDelimiter) << std::endl; //read until the sentence delimiter included
+                if (endOfDelimiter != Symbol::npos) {
+                    //delimiter finishes in the current line
 					std::shared_ptr<Symbol> tempLeftover(new Symbol(l_string.str().substr(endOfDelimiter)));
-					//std::cout << "leftover: " << *tempLeftover << std::endl;
-					leftOverSentence = tempLeftover; //store the rest of the line
+                    leftOverSentence = tempLeftover; //store the part of the line from the end of the delimiter to npos
 					endOfPhase = endOfDelimiter;
                 } else {
-					//std::cout << " (lone delimiter: " << l_string.str().at(endOfSentence) << ")" << l_string.str().substr(0, endOfSentence + 1) << std::endl; //lone delimiter (usually . or ;)
+                    //delimiter does not finish in the current line
 					std::shared_ptr<Symbol> tempLeftover(new Symbol(l_string.str().substr(endOfSentence + 1)));
-					//std::cout << "leftover: " << *tempLeftover << std::endl;
-					leftOverSentence = tempLeftover; //store the rest of the line
+                    leftOverSentence = tempLeftover; //store the part of the line from the start of the delimiter to npos
 					endOfPhase = endOfSentence + 1;
 				}
 
-				//std::cout << l_string.str().substr(0, endOfPhase) << std::endl;
-				//std::vector<Symbol> currentSentenceTokens = extractSentenceTokens(sentence); //this would induce a copying of the vector to take place
-                const std::vector<Symbol>& currentSentenceTokens = ExtractSentenceTokens(l_string.str().substr(0, endOfPhase)); //this will not however
+                const std::vector<Symbol>& currentSentenceTokens = ExtractSentenceTokens(l_string.str().substr(0, endOfPhase));
 
 #ifdef DEBUG_1_H_
 				std::cout << "------- New sentence confabulation symbols START -------" << "\n";

@@ -32,7 +32,8 @@ SOURCES += \
     SentenceTokenizer.cpp \
     SymbolAttribute.cpp \
     TextReader.cpp \
-    TemplateInstantiations.cpp
+    TemplateInstantiations.cpp \
+    NGramHandler.cpp
 
 HEADERS += \
     ConfabulationTest.h \
@@ -48,4 +49,5 @@ HEADERS += \
     sparse_structures/IKnowledgeLinks.hpp \
     Utils.h \
     TemplateInstantiations.h \
-    sparse_structures/DOKLinksMatrix.hpp
+    sparse_structures/DOKLinksMatrix.hpp \
+    NGramHandler.h
