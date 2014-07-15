@@ -15,6 +15,7 @@
 //forward declarations
 class KnowledgeManager;
 class TextReader;
+class NGramHandler;
 
 #ifndef CONFSYMBOL_H_
 #define CONFSYMBOL_H_
@@ -36,14 +37,18 @@ public:
 
     TextReader& get_text_reader();
     KnowledgeManager& get_knowledge_manager();
+    NGramHandler& get_ngram_handler();
 
-    void set_text_reader(std::shared_ptr<TextReader> text_reader); //this will internally take ownership of the pointer
-    void set_knowledge_manager(std::shared_ptr<KnowledgeManager>& knowledge_manager); //this will internally take ownership of the pointer
+    void set_text_reader(std::shared_ptr<TextReader> text_reader);
+    void set_knowledge_manager(std::shared_ptr<KnowledgeManager> knowledge_manager);
+    void set_ngram_handler(std::shared_ptr<NGramHandler> ngram_handler);
 
 private:
     std::shared_ptr<KnowledgeManager> knowledge_manager_;
 
     std::shared_ptr<TextReader> text_reader_;
+
+    std::shared_ptr<NGramHandler> ngram_handler_;
 };
 
 #endif /* GLOBALS_H_ */

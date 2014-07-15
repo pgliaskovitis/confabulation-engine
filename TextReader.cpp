@@ -6,6 +6,7 @@
  */
 
 #include "TextReader.h"
+#include "NGramHandler.h"
 #include "SentenceTokenizer.h"
 #include "KnowledgeManager.h"
 #include "Globals.h"
@@ -66,7 +67,7 @@ void TextReader::HandleAllTextFiles(const Symbol& seedname)
             while (l_file.good()) {
 				std::getline(l_file, filename);
                 handleAllSentences(filename);
-				std::cout << "Just handled file " << filename << "\n";
+                std::cout << "Just handled file " << filename << ", Multi-word count is: " << globals_manager_.get_ngram_handler().get_multi_word_count() << "\n";
 				std::cout.flush();
 			}
 			l_file.close();
@@ -137,6 +138,8 @@ void TextReader::handleAllSentences(const Symbol& filename)
 				//for (std::set<Symbol>::iterator it = mySymbolSet[0]->begin(); it != mySymbolSet[0]->end(); ++it) {
 				//	std::cout << *it << "\n";
 				//}
+
+                globals_manager_.get_ngram_handler().ExtractAndStoreNGrams(currentSentenceTokens);
                 globals_manager_.get_knowledge_manager().EnrichKnowledge(currentSentenceTokens);
 			}
 			l_file.close();
