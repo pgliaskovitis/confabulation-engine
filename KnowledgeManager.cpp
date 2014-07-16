@@ -266,8 +266,8 @@ const std::vector<std::pair<float, Symbol>> KnowledgeManager::GetConfabulatedSym
                     itSource->second->set_source_excitation(1.0);
 
 					//compute link strength for all target symbols
-					Synapse::iterator itTarget;
-                    for (itTarget = itSource->second->get_knowledge_link().begin(); itTarget != itSource->second->get_knowledge_link().end(); ++itTarget) {
+                    Synapse::iterator itTarget = itSource->second->get_knowledge_link().begin();
+                    while (itTarget != itSource->second->get_knowledge_link().end()) {
                         std::shared_ptr<Symbol> current_target_ptr = itTarget->first;
                         std::map<std::shared_ptr<Symbol>, size_t, Symbol_Cmp>::iterator current_target_symbol_occurences_it = current_knowledge_base->get_target_symbol_occurences().find(current_target_ptr);
                         size_t current_target_symbol_occurences;
@@ -280,10 +280,11 @@ const std::vector<std::pair<float, Symbol>> KnowledgeManager::GetConfabulatedSym
 
 						//STAGE III: For each active symbol in the source module of each of these knowledge bases calculate the additive term in the
 						//confabulation sum
-                        float current_link_strength = ((float)(itTarget->second)) / ((float)current_target_symbol_occurences * Globals::kBaseProb);
+                        Synapse::iterator current = itTarget++;
+                        float current_link_strength = ((float)(current->second)) / ((float)current_target_symbol_occurences * Globals::kBaseProb);
 #ifdef CLEAR_WEAK_LINKS_H_
                         if (current_link_strength <= 1.0) {
-                            itSource->second->get_knowledge_link()->erase(itTarget);
+                            itSource->second->get_knowledge_link()->erase(current);
 							continue;
 						}
 #endif

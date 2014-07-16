@@ -156,7 +156,6 @@ void TextReader::handleAllSentences(const Symbol& filename)
 
 const std::vector<Symbol> TextReader::ExtractSentenceTokens(const Symbol& input)
 {
-
 	std::vector<Symbol> output;
 
 	SentenceTokenizer tok(input);

@@ -170,7 +170,7 @@ void ConfabulationTest::TestSimpleConfabulation(const Symbol& symbolfile, const 
 {
 	Globals globals;
 	std::shared_ptr<TextReader> reader(new TextReader(globals));
-    std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(2, globals));
+    std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(3, globals));
 	std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
 
 	manager->Init();
@@ -181,6 +181,10 @@ void ConfabulationTest::TestSimpleConfabulation(const Symbol& symbolfile, const 
 
     reader->HandleAllTextFiles(masterfile);
 	manager->PersistRecallableKnowledge();
+
+    globals.get_ngram_handler().CleanupNGrams();
+    std::cout << "Multi-word count after cleanup is: " << globals.get_ngram_handler().get_multi_word_count() << "\n";
+
     PerformConfabulation(globals, sentences);
 }
 
@@ -188,7 +192,7 @@ void ConfabulationTest::TestConfabulationWithPersistedKnowledge(const Symbol& sy
 {
 	Globals globals;
 	std::shared_ptr<TextReader> reader(new TextReader(globals));
-    std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(2, globals));
+    std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(3, globals));
 	std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
 
 	manager->Init();
@@ -264,7 +268,7 @@ int main()
 
 	std::shared_ptr<std::vector<Symbol>> allOriginalFeeds(new std::vector<Symbol>());
 
-    test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
+    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
 	Symbol feed1 = "The hooded men were steadily chanting beneath the ";
 	Symbol feed2 = "An army of little insects gathered on top of ";
@@ -330,7 +334,7 @@ int main()
     allOriginalFeeds->push_back(feed29);
     allOriginalFeeds->push_back(feed30);
 
-    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
 
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
