@@ -20,7 +20,7 @@ void NGramHandler::ExtractAndStoreNGrams(const std::vector<Symbol>& sentence_tok
     // first count all single word symbols
     std::unordered_map<Symbol, size_t>& single_word_counts = occurence_counts_[0];
     for (size_t i = 0; i < sentence_size; ++i) {
-        if (single_word_counts[sentence_tokens[i]]++ == 1u)
+        single_word_counts[sentence_tokens[i]]++
     }
     */
 

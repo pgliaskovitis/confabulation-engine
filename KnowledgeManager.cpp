@@ -10,6 +10,7 @@
 #include "KnowledgeManager.h"
 #include "Globals.h"
 #include "SentenceTokenizer.h"
+#include "Utils.h"
 
 KnowledgeManager::KnowledgeManager(Globals& globals_manager) : globals_manager_(globals_manager),
                                                                all_symbols_(new std::map<Symbol, std::shared_ptr<Symbol>>)
@@ -282,12 +283,6 @@ const std::vector<std::pair<float, Symbol>> KnowledgeManager::GetConfabulatedSym
 						//confabulation sum
                         Synapse::iterator current = itTarget++;
                         float current_link_strength = ((float)(current->second)) / ((float)current_target_symbol_occurences * Globals::kBaseProb);
-#ifdef CLEAR_WEAK_LINKS_H_
-                        if (current_link_strength <= 1.0) {
-                            itSource->second->get_knowledge_link()->erase(current);
-							continue;
-						}
-#endif
                         float former_target_excitation = itSource->second->get_target_excitation();
                         float excitation_increment = (itSource->second->get_source_excitation()) * (log(current_link_strength) + Globals::kBandGap);
                         float new_target_excitation = former_target_excitation + excitation_increment;
@@ -337,6 +332,44 @@ const std::vector<std::pair<float, Symbol>> KnowledgeManager::GetConfabulatedSym
 	}
 
 	return output;
+}
+
+void KnowledgeManager::CleanUpWeakLinks()
+{
+    for (unsigned short i = 0; i < Globals::kLevelSize - 1; i++) {
+        for (unsigned short j = i + 1; j <= Globals::kLevelSize - 1; j++) {
+            const std::unique_ptr<KnowledgeBase>& current_knowledge_base = all_knowledge_bases_[i][j - (i + 1)];
+            std::map<std::shared_ptr<Symbol>, std::unique_ptr<SymbolAttribute>, Symbol_Cmp>::iterator itSource = current_knowledge_base->get_knowledge_links().begin();
+            while (itSource != current_knowledge_base->get_knowledge_links().end()) {
+                //initialize excitation of current source symbol
+                itSource->second->set_source_excitation(1.0);
+
+                //compute link strength for all target symbols
+                Synapse::iterator itTarget = itSource->second->get_knowledge_link().begin();
+                while (itTarget != itSource->second->get_knowledge_link().end()) {
+                    std::shared_ptr<Symbol> current_target_ptr = itTarget->first;
+                    std::map<std::shared_ptr<Symbol>, size_t, Symbol_Cmp>::iterator current_target_symbol_occurences_it = current_knowledge_base->get_target_symbol_occurences().find(current_target_ptr);
+                    size_t current_target_symbol_occurences;
+                    if (current_target_symbol_occurences_it != current_knowledge_base->get_target_symbol_occurences().end())
+                        current_target_symbol_occurences = current_target_symbol_occurences_it->second;
+                    else {
+                        current_target_symbol_occurences = std::numeric_limits<size_t>::max();
+                        std::cout << "Warning: Target symbol occurences for symbol " << itTarget->first << " were not found!" << "\n";
+                    }
+
+                    //STAGE III: For each active symbol in the source module of each of these knowledge bases calculate the additive term in the
+                    //confabulation sum
+                    Synapse::iterator current = itTarget++;
+                    float current_link_strength = ((float)(current->second)) / ((float)current_target_symbol_occurences * Globals::kBaseProb);
+                    if (current_link_strength < 1.0) {
+                        itSource->second->get_knowledge_link().erase(current);
+                        continue;
+                    }
+                }
+                itSource++;
+            }
+        }
+    }
 }
 
 void KnowledgeManager::PersistRecallableKnowledge()

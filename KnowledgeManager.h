@@ -57,10 +57,6 @@ struct Symbol_Cmp
 typedef std::map<std::shared_ptr<Symbol>, size_t, Symbol_Cmp> Synapse;
 #endif
 
-#ifndef CLEAR_WEAK_LINKS_H_
-//#define CLEAR_WEAK_LINKS_H_
-#endif
-
 struct Excit_Cmp
 {
 	bool operator()(std::pair<float, Symbol>& a, std::pair<float, Symbol>& b)
@@ -91,6 +87,8 @@ public:
     std::shared_ptr<Symbol> AddSymbol(const Symbol& symbol);
 
     std::shared_ptr<Symbol> GetSymbolPtr(const Symbol& symbol) const;
+
+    void CleanUpWeakLinks();
 
     void PersistRecallableKnowledge();
 

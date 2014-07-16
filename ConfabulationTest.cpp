@@ -180,12 +180,13 @@ void ConfabulationTest::TestSimpleConfabulation(const Symbol& symbolfile, const 
     reader->HandleSymbolFile(symbolfile);
 
     reader->HandleAllTextFiles(masterfile);
-	manager->PersistRecallableKnowledge();
 
     globals.get_ngram_handler().CleanupNGrams();
     std::cout << "Multi-word count after cleanup is: " << globals.get_ngram_handler().get_multi_word_count() << "\n";
 
+    manager->CleanUpWeakLinks();
     PerformConfabulation(globals, sentences);
+    manager->PersistRecallableKnowledge();
 }
 
 void ConfabulationTest::TestConfabulationWithPersistedKnowledge(const Symbol& symbolfile, const Symbol& supplementfile, const std::vector<Symbol>& sentences) const
@@ -203,6 +204,7 @@ void ConfabulationTest::TestConfabulationWithPersistedKnowledge(const Symbol& sy
 
 	manager->RecallPersistedKnowledge();
     reader->HandleAllTextFiles(supplementfile);
+    manager->CleanUpWeakLinks();
     PerformConfabulation(globals, sentences);
 	manager->PersistRecallableKnowledge();
 }
