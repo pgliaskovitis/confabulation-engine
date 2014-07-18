@@ -30,14 +30,20 @@ class ConfabulationTest
 {
 public:
     int TestSharedPointer() const;
-    int TestFixedString(const Symbol& input) const;
-    int TestSymbolFile(const Symbol& input) const;
-    int TestFixedFile(const Symbol& symbolfile, const Symbol& textfile) const;
-    int TestMultipleFiles(const Symbol& symbolfile, const Symbol& masterfile) const;
+
+    int TestTokenizeFixedString(const Symbol& input) const;
+    int TestReadSymbolFile(const Symbol& input) const;
+    int TestReadFixedFile(const Symbol& symbolfile, const Symbol& textfile) const;
+    int TestReadMultipleFiles(const Symbol& symbolfile, const Symbol& masterfile) const;
+
     void TestDOKExcitationVector() const;
     void TestDOKLinksMatrix() const;
     void TestCSRLinksMatrix() const;
+
+    void TestNGrams() const;
+
     void TestTokenizePersistedKnowledge() const;
+
     void TestSimpleConfabulation(const Symbol& symbolfile, const Symbol& masterfile, const std::vector<Symbol>& sentences) const;
     void TestConfabulationWithPersistedKnowledge(const Symbol& symbolfile, const Symbol& supplementfile, const std::vector<Symbol>& sentences) const;
 

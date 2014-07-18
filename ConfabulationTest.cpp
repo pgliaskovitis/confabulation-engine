@@ -35,7 +35,7 @@ int ConfabulationTest::TestSharedPointer() const
 	return 0;
 }
 
-int ConfabulationTest::TestFixedString(const Symbol& input) const
+int ConfabulationTest::TestTokenizeFixedString(const Symbol& input) const
 {
 	SentenceTokenizer tok(input);
 
@@ -45,7 +45,7 @@ int ConfabulationTest::TestFixedString(const Symbol& input) const
 	return 0;
 }
 
-int ConfabulationTest::TestSymbolFile(const Symbol& input) const
+int ConfabulationTest::TestReadSymbolFile(const Symbol& input) const
 {
 	Globals globals;
 	TextReader reader(globals);
@@ -55,7 +55,7 @@ int ConfabulationTest::TestSymbolFile(const Symbol& input) const
 	return 0;
 }
 
-int ConfabulationTest::TestFixedFile(const Symbol& symbolfile, const Symbol& textfile) const
+int ConfabulationTest::TestReadFixedFile(const Symbol& symbolfile, const Symbol& textfile) const
 {
 	Globals globals;
 	std::shared_ptr<TextReader> reader(new TextReader(globals));
@@ -70,7 +70,7 @@ int ConfabulationTest::TestFixedFile(const Symbol& symbolfile, const Symbol& tex
 	return 0;
 }
 
-int ConfabulationTest::TestMultipleFiles(const Symbol& symbolfile, const Symbol& masterfile) const
+int ConfabulationTest::TestReadMultipleFiles(const Symbol& symbolfile, const Symbol& masterfile) const
 {
 	Globals globals;
 	std::shared_ptr<TextReader> reader(new TextReader(globals));
@@ -166,6 +166,25 @@ void ConfabulationTest::TestTokenizePersistedKnowledge() const
     tok.KnowledgeTokenize(KnowledgeBase::kPersistenceDelimiters); //without const, it does not compile
 }
 
+void ConfabulationTest::TestNGrams() const
+{
+    Globals globals;
+    std::shared_ptr<TextReader> reader(new TextReader(globals));
+    std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(3, globals));
+    std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
+
+    manager->Init();
+    globals.set_knowledge_manager(manager);
+    globals.set_text_reader(reader);
+    globals.set_ngram_handler(ngram_handler);
+    reader->HandleSymbolFile(symbolfile);
+
+    reader->HandleAllTextFiles(masterfile);
+
+    globals.get_ngram_handler().CleanupNGrams();
+    std::cout << "Multi-word count after cleanup is: " << globals.get_ngram_handler().get_multi_word_count() << "\n";
+}
+
 void ConfabulationTest::TestSimpleConfabulation(const Symbol& symbolfile, const Symbol& masterfile, const std::vector<Symbol>& sentences) const
 {
 	Globals globals;
@@ -180,9 +199,6 @@ void ConfabulationTest::TestSimpleConfabulation(const Symbol& symbolfile, const 
     reader->HandleSymbolFile(symbolfile);
 
     reader->HandleAllTextFiles(masterfile);
-
-    globals.get_ngram_handler().CleanupNGrams();
-    std::cout << "Multi-word count after cleanup is: " << globals.get_ngram_handler().get_multi_word_count() << "\n";
 
     manager->CleanUpWeakLinks();
     PerformConfabulation(globals, sentences);
@@ -226,15 +242,15 @@ int main()
 {
 	std::shared_ptr<ConfabulationTest> test1(new ConfabulationTest());
 
-	//test1->testSharedPointer();
+    //test1->TestSharedPointer();
 
-	//test1->testFixedString("This is, alas, the primal knowledge. \"My fumblings will be your quickening, minion.\"");
+    //test1->TestFixedString("This is, alas, the primal knowledge. \"My fumblings will be your quickening, minion.\"");
 
-	//test1->testSymbolFile("text_data/ascii_symbols.txt");
+    //test1->TestSymbolFile("text_data/ascii_symbols.txt");
 
-    //test1->testFixedFile("text_data/ascii_symbols.txt", "text_data/Balzac_1.txt");
+    //test1->TestFixedFile("text_data/ascii_symbols.txt", "text_data/Balzac_1.txt");
 
-    //test1->testMultipleFiles("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+    //test1->TestMultipleFiles("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
     //test1->TestDOKExcitationVector();
 
@@ -243,6 +259,8 @@ int main()
     //test1->TestCSRLinksMatrix();
 
 	//test1->testTokenizePersistedKnowledge();
+
+    //test1->TestNGrams();
 
     Symbol copy_feed1 = "The umbrella was a black and prosaic "; //bundle
     Symbol copy_feed2 = "I will accept the post three times and refuse it "; //afterwards
