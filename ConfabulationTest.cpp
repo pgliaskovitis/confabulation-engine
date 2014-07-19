@@ -166,7 +166,7 @@ void ConfabulationTest::TestTokenizePersistedKnowledge() const
     tok.KnowledgeTokenize(KnowledgeBase::kPersistenceDelimiters); //without const, it does not compile
 }
 
-void ConfabulationTest::TestNGrams() const
+void ConfabulationTest::TestNGrams(const Symbol& symbolfile, const Symbol& masterfile) const
 {
     Globals globals;
     std::shared_ptr<TextReader> reader(new TextReader(globals));

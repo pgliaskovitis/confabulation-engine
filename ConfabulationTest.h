@@ -40,7 +40,7 @@ public:
     void TestDOKLinksMatrix() const;
     void TestCSRLinksMatrix() const;
 
-    void TestNGrams() const;
+    void TestNGrams(const Symbol& symbolfile, const Symbol& masterfile) const;
 
     void TestTokenizePersistedKnowledge() const;
 
