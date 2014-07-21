@@ -33,7 +33,8 @@ SOURCES += \
     SymbolAttribute.cpp \
     TextReader.cpp \
     TemplateInstantiations.cpp \
-    NGramHandler.cpp
+    NGramHandler.cpp \
+    SymbolMapping.cpp
 
 HEADERS += \
     ConfabulationTest.h \
@@ -50,4 +51,5 @@ HEADERS += \
     Utils.h \
     TemplateInstantiations.h \
     sparse_structures/DOKLinksMatrix.hpp \
-    NGramHandler.h
+    NGramHandler.h \
+    SymbolMapping.h
