@@ -8,6 +8,7 @@
 #include "ConfabulationTest.h"
 #include "SentenceTokenizer.h"
 #include "TextReader.h"
+#include "SymbolMapping.h"
 #include "NGramHandler.h"
 #include "SymbolAttribute.h"
 #include "KnowledgeBase.h"
@@ -159,6 +160,21 @@ void ConfabulationTest::TestCSRLinksMatrix() const
     std::cout << "Vector after multiplication:" << std::endl << my_result_vec_ptr->ToString();
 }
 
+void ConfabulationTest::TestSymbolMapping() const
+{
+    std::unique_ptr<SymbolMapping> my_symbol_mapping_ptr(new SymbolMapping());
+
+    my_symbol_mapping_ptr->AddSymbol("perilous");
+    my_symbol_mapping_ptr->AddSymbol("cellar");
+    my_symbol_mapping_ptr->AddSymbol("door");
+    my_symbol_mapping_ptr->AddSymbol("to");
+    my_symbol_mapping_ptr->AddSymbol("the");
+    my_symbol_mapping_ptr->AddSymbol("wonder");
+    my_symbol_mapping_ptr->AddSymbol("Darko");
+
+    std::cout << "SymbolMapping after addition:" << std::endl << my_symbol_mapping_ptr->ToString();
+}
+
 void ConfabulationTest::TestTokenizePersistedKnowledge() const
 {
 	Symbol knowledgeFragment = "New:::York{1765|||2308}---->Haven{7|||201}---->Year{1111|||6538}";
@@ -260,6 +276,8 @@ int main()
 
 	//test1->testTokenizePersistedKnowledge();
 
+    test1->TestSymbolMapping();
+
     //test1->TestNGrams();
 
     Symbol copy_feed1 = "The umbrella was a black and prosaic "; //bundle
@@ -354,7 +372,7 @@ int main()
     allOriginalFeeds->push_back(feed29);
     allOriginalFeeds->push_back(feed30);
 
-    test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
 
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
