@@ -18,6 +18,11 @@ class NGramHandler
 public:
     NGramHandler(unsigned short max_words, Globals& globals_manager);
 
+    NGramHandler(const NGramHandler& rhs) = delete;
+    NGramHandler& operator=(const NGramHandler& rhs) = delete;
+    NGramHandler(NGramHandler&& rhs) = delete;
+    NGramHandler&& operator=(NGramHandler&& rhs) = delete;
+
     // Counts occurences of n-grams from a given input sentence
     void ExtractAndStoreNGrams(const std::vector<Symbol>& sentence_tokens);
 
