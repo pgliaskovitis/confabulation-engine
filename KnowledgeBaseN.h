@@ -21,20 +21,22 @@ public:
     void Add(const std::string& src_symbol, const std::string& targ_symbol);
     void Add(size_t src_symbol, size_t targ_symbol);
     void ComputeLinkStrengths();
-    static float ComputeLinkStrength(double antecedent_support_probability);
     float GetPercentOfElementsLessThanThreshold(size_t threshold);
     std::unique_ptr<IExcitationVector<float>> transmit(const std::unique_ptr<IExcitationVector<float>>& normalized_excitations);
 
     std::string get_id() { return id_; }
 
-    std::string GetStats();
-    size_t GetSizeSrc() { return src_map_->Size(); }
-    size_t GetSizeTarg() { return targ_map_->Size(); }
+    std::string GetStats() { return std::string("number of knowledge links: ") + std::to_string(GetNumKnowledgeLinks()); }
+    size_t GetSizeSrc() { return cooccurrence_counts_->get_num_rows(); }
+    size_t GetSizeTarg() { return cooccurrence_counts_->get_num_cols(); }
     size_t GetNumKnowledgeLinks() { return kbase_->GetNnz(); }
 
 private:
     const std::string id_;
-    std::unique_ptr<IKnowledgeLinks<float>> cooccurrence_counts_;
+
+    static float ComputeLinkStrength(double antecedent_support_probability);
+
+    std::unique_ptr<IKnowledgeLinks<size_t>> cooccurrence_counts_;
     std::unique_ptr<IKnowledgeLinks<float>> kbase_;
     std::unique_ptr<SymbolMapping> src_map_;
     std::unique_ptr<SymbolMapping> targ_map_;
