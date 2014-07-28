@@ -19,10 +19,10 @@ public:
     KnowledgeBaseN&& operator=(KnowledgeBaseN&& rhs) = delete;
 
     void Add(const std::string& src_symbol, const std::string& targ_symbol);
-    void Add(size_t src_symbol, size_t targ_symbol);
+    void Add(size_t targ_index, size_t src_index);
     void ComputeLinkStrengths();
     float GetPercentOfElementsLessThanThreshold(size_t threshold);
-    std::unique_ptr<IExcitationVector<float>> transmit(const std::unique_ptr<IExcitationVector<float>>& normalized_excitations);
+    std::unique_ptr<IExcitationVector<float>> Transmit(const IExcitationVector<float>& normalized_excitations);
 
     std::string get_id() { return id_; }
 
@@ -36,11 +36,16 @@ private:
 
     static float ComputeLinkStrength(double antecedent_support_probability);
 
-    std::unique_ptr<IKnowledgeLinks<size_t>> cooccurrence_counts_;
-    std::unique_ptr<IKnowledgeLinks<float>> kbase_;
+    // The knowledge base is essentially a matrix of conditional probabilities P(s | t)
+    // Symbols s are providing the input excitations
+    // In order to be able to transmit excitations with regular matrix multiplication
+    // the source symbols must correspond to the COLUMNS of the matrix
+
     std::unique_ptr<SymbolMapping> src_map_;
     std::unique_ptr<SymbolMapping> targ_map_;
-    std::vector<size_t> target_symbol_count_;
+    std::unique_ptr<IKnowledgeLinks<size_t>> cooccurrence_counts_;
+    std::unique_ptr<IKnowledgeLinks<float>> kbase_;
+    std::vector<size_t> target_symbol_sums_;
 };
 
 #endif // KNOWLEDGEBASEN_H

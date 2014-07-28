@@ -1,43 +1,68 @@
 #include "KnowledgeBaseN.h"
+#include "Globals.h"
 
 KnowledgeBaseN::KnowledgeBaseN(const std::string& id, std::unique_ptr<SymbolMapping>& src_map, std::unique_ptr<SymbolMapping>& targ_map) :
     id_(id),
     src_map_(std::move(src_map)),
-    targ_map_(std::move(targ_map))
+    targ_map_(std::move(targ_map)),
+    cooccurrence_counts_ (new DOKLinksMatrix<size_t>(targ_map->Size(), src_map->Size())),
+    kbase_(new CSRLinksMatrix<float>(targ_map->Size(), src_map->Size())),
+    target_symbol_sums_(targ_map->Size())
 {}
 
 void KnowledgeBaseN::Add(const std::string& src_symbol, const std::string& targ_symbol)
 {
-    size_t row = src_map_->IndexOf(src_symbol);
-    size_t col = targ_map_->IndexOf(targ_symbol);
+    size_t row = targ_map_->IndexOf(targ_symbol);
+    size_t col = src_map_->IndexOf(src_symbol);
 
     Add(row, col);
 }
 
-void KnowledgeBaseN::Add(size_t src_symbol, size_t targ_symbol)
+void KnowledgeBaseN::Add(size_t targ_index, size_t src_index)
 {
-    kbase_.reset(nullptr); // discard out of date version
-    target_symbol_count_[targ_symbol]++;
-    size_t previous_count = cooccurrence_counts_->GetElement(src_symbol, targ_symbol);
-    cooccurrence_counts_->SetElement(src_symbol, targ_symbol, previous_count + 1);
+    kbase_.reset(nullptr);
+    target_symbol_sums_[targ_index]++;
+    size_t previous_count = cooccurrence_counts_->GetElement(targ_index, src_index);
+    cooccurrence_counts_->SetElement(targ_index, src_index, previous_count + 1);
 }
 
 void KnowledgeBaseN::ComputeLinkStrengths()
 {
-     std::unique_ptr<DOKLinksMatrix<float>> link_strengths(
-                 new DOKLinksMatrix<float>(cooccurrence_counts_->get_num_rows(), cooccurrence_counts_->get_num_cols()));
-//    for (Entry<Pair<Integer, Integer>, Integer> e : cooccurrence_counts
-//            .nz_elements()) {
+    std::unique_ptr<DOKLinksMatrix<float>> link_strengths(
+                new DOKLinksMatrix<float>(cooccurrence_counts_->get_num_rows(), cooccurrence_counts_->get_num_cols()));
 
-//        Pair<Integer, Integer> coord = e.getKey();
-//        Integer l = coord.first;
-//        Integer c = coord.second;
+    for (const std::pair<std::pair<size_t, size_t>, float>& e: cooccurrence_counts_->GetNzElements()) {
+        size_t row = e.first.first;
+        size_t col = e.first.second;
+        link_strengths->SetElement(row, col, ComputeLinkStrength(e.second / (float) target_symbol_sums_[row]));
+    }
 
-//        link_strengths.set(l, c, link_strength(e.getValue()
-//                / (float) row_count[l]));
-//    }
+    kbase_.reset(new CSRLinksMatrix<float>(*link_strengths));
+}
 
-//    // store them in an more static but much more efficient format
-//    kbase_.reset(new CSRLinksMatrix<float>(link_strengths));
+float KnowledgeBaseN::GetPercentOfElementsLessThanThreshold(size_t threshold)
+{
+    int count = 0;
+    for (const std::pair<std::pair<size_t, size_t>, float>& e: cooccurrence_counts_->GetNzElements())
+        if (e.second < threshold)
+            ++count;
 
+    return count / cooccurrence_counts_->GetNnz();
+
+}
+
+std::unique_ptr<IExcitationVector<float> > KnowledgeBaseN::Transmit(const IExcitationVector<float> &normalized_excitations)
+{
+    if (normalized_excitations.get_num_rows() != src_map_->Size())
+            throw std::out_of_range("Input excitations should match the size of the input wordsmapping");
+
+    return kbase_->Multiply(normalized_excitations);
+}
+
+float KnowledgeBaseN::ComputeLinkStrength(double antecedent_support_probability)
+{
+    if (antecedent_support_probability > Globals::kBaseProb)
+        return (float) log(antecedent_support_probability / (double) Globals::kBaseProb) + Globals::kBandGap;
+
+    return 0.0;
 }

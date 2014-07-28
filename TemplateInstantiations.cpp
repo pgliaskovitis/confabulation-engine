@@ -4,5 +4,7 @@
 #include "sparse_structures/CSRLinksMatrix.hpp"
 
 template class DOKExcitationVector<float>;
+template class DOKExcitationVector<size_t>;
 template class DOKLinksMatrix<float>;
+template class DOKLinksMatrix<size_t>;
 template class CSRLinksMatrix<float>;

@@ -35,7 +35,8 @@ SOURCES += \
     TemplateInstantiations.cpp \
     NGramHandler.cpp \
     SymbolMapping.cpp \
-    KnowledgeBaseN.cpp
+    KnowledgeBaseN.cpp \
+    Module.cpp
 
 HEADERS += \
     ConfabulationTest.h \
@@ -54,4 +55,5 @@ HEADERS += \
     sparse_structures/DOKLinksMatrix.hpp \
     NGramHandler.h \
     SymbolMapping.h \
-    KnowledgeBaseN.h
+    KnowledgeBaseN.h \
+    Module.h
