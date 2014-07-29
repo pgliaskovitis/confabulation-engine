@@ -42,7 +42,7 @@ namespace
     }
 
     template <typename T>
-    T positive_clip(T x) {
+    T PositiveClip(T x) {
         return x > 0 ? x : 0;
     }
 }

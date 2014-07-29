@@ -71,15 +71,15 @@ void Module::AddExcitationToIndex(size_t index, float value)
     if (IsFrozen()) {
         // If module is frozen, only activate index if contained in the active indices
         if (frozen_indexes_->find(index) != frozen_indexes_->end()) {
-            float previous_val = excitations_->GetElement(index);
-            excitations_->SetElement(index, positive_clip(previous_val + value)); //value could be negative
-            unsigned int num_inputs = static_cast<unsigned int>(value / Globals::kBandGap) * Globals::kBandGap;
+            float new_val = excitations_->GetElement(index) + value;
+            excitations_->SetElement(index, PositiveClip(new_val)); //value could be negative
+            unsigned int num_inputs = static_cast<unsigned int>(new_val / Globals::kBandGap);
             kb_inputs_->SetElement(index, num_inputs + kb_inputs_->GetElement(index));
         }
     } else {
-        float previous_val = excitations_->GetElement(index);
-        excitations_->SetElement(index, positive_clip(previous_val + value)); //value could be negative
-        unsigned int num_inputs = static_cast<unsigned int>(value / Globals::kBandGap) * Globals::kBandGap;
+        float new_val = excitations_->GetElement(index) + value;
+        excitations_->SetElement(index, PositiveClip(new_val)); //value could be negative
+        unsigned int num_inputs = static_cast<unsigned int>(new_val / Globals::kBandGap);
         kb_inputs_->SetElement(index, num_inputs + kb_inputs_->GetElement(index));
     }
 }
@@ -91,11 +91,9 @@ void Module::AddExcitationToAllSymbols(const IExcitationVector<float> &input)
     if (IsFrozen()) {
         // If module is frozen, only further activate already active symbols
         for (size_t i : *frozen_indexes_) {
-            float kl_input = input.GetElement(i);
-            if (kl_input > 0) {
-                excitations_->SetElement(i, excitations_->GetElement(i) + kl_input);
-                kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
-            }
+            float new_val = excitations_->GetElement(i) + input.GetElement(i);
+            excitations_->SetElement(i,  PositiveClip(new_val));
+            kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
         }
     } else {
         excitations_->Add(input);

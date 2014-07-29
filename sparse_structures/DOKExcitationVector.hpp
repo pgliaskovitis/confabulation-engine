@@ -77,6 +77,7 @@ template <typename T>
 const T& DOKExcitationVector<T>::GetElementQuick(const size_t r) const
 {
     T result;
+
     try {
         result = map_.at(r);
     } catch (const std::out_of_range& oor) {
@@ -89,7 +90,7 @@ const T& DOKExcitationVector<T>::GetElementQuick(const size_t r) const
 template <typename T>
 void DOKExcitationVector<T>::Add(const IExcitationVector<T>& other) {
     for (const std::pair<size_t, T>& element : other.GetNzElements()) {
-        SetElement(element.first, element.second + GetElement(element.first));
+        SetElement(element.first, PositiveClip(element.second + GetElement(element.first)));
     }
 }
 
