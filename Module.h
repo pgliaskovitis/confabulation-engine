@@ -44,7 +44,7 @@ private:
 
     std::unique_ptr<IExcitationVector<float>> excitations_;
     std::unique_ptr<IExcitationVector<float>> normalized_excitations_;
-    std::unique_ptr<IExcitationVector<size_t>> kb_inputs_;
+    std::unique_ptr<IExcitationVector<unsigned int>> kb_inputs_;
     std::unique_ptr<std::set<size_t>> frozen_indexes_;
 };
 
