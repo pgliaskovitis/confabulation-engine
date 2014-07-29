@@ -15,7 +15,7 @@ const Symbol Globals::kTokenDelimiters = " ,`\".!?;@#$%^&*()-:/\\_=+~[]{}<>01234
 const std::vector<Symbol> Globals::kCommonAbbreviations = {"Mr.", "Mrs.", "Dr.", "etc.", "Jr.", "Sr.", "Co.", "Ltd.", "A.D.", "B.C."};
 const unsigned short Globals::kLevelSize = 15;
 const float Globals::kBaseProb = 0.0001;
-const float Globals::kBandGap = 1.0;
+const unsigned int Globals::kBandGap = 1;
 const unsigned short Globals::kHeapResults = 3;
 
 KnowledgeManager& Globals::get_knowledge_manager()

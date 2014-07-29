@@ -42,7 +42,7 @@ namespace
     }
 
     template <typename T>
-    T ramp_fun(T x) {
+    T positive_clip(T x) {
         return x > 0 ? x : 0;
     }
 }

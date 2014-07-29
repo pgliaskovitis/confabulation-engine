@@ -32,7 +32,7 @@ public:
 
     static const unsigned short kLevelSize;
     static const float kBaseProb;
-    static const float kBandGap;
+    static const unsigned int kBandGap;
     static const unsigned short kHeapResults;
 
     TextReader& get_text_reader();

@@ -22,16 +22,17 @@ public:
     void Reset();
     void ExcitationsToZero();
 
-    void ActivateWord(const Symbol& word, unsigned int K);
-    void AddToAllExcited(unsigned int K);
-    void AddToIndex(size_t index, float value);
+    void ActivateSymbol(const Symbol& word, unsigned int K);
+    void ActivateAllSymbols(unsigned int K);
+
+    void AddExcitationToIndex(size_t index, float value);
+    void AddExcitationToAllSymbols(const IExcitationVector<float>& input);
 
     void Freeze();
     void Unfreeze();
     bool IsFrozen() const { return frozen_indexes_ != nullptr; }
 
     IExcitationVector<float>& GetNormalizedExcitations();
-    void AddExcitations(const IExcitationVector<float>& input);
     std::vector<Symbol> GetExpectation();
 
     Symbol ElementaryConfabulation();

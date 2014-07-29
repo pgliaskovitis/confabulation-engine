@@ -62,7 +62,7 @@ std::unique_ptr<IExcitationVector<float> > KnowledgeBaseN::Transmit(const IExcit
 float KnowledgeBaseN::ComputeLinkStrength(double antecedent_support_probability)
 {
     if (antecedent_support_probability > Globals::kBaseProb)
-        return (float) log(antecedent_support_probability / (double) Globals::kBaseProb) + Globals::kBandGap;
+        return static_cast<float>(log(antecedent_support_probability / (double) Globals::kBaseProb)) + Globals::kBandGap;
 
     return 0.0;
 }
