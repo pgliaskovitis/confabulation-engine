@@ -22,9 +22,9 @@ public:
     void Add(size_t targ_index, size_t src_index);
     void ComputeLinkStrengths();
     float GetPercentOfElementsLessThanThreshold(size_t threshold);
-    std::unique_ptr<IExcitationVector<float>> Transmit(const IExcitationVector<float>& normalized_excitations);
+    std::unique_ptr<IExcitationVector<float>> Transmit(const IExcitationVector<float>& normalized_excitations) const;
 
-    std::string get_id() { return id_; }
+    std::string get_id() const { return id_; }
 
     std::string GetStats() { return std::string("number of knowledge links: ") + std::to_string(GetNumKnowledgeLinks()); }
     size_t GetSizeSrc() { return cooccurrence_counts_->get_num_rows(); }
@@ -37,7 +37,7 @@ private:
     static float ComputeLinkStrength(double antecedent_support_probability);
 
     // The knowledge base is essentially a matrix of conditional probabilities P(s | t)
-    // Symbols s are providing the input excitations
+    // Symbols s are providing the input excitations that pass through the knowledge base
     // In order to be able to transmit excitations with regular matrix multiplication
     // the source symbols must correspond to the COLUMNS of the matrix
 

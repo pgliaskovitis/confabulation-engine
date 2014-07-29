@@ -27,12 +27,12 @@ public:
     SymbolMapping&& operator=(SymbolMapping&& rhs) = delete;
 
     void AddSymbol(const Symbol& symbol);
-    bool Contains(const Symbol& symbol);
+    bool Contains(const Symbol& symbol) const;
 
-    size_t IndexOf(const Symbol& symbol);
-    Symbol GetSymbol(size_t index);
+    size_t IndexOf(const Symbol& symbol) const;
+    Symbol GetSymbol(size_t index) const;
 
-    size_t Size() { return symbol_to_index_->size(); }
+    size_t Size() const { return symbol_to_index_->size(); }
 
     std::set<Symbol> GetAllSymbols();
 

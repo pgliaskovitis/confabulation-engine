@@ -40,6 +40,11 @@ namespace
 
         return result;
     }
+
+    template <typename T>
+    T ramp_fun(T x) {
+        return x > 0 ? x : 0;
+    }
 }
 
 #endif // UTILS_H

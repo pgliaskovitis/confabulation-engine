@@ -51,10 +51,10 @@ float KnowledgeBaseN::GetPercentOfElementsLessThanThreshold(size_t threshold)
 
 }
 
-std::unique_ptr<IExcitationVector<float> > KnowledgeBaseN::Transmit(const IExcitationVector<float> &normalized_excitations)
+std::unique_ptr<IExcitationVector<float> > KnowledgeBaseN::Transmit(const IExcitationVector<float> &normalized_excitations) const
 {
     if (normalized_excitations.get_num_rows() != src_map_->Size())
-            throw std::out_of_range("Input excitations should match the size of the input wordsmapping");
+        throw std::out_of_range("Input excitations should match the size of the input wordsmapping");
 
     return kbase_->Multiply(normalized_excitations);
 }

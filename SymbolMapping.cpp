@@ -19,19 +19,19 @@ void SymbolMapping::AddSymbol(const Symbol &symbol)
     }
 }
 
-bool SymbolMapping::Contains(const Symbol &symbol)
+bool SymbolMapping::Contains(const Symbol &symbol) const
 {
     std::unordered_map<Symbol, std::unique_ptr<Symbol>>::const_iterator it = all_symbols_->find(symbol);
     return (it != all_symbols_->end());
 }
 
-size_t SymbolMapping::IndexOf(const Symbol &symbol)
+size_t SymbolMapping::IndexOf(const Symbol &symbol) const
 {
     const std::unique_ptr<Symbol>& existence_ptr = all_symbols_->at(symbol);
     return symbol_to_index_->at(existence_ptr.get());
 }
 
-Symbol SymbolMapping::GetSymbol(size_t index)
+Symbol SymbolMapping::GetSymbol(size_t index) const
 {
     const Symbol* existence_ptr = index_to_symbol_->at(index);
     return *existence_ptr;

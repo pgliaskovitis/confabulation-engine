@@ -17,29 +17,34 @@ typedef std::string Symbol;
 class Module
 {
 public:
-    Module(SymbolMapping symbol_mapping);
+    Module(const SymbolMapping& symbol_mapping);
 
-    void reset();
-    void excitations_to_zero();
-    void activate_word(Symbol word, int K);
-    void add_to_all_excited(int K);
-    void add_to_index(int index, float value);
-    Symbol elementary_confabulation();
-    Symbol elementary_confabulation(int K);
-    std::vector<Symbol> partial_confabulation(int K, bool multiconf);
-    void freeze();
-    void unfreeze();
-    bool is_frozen();
-    std::unique_ptr<IExcitationVector<float>> getNormalised_excitations();
-    void add_excitations(const IExcitationVector<float>& input);
-    std::vector<Symbol> get_expectation();
+    void Reset();
+    void ExcitationsToZero();
+
+    void ActivateWord(const Symbol& word, unsigned int K);
+    void AddToAllExcited(unsigned int K);
+    void AddToIndex(size_t index, float value);
+
+    void Freeze();
+    void Unfreeze();
+    bool IsFrozen() const { return frozen_indexes_ != nullptr; }
+
+    IExcitationVector<float>& GetNormalizedExcitations();
+    void AddExcitations(const IExcitationVector<float>& input);
+    std::vector<Symbol> GetExpectation();
+
+    Symbol ElementaryConfabulation();
+    Symbol ElementaryConfabulation(unsigned int K);
+    std::vector<Symbol> PartialConfabulation(unsigned int K, bool multiconf);
 
 private:
+    const SymbolMapping& symbol_mapping_;
+
     std::unique_ptr<IExcitationVector<float>> excitations_;
-    std::unique_ptr<IExcitationVector<float>> normalised_excitations_;
+    std::unique_ptr<IExcitationVector<float>> normalized_excitations_;
     std::unique_ptr<IExcitationVector<size_t>> kb_inputs_;
-    std::vector<size_t> frozen_indexes;
-    std::unique_ptr<SymbolMapping> symbol_mapping_;
+    std::unique_ptr<std::set<size_t>> frozen_indexes_;
 };
 
 #endif // MODULE_H
