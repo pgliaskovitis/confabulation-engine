@@ -13,6 +13,7 @@
 const Symbol Globals::kSentenceDelimiters = "\".!?;";
 const Symbol Globals::kTokenDelimiters = " ,`\".!?;@#$%^&*()-:/\\_=+~[]{}<>0123456789";
 const std::vector<Symbol> Globals::kCommonAbbreviations = {"Mr.", "Mrs.", "Dr.", "etc.", "Jr.", "Sr.", "Co.", "Ltd.", "A.D.", "B.C."};
+const Symbol Globals::kDummy = "DummySymbol";
 const unsigned short Globals::kLevelSize = 15;
 const float Globals::kBaseProb = 0.0001;
 const unsigned int Globals::kBandGap = 1;

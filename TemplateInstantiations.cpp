@@ -5,6 +5,7 @@
 
 template class DOKExcitationVector<float>;
 template class DOKExcitationVector<size_t>;
+template class DOKExcitationVector<int>;
 template class DOKExcitationVector<unsigned int>;
 
 template class DOKLinksMatrix<float>;

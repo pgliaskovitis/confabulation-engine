@@ -29,6 +29,7 @@ public:
     static const Symbol kSentenceDelimiters;
     static const Symbol kTokenDelimiters;
     static const std::vector<Symbol> kCommonAbbreviations;
+    static const Symbol kDummy;
 
     static const unsigned short kLevelSize;
     static const float kBaseProb;
