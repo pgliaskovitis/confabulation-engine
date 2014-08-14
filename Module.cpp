@@ -123,11 +123,11 @@ std::vector<Symbol> Module::GetExpectation()
 {
     std::vector<Symbol> result(excitations_->GetNnz());
 
-    size_t nz_index = 0;
+    size_t res_index = 0;
     for (const std::pair<size_t, float>& e : excitations_->GetNzElements()) {
         size_t index = e.first;
-        result[nz_index] = symbol_mapping_.GetSymbol(index);
-        ++nz_index;
+        result[res_index] = symbol_mapping_.GetSymbol(index);
+        ++res_index;
     }
 
     return result;
@@ -146,8 +146,8 @@ Symbol Module::ElementaryConfabulation(int K)
     K = ActualK(K);
 
     const std::set<std::pair<size_t, float>>& nz_excit = excitations_->GetNzElements();
-    const std::set<std::pair<size_t, float>>& min_K_input = ExcitationsAbove(K, nz_excit);
-    std::unique_ptr<std::pair<size_t, float>> max_excit = MaxExcitation(min_K_input);
+    const std::set<std::pair<size_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+    std::unique_ptr<std::pair<size_t, float>> max_excit = MaxExcitation(min_K_excit);
 
     int max_index = -1;
     int n_inputs_max = -1;
@@ -170,6 +170,63 @@ Symbol Module::ElementaryConfabulation(int K)
     Freeze();
 
     return symbol_mapping_.GetSymbol(max_index);
+}
+
+std::vector<Symbol> Module::PartialConfabulation(int K, bool multiconf)
+{
+    normalized_excitations_.reset(nullptr);
+
+    std::vector<Symbol> result;
+
+    std::unique_ptr<std::vector<std::pair<size_t, float>>> expectations;
+
+    if (!multiconf) {
+        K = ActualK(K);
+        const std::set<std::pair<size_t, float>>& nz_excit = excitations_->GetNzElements();
+        const std::set<std::pair<size_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+        expectations.reset(new std::vector<std::pair<size_t, float>>(min_K_excit.begin(), min_K_excit.end()));
+    } else {
+        // we are in the multiconfabulation case, so,
+        // if the max excitation level is less than B, we keep everything, otherwise
+        // we keep all the values such that value >= (max - BandGap), i.e.,
+        // all the symbols that have at least as many incoming knowledge links as the
+        // maximally excited one
+
+        const std::set<std::pair<size_t, float>>& nz_excit = excitations_->GetNzElements();
+        std::unique_ptr<std::pair<size_t, float>> max_excit = MaxExcitation(nz_excit);
+
+        if (max_excit == nullptr) {
+            Freeze();
+            return result;
+        }
+
+        float threshold = std::max(max_excit->second - Globals::kBandGap, 0.0f);
+
+        // find symbols with excitation above threshold
+        for (const std::pair<size_t, float>& e : nz_excit)
+            if (e.second > threshold)
+                expectations->push_back(e);
+    }
+
+    DOKExcitationVector<int> kb_inputs_temp(*kb_inputs_);
+
+    Reset();
+
+    result.resize(expectations->size());
+    size_t res_index = 0;
+
+    // activate only symbols with excitations above threshold
+    for (const std::pair<size_t, float>& e : *expectations) {
+        size_t index = e.first;
+        excitations_->SetElement(index, e.second);
+        kb_inputs_->SetElement(index, kb_inputs_temp.GetElement(index));
+        result[res_index] = symbol_mapping_.GetSymbol(index);
+        ++res_index;
+    }
+
+    Freeze();
+
+    return result;
 }
 
 std::unique_ptr<std::pair<size_t, float> > Module::MaxExcitation(const std::set<std::pair<size_t, float> > &nz_excitations)
