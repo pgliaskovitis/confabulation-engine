@@ -66,7 +66,7 @@ int ConfabulationTest::TestReadFixedFile(const Symbol& symbolfile, const Symbol&
     globals.set_knowledge_manager(manager);
     globals.set_text_reader(reader);
     reader->HandleSymbolFile(symbolfile);
-    reader->handleAllSentences(textfile);
+    reader->HandleAllSentences(textfile);
 
 	return 0;
 }

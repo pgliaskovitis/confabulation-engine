@@ -55,7 +55,6 @@ void TextReader::HandleSymbolFile(const Symbol& seedname)
 //this assumes a master seed file that contains the names of all other text files
 void TextReader::HandleAllTextFiles(const Symbol& seedname)
 {
-
 	std::ifstream l_file;
 	Symbol filename;
 	
@@ -66,7 +65,7 @@ void TextReader::HandleAllTextFiles(const Symbol& seedname)
         if (l_file.is_open()) {
             while (l_file.good()) {
 				std::getline(l_file, filename);
-                handleAllSentences(filename);
+                HandleAllSentences(filename);
                 std::cout << "Just handled file " << filename << ", Multi-word count is: " << globals_manager_.get_ngram_handler().get_multi_word_count() << "\n";
 				std::cout.flush();
 			}
@@ -82,7 +81,7 @@ void TextReader::HandleAllTextFiles(const Symbol& seedname)
 }
 
 //this works inside each text file
-void TextReader::handleAllSentences(const Symbol& filename)
+void TextReader::HandleAllSentences(const Symbol& filename)
 {
 	std::ifstream l_file;
 	Symbol sentence;

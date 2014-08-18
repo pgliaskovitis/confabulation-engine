@@ -45,7 +45,7 @@ public:
     void HandleAllTextFiles(const Symbol& seedname);
 
 	//Reads all sentences from a single input file, named in the argument
-    void handleAllSentences(const Symbol& filename);
+    void HandleAllSentences(const Symbol& filename);
 
 	//Breaks a single sentence into words
     const std::vector<Symbol> ExtractSentenceTokens(const Symbol& input);

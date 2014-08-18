@@ -36,7 +36,8 @@ SOURCES += \
     NGramHandler.cpp \
     SymbolMapping.cpp \
     KnowledgeBaseN.cpp \
-    Module.cpp
+    Module.cpp \
+    TextReaderN.cpp
 
 HEADERS += \
     ConfabulationTest.h \
@@ -56,4 +57,5 @@ HEADERS += \
     NGramHandler.h \
     SymbolMapping.h \
     KnowledgeBaseN.h \
-    Module.h
+    Module.h \
+    TextReaderN.h
