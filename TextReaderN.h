@@ -32,12 +32,13 @@ public:
 
     void Initialize();
 
-    const std::vector<Symbol> ExtractNextSentenceTokens();
+    const std::vector<Symbol> GetNextSentenceTokens();
 
 private:
     void HandleSymbolFile();
     void HandleMasterFile();
 
+    const std::vector<Symbol> ExtractTokens(const Symbol& input);
     void InitializeFileStream(std::ifstream& file);
     void CleanToken(Symbol& input);
     void RemoveCommonAbbreviations(Symbol& input);
@@ -49,8 +50,10 @@ private:
     std::vector<Symbol> delimiter_symbols_;
 
     std::vector<std::string> text_file_names_;
-    unsigned int current_text_file_index_;
+    std::vector<std::string>::iterator current_text_file_it_;
     std::unique_ptr<std::ifstream> current_text_file_;
+
+    std::shared_ptr<Symbol> left_over_sentence_;
 };
 
 #endif // TEXTREADERN_H

@@ -1,10 +1,13 @@
+#include <sstream>
 #include "TextReaderN.h"
 #include "Globals.h"
+#include "SentenceTokenizer.h"
 
 TextReaderN::TextReaderN(const std::string& symbol_file, const std::string& master_file) :
     symbol_file_name_(symbol_file),
     master_file_name_(master_file),
-    current_text_file_index_(0)
+    current_text_file_it_(text_file_names_.begin()),
+    left_over_sentence_(nullptr)
 {
 }
 
@@ -14,9 +17,69 @@ void TextReaderN::Initialize()
     HandleMasterFile();
 }
 
-const std::vector<Symbol> TextReaderN::ExtractNextSentenceTokens()
+const std::vector<Symbol> TextReaderN::GetNextSentenceTokens()
 {
+    if (current_text_file_ != nullptr) {
 
+        while (current_text_file_->good()) {
+            std::string sentence;
+            std::stringstream l_string;
+
+            if (left_over_sentence_ != nullptr)
+                l_string << *left_over_sentence_;
+
+            Symbol::size_type end_of_sentence = Symbol::npos;
+            Symbol::size_type end_of_delimiter = Symbol::npos;
+            Symbol::size_type end_of_phase = Symbol::npos;
+
+            while (end_of_sentence == Symbol::npos) {
+                std::getline(*current_text_file_, sentence);
+                RemoveCommonAbbreviations(sentence);
+                l_string << " " << sentence;
+                end_of_sentence = l_string.str().find_first_of(Globals::kSentenceDelimiters, 0);
+            }
+
+            end_of_delimiter = l_string.str().find_first_not_of(Globals::kSentenceDelimiters, end_of_sentence);
+
+            if (end_of_delimiter != Symbol::npos) {
+                //delimiter finishes in the current line
+                std::shared_ptr<Symbol> tempLeftover(new Symbol(l_string.str().substr(end_of_delimiter)));
+                left_over_sentence_ = tempLeftover; //store the part of the line from the end of the delimiter to npos
+                end_of_phase = end_of_delimiter;
+            } else {
+                //delimiter does not finish in the current line
+                std::shared_ptr<Symbol> tempLeftover(new Symbol(l_string.str().substr(end_of_sentence + 1)));
+                left_over_sentence_ = tempLeftover; //store the part of the line from the start of the delimiter to npos
+                end_of_phase = end_of_sentence + 1;
+            }
+
+            const std::vector<Symbol>& current_sentence_tokens = ExtractTokens(l_string.str().substr(0, end_of_phase));
+
+#ifdef DEBUG_1_H_
+            std::cout << "------- New sentence confabulation symbols START -------" << "\n";
+            for (std::vector<Symbol>::const_iterator it = currentSentenceTokens.begin(); it != currentSentenceTokens.end(); ++it)
+                std::cout << "---->" << (*it) << "<----\n";
+            std::cout << "------- New sentence confabulation symbols END -------" << "\n";
+#endif
+            return current_sentence_tokens;
+        }
+
+        current_text_file_->close();
+        current_text_file_.reset(nullptr);
+        ++current_text_file_it_;
+        left_over_sentence_ = nullptr;
+
+        return GetNextSentenceTokens();
+    } else {
+        if (current_text_file_it_ != text_file_names_.end()) {
+            current_text_file_.reset(new std::ifstream(*current_text_file_it_));
+            current_text_file_->exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
+            InitializeFileStream(*current_text_file_);
+
+            return GetNextSentenceTokens();
+        } else
+            return {""};
+    }
 }
 
 void TextReaderN::HandleSymbolFile()
@@ -44,7 +107,6 @@ void TextReaderN::HandleSymbolFile()
         l_file.close();
     }
 
-    //sort delimiters
     std::sort(delimiter_symbols_.begin(), delimiter_symbols_.end());
 }
 
@@ -70,6 +132,28 @@ void TextReaderN::HandleMasterFile()
             std::cerr << "Exception opening/reading/closing file\n";
         l_file.close();
     }
+}
+
+const std::vector<Symbol> TextReaderN::ExtractTokens(const Symbol &input)
+{
+    std::vector<Symbol> output;
+
+    SentenceTokenizer tok(input);
+
+    while (tok.Tokenize(Globals::kTokenDelimiters)) {
+#ifdef STOREDELIMITERS_
+        if (tok.delim() != "") {
+            output.push_back(tok.delim());
+            //std::cout << "Found non-empty delimiter \"" << tok.delim() << "\"\n";
+        }
+#endif
+        Symbol newToken = tok.Str();
+        //std::cout << newToken << std::endl;
+        CleanToken(newToken);
+        output.push_back(newToken);
+    }
+
+    return output;
 }
 
 void TextReaderN::InitializeFileStream(std::ifstream &file)
