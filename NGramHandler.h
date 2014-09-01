@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <unordered_map>
+#include <map>
 
 #ifndef CONFSYMBOL_H_
 #define CONFSYMBOL_H_
@@ -29,12 +29,12 @@ public:
     // Erases n-grams with occurence count less than the accepted threshold
     void CleanupNGrams();
 
-    size_t get_single_word_count() { return occurence_counts_[0].size(); }
+    size_t get_single_word_count() { return occurrence_counts_[0].size(); }
     size_t get_multi_word_count() {
         size_t multi_word_symbols_count = 0;
 
-        for (size_t i = 1; i < occurence_counts_.size(); ++i)
-            multi_word_symbols_count += occurence_counts_[i].size();
+        for (size_t i = 1; i < occurrence_counts_.size(); ++i)
+            multi_word_symbols_count += occurrence_counts_[i].size();
 
         return multi_word_symbols_count;
     }
@@ -47,7 +47,8 @@ private:
     const unsigned short max_words_;
 
     Globals& globals_manager_;
-    std::vector<std::unordered_map<Symbol, size_t>> occurence_counts_;
+    std::vector<std::map<std::vector<Symbol>, size_t>> occurrence_counts_;
+
 };
 
 #endif // NGRAMHANDLER_H

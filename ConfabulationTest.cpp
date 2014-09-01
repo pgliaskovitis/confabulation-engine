@@ -278,7 +278,7 @@ int main()
 
     //test1->TestSymbolMapping();
 
-    //test1->TestNGrams();
+    test1->TestNGrams("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
     Symbol copy_feed1 = "The umbrella was a black and prosaic "; //bundle
     Symbol copy_feed2 = "I will accept the post three times and refuse it "; //afterwards
@@ -372,7 +372,7 @@ int main()
     allOriginalFeeds->push_back(feed29);
     allOriginalFeeds->push_back(feed30);
 
-    test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
 
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
