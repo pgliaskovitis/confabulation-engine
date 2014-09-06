@@ -1,15 +1,36 @@
 #ifndef NGRAMHANDLER_H
 #define NGRAMHANDLER_H
 
+#include <cstring>
 #include <string>
 #include <vector>
 #include <map>
+
+#ifndef DEBUG_1_H_
+//#define DEBUG_1_H_
+#endif
 
 #ifndef CONFSYMBOL_H_
 #define CONFSYMBOL_H_
 //the basic item of knowledge in this framework
 typedef std::string Symbol;
 #endif
+
+struct StringVector_Cmp
+{
+    bool operator()(const std::vector<Symbol>& a, const std::vector<Symbol> b)
+    {
+        std::string a_string("");
+        for (const Symbol& e: a)
+            a_string += e;
+
+        std::string b_string("");
+        for (const Symbol& e: b)
+            b_string += e;
+
+        return strcmp(a_string.c_str(), b_string.c_str()) < 0;
+    }
+};
 
 class Globals;
 
@@ -47,7 +68,7 @@ private:
     const unsigned short max_words_;
 
     Globals& globals_manager_;
-    std::vector<std::map<std::vector<Symbol>, size_t>> occurrence_counts_;
+    std::vector<std::map<std::vector<Symbol>, size_t, StringVector_Cmp>> occurrence_counts_;
 
 };
 

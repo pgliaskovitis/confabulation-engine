@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include "NGramHandler.h"
 
-const unsigned short NGramHandler::kMinOccurences = 2;
+const unsigned short NGramHandler::kMinOccurences = 3;
 const size_t NGramHandler::kMaxSingleWordSymbols = 120000;
 const size_t NGramHandler::kMaxMultiwordSymbols = 120000;
 
@@ -18,7 +18,7 @@ void NGramHandler::ExtractAndStoreNGrams(const std::vector<Symbol>& sentence_tok
     const size_t sentence_size = sentence_tokens.size();
 
     // count occurrences of single words, to serve as basis
-    std::map<std::vector<Symbol>, size_t>& single_word_counts = occurrence_counts_[0];
+    std::map<std::vector<Symbol>, size_t, StringVector_Cmp>& single_word_counts = occurrence_counts_[0];
     for (size_t i = 0; i < sentence_size; ++i) {
         std::vector<Symbol> single_word_vec;
         single_word_vec.push_back(sentence_tokens[i]);
@@ -36,27 +36,43 @@ void NGramHandler::ExtractAndStoreNGrams(const std::vector<Symbol>& sentence_tok
                 for (unsigned short j = i + 1; j < i + n_words; ++j)
                     compound_word.push_back(sentence_tokens[j]);
 
-                std::map<std::vector<Symbol>, size_t>& n_word_counts = occurrence_counts_[n_words - 1];
+                std::map<std::vector<Symbol>, size_t, StringVector_Cmp>& n_word_counts = occurrence_counts_[n_words - 1];
                 n_word_counts[compound_word]++;
-            }
+             }
         }
     }
 }
 
 void NGramHandler::CleanupNGrams()
 {
+    std::cout << "Single-word count 0 is: " << get_single_word_count() << "\n";
+    std::cout << "Multi-word count 0 is: " << get_multi_word_count() << "\n";
+
     // for each possible multiword length,
     // remove occurrences whose prefixes occured fewer than MIN_OCC times
     for (unsigned short n_words = 2; n_words <= max_words_; ++n_words) {
-        std::map<std::vector<Symbol>, size_t>& current_occ_count = occurrence_counts_[n_words - 1];
-        std::map<std::vector<Symbol>, size_t>& prev_occ_count = occurrence_counts_[n_words - 2];
-        std::map<std::vector<Symbol>, size_t>::iterator it_end = current_occ_count.end();
+        std::map<std::vector<Symbol>, size_t, StringVector_Cmp>& current_occ_count = occurrence_counts_[n_words - 1];
+        std::map<std::vector<Symbol>, size_t, StringVector_Cmp>& prev_occ_count = occurrence_counts_[n_words - 2];
+        std::map<std::vector<Symbol>, size_t, StringVector_Cmp>::iterator it_end = current_occ_count.end();
 
-        for (std::map<std::vector<Symbol>, size_t>::iterator it = current_occ_count.begin(); it != it_end;) {
+        for (std::map<std::vector<Symbol>, size_t, StringVector_Cmp>::iterator it = current_occ_count.begin(); it != it_end;) {
 
             std::vector<Symbol>::const_iterator symbol_it = (it->first).begin();
-            std::vector<Symbol> prefix(symbol_it, symbol_it + n_words - 2);
+            std::vector<Symbol> prefix(symbol_it, symbol_it + n_words - 1);
 
+#ifdef DEBUG_1_H
+            std::string debug_output_1("");
+            for (const std::string& e: it->first) {
+                debug_output_1 += e;
+                debug_output_1 += " ";
+            }
+
+            std::string debug_output_2("");
+            for (const std::string& e: prefix) {
+                debug_output_2 += e;
+                debug_output_2 += " ";
+            }
+#endif
             size_t prefix_count = 0;
             bool must_delete = false;
             try {
@@ -64,7 +80,9 @@ void NGramHandler::CleanupNGrams()
             } catch (std::out_of_range& oor) {
                 must_delete = true;
             }
-
+#ifdef DEBUG_1_H
+            std::cout << "Prefix of multiword \"" << debug_output_1 << "\" is : \"" << debug_output_2 << "\" with occurrence count " << prefix_count << "\n";
+#endif
             if (prefix_count < kMinOccurences)
                 must_delete = true;
 
@@ -79,18 +97,18 @@ void NGramHandler::CleanupNGrams()
     // remove counts of longer groups from the count of the sub groups
     // never erase counts of single words
     for (unsigned short n_words = 3; n_words <= max_words_; ++n_words) {
-        std::map<std::vector<Symbol>, size_t>& current_occ_count = occurrence_counts_[n_words - 1];
-        std::map<std::vector<Symbol>, size_t>::iterator it_end = current_occ_count.end();
+        std::map<std::vector<Symbol>, size_t, StringVector_Cmp>& current_occ_count = occurrence_counts_[n_words - 1];
+        std::map<std::vector<Symbol>, size_t, StringVector_Cmp>::iterator it_end = current_occ_count.end();
         for (unsigned short subgroup_words = n_words - 1; subgroup_words >= 2; --subgroup_words) {
-            std::map<std::vector<Symbol>, size_t>& prev_occ_count = occurrence_counts_[subgroup_words - 1];
+            std::map<std::vector<Symbol>, size_t, StringVector_Cmp>& prev_occ_count = occurrence_counts_[subgroup_words - 1];
 
-            for (std::map<std::vector<Symbol>, size_t>::iterator it = current_occ_count.begin(); it != it_end; ++it) {
+            for (std::map<std::vector<Symbol>, size_t, StringVector_Cmp>::iterator it = current_occ_count.begin(); it != it_end; ++it) {
                 if (it->second >= kMinOccurences) {
                     std::vector<Symbol>::const_iterator symbol_it = (it->first).begin();
                     std::vector<Symbol> prefix(symbol_it, symbol_it + subgroup_words);
 
                     symbol_it = (it->first).end();
-                    std::vector<Symbol> suffix(symbol_it, symbol_it - subgroup_words);
+                    std::vector<Symbol> suffix(symbol_it - subgroup_words, symbol_it);
 
                     prev_occ_count[prefix] -= it->second;
                     prev_occ_count[suffix] -= it->second;
@@ -102,9 +120,9 @@ void NGramHandler::CleanupNGrams()
     // clean the groups with less than MIN_OCC occurrences
     // start at two: keep all the single word symbols
     for (unsigned short n_words = 2; n_words <= max_words_; ++n_words) {
-        std::map<std::vector<Symbol>, size_t>::iterator it = occurrence_counts_[n_words - 1].begin();
+        std::map<std::vector<Symbol>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[n_words - 1].begin();
         while (it != occurrence_counts_[n_words - 1].end()) {
-            std::map<std::vector<Symbol>, size_t>::iterator current = it++;
+            std::map<std::vector<Symbol>, size_t, StringVector_Cmp>::iterator current = it++;
             if (current->second < kMinOccurences) {
                 occurrence_counts_[n_words - 1].erase(current);
             }
