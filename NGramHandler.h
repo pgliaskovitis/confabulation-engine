@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
+#include "SymbolMapping.h"
 
 #ifndef DEBUG_1_H_
 //#define DEBUG_1_H_
@@ -59,6 +61,9 @@ public:
 
         return multi_word_symbols_count;
     }
+
+    std::unique_ptr<SymbolMapping> GetSingleWordSymbols();
+    std::unique_ptr<SymbolMapping> GetAllSymbols();
 
 private:
     static const unsigned short kMinOccurences;

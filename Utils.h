@@ -4,6 +4,7 @@
 #include <cmath>
 #include <string>
 #include <vector>
+#include <sstream>
 
 namespace
 {
@@ -44,6 +45,31 @@ namespace
     template <typename T>
     T PositiveClip(T x) {
         return x > 0 ? x : 0;
+    }
+
+    std::string VectorSymbolToSymbol(const std::vector<std::string>& vector_symbol, char delim) {
+
+        std::string result("");
+
+        for (const std::string& e: vector_symbol) {
+            result += e;
+            result += delim;
+        }
+
+        return result;
+    }
+
+    std::vector<std::string> SymbolToVectorSymbol(const std::string& symbol, char delim) {
+
+        std::vector<std::string> result;
+
+        std::stringstream ss(symbol);
+        std::string item;
+        while (std::getline(ss, item, delim)) {
+            result.push_back(item);
+        }
+
+        return result;
     }
 }
 

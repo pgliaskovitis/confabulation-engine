@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "NGramHandler.h"
+#include "Utils.h"
 
 const unsigned short NGramHandler::kMinOccurences = 3;
 const size_t NGramHandler::kMaxSingleWordSymbols = 120000;
@@ -130,6 +131,30 @@ void NGramHandler::CleanupNGrams()
     }
 
     // TODO -- limit single and multiword counts to their chosen maximum values
+}
+
+std::unique_ptr<SymbolMapping> NGramHandler::GetSingleWordSymbols()
+{
+    std::unique_ptr<SymbolMapping> result(new SymbolMapping);
+
+    std::map<std::vector<Symbol>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[0].begin();
+    for (; it != occurrence_counts_[0].end(); ++it)
+        result->AddSymbol(VectorSymbolToSymbol(it->first, ' '));
+
+    return result;
+}
+
+std::unique_ptr<SymbolMapping> NGramHandler::GetAllSymbols()
+{
+    std::unique_ptr<SymbolMapping> result(new SymbolMapping);
+
+    for (size_t i = 1; i < occurrence_counts_.size(); ++i) {
+        std::map<std::vector<Symbol>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[i].begin();
+        for (; it != occurrence_counts_[i].end(); ++it)
+            result->AddSymbol(VectorSymbolToSymbol(it->first, ' '));
+    }
+
+    return result;
 }
 
 
