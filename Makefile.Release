@@ -143,6 +143,7 @@ release/ConfabulationTest.o: ConfabulationTest.cpp ConfabulationTest.h \
 		KnowledgeManager.h \
 		Globals.h \
 		sparse_structures/DOKExcitationVector.hpp \
+		utils/Utils.h \
 		sparse_structures/IExcitationVector.hpp \
 		sparse_structures/DOKLinksMatrix.hpp \
 		sparse_structures/IKnowledgeLinks.hpp \
@@ -167,7 +168,8 @@ release/KnowledgeManager.o: KnowledgeManager.cpp SymbolAttribute.h \
 		KnowledgeBase.h \
 		KnowledgeManager.h \
 		Globals.h \
-		SentenceTokenizer.h
+		SentenceTokenizer.h \
+		utils/Utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\KnowledgeManager.o KnowledgeManager.cpp
 
 release/SentenceTokenizer.o: SentenceTokenizer.cpp SentenceTokenizer.h
@@ -186,15 +188,18 @@ release/TextReader.o: TextReader.cpp TextReader.h \
 
 release/TemplateInstantiations.o: TemplateInstantiations.cpp TemplateInstantiations.h \
 		sparse_structures/DOKExcitationVector.hpp \
+		utils/Utils.h \
 		sparse_structures/IExcitationVector.hpp \
 		sparse_structures/DOKLinksMatrix.hpp \
 		sparse_structures/IKnowledgeLinks.hpp \
 		sparse_structures/CSRLinksMatrix.hpp \
+		utils/HashTrieNode.hpp \
 		utils/HashTrie.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\TemplateInstantiations.o TemplateInstantiations.cpp
 
 release/NGramHandler.o: NGramHandler.cpp NGramHandler.h \
-		SymbolMapping.h
+		SymbolMapping.h \
+		utils/Utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\NGramHandler.o NGramHandler.cpp
 
 release/SymbolMapping.o: SymbolMapping.cpp SymbolMapping.h
@@ -203,6 +208,7 @@ release/SymbolMapping.o: SymbolMapping.cpp SymbolMapping.h
 release/KnowledgeBaseN.o: KnowledgeBaseN.cpp KnowledgeBaseN.h \
 		sparse_structures/DOKLinksMatrix.hpp \
 		sparse_structures/DOKExcitationVector.hpp \
+		utils/Utils.h \
 		sparse_structures/IExcitationVector.hpp \
 		sparse_structures/IKnowledgeLinks.hpp \
 		sparse_structures/CSRLinksMatrix.hpp \
@@ -214,6 +220,7 @@ release/Module.o: Module.cpp Module.h \
 		sparse_structures/IExcitationVector.hpp \
 		SymbolMapping.h \
 		Globals.h \
+		utils/Utils.h \
 		sparse_structures/DOKExcitationVector.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\Module.o Module.cpp
 
@@ -224,7 +231,8 @@ release/TextReaderN.o: TextReaderN.cpp TextReaderN.h \
 
 release/MultiLevelOrganizer.o: MultiLevelOrganizer.cpp MultiLevelOrganizer.h \
 		SymbolMapping.h \
-		utils/HashTrie.hpp
+		utils/HashTrie.hpp \
+		utils/Utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\MultiLevelOrganizer.o MultiLevelOrganizer.cpp
 
 ####### Install

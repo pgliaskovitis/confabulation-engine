@@ -61,5 +61,6 @@ HEADERS += \
     Module.h \
     TextReaderN.h \
     utils/HashTrie.hpp \
-    utils/Utils.h
+    utils/Utils.h \
+    utils/HashTrieNode.hpp
     MultiLevelOrganizer.h

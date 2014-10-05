@@ -17,6 +17,7 @@
 #include "sparse_structures/DOKExcitationVector.hpp"
 #include "sparse_structures/DOKLinksMatrix.hpp"
 #include "sparse_structures/CSRLinksMatrix.hpp"
+#include "utils/HashTrie.hpp"
 
 int ConfabulationTest::TestSharedPointer() const
 {
@@ -201,6 +202,40 @@ void ConfabulationTest::TestNGrams(const Symbol& symbolfile, const Symbol& maste
     std::cout << "Multi-word count after cleanup is: " << globals.get_ngram_handler().get_multi_word_count() << "\n";
 }
 
+void ConfabulationTest::TestHashTrie(const Symbol& symbolfile, const Symbol& masterfile) const
+{
+    Globals globals;
+    std::shared_ptr<TextReader> reader(new TextReader(globals));
+    std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(3, globals));
+    std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
+
+    manager->Init();
+    globals.set_knowledge_manager(manager);
+    globals.set_text_reader(reader);
+    globals.set_ngram_handler(ngram_handler);
+    reader->HandleSymbolFile(symbolfile);
+
+    reader->HandleAllTextFiles(masterfile);
+
+    globals.get_ngram_handler().CleanupNGrams();
+    std::cout << "Multi-word count after cleanup is: " << globals.get_ngram_handler().get_multi_word_count() << "\n";
+
+    std::unique_ptr<SymbolMapping> all_symbols_mapping = globals.get_ngram_handler().GetAllSymbols();
+
+    const std::set<Symbol>& all_symbols = all_symbols_mapping->GetAllSymbols();
+
+    HashTrie<std::string> hash_trie;
+    for (const Symbol& e : all_symbols) {
+        std::cout << e << "\n";
+        const std::vector<std::string>& symbol_words = SymbolToVectorSymbol(e, ' ');
+        hash_trie.Add(symbol_words);
+    }
+
+    std::cout << "Test1: " << VectorSymbolToSymbol(hash_trie.FindLongest({"as", "for", "his", "beloved", "fiancee"}), ' ') << "\n";
+    std::cout << "Test2: " << VectorSymbolToSymbol(hash_trie.FindLongest({"one", "would", "have", "thought", "that", "the", "boy", "was"}), ' ') << "\n";
+    std::cout << "Test3: " << VectorSymbolToSymbol(hash_trie.FindLongest({"the", "success", "of", "his", "father's", "business"}), ' ') << "\n";
+}
+
 void ConfabulationTest::TestSimpleConfabulation(const Symbol& symbolfile, const Symbol& masterfile, const std::vector<Symbol>& sentences) const
 {
 	Globals globals;
@@ -274,11 +309,13 @@ int main()
 
     //test1->TestCSRLinksMatrix();
 
-	//test1->testTokenizePersistedKnowledge();
-
     //test1->TestSymbolMapping();
 
-    test1->TestNGrams("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+    //test1->TestNGrams("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+
+    test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+
+    //test1->TestTokenizePersistedKnowledge();
 
     Symbol copy_feed1 = "The umbrella was a black and prosaic "; //bundle
     Symbol copy_feed2 = "I will accept the post three times and refuse it "; //afterwards

@@ -44,6 +44,8 @@ public:
 
     void TestNGrams(const Symbol& symbolfile, const Symbol& masterfile) const;
 
+    void TestHashTrie(const Symbol& symbolfile, const Symbol& masterfile) const;
+
     void TestTokenizePersistedKnowledge() const;
 
     void TestSimpleConfabulation(const Symbol& symbolfile, const Symbol& masterfile, const std::vector<Symbol>& sentences) const;
