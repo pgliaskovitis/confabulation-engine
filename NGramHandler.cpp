@@ -1,11 +1,11 @@
 #include <iostream>
 #include <stdexcept>
 #include "NGramHandler.h"
-#include "Utils.h"
+#include "utils/Utils.h"
 
 const unsigned short NGramHandler::kMinOccurences = 3;
-const size_t NGramHandler::kMaxSingleWordSymbols = 120000;
-const size_t NGramHandler::kMaxMultiwordSymbols = 120000;
+const size_t NGramHandler::kMaxSingleWordSymbols = 100000;
+const size_t NGramHandler::kMaxMultiwordSymbols = 150000;
 
 NGramHandler::NGramHandler(unsigned short max_words, Globals &globals_manager) :
     max_words_(max_words),
@@ -131,6 +131,21 @@ void NGramHandler::CleanupNGrams()
     }
 
     // TODO -- limit single and multiword counts to their chosen maximum values
+}
+
+size_t NGramHandler::get_single_word_count()
+{
+    return occurrence_counts_[0].size();
+}
+
+size_t NGramHandler::get_multi_word_count()
+{
+    size_t multi_word_symbols_count = 0;
+
+    for (size_t i = 1; i < occurrence_counts_.size(); ++i)
+        multi_word_symbols_count += occurrence_counts_[i].size();
+
+    return multi_word_symbols_count;
 }
 
 std::unique_ptr<SymbolMapping> NGramHandler::GetSingleWordSymbols()

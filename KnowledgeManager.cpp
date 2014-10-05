@@ -10,7 +10,7 @@
 #include "KnowledgeManager.h"
 #include "Globals.h"
 #include "SentenceTokenizer.h"
-#include "Utils.h"
+#include "utils/Utils.h"
 
 KnowledgeManager::KnowledgeManager(Globals& globals_manager) : globals_manager_(globals_manager),
                                                                all_symbols_(new std::map<Symbol, std::shared_ptr<Symbol>>)

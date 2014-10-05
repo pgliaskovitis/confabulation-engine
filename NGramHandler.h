@@ -52,15 +52,8 @@ public:
     // Erases n-grams with occurence count less than the accepted threshold
     void CleanupNGrams();
 
-    size_t get_single_word_count() { return occurrence_counts_[0].size(); }
-    size_t get_multi_word_count() {
-        size_t multi_word_symbols_count = 0;
-
-        for (size_t i = 1; i < occurrence_counts_.size(); ++i)
-            multi_word_symbols_count += occurrence_counts_[i].size();
-
-        return multi_word_symbols_count;
-    }
+    size_t get_single_word_count();
+    size_t get_multi_word_count();
 
     std::unique_ptr<SymbolMapping> GetSingleWordSymbols();
     std::unique_ptr<SymbolMapping> GetAllSymbols();

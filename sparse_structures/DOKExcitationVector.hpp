@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 
-#include "Utils.h"
+#include "utils/Utils.h"
 #include "IExcitationVector.hpp"
 
 template <typename T>

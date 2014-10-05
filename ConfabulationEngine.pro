@@ -37,7 +37,8 @@ SOURCES += \
     SymbolMapping.cpp \
     KnowledgeBaseN.cpp \
     Module.cpp \
-    TextReaderN.cpp
+    TextReaderN.cpp \
+    MultiLevelOrganizer.cpp
 
 HEADERS += \
     ConfabulationTest.h \
@@ -58,4 +59,7 @@ HEADERS += \
     SymbolMapping.h \
     KnowledgeBaseN.h \
     Module.h \
-    TextReaderN.h
+    TextReaderN.h \
+    utils/HashTrie.hpp \
+    utils/Utils.h
+    MultiLevelOrganizer.h

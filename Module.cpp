@@ -1,6 +1,6 @@
 #include "Module.h"
 #include "Globals.h"
-#include "Utils.h"
+#include "utils/Utils.h"
 #include <sparse_structures/DOKExcitationVector.hpp>
 
 Module::Module(const SymbolMapping &symbol_mapping) :
