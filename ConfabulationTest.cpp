@@ -231,9 +231,21 @@ void ConfabulationTest::TestHashTrie(const Symbol& symbolfile, const Symbol& mas
         hash_trie.Add(symbol_words);
     }
 
-    std::cout << "Test1: " << VectorSymbolToSymbol(hash_trie.FindLongest({"as", "for", "his", "beloved", "fiancee"}), ' ') << "\n";
-    std::cout << "Test2: " << VectorSymbolToSymbol(hash_trie.FindLongest({"one", "would", "have", "thought", "that", "the", "boy", "was"}), ' ') << "\n";
-    std::cout << "Test3: " << VectorSymbolToSymbol(hash_trie.FindLongest({"the", "success", "of", "his", "father's", "business"}), ' ') << "\n";
+    std::list<std::string> test_list1;
+    std::vector<std::string> test_vec1 = {"as", "for", "his", "beloved", "fiancee"};
+    std::copy(test_vec1.begin(), test_vec1.end(), std::back_inserter(test_list1));
+
+    std::list<std::string> test_list2;
+    std::vector<std::string> test_vec2 = {"one", "would", "have", "thought", "that", "the", "boy", "was"};
+    std::copy(test_vec2.begin(), test_vec2.end(), std::back_inserter(test_list2));
+
+    std::list<std::string> test_list3;
+    std::vector<std::string> test_vec3 = {"the", "success", "of", "his", "father's", "business"};
+    std::copy(test_vec3.begin(), test_vec3.end(), std::back_inserter(test_list3));
+
+    std::cout << "Test1: " << ListSymbolToSymbol(hash_trie.FindLongest(test_list1), ' ') << "\n";
+    std::cout << "Test2: " << ListSymbolToSymbol(hash_trie.FindLongest(test_list2), ' ') << "\n";
+    std::cout << "Test3: " << ListSymbolToSymbol(hash_trie.FindLongest(test_list3), ' ') << "\n";
 }
 
 void ConfabulationTest::TestSimpleConfabulation(const Symbol& symbolfile, const Symbol& masterfile, const std::vector<Symbol>& sentences) const

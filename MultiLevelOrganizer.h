@@ -17,6 +17,8 @@ public:
     MultiLevelOrganizer(MultiLevelOrganizer&& rhs) = delete;
     MultiLevelOrganizer&& operator=(MultiLevelOrganizer&& rhs) = delete;
 
+    std::vector<std::vector<std::string>> Organize(const std::vector<std::string>& symbols, bool &match_found);
+
 private:
     std::vector<unsigned short> level_sizes_;
     std::vector<std::unique_ptr<SymbolMapping>> level_mappings_;

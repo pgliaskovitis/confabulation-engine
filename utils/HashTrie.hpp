@@ -2,6 +2,7 @@
 #define HASHTRIE_H
 
 #include <vector>
+#include <list>
 #include "HashTrieNode.hpp"
 
 template <typename T>
@@ -17,7 +18,7 @@ public:
     void Add(const std::vector<T>& sequence);
     void AddAll(const std::vector<std::vector<T>>& sequences);
 
-    std::vector<T> FindLongest(const std::vector<T>& sequence);
+    std::list<T> FindLongest(const std::list<T>& sequence);
 
     size_t Size() { return size_; }
 
@@ -59,10 +60,10 @@ void HashTrie<T>::AddAll(const std::vector<std::vector<T>>& sequences) {
 }
 
 template <typename T>
-std::vector<T> HashTrie<T>::FindLongest(const std::vector<T>& sequence) {
+std::list<T> HashTrie<T>::FindLongest(const std::list<T>& sequence) {
 
-    std::vector<T> result;
-    std::vector<T> unconfirmed;
+    std::list<T> result;
+    std::list<T> unconfirmed;
 
     HashTrieNode<T>* current_node_ptr = &root_;
     for (const T& e : sequence) {

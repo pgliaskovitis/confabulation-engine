@@ -37,8 +37,8 @@ SOURCES += \
     SymbolMapping.cpp \
     KnowledgeBaseN.cpp \
     Module.cpp \
-    TextReaderN.cpp \
-    MultiLevelOrganizer.cpp
+    MultiLevelOrganizer.cpp \
+    TextReaderN.cpp
 
 HEADERS += \
     ConfabulationTest.h \
@@ -52,15 +52,15 @@ HEADERS += \
     sparse_structures/DOKExcitationVector.hpp \
     sparse_structures/IExcitationVector.hpp \
     sparse_structures/IKnowledgeLinks.hpp \
-    Utils.h \
-    TemplateInstantiations.h \
     sparse_structures/DOKLinksMatrix.hpp \
+    TemplateInstantiations.h \
     NGramHandler.h \
     SymbolMapping.h \
     KnowledgeBaseN.h \
     Module.h \
+    MultiLevelOrganizer.h \
     TextReaderN.h \
     utils/HashTrie.hpp \
     utils/Utils.h \
     utils/HashTrieNode.hpp
-    MultiLevelOrganizer.h
+

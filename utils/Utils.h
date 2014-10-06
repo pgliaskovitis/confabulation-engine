@@ -4,6 +4,7 @@
 #include <cmath>
 #include <string>
 #include <vector>
+#include <list>
 #include <sstream>
 
 namespace
@@ -52,6 +53,18 @@ namespace
         std::string result("");
 
         for (const std::string& e: vector_symbol) {
+            result += e;
+            result += delim;
+        }
+
+        return result;
+    }
+
+    std::string ListSymbolToSymbol(const std::list<std::string>& list_symbol, char delim) {
+
+        std::string result("");
+
+        for (const std::string& e: list_symbol) {
             result += e;
             result += delim;
         }
