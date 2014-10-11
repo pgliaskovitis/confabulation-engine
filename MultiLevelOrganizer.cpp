@@ -55,5 +55,11 @@ std::vector<std::vector<std::string>> MultiLevelOrganizer::Organize(const std::v
         }
     }
 
+    // this will return a 2D vector with activated symbols as follows:
+
+    // level 2: multisymbol_21  ""          ""          ""              ""
+    // level 1: multisymbol_11  ""          ""          multisymbol_12  ""
+    // level 0: symbol_1        symbol_2    symbol_3    symbol_4        symbol_5
+
     return levels;
 }

@@ -48,7 +48,8 @@ namespace
         return x > 0 ? x : 0;
     }
 
-    std::string VectorSymbolToSymbol(const std::vector<std::string>& vector_symbol, char delim) {
+    std::string VectorSymbolToSymbol(const std::vector<std::string>& vector_symbol, char delim)
+    {
 
         std::string result("");
 
@@ -60,7 +61,8 @@ namespace
         return result;
     }
 
-    std::string ListSymbolToSymbol(const std::list<std::string>& list_symbol, char delim) {
+    std::string ListSymbolToSymbol(const std::list<std::string>& list_symbol, char delim)
+    {
 
         std::string result("");
 
@@ -72,7 +74,8 @@ namespace
         return result;
     }
 
-    std::vector<std::string> SymbolToVectorSymbol(const std::string& symbol, char delim) {
+    std::vector<std::string> SymbolToVectorSymbol(const std::string& symbol, char delim)
+    {
 
         std::vector<std::string> result;
 
@@ -83,6 +86,37 @@ namespace
         }
 
         return result;
+    }
+
+    // each row of the 2D argument vector has as many elements as the corresponding level of the architecture
+    // each element corresponds to exactly one module in the architecture
+    std::vector<std::vector<std::string>> ProduceKnowledgeLinkCombinations(const std::vector<std::vector<std::string>>& excited_symbols)
+    {
+        std::vector<std::vector<std::string>> results;
+
+        size_t total_size = 0;
+
+        for (size_t i = 0; i < excited_symbols.size(); ++i)
+            total_size += excited_symbols[i].size();
+
+        // total size is now equal to the total number of modules in the architecture
+        results.resize(excited_symbols[0].size() - 1);
+        for (size_t k = 0; k < excited_symbols[0].size() - 1; ++k) {
+            // each result vector addresses all modules
+            results[k].resize(total_size, "");
+
+            // special care must be taken because the different levels of the architecture need not be of the same size
+            size_t level_size = 0;
+            for (size_t i = 0; i < excited_symbols.size(); ++i) {
+                for (size_t j = 0; j < excited_symbols[i].size(); ++j) {
+                    if (j + k < excited_symbols[i].size())
+                        results[k][level_size + j + k] = excited_symbols[i][j];
+                }
+                level_size += excited_symbols[i].size();
+            }
+        }
+
+        return results;
     }
 }
 

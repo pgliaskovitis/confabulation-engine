@@ -18,24 +18,7 @@
 #include "sparse_structures/DOKLinksMatrix.hpp"
 #include "sparse_structures/CSRLinksMatrix.hpp"
 #include "utils/HashTrie.hpp"
-
-int ConfabulationTest::TestSharedPointer() const
-{
-	std::shared_ptr<C> foo;
-	std::shared_ptr<C> bar (new C);
-
-	foo = bar;
-
-	foo->a = 10;
-	bar->b = 20;
-
-	if (foo)
-		std::cout << "foo: " << foo->a << ' ' << foo->b << '\n';
-	if (bar)
-		std::cout << "bar: " << bar->a << ' ' << bar->b << '\n';
-
-	return 0;
-}
+#include "utils/Utils.h"
 
 int ConfabulationTest::TestTokenizeFixedString(const Symbol& input) const
 {
@@ -248,6 +231,20 @@ void ConfabulationTest::TestHashTrie(const Symbol& symbolfile, const Symbol& mas
     std::cout << "Test3: " << ListSymbolToSymbol(hash_trie.FindLongest(test_list3), ' ') << "\n";
 }
 
+void ConfabulationTest::TestProduceKnowledgeLinkCombinations() const
+{
+    std::vector<std::vector<std::string>> input = {
+        {"as", "for", "the", "evil", "witch", "she"},
+        {"as for the", "", "", "evil witch", ""},
+        {"fairy tale", ""}
+    };
+
+    const std::vector<std::vector<std::string>> result = ProduceKnowledgeLinkCombinations(input);
+
+    for (size_t i = 0; i < result.size(); ++i)
+        std::cout << "Combination " << i << ":" << VectorSymbolToSymbol(result[i], ',') << "\n";
+}
+
 void ConfabulationTest::TestSimpleConfabulation(const Symbol& symbolfile, const Symbol& masterfile, const std::vector<Symbol>& sentences) const
 {
 	Globals globals;
@@ -325,7 +322,9 @@ int main()
 
     //test1->TestNGrams("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
-    test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+    //test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+
+    test1->TestProduceKnowledgeLinkCombinations();
 
     //test1->TestTokenizePersistedKnowledge();
 

@@ -29,8 +29,6 @@ class Globals;
 class ConfabulationTest
 {
 public:
-    int TestSharedPointer() const;
-
     int TestTokenizeFixedString(const Symbol& input) const;
     int TestReadSymbolFile(const Symbol& input) const;
     int TestReadFixedFile(const Symbol& symbolfile, const Symbol& textfile) const;
@@ -45,6 +43,8 @@ public:
     void TestNGrams(const Symbol& symbolfile, const Symbol& masterfile) const;
 
     void TestHashTrie(const Symbol& symbolfile, const Symbol& masterfile) const;
+
+    void TestProduceKnowledgeLinkCombinations() const;
 
     void TestTokenizePersistedKnowledge() const;
 
