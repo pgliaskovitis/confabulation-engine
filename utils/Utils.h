@@ -6,6 +6,8 @@
 #include <vector>
 #include <list>
 #include <sstream>
+#include <limits>
+#include <iostream>
 
 namespace
 {
@@ -88,31 +90,47 @@ namespace
         return result;
     }
 
-    // each row of the 2D argument vector has as many elements as the corresponding level of the architecture
-    // each element corresponds to exactly one module in the architecture
+    int ConvertToSigned(unsigned x)
+    {
+        if (x <= std::numeric_limits<int>::max())
+            return static_cast<int>(x);
+
+        if (x >= std::numeric_limits<int>::min())
+            return static_cast<int>(x - std::numeric_limits<int>::min()) + std::numeric_limits<int>::min();
+
+        throw x;
+    }
+
+    // each row of the 2D argument vector has as many elements as
+    // exist in the corresponding level of the architecture
     std::vector<std::vector<std::string>> ProduceKnowledgeLinkCombinations(const std::vector<std::vector<std::string>>& excited_symbols)
     {
         std::vector<std::vector<std::string>> results;
 
-        size_t total_size = 0;
+        int total_size = 0;
 
+        // total size is equal to the total number of modules in the architecture
         for (size_t i = 0; i < excited_symbols.size(); ++i)
-            total_size += excited_symbols[i].size();
+            total_size += ConvertToSigned(excited_symbols[i].size());
 
-        // total size is now equal to the total number of modules in the architecture
-        results.resize(excited_symbols[0].size() - 1);
-        for (size_t k = 0; k < excited_symbols[0].size() - 1; ++k) {
+        int convolution_half_size = ConvertToSigned(excited_symbols[0].size() - 1);
+        results.resize(2 * convolution_half_size - 2);
+        for (int k = -convolution_half_size + 2; k < convolution_half_size; ++k) {
             // each result vector addresses all modules
-            results[k].resize(total_size, "");
+            results[k + convolution_half_size - 2].resize(total_size, "");
 
+            // the given sentence tokens are "convolved" with the modules of the architecture
+            // as they are shifted from the far left to the far right
             // special care must be taken because the different levels of the architecture need not be of the same size
-            size_t level_size = 0;
+            int level_size = 0;
             for (size_t i = 0; i < excited_symbols.size(); ++i) {
                 for (size_t j = 0; j < excited_symbols[i].size(); ++j) {
-                    if (j + k < excited_symbols[i].size())
-                        results[k][level_size + j + k] = excited_symbols[i][j];
+                    if ((ConvertToSigned(j) + k > 0) &&
+                        (ConvertToSigned(j) + k < ConvertToSigned(excited_symbols[i].size()))) {
+                        results[k + convolution_half_size - 2][level_size + ConvertToSigned(j) + k] = excited_symbols[i][j];
+                    }
                 }
-                level_size += excited_symbols[i].size();
+                level_size += ConvertToSigned(excited_symbols[i].size());
             }
         }
 
