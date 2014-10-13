@@ -20,6 +20,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <assert.h>
 #include <cmath>
 #include <string>
 #include <vector>
@@ -122,7 +123,7 @@ namespace
 
     // each row of the 2D argument vector has as many elements as
     // exist in the corresponding level of the architecture
-    std::vector<std::vector<std::string>> ProduceKnowledgeLinkCombinations(const std::vector<std::vector<std::string>>& excited_symbols)
+    std::vector<std::vector<std::string>> ProduceKnowledgeLinkCombinations(const std::vector<std::vector<std::string>>& excited_symbols, unsigned short num_modules)
     {
         std::vector<std::vector<std::string>> results;
 
@@ -131,6 +132,8 @@ namespace
         // total size is equal to the total number of modules in the architecture
         for (size_t i = 0; i < excited_symbols.size(); ++i)
             total_size += ConvertToSigned(excited_symbols[i].size());
+
+        assert(total_size == num_modules);
 
         int convolution_half_size = ConvertToSigned(excited_symbols[0].size() - 1);
         results.resize(2 * convolution_half_size - 2);

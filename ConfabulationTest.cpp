@@ -251,7 +251,7 @@ void ConfabulationTest::TestProduceKnowledgeLinkCombinations() const
         {"fairy tale", ""}
     };
 
-    const std::vector<std::vector<std::string>> result = ProduceKnowledgeLinkCombinations(input);
+    const std::vector<std::vector<std::string>> result = ProduceKnowledgeLinkCombinations(input, 13);
 
     for (size_t i = 0; i < result.size(); ++i)
         std::cout << "Combination " << i << ":" << VectorSymbolToSymbol(result[i], ',') << "\n";
@@ -313,8 +313,6 @@ void ConfabulationTest::PerformConfabulation(Globals& globals, const std::vector
 int main()
 {
 	std::shared_ptr<ConfabulationTest> test1(new ConfabulationTest());
-
-    //test1->TestSharedPointer();
 
     //test1->TestFixedString("This is, alas, the primal knowledge. \"My fumblings will be your quickening, minion.\"");
 

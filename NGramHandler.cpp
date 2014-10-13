@@ -26,7 +26,13 @@ const unsigned short NGramHandler::kMinOccurences = 3;
 const size_t NGramHandler::kMaxSingleWordSymbols = 100000;
 const size_t NGramHandler::kMaxMultiwordSymbols = 150000;
 
-NGramHandler::NGramHandler(unsigned short max_words, Globals &globals_manager) :
+//NGramHandler::NGramHandler(unsigned short max_words) :
+//    max_words_(max_words)
+//{
+//    occurrence_counts_.resize(max_words_); //a dedicated map for each n-gram
+//}
+
+NGramHandler::NGramHandler(unsigned short max_words, Globals& globals_manager) :
     max_words_(max_words),
     globals_manager_(globals_manager)
 {
