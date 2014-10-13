@@ -38,8 +38,7 @@ SOURCES += \
     KnowledgeBaseN.cpp \
     Module.cpp \
     MultiLevelOrganizer.cpp \
-    TextReaderN.cpp \
-    ConfabulationBase.cpp
+    TextReaderN.cpp
 
 HEADERS += \
     ConfabulationTest.h \
@@ -63,6 +62,5 @@ HEADERS += \
     TextReaderN.h \
     utils/HashTrie.hpp \
     utils/Utils.h \
-    utils/HashTrieNode.hpp \
-    ConfabulationBase.h
+    utils/HashTrieNode.hpp
 
