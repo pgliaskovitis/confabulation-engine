@@ -96,7 +96,6 @@ const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_
         if (current_text_file_it_ != text_file_names_.end()) {
             current_text_file_.reset(new std::ifstream(*current_text_file_it_));
             current_text_file_->exceptions(std::ifstream::badbit);
-            InitializeFileStream(*current_text_file_);
             std::cout << "Handling file " << *current_text_file_it_ << "\n" << std::flush;
 
             return GetNextSentenceTokens(finished_reading);
@@ -110,24 +109,10 @@ void TextReader::HandleSymbolFile()
     std::ifstream l_file;
     std::string symbol;
 
-    l_file.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
-    try {
-        l_file.open(symbol_file_name_);
-        InitializeFileStream(l_file);
-        if (l_file.is_open()) {
-            while (l_file.good()) {
-                std::getline(l_file, symbol);
-                all_delimiter_symbols_.append(symbol); //delimiters as single string
-                delimiter_symbols_.push_back(symbol); // delimiters as separate strings
-            }
-            l_file.close();
-        }
-
-    } catch (std::ifstream::failure& e)	{
-        if (!l_file.eofbit)
-            std::cerr << "Exception opening/reading/closing file\n";
-
-        l_file.close();
+    l_file.exceptions(std::ifstream::badbit);
+    while (std::getline(l_file, symbol)) {
+        all_delimiter_symbols_.append(symbol); //delimiters as single string
+        delimiter_symbols_.push_back(symbol); // delimiters as separate strings
     }
 
     std::sort(delimiter_symbols_.begin(), delimiter_symbols_.end());
@@ -138,23 +123,10 @@ void TextReader::HandleMasterFile()
     std::ifstream l_file;
     std::string filename;
 
-    l_file.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
-    try {
-        l_file.open(master_file_name_);
-        InitializeFileStream(l_file);
-        if (l_file.is_open()) {
-            while (l_file.good()) {
-                std::getline(l_file, filename);
-                text_file_names_.push_back(filename);
-            }
-            l_file.close();
-        }
-
-    } catch (std::ifstream::failure& e) {
-        if (!l_file.eofbit)
-            std::cerr << "Exception opening/reading/closing file\n";
-        l_file.close();
-    }
+    l_file.exceptions(std::ifstream::badbit);
+    l_file.open(master_file_name_);
+    while (std::getline(l_file, filename))
+       text_file_names_.push_back(filename);
 }
 
 const std::vector<std::string> TextReader::ExtractTokens(const std::string &input)
@@ -177,11 +149,6 @@ const std::vector<std::string> TextReader::ExtractTokens(const std::string &inpu
     }
 
     return output;
-}
-
-void TextReader::InitializeFileStream(std::ifstream &file)
-{
-    file.clear(file.goodbit);
 }
 
 void TextReader::CleanToken(std::string& input)

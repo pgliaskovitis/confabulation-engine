@@ -165,7 +165,7 @@ void ConfabulationTest::TestHashTrie(const std::string& symbolfile, const std::s
     do {
         sentence = reader.GetNextSentenceTokens(finished_reading);
         ngram_handler.ExtractAndStoreNGrams(sentence);
-    } while (!sentence.empty());
+    } while (!finished_reading);
 
     ngram_handler.CleanupNGrams();
     std::cout << "Multi-word count after cleanup is: " << ngram_handler.get_multi_word_count() << "\n";
@@ -281,9 +281,9 @@ int main()
 
     //test1->TestSymbolMapping();
 
-    test1->TestProduceNGrams("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+    //test1->TestProduceNGrams("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
-    //test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+    test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
     //test1->TestProduceKnowledgeLinkCombinations();
 

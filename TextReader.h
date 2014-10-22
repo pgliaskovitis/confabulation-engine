@@ -50,7 +50,6 @@ private:
     void HandleMasterFile();
 
     const std::vector<std::string> ExtractTokens(const std::string& input);
-    void InitializeFileStream(std::ifstream& file);
     void CleanToken(std::string& input);
     void RemoveCommonAbbreviations(std::string& input);
 
