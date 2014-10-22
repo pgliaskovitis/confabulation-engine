@@ -21,11 +21,11 @@
 #include "TextReaderN.h"
 #include "Globals.h"
 #include "SentenceTokenizer.h"
+#include "utils/Utils.h"
 
 TextReaderN::TextReaderN(const std::string& symbol_file, const std::string& master_file) :
     symbol_file_name_(symbol_file),
     master_file_name_(master_file),
-    current_text_file_it_(text_file_names_.begin()),
     left_over_sentence_(nullptr)
 {
 }
@@ -34,52 +34,55 @@ void TextReaderN::Initialize()
 {
     HandleSymbolFile();
     HandleMasterFile();
+    current_text_file_it_ = text_file_names_.begin();
 }
 
-const std::vector<Symbol> TextReaderN::GetNextSentenceTokens()
+const std::vector<std::string> TextReaderN::GetNextSentenceTokens(bool& finished_reading)
 {
     if (current_text_file_ != nullptr) {
 
-        while (current_text_file_->good()) {
+        if (current_text_file_->good()) {
+
+            finished_reading = false;
+
             std::string sentence;
             std::stringstream l_string;
 
             if (left_over_sentence_ != nullptr)
                 l_string << *left_over_sentence_;
 
-            Symbol::size_type end_of_sentence = Symbol::npos;
-            Symbol::size_type end_of_delimiter = Symbol::npos;
-            Symbol::size_type end_of_phase = Symbol::npos;
+            std::string::size_type end_of_sentence = std::string::npos;
+            std::string::size_type end_of_delimiter = std::string::npos;
+            std::string::size_type end_of_phase = std::string::npos;
 
-            while (end_of_sentence == Symbol::npos) {
-                std::getline(*current_text_file_, sentence);
+            while (std::getline(*current_text_file_, sentence)) {
                 RemoveCommonAbbreviations(sentence);
                 l_string << " " << sentence;
                 end_of_sentence = l_string.str().find_first_of(Globals::kSentenceDelimiters, 0);
+                if (end_of_sentence == std::string::npos) continue;
+                else break;
             }
 
             end_of_delimiter = l_string.str().find_first_not_of(Globals::kSentenceDelimiters, end_of_sentence);
 
-            if (end_of_delimiter != Symbol::npos) {
+            if (end_of_delimiter != std::string::npos) {
                 //delimiter finishes in the current line
-                std::shared_ptr<Symbol> tempLeftover(new Symbol(l_string.str().substr(end_of_delimiter)));
+                std::shared_ptr<std::string> tempLeftover(new std::string(l_string.str().substr(end_of_delimiter)));
                 left_over_sentence_ = tempLeftover; //store the part of the line from the end of the delimiter to npos
                 end_of_phase = end_of_delimiter;
             } else {
                 //delimiter does not finish in the current line
-                std::shared_ptr<Symbol> tempLeftover(new Symbol(l_string.str().substr(end_of_sentence + 1)));
+                std::shared_ptr<std::string> tempLeftover(new std::string(l_string.str().substr(end_of_sentence + 1)));
                 left_over_sentence_ = tempLeftover; //store the part of the line from the start of the delimiter to npos
                 end_of_phase = end_of_sentence + 1;
             }
 
-            const std::vector<Symbol>& current_sentence_tokens = ExtractTokens(l_string.str().substr(0, end_of_phase));
+            const std::vector<std::string>& current_sentence_tokens = ExtractTokens(l_string.str().substr(0, end_of_phase));
 
 #ifdef DEBUG_1_H_
-            std::cout << "------- New sentence confabulation symbols START -------" << "\n";
-            for (std::vector<Symbol>::const_iterator it = currentSentenceTokens.begin(); it != currentSentenceTokens.end(); ++it)
-                std::cout << "---->" << (*it) << "<----\n";
-            std::cout << "------- New sentence confabulation symbols END -------" << "\n";
+            std::cout << "Sentence : " << VectorSymbolToSymbol(current_sentence_tokens, ' ') << "\n" << std::flush;
 #endif
+
             return current_sentence_tokens;
         }
 
@@ -88,23 +91,24 @@ const std::vector<Symbol> TextReaderN::GetNextSentenceTokens()
         ++current_text_file_it_;
         left_over_sentence_ = nullptr;
 
-        return GetNextSentenceTokens();
+        return GetNextSentenceTokens(finished_reading);
     } else {
         if (current_text_file_it_ != text_file_names_.end()) {
             current_text_file_.reset(new std::ifstream(*current_text_file_it_));
-            current_text_file_->exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
+            current_text_file_->exceptions(std::ifstream::badbit);
             InitializeFileStream(*current_text_file_);
+            std::cout << "Handling file " << *current_text_file_it_ << "\n" << std::flush;
 
-            return GetNextSentenceTokens();
+            return GetNextSentenceTokens(finished_reading);
         } else
-            return {""};
+            finished_reading = true;
     }
 }
 
 void TextReaderN::HandleSymbolFile()
 {
     std::ifstream l_file;
-    Symbol symbol;
+    std::string symbol;
 
     l_file.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
     try {
@@ -132,7 +136,7 @@ void TextReaderN::HandleSymbolFile()
 void TextReaderN::HandleMasterFile()
 {
     std::ifstream l_file;
-    Symbol filename;
+    std::string filename;
 
     l_file.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
     try {
@@ -153,9 +157,9 @@ void TextReaderN::HandleMasterFile()
     }
 }
 
-const std::vector<Symbol> TextReaderN::ExtractTokens(const Symbol &input)
+const std::vector<std::string> TextReaderN::ExtractTokens(const std::string &input)
 {
-    std::vector<Symbol> output;
+    std::vector<std::string> output;
 
     SentenceTokenizer tok(input);
 
@@ -166,7 +170,7 @@ const std::vector<Symbol> TextReaderN::ExtractTokens(const Symbol &input)
             //std::cout << "Found non-empty delimiter \"" << tok.delim() << "\"\n";
         }
 #endif
-        Symbol newToken = tok.Str();
+        std::string newToken = tok.Str();
         //std::cout << newToken << std::endl;
         CleanToken(newToken);
         output.push_back(newToken);
@@ -180,7 +184,7 @@ void TextReaderN::InitializeFileStream(std::ifstream &file)
     file.clear(file.goodbit);
 }
 
-void TextReaderN::CleanToken(Symbol& input)
+void TextReaderN::CleanToken(std::string& input)
 {
     input.erase(std::remove(input.begin(), input.end(), '\0'), input.end());
     input.erase(std::remove(input.begin(), input.end(), '\r'), input.end());
@@ -188,15 +192,15 @@ void TextReaderN::CleanToken(Symbol& input)
     std::transform(input.begin(), input.end(), input.begin(), ::tolower);
 }
 
-void TextReaderN::RemoveCommonAbbreviations(Symbol& input)
+void TextReaderN::RemoveCommonAbbreviations(std::string& input)
 {
     size_t temp_index = 0;
-    size_t first_index = Symbol::npos;
-    Symbol abbreviated_symbol;
+    size_t first_index = std::string::npos;
+    std::string abbreviated_symbol;
 
-    while (temp_index != Symbol::npos) {
+    while (temp_index != std::string::npos) {
         temp_index = 0;
-        for (std::vector<Symbol>::const_iterator it = Globals::kCommonAbbreviations.begin(); it != Globals::kCommonAbbreviations.end(); ++it) {
+        for (std::vector<std::string>::const_iterator it = Globals::kCommonAbbreviations.begin(); it != Globals::kCommonAbbreviations.end(); ++it) {
             /* Locate the substring to replace. */
             temp_index = input.find(*it, 0);
             if (temp_index < first_index) {
@@ -205,7 +209,7 @@ void TextReaderN::RemoveCommonAbbreviations(Symbol& input)
             }
         }
 
-        if (first_index == Symbol::npos) break;
+        if (first_index == std::string::npos) break;
 
         /* Make the replacement. */
         if ((abbreviated_symbol != "A.D.") && (abbreviated_symbol != "B.C."))

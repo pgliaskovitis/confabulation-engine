@@ -25,18 +25,12 @@
 #include <unordered_map>
 #include <memory>
 
-#ifndef CONFSYMBOL_H_
-#define CONFSYMBOL_H_
-//the basic item of knowledge in this framework
-typedef std::string Symbol;
-#endif
-
 class SymbolMapping
 {
 private:
-    std::unique_ptr<std::unordered_map<Symbol, std::unique_ptr<Symbol>>> all_symbols_;
-    std::unique_ptr<std::unordered_map<Symbol*, size_t>> symbol_to_index_;
-    std::unique_ptr<std::unordered_map<size_t, Symbol*>> index_to_symbol_;
+    std::unique_ptr<std::unordered_map<std::string, std::unique_ptr<std::string>>> all_symbols_;
+    std::unique_ptr<std::unordered_map<std::string*, size_t>> symbol_to_index_;
+    std::unique_ptr<std::unordered_map<size_t, std::string*>> index_to_symbol_;
 
 public:
     SymbolMapping();
@@ -45,15 +39,15 @@ public:
     SymbolMapping(SymbolMapping&& rhs) = delete;
     SymbolMapping&& operator=(SymbolMapping&& rhs) = delete;
 
-    void AddSymbol(const Symbol& symbol);
-    bool Contains(const Symbol& symbol) const;
+    void AddSymbol(const std::string& symbol);
+    bool Contains(const std::string& symbol) const;
 
-    size_t IndexOf(const Symbol& symbol) const;
-    Symbol GetSymbol(size_t index) const;
+    size_t IndexOf(const std::string& symbol) const;
+    std::string GetSymbol(size_t index) const;
 
     size_t Size() const { return symbol_to_index_->size(); }
 
-    std::set<Symbol> GetAllSymbols();
+    std::set<std::string> GetAllSymbols();
 
     std::string ToString();
 };

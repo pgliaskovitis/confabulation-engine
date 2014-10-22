@@ -44,7 +44,7 @@ void Module::ExcitationsToZero()
     kb_inputs_.reset(new DOKExcitationVector<int>(symbol_mapping_.Size()));
 }
 
-void Module::ActivateSymbol(const Symbol &word, int K)
+void Module::ActivateSymbol(const std::string &word, int K)
 {
     normalized_excitations_.reset(nullptr);
 
@@ -138,9 +138,9 @@ void Module::Unfreeze()
     frozen_indexes_.reset(nullptr);
 }
 
-std::vector<Symbol> Module::GetExpectation()
+std::vector<std::string> Module::GetExpectation()
 {
-    std::vector<Symbol> result(excitations_->GetNnz());
+    std::vector<std::string> result(excitations_->GetNnz());
 
     size_t res_index = 0;
     for (const std::pair<size_t, float>& e : excitations_->GetNzElements()) {
@@ -152,12 +152,12 @@ std::vector<Symbol> Module::GetExpectation()
     return result;
 }
 
-Symbol Module::ElementaryConfabulation()
+std::string Module::ElementaryConfabulation()
 {
     return ElementaryConfabulation(1);
 }
 
-Symbol Module::ElementaryConfabulation(int K)
+std::string Module::ElementaryConfabulation(int K)
 {
     normalized_excitations_.reset(nullptr);
 
@@ -191,11 +191,11 @@ Symbol Module::ElementaryConfabulation(int K)
     return symbol_mapping_.GetSymbol(max_index);
 }
 
-std::vector<Symbol> Module::PartialConfabulation(int K, bool multiconf)
+std::vector<std::string> Module::PartialConfabulation(int K, bool multiconf)
 {
     normalized_excitations_.reset(nullptr);
 
-    std::vector<Symbol> result;
+    std::vector<std::string> result;
 
     std::unique_ptr<std::vector<std::pair<size_t, float>>> expectations;
 

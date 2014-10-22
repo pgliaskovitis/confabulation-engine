@@ -17,7 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "confabulationbase.h"
+#include "ConfabulationBase.h"
 
 ConfabulationBase::ConfabulationBase(const std::vector<std::vector<std::string>>& kb_specs) : kb_specs_(kb_specs)
 {}

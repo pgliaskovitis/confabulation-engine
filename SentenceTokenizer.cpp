@@ -19,7 +19,7 @@
 
 #include "SentenceTokenizer.h"
 
-SentenceTokenizer::SentenceTokenizer(const Symbol& source) : source_(source), index_(0)
+SentenceTokenizer::SentenceTokenizer(const std::string& source) : source_(source), index_(0)
 {
 }
 
@@ -27,7 +27,7 @@ SentenceTokenizer::SentenceTokenizer(const SentenceTokenizer& stok) : source_(st
 {
 }
 
-bool SentenceTokenizer::IsSymbolAlphanumeric(const Symbol& input)
+bool SentenceTokenizer::IsSymbolAlphanumeric(const std::string& input)
 {
 
       if (input.size() == 0)
@@ -40,17 +40,17 @@ bool SentenceTokenizer::IsSymbolAlphanumeric(const Symbol& input)
 	  return true;
 }
 
-const Symbol& SentenceTokenizer::Str() const
+const std::string& SentenceTokenizer::Str() const
 {
     return token_;
 }
 
-const Symbol& SentenceTokenizer::Delim() const
+const std::string& SentenceTokenizer::Delim() const
 {
     return delimiter_;
 }
 
-bool SentenceTokenizer::Tokenize(const Symbol& delimiters)
+bool SentenceTokenizer::Tokenize(const std::string& delimiters)
 {
 	size_t index0 = 0;
 
@@ -59,7 +59,7 @@ bool SentenceTokenizer::Tokenize(const Symbol& delimiters)
 	 *
 	size_t n = 0;
 	std::cout << "Delimiter list for tokenizer: " << "\n";
-	for (vector<Symbol>::const_iterator it = delimiterSymbols.begin(); it != delimiterSymbols.end(); ++it) {
+    for (vector<std::string>::const_iterator it = delimiterSymbols.begin(); it != delimiterSymbols.end(); ++it) {
 	  	std::cout << (*it) << " or " << delimiterSymbols.at(n++) << "\n";
 	}
 	       *
@@ -67,7 +67,7 @@ bool SentenceTokenizer::Tokenize(const Symbol& delimiters)
 	_DEBUG */
 
 	// Find the beginning of the next token, if any
-    if (index_ == Symbol::npos) return false;
+    if (index_ == std::string::npos) return false;
 
 	/* _DEBUG
 	 *
@@ -82,7 +82,7 @@ bool SentenceTokenizer::Tokenize(const Symbol& delimiters)
     index0 = source_.find_first_not_of(delimiters, index_);
 
     // Find the end of the token, if any
-    if (index0 == Symbol::npos) return false;
+    if (index0 == std::string::npos) return false;
 
 	/* _DEBUG
 	 *
@@ -130,24 +130,24 @@ bool SentenceTokenizer::Tokenize(const Symbol& delimiters)
     return true;
 }
 
-const std::vector<Symbol> SentenceTokenizer::KnowledgeTokenize(const std::vector<Symbol>& persistence_delimiters)
+const std::vector<std::string> SentenceTokenizer::KnowledgeTokenize(const std::vector<std::string>& persistence_delimiters)
 {
 	size_t index0 = 0;
     int knowledge_extraction_phase = -1;
-    std::vector<Symbol> extracted_tokens;
+    std::vector<std::string> extracted_tokens;
 
     std::string current_delimiter;
     std::string next_delimiter;
 
     while (true) {
 		// Find the beginning of the next token, if any
-        if (index_ == Symbol::npos) break;
+        if (index_ == std::string::npos) break;
 
 		//this is the bulk of the logic, for selecting the correct structured delimiters
 		//structured knowledge format is
-		//source_symbol:::target_symbol_1(link_count|||total_target_count)___target_symbol_2
+        //source_std::string:::target_std::string_1(link_count|||total_target_count)___target_std::string_2
         switch (knowledge_extraction_phase) {
-            case -1: { //source_symbol
+            case -1: { //source_std::string
                 current_delimiter = "";
                 next_delimiter = persistence_delimiters[knowledge_extraction_phase + 1];
                 knowledge_extraction_phase++;
@@ -182,7 +182,7 @@ const std::vector<Symbol> SentenceTokenizer::KnowledgeTokenize(const std::vector
         index0 = source_.find_first_not_of(current_delimiter, index_);
 
 		// Find the end of the token, if any
-		if (index0 == Symbol::npos) break;
+        if (index0 == std::string::npos) break;
         index_ = source_.find_first_of(next_delimiter, index0);
 
 	    // Save the result on the token
@@ -201,11 +201,11 @@ const std::vector<Symbol> SentenceTokenizer::KnowledgeTokenize(const std::vector
     return extracted_tokens;
 }
 
-Symbol SentenceTokenizer::ExtractDelimiterToken(size_t begin, size_t end)
+std::string SentenceTokenizer::ExtractDelimiterToken(size_t begin, size_t end)
 {
-	Symbol delimiter_partial;
+    std::string delimiter_partial;
 
-	Symbol::size_type length_delim = (end == Symbol::npos) ? Symbol::npos : (end - begin);
+    std::string::size_type length_delim = (end == std::string::npos) ? std::string::npos : (end - begin);
     delimiter_partial = source_.substr(begin, length_delim);
 
     size_t str_begin = delimiter_partial.find_first_not_of(' ');

@@ -17,22 +17,19 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "Globals.h"
 #include "ConfabulationTest.h"
 #include "SentenceTokenizer.h"
-#include "TextReader.h"
 #include "SymbolMapping.h"
 #include "NGramHandler.h"
-#include "SymbolAttribute.h"
-#include "KnowledgeBase.h"
-#include "KnowledgeManager.h"
-#include "Globals.h"
+#include "TextReaderN.h"
 #include "sparse_structures/DOKExcitationVector.hpp"
 #include "sparse_structures/DOKLinksMatrix.hpp"
 #include "sparse_structures/CSRLinksMatrix.hpp"
 #include "utils/HashTrie.hpp"
 #include "utils/Utils.h"
 
-int ConfabulationTest::TestTokenizeFixedString(const Symbol& input) const
+int ConfabulationTest::TestTokenizeFixedString(const std::string& input) const
 {
 	SentenceTokenizer tok(input);
 
@@ -40,46 +37,6 @@ int ConfabulationTest::TestTokenizeFixedString(const Symbol& input) const
         std::cout << tok.Str() << std::endl;
 
 	return 0;
-}
-
-int ConfabulationTest::TestReadSymbolFile(const Symbol& input) const
-{
-	Globals globals;
-	TextReader reader(globals);
-
-    reader.HandleSymbolFile(input);
-
-	return 0;
-}
-
-int ConfabulationTest::TestReadFixedFile(const Symbol& symbolfile, const Symbol& textfile) const
-{
-	Globals globals;
-	std::shared_ptr<TextReader> reader(new TextReader(globals));
-	std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
-
-	manager->Init();
-    globals.set_knowledge_manager(manager);
-    globals.set_text_reader(reader);
-    reader->HandleSymbolFile(symbolfile);
-    reader->HandleAllSentences(textfile);
-
-	return 0;
-}
-
-int ConfabulationTest::TestReadMultipleFiles(const Symbol& symbolfile, const Symbol& masterfile) const
-{
-	Globals globals;
-	std::shared_ptr<TextReader> reader(new TextReader(globals));
-	std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
-
-	manager->Init();
-    globals.set_knowledge_manager(manager);
-    globals.set_text_reader(reader);
-    reader->HandleSymbolFile(symbolfile);
-    reader->HandleAllTextFiles(masterfile);
-
-    return 0;
 }
 
 void ConfabulationTest::TestDOKExcitationVector() const
@@ -173,54 +130,52 @@ void ConfabulationTest::TestSymbolMapping() const
 
 void ConfabulationTest::TestTokenizePersistedKnowledge() const
 {
-	Symbol knowledgeFragment = "New:::York{1765|||2308}---->Haven{7|||201}---->Year{1111|||6538}";
+    std::string knowledgeFragment = "New:::York{1765|||2308}---->Haven{7|||201}---->Year{1111|||6538}";
 	SentenceTokenizer tok(knowledgeFragment);
-    tok.KnowledgeTokenize(KnowledgeBase::kPersistenceDelimiters); //without const, it does not compile
+    tok.KnowledgeTokenize(Globals::kPersistenceDelimiters);
 }
 
-void ConfabulationTest::TestNGrams(const Symbol& symbolfile, const Symbol& masterfile) const
+void ConfabulationTest::TestProduceNGrams(const std::string& symbolfile, const std::string& masterfile) const
 {
-    Globals globals;
-    std::shared_ptr<TextReader> reader(new TextReader(globals));
-    std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(3, globals));
-    std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
+    TextReaderN reader(symbolfile, masterfile);
+    reader.Initialize();
 
-    manager->Init();
-    globals.set_knowledge_manager(manager);
-    globals.set_text_reader(reader);
-    globals.set_ngram_handler(ngram_handler);
-    reader->HandleSymbolFile(symbolfile);
+    NGramHandler ngram_handler(3);
 
-    reader->HandleAllTextFiles(masterfile);
+    std::vector<std::string> sentence;
+    bool finished_reading = false;
+    do {
+        sentence = reader.GetNextSentenceTokens(finished_reading);
+        ngram_handler.ExtractAndStoreNGrams(sentence);
+    } while (!finished_reading);
 
-    globals.get_ngram_handler().CleanupNGrams();
-    std::cout << "Multi-word count after cleanup is: " << globals.get_ngram_handler().get_multi_word_count() << "\n";
+    ngram_handler.CleanupNGrams();
+    std::cout << "Multi-word count after cleanup is: " << ngram_handler.get_multi_word_count() << "\n";
 }
 
-void ConfabulationTest::TestHashTrie(const Symbol& symbolfile, const Symbol& masterfile) const
+void ConfabulationTest::TestHashTrie(const std::string& symbolfile, const std::string& masterfile) const
 {
-    Globals globals;
-    std::shared_ptr<TextReader> reader(new TextReader(globals));
-    std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(3, globals));
-    std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
+    TextReaderN reader(symbolfile, masterfile);
+    reader.Initialize();
 
-    manager->Init();
-    globals.set_knowledge_manager(manager);
-    globals.set_text_reader(reader);
-    globals.set_ngram_handler(ngram_handler);
-    reader->HandleSymbolFile(symbolfile);
+    NGramHandler ngram_handler(3);
 
-    reader->HandleAllTextFiles(masterfile);
+    std::vector<std::string> sentence;
+    bool finished_reading = false;
+    do {
+        sentence = reader.GetNextSentenceTokens(finished_reading);
+        ngram_handler.ExtractAndStoreNGrams(sentence);
+    } while (!sentence.empty());
 
-    globals.get_ngram_handler().CleanupNGrams();
-    std::cout << "Multi-word count after cleanup is: " << globals.get_ngram_handler().get_multi_word_count() << "\n";
+    ngram_handler.CleanupNGrams();
+    std::cout << "Multi-word count after cleanup is: " << ngram_handler.get_multi_word_count() << "\n";
 
-    std::unique_ptr<SymbolMapping> all_symbols_mapping = globals.get_ngram_handler().GetAllSymbols();
+    std::unique_ptr<SymbolMapping> all_symbols_mapping = ngram_handler.GetAllSymbols();
 
-    const std::set<Symbol>& all_symbols = all_symbols_mapping->GetAllSymbols();
+    const std::set<std::string>& all_symbols = all_symbols_mapping->GetAllSymbols();
 
     HashTrie<std::string> hash_trie;
-    for (const Symbol& e : all_symbols) {
+    for (const std::string& e : all_symbols) {
         std::cout << e << "\n";
         const std::vector<std::string>& symbol_words = SymbolToVectorSymbol(e, ' ');
         hash_trie.Add(symbol_words);
@@ -257,14 +212,15 @@ void ConfabulationTest::TestProduceKnowledgeLinkCombinations() const
         std::cout << "Combination " << i << ":" << VectorSymbolToSymbol(result[i], ',') << "\n";
 }
 
-void ConfabulationTest::TestSimpleConfabulation(const Symbol& symbolfile, const Symbol& masterfile, const std::vector<Symbol>& sentences) const
+/*
+void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
-	Globals globals;
-	std::shared_ptr<TextReader> reader(new TextReader(globals));
+    Globals globals;
+    std::shared_ptr<TextReader> reader(new TextReader(globals));
     std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(3, globals));
-	std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
+    std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
 
-	manager->Init();
+    manager->Init();
     globals.set_knowledge_manager(manager);
     globals.set_text_reader(reader);
     globals.set_ngram_handler(ngram_handler);
@@ -277,50 +233,45 @@ void ConfabulationTest::TestSimpleConfabulation(const Symbol& symbolfile, const 
     manager->PersistRecallableKnowledge();
 }
 
-void ConfabulationTest::TestConfabulationWithPersistedKnowledge(const Symbol& symbolfile, const Symbol& supplementfile, const std::vector<Symbol>& sentences) const
+void ConfabulationTest::TestConfabulationWithPersistedKnowledge(const std::string& symbolfile, const std::string& supplementfile, const std::vector<std::string>& sentences) const
 {
-	Globals globals;
-	std::shared_ptr<TextReader> reader(new TextReader(globals));
+    Globals globals;
+    std::shared_ptr<TextReader> reader(new TextReader(globals));
     std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(3, globals));
-	std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
+    std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
 
-	manager->Init();
+    manager->Init();
     globals.set_knowledge_manager(manager);
     globals.set_text_reader(reader);
     globals.set_ngram_handler(ngram_handler);
     reader->HandleSymbolFile(symbolfile);
 
-	manager->RecallPersistedKnowledge();
+    manager->RecallPersistedKnowledge();
     reader->HandleAllTextFiles(supplementfile);
     manager->CleanUpWeakLinks();
     PerformConfabulation(globals, sentences);
-	manager->PersistRecallableKnowledge();
+    manager->PersistRecallableKnowledge();
 }
 
-void ConfabulationTest::PerformConfabulation(Globals& globals, const std::vector<Symbol>& sentences) const
+void ConfabulationTest::PerformConfabulation(Globals& globals, const std::vector<std::string>& sentences) const
 {
-    for (std::vector<Symbol>::const_iterator it = sentences.begin(); it != sentences.end(); ++it) {
-        std::vector<Symbol> currentfeedTokens = globals.get_text_reader().ExtractSentenceTokens(*it);
-		//std::pair<float, Symbol> output = globals.getKnowledgeManager()->getConfabulatedSymbol(currentfeedTokens);
-        std::vector<Symbol> output = globals.get_knowledge_manager().GetLayeredConfabulatedSymbol(currentfeedTokens);
-		std::cout << *it << "{";
+    for (std::vector<std::string>::const_iterator it = sentences.begin(); it != sentences.end(); ++it) {
+        std::vector<std::string> currentfeedTokens = globals.get_text_reader().ExtractSentenceTokens(*it);
+        //std::pair<float, std::string> output = globals.getKnowledgeManager()->getConfabulatedSymbol(currentfeedTokens);
+        std::vector<std::string> output = globals.get_knowledge_manager().GetLayeredConfabulatedSymbol(currentfeedTokens);
+        std::cout << *it << "{";
         for (unsigned short k = 0; k < Globals::kHeapResults; k++)
-			std::cout << output[k] << ", ";
-		std::cout << "}" << std::endl << std::endl;
-	}
+            std::cout << output[k] << ", ";
+        std::cout << "}" << std::endl << std::endl;
+    }
 }
+*/
 
 int main()
 {
 	std::shared_ptr<ConfabulationTest> test1(new ConfabulationTest());
 
     //test1->TestFixedString("This is, alas, the primal knowledge. \"My fumblings will be your quickening, minion.\"");
-
-    //test1->TestSymbolFile("text_data/ascii_symbols.txt");
-
-    //test1->TestFixedFile("text_data/ascii_symbols.txt", "text_data/Balzac_1.txt");
-
-    //test1->TestMultipleFiles("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
     //test1->TestDOKExcitationVector();
 
@@ -330,26 +281,26 @@ int main()
 
     //test1->TestSymbolMapping();
 
-    //test1->TestNGrams("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+    test1->TestProduceNGrams("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
     //test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
-    test1->TestProduceKnowledgeLinkCombinations();
+    //test1->TestProduceKnowledgeLinkCombinations();
 
     //test1->TestTokenizePersistedKnowledge();
 
-    Symbol copy_feed1 = "The umbrella was a black and prosaic "; //bundle
-    Symbol copy_feed2 = "I will accept the post three times and refuse it "; //afterwards
-    Symbol copy_feed3 = "He scuttled across the room rather like a "; //rabbit
-    Symbol copy_feed4 = "In short, there is in life an element of elfin "; //coincidence
-    Symbol copy_feed5 = "At night the wicket gate is replaced by a solid "; //door
-    Symbol copy_feed6 = "In his own mind he had completely surrendered "; //himself
-    Symbol copy_feed7 = "Every one is grave in public, and funny in "; //private
-    Symbol copy_feed8 = "He had seen a great poet prostituting his muse to "; //journalism
-    Symbol copy_feed9 = "It was clear that they were the accursed of all men, and they knew not "; //why
-    Symbol copy_feed10 = "His long bare neck and sloping shoulders were the shape of a champagne "; //bottle
+    std::string copy_feed1 = "The umbrella was a black and prosaic "; //bundle
+    std::string copy_feed2 = "I will accept the post three times and refuse it "; //afterwards
+    std::string copy_feed3 = "He scuttled across the room rather like a "; //rabbit
+    std::string copy_feed4 = "In short, there is in life an element of elfin "; //coincidence
+    std::string copy_feed5 = "At night the wicket gate is replaced by a solid "; //door
+    std::string copy_feed6 = "In his own mind he had completely surrendered "; //himself
+    std::string copy_feed7 = "Every one is grave in public, and funny in "; //private
+    std::string copy_feed8 = "He had seen a great poet prostituting his muse to "; //journalism
+    std::string copy_feed9 = "It was clear that they were the accursed of all men, and they knew not "; //why
+    std::string copy_feed10 = "His long bare neck and sloping shoulders were the shape of a champagne "; //bottle
 
-    std::shared_ptr<std::vector<Symbol>> allCopyFeeds(new std::vector<Symbol>());
+    std::shared_ptr<std::vector<std::string>> allCopyFeeds(new std::vector<std::string>());
 
     allCopyFeeds->push_back(copy_feed1);
     allCopyFeeds->push_back(copy_feed2);
@@ -362,42 +313,42 @@ int main()
     allCopyFeeds->push_back(copy_feed9);
     allCopyFeeds->push_back(copy_feed10);
 
-	std::shared_ptr<std::vector<Symbol>> allOriginalFeeds(new std::vector<Symbol>());
+    std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
-	Symbol feed1 = "The hooded men were steadily chanting beneath the ";
-	Symbol feed2 = "An army of little insects gathered on top of ";
-	Symbol feed3 = "The prostitute smiled and slowly caressed his ";
-	Symbol feed4 = "A dark winter was eating through the ";
-	Symbol feed5 = "The eagle circled above the valley, eager for ";
-	Symbol feed6 = "However, our initial impression of the situation was ";
-	Symbol feed7 = "At the slightest hint of movement, he was ready to cut ";
-	Symbol feed8 = "A warm and sweet scent was emanating from her ";
-	Symbol feed9 = "She clumsily looked at her stained dress and ";
-	Symbol feed10 = "She had not only her husband killed but also her ";
+    std::string feed1 = "The hooded men were steadily chanting beneath the ";
+    std::string feed2 = "An army of little insects gathered on top of ";
+    std::string feed3 = "The prostitute smiled and slowly caressed his ";
+    std::string feed4 = "A dark winter was eating through the ";
+    std::string feed5 = "The eagle circled above the valley, eager for ";
+    std::string feed6 = "However, our initial impression of the situation was ";
+    std::string feed7 = "At the slightest hint of movement, he was ready to cut ";
+    std::string feed8 = "A warm and sweet scent was emanating from her ";
+    std::string feed9 = "She clumsily looked at her stained dress and ";
+    std::string feed10 = "She had not only her husband killed but also her ";
 
-    Symbol feed11 = "The harsh realization that only writers could write well, threw him into a ";
-    Symbol feed12 = "He looked at her, the love of his life, and whispered ";
-    Symbol feed13 = "He collapsed impulsively, crying like a ";
-    Symbol feed14 = "Alas, the bird's nest was too high up in the mountain for him to ";
-    Symbol feed15 = "Suffocating in a sea of uninspired people, he started a ";
-    Symbol feed16 = "She walked her wild paths without ";
-    Symbol feed17 = "The clan and the khan were ";
-    Symbol feed18 = "The beauty and the ";
-    Symbol feed19 = "Yes, supreme effort had helped him get away from the ";
-    Symbol feed20 = "Hosts of archers stood ready along the ";
+    std::string feed11 = "The harsh realization that only writers could write well, threw him into a ";
+    std::string feed12 = "He looked at her, the love of his life, and whispered ";
+    std::string feed13 = "He collapsed impulsively, crying like a ";
+    std::string feed14 = "Alas, the bird's nest was too high up in the mountain for him to ";
+    std::string feed15 = "Suffocating in a sea of uninspired people, he started a ";
+    std::string feed16 = "She walked her wild paths without ";
+    std::string feed17 = "The clan and the khan were ";
+    std::string feed18 = "The beauty and the ";
+    std::string feed19 = "Yes, supreme effort had helped him get away from the ";
+    std::string feed20 = "Hosts of archers stood ready along the ";
 
-    Symbol feed21 = "The joker laughed out loud and squeezed the ";
-    Symbol feed22 = "She moaned with desire when he ";
-    Symbol feed23 = "The thief stabbed Frederick viciously while he was ";
-    Symbol feed24 = "The green hat swirled and landed on the ";
-    Symbol feed25 = "Ominous waves surrounded us, just before we jumped ";
-    Symbol feed26 = "He was mesmerized by her ";
-    Symbol feed27 = "Unconventionally, the knight decided to kill the maiden and marry the ";
-    Symbol feed28 = "The council of the void sent out its darkest agents to accomplish this ";
-    Symbol feed29 = "Enlightenment, he said, goes hand in hand with a bowl of good ";
-    Symbol feed30 = "The captain was listening indifferently for a while, but then he ";
+    std::string feed21 = "The joker laughed out loud and squeezed the ";
+    std::string feed22 = "She moaned with desire when he ";
+    std::string feed23 = "The thief stabbed Frederick viciously while he was ";
+    std::string feed24 = "The green hat swirled and landed on the ";
+    std::string feed25 = "Ominous waves surrounded us, just before we jumped ";
+    std::string feed26 = "He was mesmerized by her ";
+    std::string feed27 = "Unconventionally, the knight decided to kill the maiden and marry the ";
+    std::string feed28 = "The council of the void sent out its darkest agents to accomplish this ";
+    std::string feed29 = "Enlightenment, he said, goes hand in hand with a bowl of good ";
+    std::string feed30 = "The captain was listening indifferently for a while, but then he ";
 
 	allOriginalFeeds->push_back(feed1);
 	allOriginalFeeds->push_back(feed2);

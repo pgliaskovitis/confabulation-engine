@@ -25,13 +25,9 @@ QMAKE_CXXFLAGS_APP -= -fPIE
 QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += \
-    ConfabulationTest.cpp \
     Globals.cpp \
-    KnowledgeBase.cpp \
-    KnowledgeManager.cpp \
+    ConfabulationTest.cpp \
     SentenceTokenizer.cpp \
-    SymbolAttribute.cpp \
-    TextReader.cpp \
     TemplateInstantiations.cpp \
     NGramHandler.cpp \
     SymbolMapping.cpp \
@@ -44,11 +40,7 @@ SOURCES += \
 HEADERS += \
     ConfabulationTest.h \
     Globals.h \
-    KnowledgeBase.h \
-    KnowledgeManager.h \
     SentenceTokenizer.h \
-    SymbolAttribute.h \
-    TextReader.h \
     sparse_structures/CSRLinksMatrix.hpp \
     sparse_structures/DOKExcitationVector.hpp \
     sparse_structures/IExcitationVector.hpp \

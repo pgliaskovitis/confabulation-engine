@@ -28,20 +28,12 @@
 #include <memory>
 #include <algorithm>
 
-class Globals;
-
 #ifndef DEBUG_1_H_
 //#define DEBUG_1_H_
 #endif
 
 #ifndef STOREDELIMITERS_
 //#define STOREDELIMITERS_
-#endif
-
-#ifndef CONFSYMBOL_H_
-#define CONFSYMBOL_H_
-//the basic item of knowledge in this framework
-typedef std::string Symbol;
 #endif
 
 class TextReaderN
@@ -51,28 +43,28 @@ public:
 
     void Initialize();
 
-    const std::vector<Symbol> GetNextSentenceTokens();
+    const std::vector<std::string> GetNextSentenceTokens(bool& finished_reading);
 
 private:
     void HandleSymbolFile();
     void HandleMasterFile();
 
-    const std::vector<Symbol> ExtractTokens(const Symbol& input);
+    const std::vector<std::string> ExtractTokens(const std::string& input);
     void InitializeFileStream(std::ifstream& file);
-    void CleanToken(Symbol& input);
-    void RemoveCommonAbbreviations(Symbol& input);
+    void CleanToken(std::string& input);
+    void RemoveCommonAbbreviations(std::string& input);
 
     std::string symbol_file_name_;
     std::string master_file_name_;
 
     std::string all_delimiter_symbols_;
-    std::vector<Symbol> delimiter_symbols_;
+    std::vector<std::string> delimiter_symbols_;
 
     std::vector<std::string> text_file_names_;
     std::vector<std::string>::iterator current_text_file_it_;
     std::unique_ptr<std::ifstream> current_text_file_;
 
-    std::shared_ptr<Symbol> left_over_sentence_;
+    std::shared_ptr<std::string> left_over_sentence_;
 };
 
 #endif // TEXTREADERN_H

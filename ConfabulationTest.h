@@ -23,28 +23,10 @@
 #include <memory>
 #include <vector>
 
-#ifndef CONFSYMBOL_H_
-#define CONFSYMBOL_H_
-//the basic item of knowledge in this framework
-typedef std::string Symbol;
-#endif
-
-//solely for testing shared pointers
-struct C
-{
-	int a;
-	int b;
-};
-
-class Globals;
-
 class ConfabulationTest
 {
 public:
-    int TestTokenizeFixedString(const Symbol& input) const;
-    int TestReadSymbolFile(const Symbol& input) const;
-    int TestReadFixedFile(const Symbol& symbolfile, const Symbol& textfile) const;
-    int TestReadMultipleFiles(const Symbol& symbolfile, const Symbol& masterfile) const;
+    int TestTokenizeFixedString(const std::string& input) const;
 
     void TestDOKExcitationVector() const;
     void TestDOKLinksMatrix() const;
@@ -52,19 +34,19 @@ public:
 
     void TestSymbolMapping() const;
 
-    void TestNGrams(const Symbol& symbolfile, const Symbol& masterfile) const;
+    void TestProduceNGrams(const std::string& symbolfile, const std::string& masterfile) const;
 
-    void TestHashTrie(const Symbol& symbolfile, const Symbol& masterfile) const;
+    void TestHashTrie(const std::string& symbolfile, const std::string& masterfile) const;
 
     void TestProduceKnowledgeLinkCombinations() const;
 
     void TestTokenizePersistedKnowledge() const;
 
-    void TestSimpleConfabulation(const Symbol& symbolfile, const Symbol& masterfile, const std::vector<Symbol>& sentences) const;
-    void TestConfabulationWithPersistedKnowledge(const Symbol& symbolfile, const Symbol& supplementfile, const std::vector<Symbol>& sentences) const;
+    void TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
+    void TestConfabulationWithPersistedKnowledge(const std::string& symbolfile, const std::string& supplementfile, const std::vector<std::string>& sentences) const;
 
 private:
-    void PerformConfabulation(Globals& globals, const std::vector<Symbol>& sentences) const;
+    void PerformConfabulation(Globals& globals, const std::vector<std::string>& sentences) const;
 };
 
 #endif /* CONFABULATIONTEST_H_ */

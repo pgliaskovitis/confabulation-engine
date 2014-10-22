@@ -31,34 +31,26 @@
 //#define DEBUG_1_H_
 #endif
 
-#ifndef CONFSYMBOL_H_
-#define CONFSYMBOL_H_
-//the basic item of knowledge in this framework
-typedef std::string Symbol;
-#endif
-
 struct StringVector_Cmp
 {
-    bool operator()(const std::vector<Symbol>& a, const std::vector<Symbol> b)
+    bool operator()(const std::vector<std::string>& a, const std::vector<std::string> b)
     {
         std::string a_string("");
-        for (const Symbol& e: a)
+        for (const std::string& e: a)
             a_string += e;
 
         std::string b_string("");
-        for (const Symbol& e: b)
+        for (const std::string& e: b)
             b_string += e;
 
         return strcmp(a_string.c_str(), b_string.c_str()) < 0;
     }
 };
 
-class Globals;
-
 class NGramHandler
 {
 public:
-    NGramHandler(unsigned short max_words, Globals& globals_manager);
+    NGramHandler(unsigned short max_words);
 
     NGramHandler(const NGramHandler& rhs) = delete;
     NGramHandler& operator=(const NGramHandler& rhs) = delete;
@@ -66,7 +58,7 @@ public:
     NGramHandler&& operator=(NGramHandler&& rhs) = delete;
 
     // Counts occurences of n-grams from a given input sentence
-    void ExtractAndStoreNGrams(const std::vector<Symbol>& sentence_tokens);
+    void ExtractAndStoreNGrams(const std::vector<std::string>& sentence_tokens);
 
     // Erases n-grams with occurence count less than the accepted threshold
     void CleanupNGrams();
@@ -84,8 +76,7 @@ private:
 
     const unsigned short max_words_;
 
-    Globals& globals_manager_;
-    std::vector<std::map<std::vector<Symbol>, size_t, StringVector_Cmp>> occurrence_counts_;
+    std::vector<std::map<std::vector<std::string>, size_t, StringVector_Cmp>> occurrence_counts_;
 
 };
 

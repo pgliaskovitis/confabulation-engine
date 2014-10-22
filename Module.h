@@ -27,12 +27,6 @@
 #include <sparse_structures/IExcitationVector.hpp>
 #include <SymbolMapping.h>
 
-#ifndef CONFSYMBOL_H_
-#define CONFSYMBOL_H_
-//the basic item of knowledge in this framework
-typedef std::string Symbol;
-#endif
-
 class Module
 {
 public:
@@ -41,7 +35,7 @@ public:
     void Reset();
     void ExcitationsToZero();
 
-    void ActivateSymbol(const Symbol& word, int K);
+    void ActivateSymbol(const std::string& word, int K);
 
     void AddExcitationToIndex(size_t index, float value);
     void AddExcitationToAllSymbols(int K);
@@ -53,12 +47,12 @@ public:
     bool IsFrozen() const { return frozen_indexes_ != nullptr; }
 
     std::unique_ptr<IExcitationVector<float>> GetNormalizedExcitations();
-    std::vector<Symbol> GetExpectation();
+    std::vector<std::string> GetExpectation();
 
-    Symbol ElementaryConfabulation();
-    Symbol ElementaryConfabulation(int K);
+    std::string ElementaryConfabulation();
+    std::string ElementaryConfabulation(int K);
 
-    std::vector<Symbol> PartialConfabulation(int K, bool multiconf);
+    std::vector<std::string> PartialConfabulation(int K, bool multiconf);
 
 private:
     const SymbolMapping& symbol_mapping_;
