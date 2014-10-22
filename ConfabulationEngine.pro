@@ -31,10 +31,10 @@ SOURCES += \
     TemplateInstantiations.cpp \
     NGramHandler.cpp \
     SymbolMapping.cpp \
-    KnowledgeBaseN.cpp \
+    KnowledgeBase.cpp \
     Module.cpp \
     MultiLevelOrganizer.cpp \
-    TextReaderN.cpp \
+    TextReader.cpp \
     ConfabulationBase.cpp
 
 HEADERS += \
@@ -49,10 +49,10 @@ HEADERS += \
     TemplateInstantiations.h \
     NGramHandler.h \
     SymbolMapping.h \
-    KnowledgeBaseN.h \
+    KnowledgeBase.h \
     Module.h \
     MultiLevelOrganizer.h \
-    TextReaderN.h \
+    TextReader.h \
     ConfabulationBase.h \
     utils/HashTrie.hpp \
     utils/Utils.h \

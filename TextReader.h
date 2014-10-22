@@ -36,10 +36,10 @@
 //#define STOREDELIMITERS_
 #endif
 
-class TextReaderN
+class TextReader
 {
 public:
-    TextReaderN(const std::string& symbol_file, const std::string& master_file);
+    TextReader(const std::string& symbol_file, const std::string& master_file);
 
     void Initialize();
 

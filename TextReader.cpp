@@ -18,26 +18,26 @@
  */
 
 #include <sstream>
-#include "TextReaderN.h"
+#include "TextReader.h"
 #include "Globals.h"
 #include "SentenceTokenizer.h"
 #include "utils/Utils.h"
 
-TextReaderN::TextReaderN(const std::string& symbol_file, const std::string& master_file) :
+TextReader::TextReader(const std::string& symbol_file, const std::string& master_file) :
     symbol_file_name_(symbol_file),
     master_file_name_(master_file),
     left_over_sentence_(nullptr)
 {
 }
 
-void TextReaderN::Initialize()
+void TextReader::Initialize()
 {
     HandleSymbolFile();
     HandleMasterFile();
     current_text_file_it_ = text_file_names_.begin();
 }
 
-const std::vector<std::string> TextReaderN::GetNextSentenceTokens(bool& finished_reading)
+const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_reading)
 {
     if (current_text_file_ != nullptr) {
 
@@ -105,7 +105,7 @@ const std::vector<std::string> TextReaderN::GetNextSentenceTokens(bool& finished
     }
 }
 
-void TextReaderN::HandleSymbolFile()
+void TextReader::HandleSymbolFile()
 {
     std::ifstream l_file;
     std::string symbol;
@@ -133,7 +133,7 @@ void TextReaderN::HandleSymbolFile()
     std::sort(delimiter_symbols_.begin(), delimiter_symbols_.end());
 }
 
-void TextReaderN::HandleMasterFile()
+void TextReader::HandleMasterFile()
 {
     std::ifstream l_file;
     std::string filename;
@@ -157,7 +157,7 @@ void TextReaderN::HandleMasterFile()
     }
 }
 
-const std::vector<std::string> TextReaderN::ExtractTokens(const std::string &input)
+const std::vector<std::string> TextReader::ExtractTokens(const std::string &input)
 {
     std::vector<std::string> output;
 
@@ -179,12 +179,12 @@ const std::vector<std::string> TextReaderN::ExtractTokens(const std::string &inp
     return output;
 }
 
-void TextReaderN::InitializeFileStream(std::ifstream &file)
+void TextReader::InitializeFileStream(std::ifstream &file)
 {
     file.clear(file.goodbit);
 }
 
-void TextReaderN::CleanToken(std::string& input)
+void TextReader::CleanToken(std::string& input)
 {
     input.erase(std::remove(input.begin(), input.end(), '\0'), input.end());
     input.erase(std::remove(input.begin(), input.end(), '\r'), input.end());
@@ -192,7 +192,7 @@ void TextReaderN::CleanToken(std::string& input)
     std::transform(input.begin(), input.end(), input.begin(), ::tolower);
 }
 
-void TextReaderN::RemoveCommonAbbreviations(std::string& input)
+void TextReader::RemoveCommonAbbreviations(std::string& input)
 {
     size_t temp_index = 0;
     size_t first_index = std::string::npos;

@@ -17,10 +17,10 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "KnowledgeBaseN.h"
+#include "KnowledgeBase.h"
 #include "Globals.h"
 
-KnowledgeBaseN::KnowledgeBaseN(const std::string& id, std::unique_ptr<SymbolMapping>& src_map, std::unique_ptr<SymbolMapping>& targ_map) :
+KnowledgeBase::KnowledgeBase(const std::string& id, std::unique_ptr<SymbolMapping>& src_map, std::unique_ptr<SymbolMapping>& targ_map) :
     id_(id),
     src_map_(std::move(src_map)),
     targ_map_(std::move(targ_map)),
@@ -29,7 +29,7 @@ KnowledgeBaseN::KnowledgeBaseN(const std::string& id, std::unique_ptr<SymbolMapp
     target_symbol_sums_(targ_map->Size())
 {}
 
-void KnowledgeBaseN::Add(const std::string& src_symbol, const std::string& targ_symbol)
+void KnowledgeBase::Add(const std::string& src_symbol, const std::string& targ_symbol)
 {
     size_t row = targ_map_->IndexOf(targ_symbol);
     size_t col = src_map_->IndexOf(src_symbol);
@@ -37,7 +37,7 @@ void KnowledgeBaseN::Add(const std::string& src_symbol, const std::string& targ_
     Add(row, col);
 }
 
-void KnowledgeBaseN::Add(size_t targ_index, size_t src_index)
+void KnowledgeBase::Add(size_t targ_index, size_t src_index)
 {
     kbase_.reset(nullptr);
     target_symbol_sums_[targ_index]++;
@@ -45,7 +45,7 @@ void KnowledgeBaseN::Add(size_t targ_index, size_t src_index)
     cooccurrence_counts_->SetElement(targ_index, src_index, previous_count + 1);
 }
 
-void KnowledgeBaseN::ComputeLinkStrengths()
+void KnowledgeBase::ComputeLinkStrengths()
 {
     std::unique_ptr<DOKLinksMatrix<float>> link_strengths(
                 new DOKLinksMatrix<float>(cooccurrence_counts_->get_num_rows(), cooccurrence_counts_->get_num_cols()));
@@ -59,7 +59,7 @@ void KnowledgeBaseN::ComputeLinkStrengths()
     kbase_.reset(new CSRLinksMatrix<float>(*link_strengths));
 }
 
-float KnowledgeBaseN::GetPercentOfElementsLessThanThreshold(size_t threshold)
+float KnowledgeBase::GetPercentOfElementsLessThanThreshold(size_t threshold)
 {
     int count = 0;
     for (const std::pair<std::pair<size_t, size_t>, float>& e: cooccurrence_counts_->GetNzElements())
@@ -70,7 +70,7 @@ float KnowledgeBaseN::GetPercentOfElementsLessThanThreshold(size_t threshold)
 
 }
 
-std::unique_ptr<IExcitationVector<float> > KnowledgeBaseN::Transmit(const IExcitationVector<float> &normalized_excitations) const
+std::unique_ptr<IExcitationVector<float> > KnowledgeBase::Transmit(const IExcitationVector<float> &normalized_excitations) const
 {
     if (normalized_excitations.get_num_rows() != src_map_->Size())
         throw std::out_of_range("Input excitations should match the size of the input wordsmapping");
@@ -78,7 +78,7 @@ std::unique_ptr<IExcitationVector<float> > KnowledgeBaseN::Transmit(const IExcit
     return kbase_->Multiply(normalized_excitations);
 }
 
-float KnowledgeBaseN::ComputeLinkStrength(double antecedent_support_probability)
+float KnowledgeBase::ComputeLinkStrength(double antecedent_support_probability)
 {
     if (antecedent_support_probability > Globals::kBaseProb)
         return static_cast<float>(log(antecedent_support_probability / (double) Globals::kBaseProb)) + Globals::kBandGap;

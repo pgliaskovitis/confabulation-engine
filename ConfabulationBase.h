@@ -22,11 +22,11 @@
 
 #include <vector>
 #include <memory>
-#include "TextReaderN.h"
+#include "TextReader.h"
 #include "NGramHandler.h"
 #include "MultiLevelOrganizer.h"
 #include "Module.h"
-#include "KnowledgeBaseN.h"
+#include "KnowledgeBase.h"
 
 class ConfabulationBase
 {
@@ -43,13 +43,13 @@ public:
     void Learn();
 
 protected:
-    std::unique_ptr<TextReaderN> text_reader_;
+    std::unique_ptr<TextReader> text_reader_;
     std::unique_ptr<NGramHandler> ngram_handler_;
     std::unique_ptr<MultiLevelOrganizer> organizer_;
 
     std::vector<std::vector<std::string>> kb_specs_;
     std::vector<std::unique_ptr<Module>> modules_;
-    std::vector<std::vector<std::unique_ptr<KnowledgeBaseN>>> knowledge_bases_;
+    std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> knowledge_bases_;
 };
 
 #endif // CONFABULATIONBASE_H

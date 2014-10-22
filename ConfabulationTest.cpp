@@ -22,7 +22,7 @@
 #include "SentenceTokenizer.h"
 #include "SymbolMapping.h"
 #include "NGramHandler.h"
-#include "TextReaderN.h"
+#include "TextReader.h"
 #include "sparse_structures/DOKExcitationVector.hpp"
 #include "sparse_structures/DOKLinksMatrix.hpp"
 #include "sparse_structures/CSRLinksMatrix.hpp"
@@ -137,7 +137,7 @@ void ConfabulationTest::TestTokenizePersistedKnowledge() const
 
 void ConfabulationTest::TestProduceNGrams(const std::string& symbolfile, const std::string& masterfile) const
 {
-    TextReaderN reader(symbolfile, masterfile);
+    TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
     NGramHandler ngram_handler(3);
@@ -155,7 +155,7 @@ void ConfabulationTest::TestProduceNGrams(const std::string& symbolfile, const s
 
 void ConfabulationTest::TestHashTrie(const std::string& symbolfile, const std::string& masterfile) const
 {
-    TextReaderN reader(symbolfile, masterfile);
+    TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
     NGramHandler ngram_handler(3);

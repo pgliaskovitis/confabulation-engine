@@ -24,7 +24,7 @@ ConfabulationBase::ConfabulationBase(const std::vector<std::vector<std::string>>
 
 void ConfabulationBase::Initialize(const std::string &symbol_file, const std::string &master_file)
 {
-    TextReaderN text_reader(symbol_file, master_file);
+    TextReader text_reader(symbol_file, master_file);
 
 //    std::vector<std::string> sentence;
 //    do {

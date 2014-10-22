@@ -27,15 +27,15 @@
 #include "sparse_structures/CSRLinksMatrix.hpp"
 #include "SymbolMapping.h"
 
-class KnowledgeBaseN
+class KnowledgeBase
 {
 public:
-    KnowledgeBaseN(const std::string& id, std::unique_ptr<SymbolMapping>& src_map, std::unique_ptr<SymbolMapping>& targ_map);
+    KnowledgeBase(const std::string& id, std::unique_ptr<SymbolMapping>& src_map, std::unique_ptr<SymbolMapping>& targ_map);
 
-    KnowledgeBaseN(const KnowledgeBaseN& rhs) = delete;
-    KnowledgeBaseN& operator=(const KnowledgeBaseN& rhs) = delete;
-    KnowledgeBaseN(KnowledgeBaseN&& rhs) = delete;
-    KnowledgeBaseN&& operator=(KnowledgeBaseN&& rhs) = delete;
+    KnowledgeBase(const KnowledgeBase& rhs) = delete;
+    KnowledgeBase& operator=(const KnowledgeBase& rhs) = delete;
+    KnowledgeBase(KnowledgeBase&& rhs) = delete;
+    KnowledgeBase&& operator=(KnowledgeBase&& rhs) = delete;
 
     void Add(const std::string& src_symbol, const std::string& targ_symbol);
     void Add(size_t targ_index, size_t src_index);
