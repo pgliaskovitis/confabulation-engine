@@ -99,8 +99,11 @@ const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_
             std::cout << "Handling file " << *current_text_file_it_ << "\n" << std::flush;
 
             return GetNextSentenceTokens(finished_reading);
-        } else
+        } else {
             finished_reading = true;
+            std::vector<std::string> result;
+            return result;
+        }
     }
 }
 
@@ -115,6 +118,8 @@ void TextReader::HandleSymbolFile()
         delimiter_symbols_.push_back(symbol); // delimiters as separate strings
     }
 
+    l_file.close();
+
     std::sort(delimiter_symbols_.begin(), delimiter_symbols_.end());
 }
 
@@ -127,6 +132,8 @@ void TextReader::HandleMasterFile()
     l_file.open(master_file_name_);
     while (std::getline(l_file, filename))
        text_file_names_.push_back(filename);
+
+    l_file.close();
 }
 
 const std::vector<std::string> TextReader::ExtractTokens(const std::string &input)

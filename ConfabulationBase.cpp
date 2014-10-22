@@ -25,29 +25,34 @@ ConfabulationBase::ConfabulationBase(const std::vector<std::vector<std::string>>
 void ConfabulationBase::Initialize(const std::string &symbol_file, const std::string &master_file)
 {
     TextReader text_reader(symbol_file, master_file);
+    text_reader.Initialize();
 
-//    std::vector<std::string> sentence;
-//    do {
-//        sentence = text_reader.GetNextSentenceTokens();
-//        ngram_handler_->ExtractAndStoreNGrams();
-//    } while (!sentence.empty());
+    NGramHandler ngram_handler(3);
 
-//    unsigned short num_mods = kb_specs_.size();
+    bool finished_reading = false;
+    do {
+        sentence = reader.GetNextSentenceTokens(finished_reading);
+        ngram_handler.ExtractAndStoreNGrams(sentence);
+    } while (!finished_reading);
 
-//    // create the modules
-//    modules_.resize(num_mods);
-//    for (size_t i = 0; i < num_mods; ++i) {
-//        modules_.push_back(new Module(mappings[i]));
-//    }
+    std::unique_ptr<SymbolMapping> all_symbols_mapping = ngram_handler.GetAllSymbols();
 
-//    // create the knowledge bases according to matrix
-//    kbs = new KnowledgeBase[num_mods][num_mods];
-//    for (int i = 0; i < num_mods; i++) {
-//        for (int j = 0; j < num_mods; j++) {
+    unsigned short num_mods = kb_specs_.size();
 
-//            if (kbs_spec[i][j]) {
-//                kbs[i][j] = new KnowledgeBase(modules_[i].sm, modules_[j].sm);
-//            }
-//        }
-//    }
+    // create the modules
+    modules_.resize(num_mods);
+    for (size_t i = 0; i < num_mods; ++i) {
+        modules_.push_back(new Module(mappings[i]));
+    }
+
+    // create the knowledge bases according to specifications matrix
+    kbs = new KnowledgeBase[num_mods][num_mods];
+    for (int i = 0; i < num_mods; i++) {
+        for (int j = 0; j < num_mods; j++) {
+
+            if (kbs_spec[i][j]) {
+                kbs[i][j] = new KnowledgeBase(modules_[i].sm, modules_[j].sm);
+            }
+        }
+    }
 }
