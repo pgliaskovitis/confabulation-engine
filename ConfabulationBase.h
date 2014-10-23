@@ -42,8 +42,17 @@ public:
     void Build();
     void Learn();
 
+    virtual size_t AutoIndexToComplete() = 0;
+    size_t ActualK(size_t K, const std::vector<std::string>& symbols, int index_to_complete);
+    void Activate(const std::vector<std::string>& symbols);
+    void TransferAllExcitations(int target_index);
+    std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int index_to_complete, bool expectation);
+    void Clean();
+
 protected:
     unsigned short num_modules_;
+
+    int K_;
 
     std::string symbol_file_;
     std::string master_file_;

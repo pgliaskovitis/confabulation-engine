@@ -17,11 +17,13 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include "ConfabulationBase.h"
 #include "utils/Utils.h"
 
 ConfabulationBase::ConfabulationBase(const std::vector<std::vector<bool>>& kb_specs, std::vector<unsigned short> level_specs) :
     num_modules_(kb_specs.size()),
+    K_(-1),
     kb_specs_(kb_specs),
     level_specs_(level_specs)
 {}
@@ -95,6 +97,75 @@ void ConfabulationBase::Learn()
         for (const std::unique_ptr<KnowledgeBase>& kb : kb_row) {
             if (kb != nullptr)
                 kb->ComputeLinkStrengths();
+        }
+    }
+}
+
+int ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int index_to_complete)
+{
+    int index = std::min(symbols.size(), index_to_complete);
+
+    // number of non-null symbols before index_to_complete
+    size_t max_K = index - ArrayTools.number_equal(null, Arrays.copyOf(symbols, index));
+
+    if (K_ >= 0) {
+       return std::min(K_, max_K);
+    } else {
+       // autocompute: use max_K
+       return max_K;
+    }
+}
+
+void ConfabulationBase::TransferAllExcitations(int target_index)
+{
+
+}
+
+std::vector<std::string> ConfabulationBase::Confabulation(const std::vector<std::string> &symbols, int index_to_complete, bool expectation)
+{
+    int index;
+    if (index_to_complete < 0) {
+        index = AutoIndexToComplete(symbols);
+    } else {
+        index = index_to_complete;
+    }
+
+    int actual_K = ActualK(symbols, index);
+    const std::unique_ptr<Module>& target = modules_[index];
+
+    // core algorithm
+    Activate(symbols);
+    TransferAllExcitations(index);
+
+    std::vector<std::string> result;
+
+    if (expectation) {
+        result = target->PartialConfabulation(actual_K, false);
+    } else {
+        result = target->ElementaryConfabulation(actual_K);
+    }
+
+    Clean();
+
+    return result;
+}
+
+void ConfabulationBase::Clean()
+{
+    for (const std::unique_ptr<Module>& module : modules_) {
+        if (module != nullptr) {
+            module->Reset();
+            module->Unfreeze();
+        }
+    }
+}
+
+void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
+{
+    for (size_t i = 0; i < std::min(symbols.size(), modules_.size()); ++i) {
+        if ((!symbols[i].empty()) && (modules_[i] != nullptr)) {
+            modules_[i]->ActivateSymbol(symbols[i], 1);
+            modules_[i]->freeze();
         }
     }
 }
