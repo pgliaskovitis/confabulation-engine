@@ -61,7 +61,7 @@ void NGramHandler::ExtractAndStoreNGrams(const std::vector<std::string>& sentenc
                     std::map<std::vector<std::string>, size_t, StringVector_Cmp>& n_word_counts = occurrence_counts_[n_words - 1];
                     n_word_counts[compound_word]++;
                 }
-             }
+            }
         }
     }
 }

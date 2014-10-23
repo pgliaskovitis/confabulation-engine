@@ -54,6 +54,8 @@ public:
 
     std::vector<std::string> PartialConfabulation(int K, bool multiconf);
 
+    const SymbolMapping& get_symbol_mapping() { return symbol_mapping_; }
+
 private:
     const SymbolMapping& symbol_mapping_;
 

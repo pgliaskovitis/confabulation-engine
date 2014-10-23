@@ -30,7 +30,7 @@
 class KnowledgeBase
 {
 public:
-    KnowledgeBase(const std::string& id, std::unique_ptr<SymbolMapping>& src_map, std::unique_ptr<SymbolMapping>& targ_map);
+    KnowledgeBase(const std::string& id, const SymbolMapping& src_map, const SymbolMapping& targ_map);
 
     KnowledgeBase(const KnowledgeBase& rhs) = delete;
     KnowledgeBase& operator=(const KnowledgeBase& rhs) = delete;
@@ -60,8 +60,8 @@ private:
     // In order to be able to transmit excitations with regular matrix multiplication
     // the source symbols must correspond to the COLUMNS of the matrix
 
-    std::unique_ptr<SymbolMapping> src_map_;
-    std::unique_ptr<SymbolMapping> targ_map_;
+    const SymbolMapping& src_map_;
+    const SymbolMapping& targ_map_;
     std::unique_ptr<IKnowledgeLinks<size_t>> cooccurrence_counts_;
     std::unique_ptr<IKnowledgeLinks<float>> kbase_;
     std::vector<size_t> target_symbol_sums_;

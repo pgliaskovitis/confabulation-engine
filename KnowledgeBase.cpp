@@ -20,19 +20,19 @@
 #include "KnowledgeBase.h"
 #include "Globals.h"
 
-KnowledgeBase::KnowledgeBase(const std::string& id, std::unique_ptr<SymbolMapping>& src_map, std::unique_ptr<SymbolMapping>& targ_map) :
+KnowledgeBase::KnowledgeBase(const std::string& id, const SymbolMapping& src_map, const SymbolMapping& targ_map) :
     id_(id),
-    src_map_(std::move(src_map)),
-    targ_map_(std::move(targ_map)),
-    cooccurrence_counts_ (new DOKLinksMatrix<size_t>(targ_map->Size(), src_map->Size())),
-    kbase_(new CSRLinksMatrix<float>(targ_map->Size(), src_map->Size())),
-    target_symbol_sums_(targ_map->Size())
+    src_map_(src_map),
+    targ_map_(targ_map),
+    cooccurrence_counts_ (new DOKLinksMatrix<size_t>(targ_map.Size(), src_map.Size())),
+    kbase_(new CSRLinksMatrix<float>(targ_map.Size(), src_map.Size())),
+    target_symbol_sums_(targ_map.Size())
 {}
 
 void KnowledgeBase::Add(const std::string& src_symbol, const std::string& targ_symbol)
 {
-    size_t row = targ_map_->IndexOf(targ_symbol);
-    size_t col = src_map_->IndexOf(src_symbol);
+    size_t row = targ_map_.IndexOf(targ_symbol);
+    size_t col = src_map_.IndexOf(src_symbol);
 
     Add(row, col);
 }
@@ -72,7 +72,7 @@ float KnowledgeBase::GetPercentOfElementsLessThanThreshold(size_t threshold)
 
 std::unique_ptr<IExcitationVector<float> > KnowledgeBase::Transmit(const IExcitationVector<float> &normalized_excitations) const
 {
-    if (normalized_excitations.get_num_rows() != src_map_->Size())
+    if (normalized_excitations.get_num_rows() != src_map_.Size())
         throw std::out_of_range("Input excitations should match the size of the input wordsmapping");
 
     return kbase_->Multiply(normalized_excitations);

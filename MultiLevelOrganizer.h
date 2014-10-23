@@ -38,6 +38,8 @@ public:
 
     std::vector<std::vector<std::string>> Organize(const std::vector<std::string>& symbols, bool &match_found);
 
+    const std::unique_ptr<SymbolMapping>& get_mappings_for_level(unsigned short level) { return level_mappings_.at(level); }
+
 private:
     std::vector<unsigned short> level_sizes_;
     std::vector<std::unique_ptr<SymbolMapping>> level_mappings_;

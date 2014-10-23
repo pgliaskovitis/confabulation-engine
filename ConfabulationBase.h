@@ -31,7 +31,7 @@
 class ConfabulationBase
 {
 public:
-    ConfabulationBase(const std::vector<std::vector<std::string>>& kb_specs);
+    ConfabulationBase(const std::vector<std::vector<bool>>& kb_specs, std::vector<unsigned short> level_specs);
 
     ConfabulationBase(const ConfabulationBase& rhs) = delete;
     ConfabulationBase& operator=(const ConfabulationBase& rhs) = delete;
@@ -43,13 +43,14 @@ public:
     void Learn();
 
 protected:
-    std::unique_ptr<TextReader> text_reader_;
-    std::unique_ptr<NGramHandler> ngram_handler_;
     std::unique_ptr<MultiLevelOrganizer> organizer_;
 
-    std::vector<std::vector<std::string>> kb_specs_;
+    std::vector<std::vector<bool>> kb_specs_;
+    std::vector<unsigned short> level_specs_;
     std::vector<std::unique_ptr<Module>> modules_;
     std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> knowledge_bases_;
+
+    std::vector<std::unique_ptr<SymbolMapping>> ProduceSymbolMappings(const std::string &symbol_file, const std::string &master_file);
 };
 
 #endif // CONFABULATIONBASE_H
