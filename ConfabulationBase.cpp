@@ -18,35 +18,83 @@
  */
 
 #include "ConfabulationBase.h"
+#include "utils/Utils.h"
 
 ConfabulationBase::ConfabulationBase(const std::vector<std::vector<bool>>& kb_specs, std::vector<unsigned short> level_specs) :
+    num_modules_(kb_specs.size()),
     kb_specs_(kb_specs),
     level_specs_(level_specs)
 {}
 
 void ConfabulationBase::Initialize(const std::string &symbol_file, const std::string &master_file)
 {
-    organizer_.reset(new MultiLevelOrganizer(level_specs_, ProduceSymbolMappings(symbol_file, master_file)));
+    symbol_file_ = symbol_file;
+    master_file_ = master_file;
+    Build();
+    Learn();
+}
+
+void ConfabulationBase::Build()
+{
+    organizer_.reset(new MultiLevelOrganizer(level_specs_, ProduceSymbolMappings(symbol_file_, master_file_)));
 
     // create the modules
-    unsigned short num_mods = kb_specs_.size();
-    modules_.resize(num_mods);
-    for (size_t i = 0; i < num_mods; ++i) {
+    modules_.resize(num_modules_);
+    for (size_t i = 0; i < num_modules_; ++i) {
         const std::unique_ptr<SymbolMapping>& symbols_at_level = organizer_->get_mappings_for_level(i);
         modules_.emplace_back(new Module(*symbols_at_level));
     }
 
     // create the knowledge bases according to specifications matrix
-    knowledge_bases_.resize(num_mods);
-    for (size_t i = 0; i < num_mods; ++i) {
-        knowledge_bases_[i].resize(num_mods);
-        for (size_t j = 0; j < num_mods; ++j) {
+    knowledge_bases_.resize(num_modules_);
+    for (size_t i = 0; i < num_modules_; ++i) {
+        knowledge_bases_[i].resize(num_modules_);
+        for (size_t j = 0; j < num_modules_; ++j) {
             if (kb_specs_[i][j]) {
                 std::string id(std::to_string(i));
                 id += "-";
                 id += std::to_string(j);
-                knowledge_bases_[i][j].reset(new KnowledgeBase(id, modules_[i]->get_symbol_mapping(), modules_[j]->get_symbol_mapping()));
+                knowledge_bases_[i][j].reset(new KnowledgeBase(id,
+                                                               modules_[i]->get_symbol_mapping(),
+                                                               modules_[j]->get_symbol_mapping()));
             }
+        }
+    }
+}
+
+void ConfabulationBase::Learn()
+{
+    TextReader text_reader(symbol_file_, master_file_);
+    text_reader.Initialize();
+
+    std::vector<std::string> sentence;
+    bool finished_reading = false;
+    do {
+        sentence = text_reader.GetNextSentenceTokens(finished_reading);
+
+        bool match_found = false;
+        const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence, match_found);
+        const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
+
+        // wire the knowledge links
+        for (const std::vector<std::string>& module_combination : module_combinations) {
+            for (size_t src = 0; src < num_modules_; src++) {
+                if (!module_combination[src].empty()) {
+                    for (size_t targ = 0; targ < num_modules_; targ++) {
+                        if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty()))
+                             knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
+                    }
+                }
+            }
+        }
+
+    } while (!finished_reading);
+
+    // compute knowledge link strengths
+    for (const std::vector<std::unique_ptr<KnowledgeBase>>& kb_row : knowledge_bases_) {
+        for (const std::unique_ptr<KnowledgeBase>& kb : kb_row) {
+            if (kb != nullptr)
+                kb->ComputeLinkStrengths();
         }
     }
 }
@@ -55,7 +103,7 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
 {
     std::vector<std::unique_ptr<SymbolMapping>> result;
 
-    result.resize(2); //currently, only single word symbols at position [0] and multi-word symbols at position [1]
+    result.resize(2);
 
     TextReader text_reader(symbol_file, master_file);
     text_reader.Initialize();
@@ -69,8 +117,8 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
         ngram_handler.ExtractAndStoreNGrams(sentence);
     } while (!finished_reading);
 
-    result.push_back(ngram_handler.GetSingleWordSymbols());
-    result.push_back(ngram_handler.GetAllSymbols());
+    result.push_back(ngram_handler.GetSingleWordSymbols()); // single word symbols at position [0]
+    result.push_back(ngram_handler.GetAllSymbols()); // multi-word symbols (including single word ones at position [1]
 
     return result; //at this point, NGramHandler is destroyed so we save its internal memory
 }

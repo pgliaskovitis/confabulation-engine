@@ -43,6 +43,11 @@ public:
     void Learn();
 
 protected:
+    unsigned short num_modules_;
+
+    std::string symbol_file_;
+    std::string master_file_;
+
     std::unique_ptr<MultiLevelOrganizer> organizer_;
 
     std::vector<std::vector<bool>> kb_specs_;
