@@ -42,23 +42,24 @@ public:
     void Build();
     void Learn();
 
-    virtual size_t AutoIndexToComplete() = 0;
-    size_t ActualK(size_t K, const std::vector<std::string>& symbols, int index_to_complete);
+    virtual int AutoIndexToComplete(const std::vector<std::string>& symbols) = 0;
+    int ActualK(const std::vector<std::string> &symbols, int index_to_complete);
     void Activate(const std::vector<std::string>& symbols);
-    void TransferAllExcitations(int target_index);
+
+    void TransferExcitation(const std::unique_ptr<Module>& source_module, const std::unique_ptr<KnowledgeBase>& kb, const std::unique_ptr<Module>& target_module);
+    void TransferAllExcitations(int target_index, const std::unique_ptr<Module> &target_module);
+
     std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int index_to_complete, bool expectation);
+
     void Clean();
 
 protected:
     unsigned short num_modules_;
-
     int K_;
-
     std::string symbol_file_;
     std::string master_file_;
 
     std::unique_ptr<MultiLevelOrganizer> organizer_;
-
     std::vector<std::vector<bool>> kb_specs_;
     std::vector<unsigned short> level_specs_;
     std::vector<std::unique_ptr<Module>> modules_;

@@ -138,6 +138,24 @@ void Module::Unfreeze()
     frozen_indexes_.reset(nullptr);
 }
 
+const std::unique_ptr<IExcitationVector<float> > &Module::GetNormalizedExcitations()
+{
+    if (normalized_excitations_ != nullptr) {
+        return normalized_excitations_;
+    }
+
+    normalized_excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
+
+    double sum = 0;
+    for (const std::pair<size_t, float>& e : excitations_->GetNzElements())
+        sum += e.second;
+
+    for (const std::pair<size_t, float>& e : excitations_->GetNzElements())
+        normalized_excitations_->SetElement(e.first, (float) (e.second / sum));
+
+    return normalized_excitations_;
+}
+
 std::vector<std::string> Module::GetExpectation()
 {
     std::vector<std::string> result(excitations_->GetNnz());
