@@ -23,7 +23,7 @@
 #include <vector>
 #include <memory>
 #include "SymbolMapping.h"
-#include <utils/HashTrie.hpp>
+#include "utils/HashTrie.hpp"
 
 class MultiLevelOrganizer
 {

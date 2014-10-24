@@ -22,8 +22,8 @@
 
 #include <vector>
 #include <memory>
-#include "TextReader.h"
-#include "NGramHandler.h"
+#include "text_processing/TextReader.h"
+#include "text_processing/NGramHandler.h"
 #include "MultiLevelOrganizer.h"
 #include "Module.h"
 #include "KnowledgeBase.h"

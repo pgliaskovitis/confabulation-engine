@@ -19,10 +19,10 @@
 
 #include "Globals.h"
 #include "ConfabulationTest.h"
-#include "SentenceTokenizer.h"
+#include "text_processing/SentenceTokenizer.h"
 #include "SymbolMapping.h"
-#include "NGramHandler.h"
-#include "TextReader.h"
+#include "text_processing/NGramHandler.h"
+#include "text_processing/TextReader.h"
 #include "sparse_structures/DOKExcitationVector.hpp"
 #include "sparse_structures/DOKLinksMatrix.hpp"
 #include "sparse_structures/CSRLinksMatrix.hpp"

@@ -25,36 +25,37 @@ QMAKE_CXXFLAGS_APP -= -fPIE
 QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += \
-    Globals.cpp \
-    ConfabulationTest.cpp \
-    SentenceTokenizer.cpp \
+    text_processing\TextReader.cpp \
+    text_processing\SentenceTokenizer.cpp \
+    text_processing\NGramHandler.cpp \
     TemplateInstantiations.cpp \
-    NGramHandler.cpp \
+    ConfabulationTest.cpp \
+    Globals.cpp \
     SymbolMapping.cpp \
     KnowledgeBase.cpp \
     Module.cpp \
     MultiLevelOrganizer.cpp \
-    TextReader.cpp \
     ConfabulationBase.cpp
 
 HEADERS += \
-    ConfabulationTest.h \
-    Globals.h \
-    SentenceTokenizer.h \
     sparse_structures/CSRLinksMatrix.hpp \
     sparse_structures/DOKExcitationVector.hpp \
     sparse_structures/IExcitationVector.hpp \
     sparse_structures/IKnowledgeLinks.hpp \
     sparse_structures/DOKLinksMatrix.hpp \
+    text_processing\TextReader.h \
+    text_processing\SentenceTokenizer.h \
+    text_processing\NGramHandler.h \
+    utils/HashTrie.hpp \
+    utils/Utils.h \
+    utils/HashTrieNode.hpp \
     TemplateInstantiations.h \
-    NGramHandler.h \
+    ConfabulationTest.h \
+    Globals.h \
     SymbolMapping.h \
     KnowledgeBase.h \
     Module.h \
     MultiLevelOrganizer.h \
-    TextReader.h \
-    ConfabulationBase.h \
-    utils/HashTrie.hpp \
-    utils/Utils.h \
-    utils/HashTrieNode.hpp
+    ConfabulationBase.h
+
 

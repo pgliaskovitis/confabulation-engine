@@ -18,7 +18,7 @@
  */
 
 #include "Globals.h"
-#include "NGramHandler.h"
+#include "text_processing/NGramHandler.h"
 
 const std::string Globals::kSentenceDelimiters = "\".!?;:";
 const std::string Globals::kTokenDelimiters = " ,`\".!?;@#$%^&*()-/\\_=+~[]{}<>0123456789";
