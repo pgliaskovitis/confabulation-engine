@@ -51,7 +51,6 @@ class NGramHandler
 {
 public:
     NGramHandler(unsigned short max_words);
-
     NGramHandler(const NGramHandler& rhs) = delete;
     NGramHandler& operator=(const NGramHandler& rhs) = delete;
     NGramHandler(NGramHandler&& rhs) = delete;

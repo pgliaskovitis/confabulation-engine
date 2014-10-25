@@ -31,6 +31,10 @@ class Module
 {
 public:
     Module(const SymbolMapping& symbol_mapping);
+    Module(const Module& rhs) = delete;
+    Module& operator=(const Module& rhs) = delete;
+    Module(Module&& rhs) = delete;
+    Module&& operator=(Module&& rhs) = delete;
 
     void Reset();
     void ExcitationsToZero();

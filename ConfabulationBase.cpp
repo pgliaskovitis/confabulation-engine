@@ -21,15 +21,30 @@
 #include "ConfabulationBase.h"
 #include "utils/Utils.h"
 
-ConfabulationBase::ConfabulationBase(const std::vector<std::vector<bool>>& kb_specs, std::vector<unsigned short> level_specs) :
-    num_modules_(kb_specs.size()),
-    K_(-1),
-    kb_specs_(kb_specs),
-    level_specs_(level_specs)
+ConfabulationBase::ConfabulationBase() : K_(-1)
 {}
 
-void ConfabulationBase::Initialize(const std::string &symbol_file, const std::string &master_file)
+int ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int index_to_complete)
 {
+    int index = std::min(ConvertToSigned(symbols.size()), index_to_complete);
+
+    int max_K = index - FindNumberOfEmptyStringBeforeIndex(symbols, index);
+
+    if (K_ >= 0) {
+       return std::min(K_, max_K);
+    } else {
+       return max_K;
+    }
+}
+
+void ConfabulationBase::Initialize(const std::vector<std::vector<bool>>& kb_specs,
+                                   std::vector<unsigned short> level_specs,
+                                   const std::string &symbol_file,
+                                   const std::string &master_file)
+{
+    num_modules_ = kb_specs.size();
+    kb_specs_ = kb_specs;
+    level_specs_ = level_specs;
     symbol_file_ = symbol_file;
     master_file_ = master_file;
     Build();
@@ -78,7 +93,7 @@ void ConfabulationBase::Learn()
         const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence, match_found);
         const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
 
-        // wire the knowledge links
+        // wire up the knowledge links
         for (const std::vector<std::string>& module_combination : module_combinations) {
             for (size_t src = 0; src < num_modules_; src++) {
                 if (!module_combination[src].empty()) {
@@ -101,49 +116,11 @@ void ConfabulationBase::Learn()
     }
 }
 
-int ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int index_to_complete)
-{
-    int index = std::min(ConvertToSigned(symbols.size()), index_to_complete);
-
-    // number of non-null symbols before index_to_complete
-    int max_K = index; // - ArrayTools.number_equal(null, Arrays.copyOf(symbols, index));
-
-    if (K_ >= 0) {
-       return std::min(K_, max_K);
-    } else {
-       // autocompute: use max_K
-       return max_K;
-    }
-}
-
-void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
-{
-    for (size_t i = 0; i < std::min(symbols.size(), modules_.size()); ++i) {
-        if ((!symbols[i].empty()) && (modules_[i] != nullptr)) {
-            modules_[i]->ActivateSymbol(symbols[i], 1);
-            modules_[i]->Freeze();
-        }
-    }
-}
-
-void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source_module, const std::unique_ptr<KnowledgeBase> &kb, const std::unique_ptr<Module> &target_module)
-{
-    target_module->AddExcitationVector(*(kb->Transmit(*(source_module->GetNormalizedExcitations()))));
-}
-
-void ConfabulationBase::TransferAllExcitations(int target_index, const std::unique_ptr<Module>& target_module)
-{
-    for (const std::unique_ptr<Module>& source_module : modules_) {
-        for (size_t i = 0; i < knowledge_bases_.size(); ++i) {
-            if (knowledge_bases_[i][target_index] != nullptr) {
-                TransferExcitation(source_module, knowledge_bases_[i][target_index], target_module);
-            }
-        }
-    }
-}
-
 std::vector<std::string> ConfabulationBase::Confabulation(const std::vector<std::string> &symbols, int index_to_complete, bool expectation)
 {
+    // we need some type of argument checking here
+    // on the size of symbols as compared to the size of modules_
+
     int index;
     if (index_to_complete < 0) {
         index = AutoIndexToComplete(symbols);
@@ -177,6 +154,33 @@ void ConfabulationBase::Clean()
         if (module != nullptr) {
             module->Reset();
             module->Unfreeze();
+        }
+    }
+}
+
+void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
+{
+    for (size_t i = 0; i < std::min(symbols.size(), modules_.size()); ++i) {
+        if ((!symbols[i].empty()) && (modules_[i] != nullptr)) {
+            modules_[i]->ActivateSymbol(symbols[i], 1);
+            modules_[i]->Freeze();
+        }
+    }
+}
+
+void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source_module, const std::unique_ptr<KnowledgeBase> &kb, const std::unique_ptr<Module> &target_module)
+{
+    target_module->AddExcitationVector(*(kb->Transmit(*(source_module->GetNormalizedExcitations()))));
+}
+
+void ConfabulationBase::TransferAllExcitations(int target_index, const std::unique_ptr<Module>& target_module)
+{
+    // use all modules as possible source modules
+    for (const std::unique_ptr<Module>& source_module : modules_) {
+        for (size_t i = 0; i < knowledge_bases_.size(); ++i) {
+            if (knowledge_bases_[i][target_index] != nullptr) {
+                TransferExcitation(source_module, knowledge_bases_[i][target_index], target_module);
+            }
         }
     }
 }

@@ -110,6 +110,16 @@ namespace
         return result;
     }
 
+    size_t FindNumberOfEmptyStringBeforeIndex(const std::vector<std::string>& symbols, int index)
+    {
+        size_t result = 0;
+        for (int i = 0; i < index; ++i)
+            if (symbols[i].empty())
+                ++result;
+
+        return result;
+    }
+
     int ConvertToSigned(unsigned x)
     {
         if (x <= std::numeric_limits<int>::max())

@@ -31,27 +31,27 @@
 class ConfabulationBase
 {
 public:
-    ConfabulationBase(const std::vector<std::vector<bool>>& kb_specs, std::vector<unsigned short> level_specs);
-
+    ConfabulationBase();
     ConfabulationBase(const ConfabulationBase& rhs) = delete;
     ConfabulationBase& operator=(const ConfabulationBase& rhs) = delete;
     ConfabulationBase(ConfabulationBase&& rhs) = delete;
     ConfabulationBase&& operator=(ConfabulationBase&& rhs) = delete;
 
-    void Initialize(const std::string& symbol_file, const std::string& master_file);
+    int ActualK(const std::vector<std::string> &symbols, int index_to_complete);
+    int get_K() const { return K_; }
+    void set_K(int K) { K_ = K; }
+
+    void Initialize(const std::vector<std::vector<bool>>& kb_specs,
+                    std::vector<unsigned short> level_specs,
+                    const std::string& symbol_file,
+                    const std::string& master_file);
     void Build();
     void Learn();
+    std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int index_to_complete, bool expectation);
+    void Clean();
 
     virtual int AutoIndexToComplete(const std::vector<std::string>& symbols) = 0;
-    int ActualK(const std::vector<std::string> &symbols, int index_to_complete);
-    void Activate(const std::vector<std::string>& symbols);
-
-    void TransferExcitation(const std::unique_ptr<Module>& source_module, const std::unique_ptr<KnowledgeBase>& kb, const std::unique_ptr<Module>& target_module);
-    void TransferAllExcitations(int target_index, const std::unique_ptr<Module> &target_module);
-
-    std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int index_to_complete, bool expectation);
-
-    void Clean();
+    virtual bool CheckArguments(const std::vector<std::string>& symbols, int index_to_complete) = 0;
 
 protected:
     unsigned short num_modules_;
@@ -65,6 +65,9 @@ protected:
     std::vector<std::unique_ptr<Module>> modules_;
     std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> knowledge_bases_;
 
+    void Activate(const std::vector<std::string>& symbols);
+    void TransferExcitation(const std::unique_ptr<Module>& source_module, const std::unique_ptr<KnowledgeBase>& kb, const std::unique_ptr<Module>& target_module);
+    void TransferAllExcitations(int target_index, const std::unique_ptr<Module> &target_module);
     std::vector<std::unique_ptr<SymbolMapping>> ProduceSymbolMappings(const std::string &symbol_file, const std::string &master_file);
 };
 

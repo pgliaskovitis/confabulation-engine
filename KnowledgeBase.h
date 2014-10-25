@@ -31,7 +31,6 @@ class KnowledgeBase
 {
 public:
     KnowledgeBase(const std::string& id, const SymbolMapping& src_map, const SymbolMapping& targ_map);
-
     KnowledgeBase(const KnowledgeBase& rhs) = delete;
     KnowledgeBase& operator=(const KnowledgeBase& rhs) = delete;
     KnowledgeBase(KnowledgeBase&& rhs) = delete;

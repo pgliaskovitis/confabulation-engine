@@ -28,9 +28,7 @@
 class MultiLevelOrganizer
 {
 public:
-    MultiLevelOrganizer(const std::vector<unsigned short>& level_sizes_,
-                        std::vector<std::unique_ptr<SymbolMapping>>&& level_mappings);
-
+    MultiLevelOrganizer(const std::vector<unsigned short>& level_sizes_, std::vector<std::unique_ptr<SymbolMapping>>&& level_mappings);
     MultiLevelOrganizer(const MultiLevelOrganizer& rhs) = delete;
     MultiLevelOrganizer& operator=(const MultiLevelOrganizer& rhs) = delete;
     MultiLevelOrganizer(MultiLevelOrganizer&& rhs) = delete;
