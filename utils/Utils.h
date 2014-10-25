@@ -110,7 +110,18 @@ namespace
         return result;
     }
 
-    size_t FindNumberOfEmptyStringBeforeIndex(const std::vector<std::string>& symbols, int index)
+    int ConvertToSigned(unsigned int x)
+    {
+        if (x <= std::numeric_limits<int>::max())
+            return static_cast<int>(x);
+
+        if (x >= std::numeric_limits<int>::min())
+            return static_cast<int>(x - std::numeric_limits<int>::min()) + std::numeric_limits<int>::min();
+
+        throw x;
+    }
+
+    size_t FindNumberOfEmptyStringsBeforeIndex(const std::vector<std::string>& symbols, int index)
     {
         size_t result = 0;
         for (int i = 0; i < index; ++i)
@@ -120,15 +131,22 @@ namespace
         return result;
     }
 
-    int ConvertToSigned(unsigned x)
+    int FindFirstIndexOfSymbol(const std::vector<std::string>& symbols, const std::string& target_string)
     {
-        if (x <= std::numeric_limits<int>::max())
-            return static_cast<int>(x);
+        for (size_t i = 0; i < symbols.size(); ++i)
+            if (symbols[i] == target_string)
+                return ConvertToSigned(i);
 
-        if (x >= std::numeric_limits<int>::min())
-            return static_cast<int>(x - std::numeric_limits<int>::min()) + std::numeric_limits<int>::min();
+        return -1;
+    }
 
-        throw x;
+    int FindFirstIndexNotOfSymbol(const std::vector<std::string>& symbols, const std::string& target_string)
+    {
+        for (size_t i = 0; i < symbols.size(); ++i)
+            if (symbols[i] != target_string)
+                return ConvertToSigned(i);
+
+        return -1;
     }
 
     // each row of the 2D argument vector has as many elements as

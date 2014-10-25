@@ -50,9 +50,6 @@ public:
     std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int index_to_complete, bool expectation);
     void Clean();
 
-    virtual int AutoIndexToComplete(const std::vector<std::string>& symbols) = 0;
-    virtual bool CheckArguments(const std::vector<std::string>& symbols, int index_to_complete) = 0;
-
 protected:
     unsigned short num_modules_;
     int K_;
@@ -65,10 +62,20 @@ protected:
     std::vector<std::unique_ptr<Module>> modules_;
     std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> knowledge_bases_;
 
+    bool CheckVocabulary(const std::vector<std::string>& symbols);
     void Activate(const std::vector<std::string>& symbols);
     void TransferExcitation(const std::unique_ptr<Module>& source_module, const std::unique_ptr<KnowledgeBase>& kb, const std::unique_ptr<Module>& target_module);
     void TransferAllExcitations(int target_index, const std::unique_ptr<Module> &target_module);
     std::vector<std::unique_ptr<SymbolMapping>> ProduceSymbolMappings(const std::string &symbol_file, const std::string &master_file);
+
+    // compute index to complete with confabulation
+    virtual int AutoIndexToComplete(const std::vector<std::string>& symbols) = 0;
+
+    // check if provided index is valid in the current setup
+    virtual bool CheckIndex(const std::vector<std::string>& symbols, int index_to_complete) = 0;
+
+    // check arguments against current setup
+    virtual bool CheckArguments(const std::vector<std::string>& symbols, int index_to_complete) = 0;
 };
 
 #endif // CONFABULATIONBASE_H

@@ -28,7 +28,7 @@ int ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int inde
 {
     int index = std::min(ConvertToSigned(symbols.size()), index_to_complete);
 
-    int max_K = index - FindNumberOfEmptyStringBeforeIndex(symbols, index);
+    int max_K = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
 
     if (K_ >= 0) {
        return std::min(K_, max_K);
@@ -156,6 +156,22 @@ void ConfabulationBase::Clean()
             module->Unfreeze();
         }
     }
+}
+
+bool ConfabulationBase::CheckVocabulary(const std::vector<std::string> &symbols)
+{
+    for (size_t i = 0; i < std::min(symbols.size(), modules_.size()); ++i) {
+        if ((!symbols[i].empty()) && (modules_[i] == nullptr)) {
+            std::cout << "Input has activated symbol " << symbols[i] << " at position " << i
+                      << " and corresponding module is null" << "\n" << std::flush;
+            return false;
+        } else if ((!symbols[i].empty()) && (!modules_[i]->get_symbol_mapping().Contains(symbols[i]))) {
+            std::cout << "Input has activated symbol " << symbols[i] << " at position " << i
+                      << " not contained in corresponding module" << "\n" << std::flush;
+        }
+    }
+
+    return true;
 }
 
 void ConfabulationBase::Activate(const std::vector<std::string> &symbols)

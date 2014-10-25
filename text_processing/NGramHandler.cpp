@@ -68,8 +68,8 @@ void NGramHandler::ExtractAndStoreNGrams(const std::vector<std::string>& sentenc
 
 void NGramHandler::CleanupNGrams()
 {
-    std::cout << "Single-word count is: " << get_single_word_count() << "\n";
-    std::cout << "Multi-word count initial is: " << get_multi_word_count() << "\n";
+    std::cout << "Single-word count is: " << get_single_word_count() << "\n" << std::flush;
+    std::cout << "Multi-word count initial is: " << get_multi_word_count() << "\n" << std::flush;
 
     // for each possible multiword length,
     // remove occurrences whose prefixes occured fewer than MIN_OCC times
