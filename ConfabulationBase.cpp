@@ -73,7 +73,6 @@ void ConfabulationBase::Build()
                 std::string id(std::to_string(i));
                 id += "-";
                 id += std::to_string(j);
-                //std::cout << "Creating knowledge base " << id << "\n" << std::flush;
                 knowledge_bases_[i][j].reset(new KnowledgeBase(id,
                                                                modules_[i]->get_symbol_mapping(),
                                                                modules_[j]->get_symbol_mapping()));
@@ -92,13 +91,13 @@ void ConfabulationBase::Learn()
     do {
         sentence = text_reader.GetNextSentenceTokens(finished_reading);
 
-        std::cout << "Finding module activations for sentence: " << VectorSymbolToSymbol(sentence, ' ') << "\n" << std::flush;
+        //std::cout << "Finding module activations for sentence: " << VectorSymbolToSymbol(sentence, ' ') << "\n" << std::flush;
 
         // make sure that sentence does not wholly consist of empty strings
         if (!(FindFirstIndexNotOfSymbol(sentence, "") < 0)) {
             bool match_found = false;
             const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence, match_found);
-            std::cout << "Initial module activations: " << "#" << VectorSymbolToSymbol(activated_modules[0], '#') << "\n" << std::flush;
+            //std::cout << "Initial module activations: " << "#" << VectorSymbolToSymbol(activated_modules[0], '#') << "\n" << std::flush;
 
             const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
 
