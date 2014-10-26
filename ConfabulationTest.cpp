@@ -215,13 +215,15 @@ void ConfabulationTest::TestProduceKnowledgeLinkCombinations() const
 
 void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
-    ForwardConfabulation confab_engine(15, symbolfile, masterfile);
+
+    size_t  num_modules = 20;
+    ForwardConfabulation confab_engine(num_modules, symbolfile, masterfile);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
     for (const std::string& e : sentences) {
         const std::vector<std::string> current_feed_tokens(reader.ExtractTokens(e));
-        FillWithEmptyStrings(current_feed_tokens, 15);
+        FillWithEmptyStrings(current_feed_tokens, num_modules);
         const std::vector<std::string>& current_result_tokens = confab_engine.Confabulation(current_feed_tokens, -1, false);
         std::cout << e << current_result_tokens[0] << "\n" << std::flush;
     }

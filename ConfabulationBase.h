@@ -42,7 +42,7 @@ public:
     void set_K(int K) { K_ = K; }
 
     void Initialize(const std::vector<std::vector<bool>>& kb_specs,
-                    std::vector<unsigned short> level_specs,
+                    const std::vector<unsigned short> level_specs,
                     const std::string& symbol_file,
                     const std::string& master_file);
     void Build();

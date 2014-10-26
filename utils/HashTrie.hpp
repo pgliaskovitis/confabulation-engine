@@ -37,7 +37,7 @@ public:
     void Add(const std::vector<T>& sequence);
     void AddAll(const std::vector<std::vector<T>>& sequences);
 
-    std::list<T> FindLongest(const std::list<T>& sequence);
+    std::list<T> FindLongest(const std::list<T>& sequence) const;
 
     size_t Size() { return size_; }
 
@@ -79,16 +79,16 @@ void HashTrie<T>::AddAll(const std::vector<std::vector<T>>& sequences) {
 }
 
 template <typename T>
-std::list<T> HashTrie<T>::FindLongest(const std::list<T>& sequence) {
+std::list<T> HashTrie<T>::FindLongest(const std::list<T>& sequence) const {
 
     std::list<T> result;
     std::list<T> unconfirmed;
 
-    HashTrieNode<T>* current_node_ptr = &root_;
+    const HashTrieNode<T>* current_node_ptr = &root_;
     for (const T& e : sequence) {
 
         try {
-            HashTrieNode<T>& child = current_node_ptr->Get(e);
+            const HashTrieNode<T>& child = current_node_ptr->Get(e);
 
             unconfirmed.push_back(e);
             if (child.is_leaf()) {

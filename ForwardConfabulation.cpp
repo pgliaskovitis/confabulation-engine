@@ -51,7 +51,7 @@ bool ForwardConfabulation::CheckIndex(const std::vector<std::string> &symbols, i
     }
 
     if ((index_to_complete < symbols.size()) && (!symbols[index_to_complete].empty())) {
-        std::cout << "There is already symbol " << symbols[index_to_complete] << ") at index " << index_to_complete << "\n" << std::flush;
+        std::cout << "There is already symbol \"" << symbols[index_to_complete] << "\") at index " << index_to_complete << "\n" << std::flush;
         return false;
     }
 
@@ -68,7 +68,7 @@ bool ForwardConfabulation::CheckArguments(const std::vector<std::string> &symbol
     if (index_to_complete >= 0) {
         // check there is at least one symbol before index_to_complete
         if (FindFirstIndexNotOfSymbol(symbols, "") >= index_to_complete) {
-            std::cout << "Symbols array does not contain any symbol before index_to_complete" << "\n" << std::flush;
+            std::cout << "Symbols vector does not contain any symbol before index_to_complete" << "\n" << std::flush;
             return false;
         }
 

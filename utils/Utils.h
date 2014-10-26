@@ -160,7 +160,7 @@ namespace
         return -1;
     }
 
-    // each row of the 2D argument vector has as many elements as
+    // each row of the 2D argument vector must have as many elements as
     // exist in the corresponding level of the architecture
     std::vector<std::vector<std::string>> ProduceKnowledgeLinkCombinations(const std::vector<std::vector<std::string>>& excited_symbols, unsigned short num_modules)
     {

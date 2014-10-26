@@ -31,7 +31,7 @@ public:
         value_(value),
         leaf_node_(final_node) {}
 
-    bool is_leaf() {
+    bool is_leaf() const {
         return leaf_node_;
     }
 
@@ -39,7 +39,7 @@ public:
         leaf_node_ = final_node;
     }
 
-    HashTrieNode& Get(const T& child) {
+    HashTrieNode& Get(const T& child) const {
         return *(map_.at(child));
     }
 

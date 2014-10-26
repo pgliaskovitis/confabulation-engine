@@ -185,7 +185,7 @@ std::unique_ptr<SymbolMapping> NGramHandler::GetAllSymbols()
 {
     std::unique_ptr<SymbolMapping> result(new SymbolMapping);
 
-    for (size_t i = 1; i < occurrence_counts_.size(); ++i) {
+    for (size_t i = 0; i < occurrence_counts_.size(); ++i) {
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[i].begin();
         for (; it != occurrence_counts_[i].end(); ++it)
             result->AddSymbol(VectorSymbolToSymbol(it->first, ' '));

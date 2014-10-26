@@ -31,6 +31,7 @@ MultiLevelOrganizer::MultiLevelOrganizer(const std::vector<unsigned short>& leve
         level_mappings_.push_back(std::move(level_mapping));
 
     // organize symbols in HashTries
+    size_t i = 0;
     for (const std::unique_ptr<SymbolMapping>& mapping : level_mappings_) {
         tries_.emplace_back(new HashTrie<std::string>());
         const std::set<std::string>& level_symbols = mapping->GetAllSymbols();
@@ -46,10 +47,9 @@ std::vector<std::vector<std::string>> MultiLevelOrganizer::Organize(const std::v
     levels.resize(n_levels);
 
     for (size_t i = 0; i < n_levels; ++i) {
-
         std::vector<std::string>& level = levels[i];
         level.resize(level_sizes_[i]);
-        HashTrie<std::string>& trie = *(tries_.at(i));
+        const HashTrie<std::string>& trie = *(tries_.at(i));
         std::list<std::string> temp_symbols_list(symbols.begin(), symbols.end());
 
         // find longest match and remove matched symbols
@@ -64,7 +64,8 @@ std::vector<std::vector<std::string>> MultiLevelOrganizer::Organize(const std::v
             }
 
             // store found multisymbol
-            level[j] = ListSymbolToSymbol(temp_symbols_list, ' ');
+            level[j] = ListSymbolToSymbol(match, ' ');
+            //std::cout << "Found match in HashTrie for " << level[j] << "\n" << std::flush;
 
             size_t end = std::min(level.size(), j + match.size());
             while (j < end) {

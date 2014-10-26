@@ -38,7 +38,7 @@ int ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int inde
 }
 
 void ConfabulationBase::Initialize(const std::vector<std::vector<bool>>& kb_specs,
-                                   std::vector<unsigned short> level_specs,
+                                   const std::vector<unsigned short> level_specs,
                                    const std::string &symbol_file,
                                    const std::string &master_file)
 {
@@ -56,9 +56,11 @@ void ConfabulationBase::Build()
     organizer_.reset(new MultiLevelOrganizer(level_specs_, ProduceSymbolMappings(symbol_file_, master_file_)));
 
     // create the modules
-    modules_.resize(num_modules_);
+    unsigned short level = 0;
     for (size_t i = 0; i < num_modules_; ++i) {
-        const std::unique_ptr<SymbolMapping>& symbols_at_level = organizer_->get_mappings_for_level(i);
+        if (i >= level_specs_[level])
+            ++level;
+        const std::unique_ptr<SymbolMapping>& symbols_at_level = organizer_->get_mappings_for_level(level);
         modules_.emplace_back(new Module(*symbols_at_level));
     }
 
@@ -71,6 +73,7 @@ void ConfabulationBase::Build()
                 std::string id(std::to_string(i));
                 id += "-";
                 id += std::to_string(j);
+                //std::cout << "Creating knowledge base " << id << "\n" << std::flush;
                 knowledge_bases_[i][j].reset(new KnowledgeBase(id,
                                                                modules_[i]->get_symbol_mapping(),
                                                                modules_[j]->get_symbol_mapping()));
@@ -89,17 +92,25 @@ void ConfabulationBase::Learn()
     do {
         sentence = text_reader.GetNextSentenceTokens(finished_reading);
 
-        bool match_found = false;
-        const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence, match_found);
-        const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
+        std::cout << "Finding module activations for sentence: " << VectorSymbolToSymbol(sentence, ' ') << "\n" << std::flush;
 
-        // wire up the knowledge links
-        for (const std::vector<std::string>& module_combination : module_combinations) {
-            for (size_t src = 0; src < num_modules_; src++) {
-                if (!module_combination[src].empty()) {
-                    for (size_t targ = 0; targ < num_modules_; targ++) {
-                        if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty()))
-                             knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
+        // make sure that sentence does not wholly consist of empty strings
+        if (!(FindFirstIndexNotOfSymbol(sentence, "") < 0)) {
+            bool match_found = false;
+            const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence, match_found);
+            std::cout << "Initial module activations: " << "#" << VectorSymbolToSymbol(activated_modules[0], '#') << "\n" << std::flush;
+
+            const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
+
+            // wire up the knowledge links
+            for (const std::vector<std::string>& module_combination : module_combinations) {
+                //std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, ' ') << "\n" << std::flush;
+                for (size_t src = 0; src < num_modules_; src++) {
+                    if (!module_combination[src].empty()) {
+                        for (size_t targ = 0; targ < num_modules_; targ++) {
+                            if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty()))
+                                 knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
+                        }
                     }
                 }
             }
@@ -118,7 +129,11 @@ void ConfabulationBase::Learn()
 
 std::vector<std::string> ConfabulationBase::Confabulation(const std::vector<std::string> &symbols, int index_to_complete, bool expectation)
 {
-    CheckArguments(symbols, index_to_complete);
+    std::vector<std::string> result;
+    if (!CheckArguments(symbols, index_to_complete)) {
+        std::cout << "Input sentence does not satisfy conditions for confabulation with this architecture";
+        return result;
+    }
 
     int index;
     if (index_to_complete < 0) {
@@ -133,8 +148,6 @@ std::vector<std::string> ConfabulationBase::Confabulation(const std::vector<std:
     // core algorithm
     Activate(symbols);
     TransferAllExcitations(index, target_module);
-
-    std::vector<std::string> result;
 
     if (expectation) {
         result = target_module->PartialConfabulation(actual_K, false);
@@ -161,11 +174,11 @@ bool ConfabulationBase::CheckVocabulary(const std::vector<std::string> &symbols)
 {
     for (size_t i = 0; i < std::min(symbols.size(), modules_.size()); ++i) {
         if ((!symbols[i].empty()) && (modules_[i] == nullptr)) {
-            std::cout << "Input has activated symbol " << symbols[i] << " at position " << i
+            std::cout << "Input has activated symbol \"" << symbols[i] << "\" at position " << i
                       << " and corresponding module is null" << "\n" << std::flush;
             return false;
         } else if ((!symbols[i].empty()) && (!modules_[i]->get_symbol_mapping().Contains(symbols[i]))) {
-            std::cout << "Input has activated symbol " << symbols[i] << " at position " << i
+            std::cout << "Input has activated symbol \"" << symbols[i] << "\" at position " << i
                       << " not contained in corresponding module" << "\n" << std::flush;
         }
     }
@@ -204,8 +217,6 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
 {
     std::vector<std::unique_ptr<SymbolMapping>> result;
 
-    result.resize(2);
-
     TextReader text_reader(symbol_file, master_file);
     text_reader.Initialize();
 
@@ -219,7 +230,7 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
     } while (!finished_reading);
 
     result.push_back(ngram_handler.GetSingleWordSymbols()); // single word symbols at position [0]
-    result.push_back(ngram_handler.GetAllSymbols()); // multi-word symbols (including single word ones at position [1]
+    result.push_back(ngram_handler.GetAllSymbols()); // multi-word symbols (including single word ones) at position [1]
 
-    return result; //at this point, NGramHandler is destroyed so we save its internal memory
+    return result; //at this point, NGramHandler is destroyed, so we save its internal memory
 }
