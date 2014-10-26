@@ -44,12 +44,12 @@ public:
     void Initialize();
 
     const std::vector<std::string> GetNextSentenceTokens(bool& finished_reading);
+    const std::vector<std::string> ExtractTokens(const std::string& input);
 
 private:
     void HandleSymbolFile();
     void HandleMasterFile();
 
-    const std::vector<std::string> ExtractTokens(const std::string& input);
     void CleanToken(std::string& input);
     void RemoveCommonAbbreviations(std::string& input);
 

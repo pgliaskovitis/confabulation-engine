@@ -121,6 +121,17 @@ namespace
         throw x;
     }
 
+    std::vector<std::string> FillWithEmptyStrings(const std::vector<std::string>& input, size_t max_size)
+    {
+        std::vector<std::string> result(input);
+        if (input.size() < max_size) {
+            for (size_t i = result.size(); i < max_size; ++i)
+                result.push_back("");
+        }
+
+        return result;
+    }
+
     size_t FindNumberOfEmptyStringsBeforeIndex(const std::vector<std::string>& symbols, int index)
     {
         size_t result = 0;

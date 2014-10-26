@@ -118,8 +118,7 @@ void ConfabulationBase::Learn()
 
 std::vector<std::string> ConfabulationBase::Confabulation(const std::vector<std::string> &symbols, int index_to_complete, bool expectation)
 {
-    // we need some type of argument checking here
-    // on the size of symbols as compared to the size of modules_
+    CheckArguments(symbols, index_to_complete);
 
     int index;
     if (index_to_complete < 0) {

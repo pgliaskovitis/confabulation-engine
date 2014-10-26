@@ -28,6 +28,7 @@
 #include "sparse_structures/CSRLinksMatrix.hpp"
 #include "utils/HashTrie.hpp"
 #include "utils/Utils.h"
+#include "ForwardConfabulation.h"
 
 int ConfabulationTest::TestTokenizeFixedString(const std::string& input) const
 {
@@ -212,6 +213,20 @@ void ConfabulationTest::TestProduceKnowledgeLinkCombinations() const
         std::cout << "Combination " << i << ":" << VectorSymbolToSymbol(result[i], ',') << "\n";
 }
 
+void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
+{
+    ForwardConfabulation confab_engine(15, symbolfile, masterfile);
+    TextReader reader(symbolfile, masterfile);
+    reader.Initialize();
+
+    for (const std::string& e : sentences) {
+        const std::vector<std::string> current_feed_tokens(reader.ExtractTokens(e));
+        FillWithEmptyStrings(current_feed_tokens, 15);
+        const std::vector<std::string>& current_result_tokens = confab_engine.Confabulation(current_feed_tokens, -1, false);
+        std::cout << e << current_result_tokens[0] << "\n" << std::flush;
+    }
+}
+
 /*
 void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
@@ -283,7 +298,7 @@ int main()
 
     //test1->TestProduceNGrams("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
-    test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+    //test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
     //test1->TestProduceKnowledgeLinkCombinations();
 
@@ -382,9 +397,10 @@ int main()
     allOriginalFeeds->push_back(feed30);
 
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
-
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
+
+    test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
 
 	return 0;
 
