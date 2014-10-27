@@ -39,8 +39,8 @@ public:
     virtual void SetElement(size_t r, size_t c, const T& value);
     virtual void SetElementQuick(size_t r, size_t c, const T& value);
 
-    virtual const T& GetElement(size_t r, size_t c) const;
-    virtual const T& GetElementQuick(size_t r, size_t c) const;
+    virtual T GetElement(size_t r, size_t c) const;
+    virtual T GetElementQuick(size_t r, size_t c) const;
 
     virtual size_t get_num_rows() const { return num_rows_; }
     virtual size_t get_num_cols() const { return num_cols_; }
@@ -69,21 +69,21 @@ DOKLinksMatrix<T>::DOKLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get
 }
 
 template <typename T>
-const T& DOKLinksMatrix<T>::GetElement(size_t r, size_t c) const
+T DOKLinksMatrix<T>::GetElement(size_t r, size_t c) const
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
     return GetElementQuick(r, c);
 }
 
 template <typename T>
-const T& DOKLinksMatrix<T>::GetElementQuick(size_t r, size_t c) const
+T DOKLinksMatrix<T>::GetElementQuick(size_t r, size_t c) const
 {
     T result;
 
     try {
         result = map_.at(std::make_pair(r, c));
     } catch (const std::out_of_range& oor) {
-        result = 0;
+        result = 0.0;
     }
 
     return result;
@@ -93,7 +93,7 @@ template <typename T>
 void DOKLinksMatrix<T>::SetElement(size_t r, size_t c, const T &value)
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
-    if (IsNearlyEqual(value, 0)) {
+    if (IsNearlyEqual(value, 0.0)) {
         typename std::map<std::pair<size_t, size_t>, T>::iterator it = map_.find(std::make_pair(r, c));
         if (it != map_.end())
             map_.erase(it);
@@ -112,14 +112,14 @@ std::unique_ptr<IExcitationVector<T>> DOKLinksMatrix<T>::Multiply(const IExcitat
 {
     std::set<std::pair<size_t, T>> vec_elements = vec.GetNzElements();
 
-    T link_strength = 0;
+    T link_strength = 0.0;
     std::unique_ptr<IExcitationVector<T>> result(new DOKExcitationVector<T>(num_rows_));
 
     for (const std::pair<size_t, T>& element : vec_elements) {
         size_t c = element.first;
         for (size_t r = 0; r < num_rows_; ++r) {
             link_strength = GetElementQuick(r, c);
-            if (!IsNearlyEqual(link_strength, 0)) {
+            if (!IsNearlyEqual(link_strength, 0.0)) {
                 result->SetElement(r, result->GetElementQuick(r) + link_strength * element.second);
             }
         }

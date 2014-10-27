@@ -330,9 +330,9 @@ int main()
     allCopyFeeds->push_back(copy_feed9);
     allCopyFeeds->push_back(copy_feed10);
 
-    std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
-
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
+
+    std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 
     std::string feed1 = "The hooded men were steadily chanting beneath the ";
     std::string feed2 = "An army of little insects gathered on top of ";

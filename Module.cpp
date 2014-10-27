@@ -49,7 +49,7 @@ void Module::ActivateSymbol(const std::string &word, int K)
     normalized_excitations_.reset(nullptr);
 
     if (K < 0)
-        throw std::logic_error("ActivateSymbol with negative K");
+        throw std::logic_error("ActivateSymbol called with negative K");
 
     try {
         size_t index = symbol_mapping_.IndexOf(word);
@@ -91,6 +91,7 @@ void Module::AddExcitationToIndex(size_t index, float value)
 void Module::AddExcitationToAllSymbols(int K)
 {
     normalized_excitations_.reset(nullptr);
+
     if (IsFrozen()) {
         // If module is frozen, only further activate already active symbols
         for (size_t i : *frozen_indexes_) {
@@ -150,7 +151,7 @@ const std::unique_ptr<IExcitationVector<float> > &Module::GetNormalizedExcitatio
 
     normalized_excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
 
-    double sum = 0;
+    double sum = 0.0;
     for (const std::pair<size_t, float>& e : excitations_->GetNzElements())
         sum += e.second;
 
@@ -187,6 +188,7 @@ std::string Module::ElementaryConfabulation(int K)
     K = ActualK(K);
 
     const std::set<std::pair<size_t, float>>& nz_excit = excitations_->GetNzElements();
+    //std::cout << "Initially excited " << nz_excit.size() << " symbols" << " \n" << std::flush;
 
     int max_index = -1;
     int n_inputs_max = -1;
@@ -195,6 +197,7 @@ std::string Module::ElementaryConfabulation(int K)
     std::unique_ptr<std::pair<size_t, float>> max_excit;
     do {
         const std::set<std::pair<size_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+        //std::cout << "Reduced to " << min_K_excit.size() << " symbols for K=" << K << " \n" << std::flush;
         max_excit = MaxExcitation(min_K_excit);
 
         if (max_excit != nullptr) {
@@ -329,5 +332,5 @@ int Module::MaxK()
         }
     }
 
-    return static_cast<int>(result / Globals::kBandGap);
+    return result;
 }

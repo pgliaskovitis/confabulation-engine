@@ -106,9 +106,9 @@ void ConfabulationBase::Learn()
             // wire up the knowledge links
             for (const std::vector<std::string>& module_combination : module_combinations) {
                 //std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, ' ') << "\n" << std::flush;
-                for (size_t src = 0; src < num_modules_; src++) {
+                for (size_t src = 0; src < num_modules_; ++src) {
                     if (!module_combination[src].empty()) {
-                        for (size_t targ = 0; targ < num_modules_; targ++) {
+                        for (size_t targ = 0; targ < num_modules_; ++targ) {
                             if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty()))
                                  knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
                         }
@@ -145,6 +145,7 @@ std::vector<std::string> ConfabulationBase::Confabulation(const std::vector<std:
 
     int actual_K = ActualK(symbols, index);
     const std::unique_ptr<Module>& target_module = modules_[index];
+    target_module->ExcitationsToZero();
 
     // core algorithm
     Activate(symbols);
@@ -199,7 +200,9 @@ void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
 
 void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source_module, const std::unique_ptr<KnowledgeBase> &kb, const std::unique_ptr<Module> &target_module)
 {
-    target_module->AddExcitationVector(*(kb->Transmit(*(source_module->GetNormalizedExcitations()))));
+    const std::unique_ptr<IExcitationVector<float>>& source_excitation = source_module->GetNormalizedExcitations();
+    const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
+    target_module->AddExcitationVector(*transmitted_excitation);
 }
 
 void ConfabulationBase::TransferAllExcitations(int target_index, const std::unique_ptr<Module>& target_module)

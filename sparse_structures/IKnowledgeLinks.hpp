@@ -33,8 +33,8 @@ public:
     virtual void SetElement(const size_t r, const size_t c, const T& value) = 0;
     virtual void SetElementQuick(const size_t r, size_t c, const T& value) = 0;
 
-    virtual const T& GetElement(const size_t r, const size_t c) const = 0;
-    virtual const T& GetElementQuick(const size_t r, const size_t c) const = 0;
+    virtual T GetElement(const size_t r, const size_t c) const = 0;
+    virtual T GetElementQuick(const size_t r, const size_t c) const = 0;
 
     virtual size_t get_num_rows() const = 0;
     virtual size_t get_num_cols() const = 0;

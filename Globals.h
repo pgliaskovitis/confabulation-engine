@@ -33,7 +33,6 @@ public:
     static const std::string kDummy;
     static const std::vector<std::string> kPersistenceDelimiters;
 
-    static const unsigned short kLevelSize;
     static const float kBaseProb;
     static const unsigned int kBandGap;
     static const unsigned short kHeapResults;

@@ -21,6 +21,7 @@
 #define DOKEXCITATIONVECTOR_H
 
 #include <unordered_map>
+#include <iostream>
 
 #include "utils/Utils.h"
 #include "IExcitationVector.hpp"
@@ -40,8 +41,8 @@ public:
     virtual void SetElement(const size_t r, const T& value);
     virtual void SetElementQuick(const size_t r, const T& value);
 
-    virtual const T& GetElement(const size_t r) const;
-    virtual const T& GetElementQuick(const size_t r) const;
+    virtual T GetElement(const size_t r) const;
+    virtual T GetElementQuick(const size_t r) const;
 
     virtual size_t get_num_rows() const { return num_rows_; }
 
@@ -71,7 +72,7 @@ template <typename T>
 void DOKExcitationVector<T>::SetElement(const size_t r, const T& value)
 {
     IExcitationVector<T>::CheckBounds(r);
-    if (IsNearlyEqual(value, 0)) {
+    if (IsNearlyEqual(value, 0.0)) {
         typename std::unordered_map<size_t, T>::iterator it = map_.find(r);
         if (it != map_.end())
             map_.erase(it);
@@ -86,21 +87,21 @@ void DOKExcitationVector<T>::SetElementQuick(const size_t r, const T &value)
 }
 
 template <typename T>
-const T& DOKExcitationVector<T>::GetElement(const size_t r) const
+T DOKExcitationVector<T>::GetElement(const size_t r) const
 {
     IExcitationVector<T>::CheckBounds(r);
     return GetElementQuick(r);
 }
 
 template <typename T>
-const T& DOKExcitationVector<T>::GetElementQuick(const size_t r) const
+T DOKExcitationVector<T>::GetElementQuick(const size_t r) const
 {
     T result;
 
     try {
         result = map_.at(r);
     } catch (const std::out_of_range& oor) {
-        result = 0;
+        result = 0.0;
     }
 
     return result;

@@ -40,8 +40,8 @@ public:
     virtual void SetElement(size_t r, size_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
     virtual void SetElementQuick(size_t r, size_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
 
-    virtual const T& GetElement(size_t r, size_t c) const;
-    virtual const T& GetElementQuick(size_t r, size_t c) const;
+    virtual T GetElement(size_t r, size_t c) const;
+    virtual T GetElementQuick(size_t r, size_t c) const;
 
     virtual size_t get_num_rows() const { return num_rows_; }
     virtual size_t get_num_cols() const { return num_cols_; }
@@ -95,14 +95,14 @@ CSRLinksMatrix<T>::CSRLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get
 }
 
 template <typename T>
-const T& CSRLinksMatrix<T>::GetElement(size_t r, size_t c) const
+T CSRLinksMatrix<T>::GetElement(size_t r, size_t c) const
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
     return GetElementQuick(r, c);
 }
 
 template <typename T>
-const T& CSRLinksMatrix<T>::GetElementQuick(size_t r, size_t c) const
+T CSRLinksMatrix<T>::GetElementQuick(size_t r, size_t c) const
 {
     std::vector<size_t>::const_iterator begin_it = ja_.begin() + ia_[r];
     std::vector<size_t>::const_iterator end_it = ja_.begin() + ia_[r + 1];
