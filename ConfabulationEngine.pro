@@ -25,9 +25,9 @@ QMAKE_CXXFLAGS_APP -= -fPIE
 QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += \
-    text_processing\TextReader.cpp \
-    text_processing\SentenceTokenizer.cpp \
-    text_processing\NGramHandler.cpp \
+    text_processing/TextReader.cpp \
+    text_processing/SentenceTokenizer.cpp \
+    text_processing/NGramHandler.cpp \
     TemplateInstantiations.cpp \
     ConfabulationTest.cpp \
     Globals.cpp \
@@ -44,9 +44,9 @@ HEADERS += \
     sparse_structures/IExcitationVector.hpp \
     sparse_structures/IKnowledgeLinks.hpp \
     sparse_structures/DOKLinksMatrix.hpp \
-    text_processing\TextReader.h \
-    text_processing\SentenceTokenizer.h \
-    text_processing\NGramHandler.h \
+    text_processing/TextReader.h \
+    text_processing/SentenceTokenizer.h \
+    text_processing/NGramHandler.h \
     utils/HashTrie.hpp \
     utils/Utils.h \
     utils/HashTrieNode.hpp \

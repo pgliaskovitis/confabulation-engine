@@ -75,9 +75,13 @@ namespace
 
         std::string result("");
 
+        size_t symbol_count = vector_symbol.size();
+        size_t i = 0;
         for (const std::string& e: vector_symbol) {
             result += e;
-            result += delim;
+            ++i;
+            if (i < symbol_count - 1)
+                result += delim;
         }
 
         return result;
@@ -88,9 +92,13 @@ namespace
 
         std::string result("");
 
+        size_t symbol_count = list_symbol.size();
+        size_t i = 0;
         for (const std::string& e: list_symbol) {
             result += e;
-            result += delim;
+            ++i;
+            if (i < symbol_count - 1)
+                result += delim;
         }
 
         return result;

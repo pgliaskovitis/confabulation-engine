@@ -26,7 +26,6 @@ const std::vector<std::string> Globals::kCommonAbbreviations = {"Mr.", "Mrs.", "
 const std::string Globals::kDummy = "DummySymbol";
 const std::vector<std::string> Globals::kPersistenceDelimiters = {":::", "{--->", "|||", "}--->"};
 
-const unsigned short Globals::kLevelSize = 15;
 const float Globals::kBaseProb = 0.0001;
 const unsigned int Globals::kBandGap = 1;
 const unsigned short Globals::kHeapResults = 3;

@@ -58,8 +58,10 @@ void ConfabulationBase::Build()
     // create the modules
     unsigned short level = 0;
     for (size_t i = 0; i < num_modules_; ++i) {
-        if (i >= level_specs_[level])
+        if (i >= level_specs_[level]) {
             ++level;
+            std::cout << "Now populating modules at level " << level << "\n" << std::flush;
+        }
         const std::unique_ptr<SymbolMapping>& symbols_at_level = organizer_->get_mappings_for_level(level);
         modules_.emplace_back(new Module(*symbols_at_level));
     }
@@ -202,12 +204,10 @@ void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source
 
 void ConfabulationBase::TransferAllExcitations(int target_index, const std::unique_ptr<Module>& target_module)
 {
-    // use all modules as possible source modules
-    for (const std::unique_ptr<Module>& source_module : modules_) {
-        for (size_t i = 0; i < knowledge_bases_.size(); ++i) {
-            if (knowledge_bases_[i][target_index] != nullptr) {
-                TransferExcitation(source_module, knowledge_bases_[i][target_index], target_module);
-            }
+    // use only modules that can contribute to the given index as possible source modules
+    for (size_t i = 0; i < knowledge_bases_.size(); ++i) {
+        if (knowledge_bases_[i][target_index] != nullptr) {
+            TransferExcitation(modules_[i], knowledge_bases_[i][target_index], target_module);
         }
     }
 }
@@ -227,6 +227,11 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
         sentence = text_reader.GetNextSentenceTokens(finished_reading);
         ngram_handler.ExtractAndStoreNGrams(sentence);
     } while (!finished_reading);
+
+    ngram_handler.CleanupNGrams();
+
+    std::cout << "NGramHandler has found " << ngram_handler.get_single_word_count() << " words" << "\n" << std::flush;
+    std::cout << "NGramHandler has found " << ngram_handler.get_multi_word_count() << " multi-words" << "\n" << std::flush;
 
     result.push_back(ngram_handler.GetSingleWordSymbols()); // single word symbols at position [0]
     result.push_back(ngram_handler.GetAllSymbols()); // multi-word symbols (including single word ones) at position [1]

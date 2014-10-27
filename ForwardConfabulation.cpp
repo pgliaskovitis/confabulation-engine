@@ -1,4 +1,4 @@
-#include "forwardconfabulation.h"
+#include "ForwardConfabulation.h"
 
 ForwardConfabulation::ForwardConfabulation(size_t num_modules, const std::string &symbol_file, const std::string &master_file)
 {

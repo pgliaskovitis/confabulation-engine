@@ -51,16 +51,20 @@ void Module::ActivateSymbol(const std::string &word, int K)
     if (K < 0)
         throw std::logic_error("ActivateSymbol with negative K");
 
-    size_t index = symbol_mapping_.IndexOf(word);
-    if (IsFrozen()) {
-        // If module is frozen, only activate symbol if contained in the active symbols
-        if (frozen_indexes_->find(index) != frozen_indexes_->end()) {
+    try {
+        size_t index = symbol_mapping_.IndexOf(word);
+        if (IsFrozen()) {
+            // If module is frozen, only activate symbol if contained in the active symbols
+            if (frozen_indexes_->find(index) != frozen_indexes_->end()) {
+                excitations_->SetElement(index, K * Globals::kBandGap);
+                kb_inputs_->SetElement(index, K);
+            }
+        } else {
             excitations_->SetElement(index, K * Globals::kBandGap);
             kb_inputs_->SetElement(index, K);
         }
-    } else {
-        excitations_->SetElement(index, K * Globals::kBandGap);
-        kb_inputs_->SetElement(index, K);
+    } catch (std::out_of_range&) {
+        std::cout << "Word \"" << word << "\" could not be found in symbol mapping of module during activation" << "\n" << std::flush;
     }
 }
 
@@ -183,15 +187,24 @@ std::string Module::ElementaryConfabulation(int K)
     K = ActualK(K);
 
     const std::set<std::pair<size_t, float>>& nz_excit = excitations_->GetNzElements();
-    const std::set<std::pair<size_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
-    std::unique_ptr<std::pair<size_t, float>> max_excit = MaxExcitation(min_K_excit);
 
     int max_index = -1;
     int n_inputs_max = -1;
-    if (max_excit != nullptr) {
-        max_index = max_excit->first;
-        n_inputs_max = kb_inputs_->GetElement(max_index);
-    }
+
+    // try with all possible K, starting from the maximum one, until a solution is found
+    std::unique_ptr<std::pair<size_t, float>> max_excit;
+    do {
+        const std::set<std::pair<size_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+        max_excit = MaxExcitation(min_K_excit);
+
+        if (max_excit != nullptr) {
+            max_index = max_excit->first;
+            n_inputs_max = kb_inputs_->GetElement(max_index);
+        } else {
+            --K;
+            continue;
+        }
+    } while ((max_excit == nullptr) && (K > 0));
 
     ExcitationsToZero();
 
@@ -302,7 +315,7 @@ int Module::ActualK(int K)
     if (K >= 0)
         return K;
 
-    return MaxK() + 1 + K;
+    return MaxK() + K + 1;
 }
 
 int Module::MaxK()
@@ -316,5 +329,5 @@ int Module::MaxK()
         }
     }
 
-    return result;
+    return static_cast<int>(result / Globals::kBandGap);
 }
