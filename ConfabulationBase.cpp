@@ -93,19 +93,20 @@ void ConfabulationBase::Learn()
     do {
         sentence = text_reader.GetNextSentenceTokens(finished_reading);
 
-        //std::cout << "Finding module activations for sentence: " << VectorSymbolToSymbol(sentence, ' ') << "\n" << std::flush;
-
         // make sure that sentence does not wholly consist of empty strings
         if (!(FindFirstIndexNotOfSymbol(sentence, "") < 0)) {
             bool match_found = false;
             const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence, match_found);
-            //std::cout << "Initial module activations: " << "#" << VectorSymbolToSymbol(activated_modules[0], '#') << "\n" << std::flush;
-
+#ifdef DEBUG_1_H
+            std::cout << "Initial module activations: " << "#" << VectorSymbolToSymbol(activated_modules[0], '#') << "\n" << std::flush;
+#endif
             const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
 
             // wire up the knowledge links
             for (const std::vector<std::string>& module_combination : module_combinations) {
-                //std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, ' ') << "\n" << std::flush;
+#ifdef DEBUG_1_H
+                std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, '#') << "\n" << std::flush;
+#endif
                 for (size_t src = 0; src < num_modules_; ++src) {
                     if (!module_combination[src].empty()) {
                         for (size_t targ = 0; targ < num_modules_; ++targ) {
@@ -222,7 +223,7 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
     TextReader text_reader(symbol_file, master_file);
     text_reader.Initialize();
 
-    NGramHandler ngram_handler(3);
+    NGramHandler ngram_handler(4, 10);
 
     std::vector<std::string> sentence;
     bool finished_reading = false;

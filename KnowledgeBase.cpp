@@ -40,6 +40,7 @@ void KnowledgeBase::Add(const std::string& src_symbol, const std::string& targ_s
 void KnowledgeBase::Add(size_t targ_index, size_t src_index)
 {
     kbase_.reset(nullptr);
+
     target_symbol_sums_[targ_index]++;
     size_t previous_count = cooccurrence_counts_->GetElement(targ_index, src_index);
     cooccurrence_counts_->SetElement(targ_index, src_index, previous_count + 1);

@@ -141,7 +141,7 @@ void ConfabulationTest::TestProduceNGrams(const std::string& symbolfile, const s
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
-    NGramHandler ngram_handler(3);
+    NGramHandler ngram_handler(3, 3);
 
     std::vector<std::string> sentence;
     bool finished_reading = false;
@@ -159,7 +159,7 @@ void ConfabulationTest::TestHashTrie(const std::string& symbolfile, const std::s
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
-    NGramHandler ngram_handler(3);
+    NGramHandler ngram_handler(3, 3);
 
     std::vector<std::string> sentence;
     bool finished_reading = false;
@@ -216,7 +216,7 @@ void ConfabulationTest::TestProduceKnowledgeLinkCombinations() const
 void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
 
-    size_t  num_modules = 20;
+    size_t num_modules = 20;
     ForwardConfabulation confab_engine(num_modules, symbolfile, masterfile);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();

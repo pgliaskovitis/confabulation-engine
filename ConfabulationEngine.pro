@@ -24,6 +24,8 @@ QMAKE_CXXFLAGS_APP -= -fPIE
 
 QMAKE_CXXFLAGS += -std=c++11
 
+#QMAKE_LFLAGS_WINDOWS += -Wl,--heap,8000000000
+
 SOURCES += \
     text_processing/TextReader.cpp \
     text_processing/SentenceTokenizer.cpp \

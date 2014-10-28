@@ -22,12 +22,12 @@
 #include "NGramHandler.h"
 #include "utils/Utils.h"
 
-const unsigned short NGramHandler::kMinOccurences = 3;
 const size_t NGramHandler::kMaxSingleWordSymbols = 100000;
 const size_t NGramHandler::kMaxMultiwordSymbols = 150000;
 
-NGramHandler::NGramHandler(unsigned short max_words) :
-    max_words_(max_words)
+NGramHandler::NGramHandler(unsigned short max_words, unsigned short min_occurences) :
+    max_words_(max_words),
+    min_occurences_(min_occurences)
 {
     occurrence_counts_.resize(max_words_); //a dedicated map for each n-gram
 }
@@ -103,7 +103,7 @@ void NGramHandler::CleanupNGrams()
 #ifdef DEBUG_1_H
             std::cout << "Prefix of multiword \"" << debug_output_1 << "\" is : \"" << debug_output_2 << "\" with occurrence count " << prefix_count << "\n";
 #endif
-            if (prefix_count < kMinOccurences)
+            if (prefix_count < min_occurences_)
                 must_delete = true;
 
             if (must_delete)
@@ -123,7 +123,7 @@ void NGramHandler::CleanupNGrams()
             std::map<std::vector<std::string>, size_t, StringVector_Cmp>& prev_occ_count = occurrence_counts_[subgroup_words - 1];
 
             for (std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = current_occ_count.begin(); it != it_end; ++it) {
-                if (it->second >= kMinOccurences) {
+                if (it->second >= min_occurences_) {
                     std::vector<std::string>::const_iterator symbol_it = (it->first).begin();
                     std::vector<std::string> prefix(symbol_it, symbol_it + subgroup_words);
 
@@ -143,7 +143,7 @@ void NGramHandler::CleanupNGrams()
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[n_words - 1].begin();
         while (it != occurrence_counts_[n_words - 1].end()) {
             std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator current = it++;
-            if (current->second < kMinOccurences) {
+            if (current->second < min_occurences_) {
                 occurrence_counts_[n_words - 1].erase(current);
             }
         }
