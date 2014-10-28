@@ -23,9 +23,12 @@
 #include <string>
 #include <vector>
 #include <set>
-
 #include <sparse_structures/IExcitationVector.hpp>
 #include <SymbolMapping.h>
+
+#ifndef DEBUG_1_H_
+//#define DEBUG_1_H_
+#endif
 
 class Module
 {

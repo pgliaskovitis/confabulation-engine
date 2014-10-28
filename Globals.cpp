@@ -27,4 +27,4 @@ const std::string Globals::kDummy = "DummySymbol";
 const std::vector<std::string> Globals::kPersistenceDelimiters = {":::", "{--->", "|||", "}--->"};
 
 const float Globals::kBaseProb = 0.0001;
-const unsigned int Globals::kBandGap = 5;
+const unsigned int Globals::kBandGap = 1;

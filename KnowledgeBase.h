@@ -27,6 +27,10 @@
 #include "sparse_structures/CSRLinksMatrix.hpp"
 #include "SymbolMapping.h"
 
+#ifndef DEBUG_1_H_
+//#define DEBUG_1_H_
+#endif
+
 class KnowledgeBase
 {
 public:

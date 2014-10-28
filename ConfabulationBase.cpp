@@ -223,7 +223,7 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
     TextReader text_reader(symbol_file, master_file);
     text_reader.Initialize();
 
-    NGramHandler ngram_handler(4, 10);
+    NGramHandler ngram_handler(4, 1, 10);
 
     std::vector<std::string> sentence;
     bool finished_reading = false;

@@ -141,7 +141,7 @@ void ConfabulationTest::TestProduceNGrams(const std::string& symbolfile, const s
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
-    NGramHandler ngram_handler(3, 3);
+    NGramHandler ngram_handler(3, 1, 3);
 
     std::vector<std::string> sentence;
     bool finished_reading = false;
@@ -159,7 +159,7 @@ void ConfabulationTest::TestHashTrie(const std::string& symbolfile, const std::s
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
-    NGramHandler ngram_handler(3, 3);
+    NGramHandler ngram_handler(3, 1, 3);
 
     std::vector<std::string> sentence;
     bool finished_reading = false;
@@ -334,37 +334,37 @@ int main()
 
     std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 
-    std::string feed1 = "The hooded men were steadily chanting beneath the ";
+    std::string feed1 = "The hooded men were chanting beneath the ";
     std::string feed2 = "An army of little insects gathered on top of ";
     std::string feed3 = "The prostitute smiled and slowly caressed his ";
     std::string feed4 = "A dark winter was eating through the ";
     std::string feed5 = "The eagle circled above the valley, eager for ";
-    std::string feed6 = "However, our initial impression of the situation was ";
+    std::string feed6 = "Our initial impression of the situation was ";
     std::string feed7 = "At the slightest hint of movement, he was ready to cut ";
     std::string feed8 = "A warm and sweet scent was emanating from her ";
-    std::string feed9 = "She clumsily looked at her stained dress and ";
+    std::string feed9 = "She looked at her stained dress and clumsily ";
     std::string feed10 = "She had not only her husband killed but also her ";
 
     std::string feed11 = "The harsh realization that only writers could write well, threw him into a ";
     std::string feed12 = "He looked at her, the love of his life, and whispered ";
-    std::string feed13 = "He collapsed impulsively, crying like a ";
-    std::string feed14 = "Alas, the bird's nest was too high up in the mountain for him to ";
-    std::string feed15 = "Suffocating in a sea of uninspired people, he started a ";
+    std::string feed13 = "He suddenly collapsed, crying like a ";
+    std::string feed14 = "The bird's nest was too high up in the mountain for him to ";
+    std::string feed15 = "Suffocating in a city of dull people, he started a ";
     std::string feed16 = "She walked her wild paths without ";
-    std::string feed17 = "The clan and the khan were ";
+    std::string feed17 = "The clan and the warlord were ";
     std::string feed18 = "The beauty and the ";
-    std::string feed19 = "Yes, supreme effort had helped him get away from the ";
+    std::string feed19 = "Finally, superhuman effort had helped him get away from the ";
     std::string feed20 = "Hosts of archers stood ready along the ";
 
-    std::string feed21 = "The joker laughed out loud and squeezed the ";
+    std::string feed21 = "The joker laughed out loud and squeezed her ";
     std::string feed22 = "She moaned with desire when he ";
     std::string feed23 = "The thief stabbed Frederick viciously while he was ";
     std::string feed24 = "The green hat swirled and landed on the ";
     std::string feed25 = "Ominous waves surrounded us, just before we jumped ";
-    std::string feed26 = "He was mesmerized by her ";
-    std::string feed27 = "Unconventionally, the knight decided to kill the maiden and marry the ";
-    std::string feed28 = "The council of the void sent out its darkest agents to accomplish this ";
-    std::string feed29 = "Enlightenment, he said, goes hand in hand with a bowl of good ";
+    std::string feed26 = "He was mesmerised by her ";
+    std::string feed27 = "Surprisingly, the knight decided to kill the maiden and marry the ";
+    std::string feed28 = "The council sent out its darkest agents to accomplish this ";
+    std::string feed29 = "Enlightenment, he said, goes well with a cup of ";
     std::string feed30 = "The captain was listening indifferently for a while, but then he ";
 
 	allOriginalFeeds->push_back(feed1);

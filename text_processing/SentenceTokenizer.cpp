@@ -17,6 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include "SentenceTokenizer.h"
 
 SentenceTokenizer::SentenceTokenizer(const std::string& source) : source_(source), index_(0)
@@ -27,17 +28,26 @@ SentenceTokenizer::SentenceTokenizer(const SentenceTokenizer& stok) : source_(st
 {
 }
 
+bool SentenceTokenizer::IsCharNotAlphaNumeric(char input)
+{
+    return (!std::isalpha(input));
+}
+
 bool SentenceTokenizer::IsSymbolAlphanumeric(const std::string& input)
 {
+    if (input.size() == 0)
+      return false;
 
-      if (input.size() == 0)
-		  return false;
+    for (std::string::const_iterator it = input.begin(); it != input.end(); ++it)
+    if (!std::isalpha(*it))
+        return false;
 
-      for (std::string::const_iterator it = input.begin(); it != input.end(); ++it)
-        if (!std::isalpha(*it))
-	    	return false;
+    return true;
+}
 
-	  return true;
+void SentenceTokenizer::ConvertSymbolToAlphanumeric(std::string& input)
+{
+    input.erase(std::remove_if(input.begin(), input.end(), IsCharNotAlphaNumeric), input.end());
 }
 
 const std::string& SentenceTokenizer::Str() const

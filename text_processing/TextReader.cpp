@@ -163,6 +163,7 @@ void TextReader::CleanToken(std::string& input)
     input.erase(std::remove(input.begin(), input.end(), '\0'), input.end());
     input.erase(std::remove(input.begin(), input.end(), '\r'), input.end());
     input.erase(std::remove(input.begin(), input.end(), '\t'), input.end());
+    SentenceTokenizer::ConvertSymbolToAlphanumeric(input);
     std::transform(input.begin(), input.end(), input.begin(), ::tolower);
 }
 

@@ -47,7 +47,9 @@ public:
 	//Get the delimiter following the last-read token
     const std::string& Delim() const;
 
+    static bool IsCharNotAlphaNumeric(char input);
     static bool IsSymbolAlphanumeric(const std::string& input);
+    static void ConvertSymbolToAlphanumeric(std::string& input);
 
 private:
     std::string source_; //our copy of the source

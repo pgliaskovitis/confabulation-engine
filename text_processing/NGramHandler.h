@@ -50,7 +50,7 @@ struct StringVector_Cmp
 class NGramHandler
 {
 public:
-    NGramHandler(unsigned short max_words, unsigned short min_occurences);
+    NGramHandler(unsigned short max_words, unsigned short min_single_occurences, unsigned short min_multi_occurences);
     NGramHandler(const NGramHandler& rhs) = delete;
     NGramHandler& operator=(const NGramHandler& rhs) = delete;
     NGramHandler(NGramHandler&& rhs) = delete;
@@ -73,7 +73,8 @@ private:
     static const size_t kMaxMultiwordSymbols;
 
     const unsigned short max_words_;
-    const unsigned short min_occurences_;
+    const unsigned short min_single_occurences_;
+    const unsigned short min_multi_occurences_;
 
     std::vector<std::map<std::vector<std::string>, size_t, StringVector_Cmp>> occurrence_counts_;
 
