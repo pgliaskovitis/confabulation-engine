@@ -1,6 +1,5 @@
 *.o
 *.user
-Makefile
 object_script.ConfabulationEngine.Debug
 object_script.ConfabulationEngine.Release
 text_data/*

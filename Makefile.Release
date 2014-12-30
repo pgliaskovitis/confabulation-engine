@@ -14,38 +14,38 @@ CXX           = g++
 DEFINES       = -DUNICODE
 CFLAGS        = -pipe -fno-keep-inline-dllexport -O2 -Wall -Wextra $(DEFINES)
 CXXFLAGS      = -pipe -fno-keep-inline-dllexport -std=c++11 -O3 -frtti -Wall -Wextra -fexceptions -mthreads $(DEFINES)
-INCPATH       = -I. -I"C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\win32-g++"
+INCPATH       = -I. -I'C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/win32-g++'
 LINKER      =        g++
 LFLAGS        =        -Wl,-s -Wl,-subsystem,console -mthreads
 LIBS        =         
-QMAKE         = C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\bin\qmake.exe
+QMAKE         = c:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/bin/qmake.exe
 IDC           = idc
 IDL           = midl
-ZIP           = zip -r -9
+ZIP           = 
 DEF_FILE      = 
 RES_FILE      = 
-COPY          = copy /y
-SED           = $(QMAKE) -install sed
-COPY_FILE     = $(COPY)
-COPY_DIR      = xcopy /s /q /y /i
-DEL_FILE      = del
+COPY          = cp -f
+SED           = sed
+COPY_FILE     = cp -f
+COPY_DIR      = cp -f -R
+DEL_FILE      = rm -f
 DEL_DIR       = rmdir
-MOVE          = move
-CHK_DIR_EXISTS= if not exist
-MKDIR         = mkdir
-INSTALL_FILE    = $(COPY_FILE)
-INSTALL_PROGRAM = $(COPY_FILE)
+MOVE          = mv -f
+CHK_DIR_EXISTS= test -d
+MKDIR         = mkdir -p
+INSTALL_FILE    = cp -f
+INSTALL_PROGRAM = cp -f
 INSTALL_DIR     = $(COPY_DIR)
 
 ####### Output directory
 
-OBJECTS_DIR   = release
+OBJECTS_DIR   = release/
 
 ####### Files
 
-SOURCES       = text_processing\TextReader.cpp \
-		text_processing\SentenceTokenizer.cpp \
-		text_processing\NGramHandler.cpp \
+SOURCES       = text_processing/TextReader.cpp \
+		text_processing/SentenceTokenizer.cpp \
+		text_processing/NGramHandler.cpp \
 		TemplateInstantiations.cpp \
 		ConfabulationTest.cpp \
 		Globals.cpp \
@@ -70,9 +70,9 @@ OBJECTS       = release/TextReader.o \
 
 DIST          = 
 QMAKE_TARGET  = ConfabulationEngine
-DESTDIR        = release\ #avoid trailing-slash linebreak
+DESTDIR        = release/ #avoid trailing-slash linebreak
 TARGET         = ConfabulationEngine.exe
-DESTDIR_TARGET = release\ConfabulationEngine.exe
+DESTDIR_TARGET = release/ConfabulationEngine.exe
 
 ####### Implicit rules
 
@@ -99,15 +99,15 @@ $(DESTDIR_TARGET):  $(OBJECTS)
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) object_script.ConfabulationEngine.Release  $(LIBS)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ CONFIG+=release -o Makefile.Release ConfabulationEngine.pro
+	@$(QMAKE) -o Makefile.Release ConfabulationEngine.pro
 
 qmake_all: FORCE
 
 dist:
-	$(ZIP) ConfabulationEngine.zip $(SOURCES) $(DIST) ConfabulationEngine.pro C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\spec_pre.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\qdevice.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\device_config.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\common\shell-win32.conf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\qconfig.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_axbase.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_axserver.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_clucene_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_core.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_core_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_declarative.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_declarative_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_designer.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_enginio.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_enginio_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_gui.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_help.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_help_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_network.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_network_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_nfc.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_opengl.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_platformsupport_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_positioning.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_qml.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_quick.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_script.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_script_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_scripttools.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_scripttools_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_sensors.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_serialport.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_sql.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_svg.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_testlib.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_uitools.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_webkit.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_webkit_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_webkitwidgets.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_webkitwidgets_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_websockets.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_websockets_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_widgets.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_winextras.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_xml.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\qt_functions.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\qt_config.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\win32\qt_config.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\win32-g++\qmake.conf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\spec_post.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\exclusive_builds.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\default_pre.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\win32\default_pre.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\resolve_config.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\exclusive_builds_post.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\default_post.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\build_pass.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\win32\console.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\win32\rtti.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\precompile_header.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\warn_on.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\testcase_targets.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\exceptions.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\yacc.prf C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\features\lex.prf ConfabulationEngine.pro  NO_PCH_SOURCES YACCSOURCES YACCSOURCES LEXSOURCES 
+	$(ZIP) ConfabulationEngine.zip $(SOURCES) $(DIST) ConfabulationEngine.pro C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/spec_pre.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/qdevice.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/device_config.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/common/shell-unix.conf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/qconfig.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_axbase.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_axbase_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_axcontainer.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_axcontainer_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_axserver.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_axserver_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_bluetooth.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_bluetooth_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_bootstrap_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_clucene_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_concurrent.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_concurrent_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_core.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_core_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_declarative.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_declarative_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_designer.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_designer_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_designercomponents_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_enginio.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_enginio_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_gui.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_gui_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_help.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_help_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_multimedia.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_multimedia_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_multimediawidgets.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_multimediawidgets_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_network.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_network_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_nfc.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_nfc_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_opengl.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_opengl_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_openglextensions.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_openglextensions_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_platformsupport_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_positioning.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_positioning_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_printsupport.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_printsupport_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_qml.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_qml_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_qmldevtools_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_qmltest.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_qmltest_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_quick.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_quick_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_quickparticles_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_quickwidgets.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_quickwidgets_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_script.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_script_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_scripttools.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_scripttools_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_sensors.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_sensors_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_serialport.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_serialport_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_sql.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_sql_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_svg.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_svg_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_testlib.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_testlib_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_uitools.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_uitools_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_webkit.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_webkit_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_webkitwidgets.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_webkitwidgets_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_websockets.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_websockets_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_widgets.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_widgets_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_winextras.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_winextras_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_xml.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_xml_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_xmlpatterns.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/modules/qt_lib_xmlpatterns_private.pri C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/qt_functions.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/qt_config.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/win32/qt_config.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/win32-g++/qmake.conf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/spec_post.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/exclusive_builds.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/default_pre.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/win32/default_pre.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/resolve_config.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/exclusive_builds_post.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/default_post.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/build_pass.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/win32/console.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/win32/rtti.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/precompile_header.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/warn_on.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/testcase_targets.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/exceptions.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/yacc.prf C:/Qt/qt-5.3.2-x64-mingw491r1-sjlj/qt-5.3.2-x64-mingw491r1-sjlj/mkspecs/features/lex.prf ConfabulationEngine.pro  NO_PCH_SOURCES YACCSOURCES YACCSOURCES LEXSOURCES 
 
 clean: compiler_clean 
-	-$(DEL_FILE) release\TextReader.o release\SentenceTokenizer.o release\NGramHandler.o release\TemplateInstantiations.o release\ConfabulationTest.o release\Globals.o release\SymbolMapping.o release\KnowledgeBase.o release\Module.o release\MultiLevelOrganizer.o release\ConfabulationBase.o release\ForwardConfabulation.o
+	-$(DEL_FILE) release/TextReader.o release/SentenceTokenizer.o release/NGramHandler.o release/TemplateInstantiations.o release/ConfabulationTest.o release/Globals.o release/SymbolMapping.o release/KnowledgeBase.o release/Module.o release/MultiLevelOrganizer.o release/ConfabulationBase.o release/ForwardConfabulation.o
 
 distclean: clean 
 	-$(DEL_FILE) $(DESTDIR_TARGET)
@@ -133,15 +133,15 @@ release/TextReader.o: text_processing/TextReader.cpp text_processing/TextReader.
 		Globals.h \
 		text_processing/SentenceTokenizer.h \
 		utils/Utils.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\TextReader.o text_processing\TextReader.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/TextReader.o text_processing/TextReader.cpp
 
 release/SentenceTokenizer.o: text_processing/SentenceTokenizer.cpp text_processing/SentenceTokenizer.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\SentenceTokenizer.o text_processing\SentenceTokenizer.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/SentenceTokenizer.o text_processing/SentenceTokenizer.cpp
 
 release/NGramHandler.o: text_processing/NGramHandler.cpp text_processing/NGramHandler.h \
 		SymbolMapping.h \
 		utils/Utils.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\NGramHandler.o text_processing\NGramHandler.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/NGramHandler.o text_processing/NGramHandler.cpp
 
 release/TemplateInstantiations.o: TemplateInstantiations.cpp TemplateInstantiations.h \
 		sparse_structures/DOKExcitationVector.hpp \
@@ -152,7 +152,7 @@ release/TemplateInstantiations.o: TemplateInstantiations.cpp TemplateInstantiati
 		sparse_structures/CSRLinksMatrix.hpp \
 		utils/HashTrieNode.hpp \
 		utils/HashTrie.hpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\TemplateInstantiations.o TemplateInstantiations.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/TemplateInstantiations.o TemplateInstantiations.cpp
 
 release/ConfabulationTest.o: ConfabulationTest.cpp Globals.h \
 		ConfabulationTest.h \
@@ -173,15 +173,15 @@ release/ConfabulationTest.o: ConfabulationTest.cpp Globals.h \
 		MultiLevelOrganizer.h \
 		Module.h \
 		KnowledgeBase.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ConfabulationTest.o ConfabulationTest.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/ConfabulationTest.o ConfabulationTest.cpp
 
 release/Globals.o: Globals.cpp Globals.h \
 		text_processing/NGramHandler.h \
 		SymbolMapping.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\Globals.o Globals.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/Globals.o Globals.cpp
 
 release/SymbolMapping.o: SymbolMapping.cpp SymbolMapping.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\SymbolMapping.o SymbolMapping.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/SymbolMapping.o SymbolMapping.cpp
 
 release/KnowledgeBase.o: KnowledgeBase.cpp KnowledgeBase.h \
 		sparse_structures/DOKLinksMatrix.hpp \
@@ -192,7 +192,7 @@ release/KnowledgeBase.o: KnowledgeBase.cpp KnowledgeBase.h \
 		sparse_structures/CSRLinksMatrix.hpp \
 		SymbolMapping.h \
 		Globals.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\KnowledgeBase.o KnowledgeBase.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/KnowledgeBase.o KnowledgeBase.cpp
 
 release/Module.o: Module.cpp Module.h \
 		sparse_structures/IExcitationVector.hpp \
@@ -200,14 +200,14 @@ release/Module.o: Module.cpp Module.h \
 		Globals.h \
 		utils/Utils.h \
 		sparse_structures/DOKExcitationVector.hpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\Module.o Module.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/Module.o Module.cpp
 
 release/MultiLevelOrganizer.o: MultiLevelOrganizer.cpp MultiLevelOrganizer.h \
 		SymbolMapping.h \
 		utils/HashTrie.hpp \
 		utils/HashTrieNode.hpp \
 		utils/Utils.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\MultiLevelOrganizer.o MultiLevelOrganizer.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/MultiLevelOrganizer.o MultiLevelOrganizer.cpp
 
 release/ConfabulationBase.o: ConfabulationBase.cpp ConfabulationBase.h \
 		text_processing/TextReader.h \
@@ -224,7 +224,7 @@ release/ConfabulationBase.o: ConfabulationBase.cpp ConfabulationBase.h \
 		utils/Utils.h \
 		sparse_structures/IKnowledgeLinks.hpp \
 		sparse_structures/CSRLinksMatrix.hpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ConfabulationBase.o ConfabulationBase.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/ConfabulationBase.o ConfabulationBase.cpp
 
 release/ForwardConfabulation.o: ForwardConfabulation.cpp ForwardConfabulation.h \
 		ConfabulationBase.h \
@@ -242,7 +242,7 @@ release/ForwardConfabulation.o: ForwardConfabulation.cpp ForwardConfabulation.h 
 		utils/Utils.h \
 		sparse_structures/IKnowledgeLinks.hpp \
 		sparse_structures/CSRLinksMatrix.hpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ForwardConfabulation.o ForwardConfabulation.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/ForwardConfabulation.o ForwardConfabulation.cpp
 
 ####### Install
 
