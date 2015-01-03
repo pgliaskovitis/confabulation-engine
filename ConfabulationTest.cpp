@@ -302,7 +302,7 @@ int main()
 
     //test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
-    test1->TestProduceKnowledgeLinkCombinations();
+    //test1->TestProduceKnowledgeLinkCombinations();
 
     //test1->TestTokenizePersistedKnowledge();
 
@@ -401,7 +401,7 @@ int main()
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
 
-    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
 
 	return 0;
 
