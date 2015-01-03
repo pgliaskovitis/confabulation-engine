@@ -348,21 +348,21 @@ int main()
     std::string feed11 = "He realized that only writers could write well, and fell into a ";
     std::string feed12 = "He looked at her, the love of his life, and whispered ";
     std::string feed13 = "He suddenly collapsed, crying like a ";
-    std::string feed14 = "The bird's nest was too high up in the mountain for him to ";
+    std::string feed14 = "The cave was too high up in the mountain for him to ";
     std::string feed15 = "Suffocating in a city of dull people, he started a ";
-    std::string feed16 = "She walked her wild paths without ";
-    std::string feed17 = "The chief and the clan were ";
+    std::string feed16 = "She wandered in her wild paths without ";
+    std::string feed17 = "The clan and the whole khan were ";
     std::string feed18 = "The beauty and the ";
     std::string feed19 = "Extreme effort had helped him get away from the ";
     std::string feed20 = "Hosts of archers stood ready along the ";
 
     std::string feed21 = "The joker laughed out loud and squeezed her ";
-    std::string feed22 = "She moaned with desire when he ";
-    std::string feed23 = "The thief viciously stabbed John while he was ";
+    std::string feed22 = "She moaned with pleasure when he ";
+    std::string feed23 = "The thief viciously stabbed John while he was chopping ";
     std::string feed24 = "The green hat swirled and landed on the ";
     std::string feed25 = "Ominous waves surrounded us, just before we jumped ";
-    std::string feed26 = "He was enchanted by her ";
-    std::string feed27 = "Surprisingly, the knight decided to kill the maiden and marry the ";
+    std::string feed26 = "He was immediately enchanted by her ";
+    std::string feed27 = "The knight decided to kill the maiden and marry the ";
     std::string feed28 = "The council sent out its most fearsome agents to ";
     std::string feed29 = "Enlightenment goes well with a cup of ";
     std::string feed30 = "The captain was listening silently for a while, but then he ";
@@ -402,6 +402,7 @@ int main()
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
 
     test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 
 	return 0;
 

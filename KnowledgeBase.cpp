@@ -31,10 +31,13 @@ KnowledgeBase::KnowledgeBase(const std::string& id, const SymbolMapping& src_map
 
 void KnowledgeBase::Add(const std::string& src_symbol, const std::string& targ_symbol)
 {
-    size_t row = targ_map_.IndexOf(targ_symbol);
-    size_t col = src_map_.IndexOf(src_symbol);
+    try {
+        size_t row = targ_map_.IndexOf(targ_symbol);
+        size_t col = src_map_.IndexOf(src_symbol);
 
-    Add(row, col);
+        Add(row, col);
+    } catch (std::out_of_range&) {
+    }
 }
 
 void KnowledgeBase::Add(size_t targ_index, size_t src_index)
