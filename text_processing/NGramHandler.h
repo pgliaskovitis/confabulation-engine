@@ -33,7 +33,7 @@
 
 struct StringVector_Cmp
 {
-    bool operator()(const std::vector<std::string>& a, const std::vector<std::string> b)
+    bool operator() (const std::vector<std::string>& a, const std::vector<std::string> b)
     {
         std::string a_string("");
         for (const std::string& e: a)
@@ -44,6 +44,15 @@ struct StringVector_Cmp
             b_string += e;
 
         return strcmp(a_string.c_str(), b_string.c_str()) < 0;
+    }
+};
+
+struct Occurrence_Cmp
+{
+    bool operator() (const std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator& a,
+                     const std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator& b)
+    {
+        return (a->second < b->second);
     }
 };
 
@@ -70,7 +79,7 @@ public:
 
 private:
     static const size_t kMaxSingleWordSymbols;
-    static const size_t kMaxMultiwordSymbols;
+    static const size_t kMaxMultiWordSymbols;
 
     const unsigned short max_words_;
     const unsigned short min_single_occurences_;

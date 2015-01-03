@@ -302,7 +302,7 @@ int main()
 
     //test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
-    //test1->TestProduceKnowledgeLinkCombinations();
+    test1->TestProduceKnowledgeLinkCombinations();
 
     //test1->TestTokenizePersistedKnowledge();
 
@@ -342,30 +342,30 @@ int main()
     std::string feed6 = "Our initial impression of the situation was ";
     std::string feed7 = "At the slightest hint of movement, he was ready to cut ";
     std::string feed8 = "A warm and sweet scent was emanating from her ";
-    std::string feed9 = "She looked at her stained dress and clumsily ";
+    std::string feed9 = "She stumbled over her dress and fell ";
     std::string feed10 = "She had not only her husband killed but also her ";
 
-    std::string feed11 = "The harsh realization that only writers could write well, threw him into a ";
+    std::string feed11 = "He realized that only writers could write well, and fell into a ";
     std::string feed12 = "He looked at her, the love of his life, and whispered ";
     std::string feed13 = "He suddenly collapsed, crying like a ";
     std::string feed14 = "The bird's nest was too high up in the mountain for him to ";
     std::string feed15 = "Suffocating in a city of dull people, he started a ";
     std::string feed16 = "She walked her wild paths without ";
-    std::string feed17 = "The clan and the warlord were ";
+    std::string feed17 = "The chief and the clan were ";
     std::string feed18 = "The beauty and the ";
-    std::string feed19 = "Finally, superhuman effort had helped him get away from the ";
+    std::string feed19 = "Extreme effort had helped him get away from the ";
     std::string feed20 = "Hosts of archers stood ready along the ";
 
     std::string feed21 = "The joker laughed out loud and squeezed her ";
     std::string feed22 = "She moaned with desire when he ";
-    std::string feed23 = "The thief stabbed Frederick viciously while he was ";
+    std::string feed23 = "The thief viciously stabbed John while he was ";
     std::string feed24 = "The green hat swirled and landed on the ";
     std::string feed25 = "Ominous waves surrounded us, just before we jumped ";
-    std::string feed26 = "He was mesmerised by her ";
+    std::string feed26 = "He was enchanted by her ";
     std::string feed27 = "Surprisingly, the knight decided to kill the maiden and marry the ";
-    std::string feed28 = "The council sent out its darkest agents to accomplish this ";
-    std::string feed29 = "Enlightenment, he said, goes well with a cup of ";
-    std::string feed30 = "The captain was listening indifferently for a while, but then he ";
+    std::string feed28 = "The council sent out its most fearsome agents to ";
+    std::string feed29 = "Enlightenment goes well with a cup of ";
+    std::string feed30 = "The captain was listening silently for a while, but then he ";
 
 	allOriginalFeeds->push_back(feed1);
 	allOriginalFeeds->push_back(feed2);
@@ -401,7 +401,7 @@ int main()
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
 
-    test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
 
 	return 0;
 

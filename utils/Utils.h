@@ -72,16 +72,15 @@ namespace
 
     std::string VectorSymbolToSymbol(const std::vector<std::string>& vector_symbol, char delim)
     {
-
         std::string result("");
 
         size_t symbol_count = vector_symbol.size();
         size_t i = 0;
         for (const std::string& e: vector_symbol) {
             result += e;
-            ++i;
             if (i < symbol_count - 1)
                 result += delim;
+            ++i;
         }
 
         return result;
@@ -89,16 +88,15 @@ namespace
 
     std::string ListSymbolToSymbol(const std::list<std::string>& list_symbol, char delim)
     {
-
         std::string result("");
 
         size_t symbol_count = list_symbol.size();
         size_t i = 0;
         for (const std::string& e: list_symbol) {
             result += e;
-            ++i;
             if (i < symbol_count - 1)
                 result += delim;
+            ++i;
         }
 
         return result;
@@ -106,7 +104,6 @@ namespace
 
     std::vector<std::string> SymbolToVectorSymbol(const std::string& symbol, char delim)
     {
-
         std::vector<std::string> result;
 
         std::stringstream ss(symbol);

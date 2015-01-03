@@ -19,11 +19,14 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <queue>
+#include <deque>
+#include <algorithm>
 #include "NGramHandler.h"
 #include "utils/Utils.h"
 
-const size_t NGramHandler::kMaxSingleWordSymbols = 60000;
-const size_t NGramHandler::kMaxMultiwordSymbols = 240000;
+const size_t NGramHandler::kMaxSingleWordSymbols = 70000;
+const size_t NGramHandler::kMaxMultiWordSymbols = 70000;
 
 NGramHandler::NGramHandler(unsigned short max_words, unsigned short min_single_occurences, unsigned short min_multi_occurences) :
     max_words_(max_words),
@@ -101,6 +104,7 @@ void NGramHandler::CleanupNGrams()
             } catch (std::out_of_range& oor) {
                 must_delete = true;
             }
+
 #ifdef DEBUG_1_H
             std::cout << "Prefix of multiword \"" << debug_output_1 << "\" is : \"" << debug_output_2 << "\" with occurrence count " << prefix_count << "\n";
 #endif
@@ -164,7 +168,57 @@ void NGramHandler::CleanupNGrams()
         }
     }
 
-    // TODO -- limit single and multiword counts to their chosen maximum values
+    std::cout << "Finished stage III of cleaning up multigrams" << "\n" << std::flush;
+
+    // limit single and multiword counts to their chosen maximum values
+    typedef std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator NGramWithCountIterator;
+    std::deque<NGramWithCountIterator> queue;
+    NGramWithCountIterator it = occurrence_counts_[0].begin();
+    while (it != occurrence_counts_[0].end()) {
+        std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator current = it++;
+        queue.push_back(current);
+    }
+
+    Occurrence_Cmp occurence_cmp;
+    std::sort(queue.begin(), queue.end(), occurence_cmp);
+
+    while (queue.size() > kMaxSingleWordSymbols) {
+        NGramWithCountIterator removed_ngram_it = queue.front();
+#ifdef DEBUG_2_H
+        std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
+#endif
+        NGramWithCountIterator current_it = occurrence_counts_[0].find(removed_ngram_it->first);
+        occurrence_counts_[0].erase(current_it);
+        queue.pop_front();
+    }
+
+    queue.clear();
+    for (unsigned short n_words = 2; n_words <= max_words_; ++n_words) {
+        typedef std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator NGramWithCountIterator;
+        NGramWithCountIterator it = occurrence_counts_[n_words - 1].begin();
+        while (it != occurrence_counts_[n_words - 1].end()) {
+            std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator current = it++;
+            queue.push_back(current);
+        }
+    }
+
+    std::sort(queue.begin(), queue.end(), occurence_cmp);
+
+    while (queue.size() > kMaxMultiWordSymbols) {
+        NGramWithCountIterator removed_ngram_it = queue.front();
+#ifdef DEBUG_2_H
+        std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
+#endif
+        for (unsigned short n_words = 2; n_words <= max_words_; ++n_words) {
+            NGramWithCountIterator current_it = occurrence_counts_[n_words - 1].find(removed_ngram_it->first);
+            if (current_it != occurrence_counts_[n_words - 1].end()) {
+                occurrence_counts_[n_words - 1].erase(current_it);
+                break;
+            }
+        }
+        queue.pop_front();
+    }
+
 }
 
 size_t NGramHandler::get_single_word_count()
