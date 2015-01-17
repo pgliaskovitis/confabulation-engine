@@ -27,10 +27,6 @@
 #include <memory>
 #include "SymbolMapping.h"
 
-#ifndef DEBUG_1_H_
-//#define DEBUG_1_H_
-#endif
-
 struct StringVector_Cmp
 {
     bool operator() (const std::vector<std::string>& a, const std::vector<std::string> b)
@@ -75,6 +71,7 @@ public:
     size_t get_multi_word_count();
 
     std::unique_ptr<SymbolMapping> GetSingleWordSymbols();
+    std::unique_ptr<SymbolMapping> GetMultiWordSymbols();
     std::unique_ptr<SymbolMapping> GetAllSymbols();
 
 private:

@@ -28,10 +28,6 @@
 #include <memory>
 #include <algorithm>
 
-#ifndef DEBUG_1_H_
-//#define DEBUG_1_H_
-#endif
-
 #ifndef STOREDELIMITERS_
 //#define STOREDELIMITERS_
 #endif

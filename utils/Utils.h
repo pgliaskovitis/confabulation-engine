@@ -165,18 +165,21 @@ namespace
         return -1;
     }
 
-    // each row of the 2D argument vector must have as many elements as
-    // exist in the corresponding level of the architecture
+    // The purpose of this function is to produce all possible combinations of symbol activations for the given
+    // initial symbol activation within a given multi-level architecture
     std::vector<std::vector<std::string>> ProduceKnowledgeLinkCombinations(const std::vector<std::vector<std::string>>& excited_symbols, unsigned short num_modules)
     {
         std::vector<std::vector<std::string>> results;
 
         int total_size = 0;
 
-        // total size is equal to the total number of modules in the architecture
-        for (size_t i = 0; i < excited_symbols.size(); ++i)
+        for (size_t i = 0; i < excited_symbols.size(); ++i) {
+            // each row of the argument vector should have as many elements as
+            // exist in the corresponding level of the architecture
             total_size += ConvertToSigned(excited_symbols[i].size());
+        }
 
+        // total size should be equal to the total number of modules in the architecture
         assert(total_size == num_modules);
 
         int convolution_half_size = ConvertToSigned(excited_symbols[0].size() - 1);
@@ -202,6 +205,7 @@ namespace
 
         return results;
     }
+
 }
 
 #endif // UTILS_H

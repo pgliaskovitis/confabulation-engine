@@ -11,7 +11,6 @@ TwoLevelSimpleConfabulation::TwoLevelSimpleConfabulation(size_t num_word_modules
         kb_specs[i].resize(num_modules_);
 
     // word-to-word knowledge bases
-    // triangle matrix
     for (size_t i = 0; i < num_word_modules; ++i)
         for (size_t j = i + 1; j < num_word_modules; ++j)
             kb_specs[i][j] = true;
@@ -27,7 +26,6 @@ TwoLevelSimpleConfabulation::TwoLevelSimpleConfabulation(size_t num_word_modules
             kb_specs[i][j] = true;
 
     // phrase-to-phrase knowledge bases
-    // triangle matrix
     for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i)
         for (size_t j = i + 1; j < 2 * num_word_modules; ++j)
             kb_specs[i][j] = true;

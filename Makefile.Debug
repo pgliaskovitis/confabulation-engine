@@ -101,7 +101,7 @@ $(DESTDIR_TARGET):  $(OBJECTS)
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) object_script.ConfabulationEngine.Debug  $(LIBS)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ -o Makefile.Debug ConfabulationEngine.pro
+	@$(QMAKE) -spec win32-g++ CONFIG+=release -o Makefile.Debug ConfabulationEngine.pro
 
 qmake_all: FORCE
 
@@ -226,7 +226,8 @@ debug/ConfabulationBase.o: ConfabulationBase.cpp ConfabulationBase.h \
 		sparse_structures/DOKExcitationVector.hpp \
 		utils/Utils.h \
 		sparse_structures/IKnowledgeLinks.hpp \
-		sparse_structures/CSRLinksMatrix.hpp
+		sparse_structures/CSRLinksMatrix.hpp \
+		Dbg.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\ConfabulationBase.o ConfabulationBase.cpp
 
 debug/ForwardConfabulation.o: ForwardConfabulation.cpp ForwardConfabulation.h \

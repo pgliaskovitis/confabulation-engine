@@ -25,10 +25,6 @@
 #include "SymbolMapping.h"
 #include "utils/HashTrie.hpp"
 
-#ifndef DEBUG_1_H_
-//#define DEBUG_1_H_
-#endif
-
 class MultiLevelOrganizer
 {
 public:

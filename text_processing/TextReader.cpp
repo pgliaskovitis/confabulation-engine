@@ -22,6 +22,7 @@
 #include "Globals.h"
 #include "SentenceTokenizer.h"
 #include "utils/Utils.h"
+#include "Dbg.h"
 
 TextReader::TextReader(const std::string& symbol_file, const std::string& master_file) :
     symbol_file_name_(symbol_file),
@@ -79,9 +80,7 @@ const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_
 
             const std::vector<std::string>& current_sentence_tokens = ExtractTokens(l_string.str().substr(0, end_of_phase));
 
-#ifdef DEBUG_1_H_
-            std::cout << "Sentence : " << VectorSymbolToSymbol(current_sentence_tokens, ' ') << "\n" << std::flush;
-#endif
+            //std::cout << "Sentence : " << VectorSymbolToSymbol(current_sentence_tokens, ' ') << "\n" << std::flush;
 
             return current_sentence_tokens;
         }
@@ -96,7 +95,7 @@ const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_
         if (current_text_file_it_ != text_file_names_.end()) {
             current_text_file_.reset(new std::ifstream(*current_text_file_it_));
             current_text_file_->exceptions(std::ifstream::badbit);
-            std::cout << "Handling file " << *current_text_file_it_ << "\n" << std::flush;
+            log_info("Handling file %s", current_text_file_it_->c_str());
 
             return GetNextSentenceTokens(finished_reading);
         } else {

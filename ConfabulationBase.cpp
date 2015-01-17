@@ -18,8 +18,11 @@
  */
 
 #include <algorithm>
+#include <functional>   // std::minus
+#include <numeric>      // std::accumulate
 #include "ConfabulationBase.h"
 #include "utils/Utils.h"
+#include "Dbg.h"
 
 ConfabulationBase::ConfabulationBase() : K_(-1)
 {}
@@ -53,15 +56,16 @@ void ConfabulationBase::Initialize(const std::vector<std::vector<bool>>& kb_spec
 
 void ConfabulationBase::Build()
 {
+    log_info("Starting Build phase for confabulation");
+
     organizer_.reset(new MultiLevelOrganizer(level_specs_, ProduceSymbolMappings(symbol_file_, master_file_)));
 
     // create the modules
     unsigned short level = 0;
     for (size_t i = 0; i < num_modules_; ++i) {
-        if (i >= level_specs_[level]) {
+        if ((i != 0) && (i % level_specs_[level] == 0))
             ++level;
-            std::cout << "Now populating modules at level " << level << "\n" << std::flush;
-        }
+
         const std::unique_ptr<SymbolMapping>& symbols_at_level = organizer_->get_mappings_for_level(level);
         modules_.emplace_back(new Module(*symbols_at_level));
     }
@@ -81,10 +85,14 @@ void ConfabulationBase::Build()
             }
         }
     }
+
+    log_info("Finished Build phase for confabulation");
 }
 
 void ConfabulationBase::Learn()
 {
+    log_info("Starting Learn phase for confabulation");
+
     TextReader text_reader(symbol_file_, master_file_);
     text_reader.Initialize();
 
@@ -97,16 +105,16 @@ void ConfabulationBase::Learn()
         if (!(FindFirstIndexNotOfSymbol(sentence, "") < 0)) {
             bool match_found = false;
             const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence, match_found);
-#ifdef DEBUG_1_H
-            std::cout << "Initial module activations: " << "#" << VectorSymbolToSymbol(activated_modules[0], '#') << "\n" << std::flush;
-#endif
+
+            //std::cout << "Initial module activations: " << "#" << VectorSymbolToSymbol(activated_modules[0], '#') << "\n" << std::flush;
+
             const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
 
             // wire up the knowledge links
             for (const std::vector<std::string>& module_combination : module_combinations) {
-#ifdef DEBUG_1_H
-                std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, '#') << "\n" << std::flush;
-#endif
+
+                //std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, '#') << "\n" << std::flush;
+
                 for (size_t src = 0; src < num_modules_; ++src) {
                     if (!module_combination[src].empty()) {
                         for (size_t targ = 0; targ < num_modules_; ++targ) {
@@ -127,6 +135,8 @@ void ConfabulationBase::Learn()
                 kb->ComputeLinkStrengths();
         }
     }
+
+    log_info("Finished Learn phase for confabulation");
 }
 
 std::vector<std::string> ConfabulationBase::Confabulation(const std::vector<std::string> &symbols, int index_to_complete, bool expectation)
@@ -234,11 +244,11 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
 
     ngram_handler.CleanupNGrams();
 
-    std::cout << "NGramHandler has found " << ngram_handler.get_single_word_count() << " words" << "\n" << std::flush;
-    std::cout << "NGramHandler has found " << ngram_handler.get_multi_word_count() << " multi-words" << "\n" << std::flush;
+    log_info("NGramHandler has found %lu words", ngram_handler.get_single_word_count());
+    log_info("NGramHandler has found %lu multi-words", ngram_handler.get_multi_word_count());
 
-    result.push_back(ngram_handler.GetSingleWordSymbols()); // single word symbols at position [0]
-    result.push_back(ngram_handler.GetAllSymbols()); // multi-word symbols (including single word ones) at position [1]
+    result.push_back(ngram_handler.GetSingleWordSymbols()); // single-word symbols at position [0]
+    result.push_back(ngram_handler.GetMultiWordSymbols()); // multi-word symbols (excluding single-word ones) at position [1]
 
     return result; //at this point, NGramHandler is destroyed, so we save its internal memory
 }

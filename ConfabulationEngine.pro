@@ -62,6 +62,7 @@ HEADERS += \
     MultiLevelOrganizer.h \
     ConfabulationBase.h \
     ForwardConfabulation.h \
-    TwoLevelSimpleConfabulation.h
+    TwoLevelSimpleConfabulation.h \
+    Dbg.h
 
 
