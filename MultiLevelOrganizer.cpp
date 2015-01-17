@@ -46,6 +46,9 @@ MultiLevelOrganizer::MultiLevelOrganizer(const std::vector<unsigned short>& leve
 // level 2: multisymbol_21  ""          ""          ""              ""
 // level 1: multisymbol_11  ""          ""          multisymbol_12  ""
 // level 0: symbol_1        symbol_2    symbol_3    symbol_4        symbol_5
+// where multisymbol_11 = symbol_1 + symbol_2 + symbol_3
+//       multisymbol_12 = symbol_4 + symbol_5
+//       multisymbol_21 = multisymbol_11 + multisymbol_12
 std::vector<std::vector<std::string>> MultiLevelOrganizer::Organize(const std::vector<std::string>& symbols, bool& match_found)
 {
     size_t n_levels = level_sizes_.size();
@@ -62,7 +65,7 @@ std::vector<std::vector<std::string>> MultiLevelOrganizer::Organize(const std::v
         const HashTrie<std::string>& trie = *(tries_.at(i));
         std::list<std::string> temp_symbols_list(symbols.begin(), symbols.end());
 
-        // find longest match and remove matched symbols
+        // find longest match and remove matched symbols from beginning of sentence
         size_t j = 0;
         while (j < level.size() && !temp_symbols_list.empty()) {
 

@@ -249,6 +249,7 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
 
     result.push_back(ngram_handler.GetSingleWordSymbols()); // single-word symbols at position [0]
     result.push_back(ngram_handler.GetMultiWordSymbols()); // multi-word symbols (excluding single-word ones) at position [1]
+    //result.push_back(ngram_handler.GetAllSymbols()); // multi-word symbols (including single-word ones) at position [1]
 
     return result; //at this point, NGramHandler is destroyed, so we save its internal memory
 }
