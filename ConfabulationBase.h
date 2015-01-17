@@ -63,6 +63,7 @@ protected:
     std::unique_ptr<MultiLevelOrganizer> organizer_;
     std::vector<std::vector<bool>> kb_specs_;
     std::vector<unsigned short> level_specs_;
+
     std::vector<std::unique_ptr<Module>> modules_;
     std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> knowledge_bases_;
 

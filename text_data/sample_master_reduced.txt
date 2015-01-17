@@ -1,10 +1,1 @@
 text_data/Balzac_1.txt
-text_data/Balzac_2.txt
-text_data/Balzac_3.txt
-text_data/Balzac_4.txt
-text_data/Balzac_5.txt
-text_data/Chesterton_1.txt
-text_data/Chesterton_2.txt
-text_data/Chesterton_3.txt
-text_data/Chesterton_4.txt
-text_data/Chesterton_5.txt

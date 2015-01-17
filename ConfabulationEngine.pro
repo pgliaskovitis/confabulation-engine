@@ -38,7 +38,8 @@ SOURCES += \
     Module.cpp \
     MultiLevelOrganizer.cpp \
     ConfabulationBase.cpp \
-    ForwardConfabulation.cpp
+    ForwardConfabulation.cpp \
+    TwoLevelSimpleConfabulation.cpp
 
 HEADERS += \
     sparse_structures/CSRLinksMatrix.hpp \
@@ -60,6 +61,7 @@ HEADERS += \
     Module.h \
     MultiLevelOrganizer.h \
     ConfabulationBase.h \
-    ForwardConfabulation.h
+    ForwardConfabulation.h \
+    TwoLevelSimpleConfabulation.h
 
 

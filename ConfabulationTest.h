@@ -43,7 +43,8 @@ public:
     void TestTokenizePersistedKnowledge() const;
 
     void TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
-    void TestConfabulationWithPersistedKnowledge(const std::string& symbolfile, const std::string& supplementfile, const std::vector<std::string>& sentences) const;
+
+    void TestTwoLevelSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
 
 private:
     void PerformConfabulation(Globals& globals, const std::vector<std::string>& sentences) const;
