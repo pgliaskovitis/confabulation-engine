@@ -54,45 +54,41 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
         index = index_to_complete;
     }
 
-    int initial_index_to_complete = index;
     std::vector<std::string> temp_input(symbols.begin(), symbols.end());
 
-    for (size_t i = 0; i < 1; ++i) {
+    int actual_K = ActualK(temp_input, index);
+    const std::unique_ptr<Module>& target_module = modules_[index];
+    target_module->ExcitationsToZero();
 
-        int actual_K = ActualK(temp_input, index);
-        const std::unique_ptr<Module>& target_module = modules_[index];
-        target_module->ExcitationsToZero();
+    // activate known symbols from input
+    Activate(temp_input);
 
-        // activate known symbols from input
-        Activate(temp_input);
-
-        // find expectation on phrase module above last known word module
-        TransferExcitation(modules_[index - 1],
-                           knowledge_bases_[index - 1][num_word_modules_ + index - 1],
-                           modules_[num_word_modules_ + index - 1]);
+    // find expectation on phrase module above last known word module
+    TransferExcitation(modules_[index - 1],
+                       knowledge_bases_[index - 1][num_word_modules_ + index - 1],
+                       modules_[num_word_modules_ + index - 1]);
 
 //        std::cout << "Expectation on last phrase module is : " <<
 //                     VectorSymbolToSymbol(modules_[num_word_modules_ + index - 1]->GetExpectation(), ':') <<
 //                     "\n\n\n" << std::flush;
 
-        // find expectation on first unknown word module
-        TransferAllExcitations(index, target_module);
+    // find expectation on first unknown word module
+    TransferAllExcitations(index, target_module);
 
-        // freeze possible symbols on target module
-        target_module->Freeze();
+    // freeze possible symbols on target module
+    target_module->Freeze();
 
-        if (expectation) {
-            result = target_module->PartialConfabulation(actual_K, false);
-        } else {
-            std::string next_word = target_module->ElementaryConfabulation(actual_K);
-            result.push_back(next_word);
-            temp_input.push_back(next_word);
-        }
-
-        ++index;
-
-        Clean();
+    if (expectation) {
+        result = target_module->PartialConfabulation(actual_K, false);
+    } else {
+        std::string next_word = target_module->ElementaryConfabulation(actual_K);
+        result.push_back(next_word);
+        temp_input.push_back(next_word);
     }
+
+    ++index;
+
+    Clean();
 
     return result;
 }

@@ -101,7 +101,7 @@ $(DESTDIR_TARGET):  $(OBJECTS)
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) object_script.ConfabulationEngine.Release  $(LIBS)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ -o Makefile.Release ConfabulationEngine.pro
+	@$(QMAKE) -spec win32-g++ CONFIG+=release -o Makefile.Release ConfabulationEngine.pro
 
 qmake_all: FORCE
 
@@ -214,7 +214,8 @@ release/MultiLevelOrganizer.o: MultiLevelOrganizer.cpp MultiLevelOrganizer.h \
 		utils/Utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\MultiLevelOrganizer.o MultiLevelOrganizer.cpp
 
-release/ConfabulationBase.o: ConfabulationBase.cpp ConfabulationBase.h \
+release/ConfabulationBase.o: ConfabulationBase.cpp Globals.h \
+		ConfabulationBase.h \
 		text_processing/TextReader.h \
 		text_processing/NGramHandler.h \
 		SymbolMapping.h \
@@ -266,7 +267,8 @@ release/TwoLevelSimpleConfabulation.o: TwoLevelSimpleConfabulation.cpp TwoLevelS
 		sparse_structures/DOKExcitationVector.hpp \
 		utils/Utils.h \
 		sparse_structures/IKnowledgeLinks.hpp \
-		sparse_structures/CSRLinksMatrix.hpp
+		sparse_structures/CSRLinksMatrix.hpp \
+		Globals.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\TwoLevelSimpleConfabulation.o TwoLevelSimpleConfabulation.cpp
 
 ####### Install
