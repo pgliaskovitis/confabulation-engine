@@ -101,7 +101,7 @@ $(DESTDIR_TARGET):  $(OBJECTS)
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) object_script.ConfabulationEngine.Release  $(LIBS)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ CONFIG+=release -o Makefile.Release ConfabulationEngine.pro
+	@$(QMAKE) -spec win32-g++ -o Makefile.Release ConfabulationEngine.pro
 
 qmake_all: FORCE
 
@@ -134,7 +134,8 @@ compiler_clean:
 release/TextReader.o: text_processing/TextReader.cpp text_processing/TextReader.h \
 		Globals.h \
 		text_processing/SentenceTokenizer.h \
-		utils/Utils.h
+		utils/Utils.h \
+		Dbg.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\TextReader.o text_processing\TextReader.cpp
 
 release/SentenceTokenizer.o: text_processing/SentenceTokenizer.cpp text_processing/SentenceTokenizer.h
@@ -142,7 +143,8 @@ release/SentenceTokenizer.o: text_processing/SentenceTokenizer.cpp text_processi
 
 release/NGramHandler.o: text_processing/NGramHandler.cpp text_processing/NGramHandler.h \
 		SymbolMapping.h \
-		utils/Utils.h
+		utils/Utils.h \
+		Dbg.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\NGramHandler.o text_processing\NGramHandler.cpp
 
 release/TemplateInstantiations.o: TemplateInstantiations.cpp TemplateInstantiations.h \

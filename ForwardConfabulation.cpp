@@ -22,6 +22,40 @@ ForwardConfabulation::ForwardConfabulation(size_t num_modules, const std::string
     Initialize(kb_specs, level_sizes, symbol_file, master_file);
 }
 
+std::vector<std::string> ForwardConfabulation::Confabulation(const std::vector<std::string> &symbols, int index_to_complete, bool expectation)
+{
+    std::vector<std::string> result;
+    if (!CheckArguments(symbols, index_to_complete)) {
+        std::cout << "Input sentence does not satisfy conditions for confabulation with this architecture";
+        return result;
+    }
+
+    int index;
+    if (index_to_complete < 0) {
+        index = AutoIndexToComplete(symbols);
+    } else {
+        index = index_to_complete;
+    }
+
+    int actual_K = ActualK(symbols, index);
+    const std::unique_ptr<Module>& target_module = modules_[index];
+    target_module->ExcitationsToZero();
+
+    // core algorithm
+    Activate(symbols);
+    TransferAllExcitations(index, target_module);
+
+    if (expectation) {
+        result = target_module->PartialConfabulation(actual_K, false);
+    } else {
+        result.push_back(target_module->ElementaryConfabulation(actual_K));
+    }
+
+    Clean();
+
+    return result;
+}
+
 int ForwardConfabulation::AutoIndexToComplete(const std::vector<std::string> &symbols)
 {
     if (symbols.empty() || symbols[0].empty()) {
@@ -46,7 +80,7 @@ bool ForwardConfabulation::CheckIndex(const std::vector<std::string> &symbols, i
     }
 
     if (index_to_complete >= num_modules_) {
-        std::cout << "Support for indices in [0, " << (num_modules_ - 1) << "\n" << std::flush;
+        std::cout << "Support for completion only for indices in [0, " << (num_modules_ - 1) << "\n" << std::flush;
         return false;
     }
 

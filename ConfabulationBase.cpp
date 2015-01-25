@@ -18,8 +18,7 @@
  */
 
 #include <algorithm>
-#include <functional>   // std::minus
-#include <numeric>      // std::accumulate
+#include <Globals.h>
 #include "ConfabulationBase.h"
 #include "utils/Utils.h"
 #include "Dbg.h"
@@ -118,8 +117,13 @@ void ConfabulationBase::Learn()
                 for (size_t src = 0; src < num_modules_; ++src) {
                     if (!module_combination[src].empty()) {
                         for (size_t targ = 0; targ < num_modules_; ++targ) {
-                            if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty()))
+                            if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
                                  knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
+//                                 std::cout << "Enhancing link [" << src << "][" << targ <<
+//                                              "] between \"" << module_combination[src] <<
+//                                              "\" and \"" << module_combination[targ] <<
+//                                              "\"\n" << std::flush;
+                            }
                         }
                     }
                 }
@@ -137,40 +141,6 @@ void ConfabulationBase::Learn()
     }
 
     log_info("Finished Learn phase for confabulation");
-}
-
-std::vector<std::string> ConfabulationBase::Confabulation(const std::vector<std::string> &symbols, int index_to_complete, bool expectation)
-{
-    std::vector<std::string> result;
-    if (!CheckArguments(symbols, index_to_complete)) {
-        std::cout << "Input sentence does not satisfy conditions for confabulation with this architecture";
-        return result;
-    }
-
-    int index;
-    if (index_to_complete < 0) {
-        index = AutoIndexToComplete(symbols);
-    } else {
-        index = index_to_complete;
-    }
-
-    int actual_K = ActualK(symbols, index);
-    const std::unique_ptr<Module>& target_module = modules_[index];
-    target_module->ExcitationsToZero();
-
-    // core algorithm
-    Activate(symbols);
-    TransferAllExcitations(index, target_module);
-
-    if (expectation) {
-        result = target_module->PartialConfabulation(actual_K, false);
-    } else {
-        result.push_back(target_module->ElementaryConfabulation(actual_K));
-    }
-
-    Clean();
-
-    return result;
 }
 
 void ConfabulationBase::Clean()
@@ -233,7 +203,7 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
     TextReader text_reader(symbol_file, master_file);
     text_reader.Initialize();
 
-    NGramHandler ngram_handler(4, 1, 10);
+    NGramHandler ngram_handler(Globals::kMaxMultiWordSize, 1, 5);
 
     std::vector<std::string> sentence;
     bool finished_reading = false;

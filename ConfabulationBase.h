@@ -47,8 +47,10 @@ public:
                     const std::string& master_file);
     void Build();
     void Learn();
-    std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int index_to_complete, bool expectation);
     void Clean();
+
+    // basic public interface for performing confabulation
+    virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int index_to_complete, bool expectation) = 0;
 
 protected:
     unsigned short num_modules_;

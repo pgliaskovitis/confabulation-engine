@@ -190,11 +190,11 @@ namespace
 
             // the given sentence tokens are "convolved" with the modules of the architecture
             // as they are shifted from the far left to the far right
-            // special care must be taken because the different levels of the architecture need not be of the same size
+            // special care must be taken, since the different levels of the architecture need not be of the same size
             int level_size = 0;
             for (size_t i = 0; i < excited_symbols.size(); ++i) {
                 for (size_t j = 0; j < excited_symbols[i].size(); ++j) {
-                    if ((ConvertToSigned(j) + k > 0) &&
+                    if ((ConvertToSigned(j) + k >= 0) &&
                         (ConvertToSigned(j) + k < ConvertToSigned(excited_symbols[i].size()))) {
                         results[k + convolution_half_size - 2][level_size + ConvertToSigned(j) + k] = excited_symbols[i][j];
                     }

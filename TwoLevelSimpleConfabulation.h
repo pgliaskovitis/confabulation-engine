@@ -12,14 +12,10 @@ public:
     TwoLevelSimpleConfabulation(TwoLevelSimpleConfabulation&& rhs) = delete;
     TwoLevelSimpleConfabulation&& operator=(TwoLevelSimpleConfabulation&& rhs) = delete;
 
-protected:
-    std::vector<std::unique_ptr<Module>> words_;
-    std::vector<std::unique_ptr<Module>> phrases_;
+    virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int index_to_complete, bool expectation);
 
-    std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> words_to_words_;
-    std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> phrases_to_phrases_;
-    std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> words_to_phrases_;
-    std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> phrases_to_words_;
+private:
+    size_t num_word_modules_;
 };
 
 #endif // TWOLEVELSIMPLECONFABULATION_H

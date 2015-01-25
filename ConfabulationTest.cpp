@@ -236,12 +236,12 @@ void ConfabulationTest::TestTwoLevelSimpleConfabulation(const std::string& symbo
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
-//    for (const std::string& e : sentences) {
-//        const std::vector<std::string> current_feed_tokens(reader.ExtractTokens(e));
-//        FillWithEmptyStrings(current_feed_tokens, num_modules);
-//        const std::vector<std::string>& current_result_tokens = confab_engine.Confabulation(current_feed_tokens, -1, false);
-//        std::cout << e << current_result_tokens[0] << "\n" << std::flush;
-//    }
+    for (const std::string& e : sentences) {
+        const std::vector<std::string> current_feed_tokens(reader.ExtractTokens(e));
+        FillWithEmptyStrings(current_feed_tokens, num_modules);
+        const std::vector<std::string>& current_result_tokens = confab_engine.Confabulation(current_feed_tokens, -1, false);
+        std::cout << e << VectorSymbolToSymbol(current_result_tokens, ' ') << "\n" << std::flush;
+    }
 }
 
 /*

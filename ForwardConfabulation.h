@@ -13,6 +13,8 @@ public:
     ForwardConfabulation(ForwardConfabulation&& rhs) = delete;
     ForwardConfabulation&& operator=(ForwardConfabulation&& rhs) = delete;
 
+    virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int index_to_complete, bool expectation);
+
 protected:
     virtual int AutoIndexToComplete(const std::vector<std::string>& symbols);
     virtual bool CheckIndex(const std::vector<std::string>& symbols, int index_to_complete);

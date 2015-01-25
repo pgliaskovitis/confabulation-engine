@@ -1,6 +1,8 @@
 #include "TwoLevelSimpleConfabulation.h"
+#include "Globals.h"
 
 TwoLevelSimpleConfabulation::TwoLevelSimpleConfabulation(size_t num_word_modules, const std::string &symbol_file, const std::string &master_file)
+    : num_word_modules_(num_word_modules)
 {
     num_modules_ = 2 * num_word_modules;
 
@@ -35,4 +37,62 @@ TwoLevelSimpleConfabulation::TwoLevelSimpleConfabulation(size_t num_word_modules
     level_sizes.push_back(num_word_modules);
 
     Initialize(kb_specs, level_sizes, symbol_file, master_file);
+}
+
+std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::vector<std::string> &symbols, int index_to_complete, bool expectation)
+{
+    std::vector<std::string> result;
+    if (!CheckArguments(symbols, index_to_complete)) {
+        std::cout << "Input sentence does not satisfy conditions for confabulation with this architecture";
+        return result;
+    }
+
+    int index;
+    if (index_to_complete < 0) {
+        index = AutoIndexToComplete(symbols);
+    } else {
+        index = index_to_complete;
+    }
+
+    int initial_index_to_complete = index;
+    std::vector<std::string> temp_input(symbols.begin(), symbols.end());
+
+    for (size_t i = 0; i < 1; ++i) {
+
+        int actual_K = ActualK(temp_input, index);
+        const std::unique_ptr<Module>& target_module = modules_[index];
+        target_module->ExcitationsToZero();
+
+        // activate known symbols from input
+        Activate(temp_input);
+
+        // find expectation on phrase module above last known word module
+        TransferExcitation(modules_[index - 1],
+                           knowledge_bases_[index - 1][num_word_modules_ + index - 1],
+                           modules_[num_word_modules_ + index - 1]);
+
+//        std::cout << "Expectation on last phrase module is : " <<
+//                     VectorSymbolToSymbol(modules_[num_word_modules_ + index - 1]->GetExpectation(), ':') <<
+//                     "\n\n\n" << std::flush;
+
+        // find expectation on first unknown word module
+        TransferAllExcitations(index, target_module);
+
+        // freeze possible symbols on target module
+        target_module->Freeze();
+
+        if (expectation) {
+            result = target_module->PartialConfabulation(actual_K, false);
+        } else {
+            std::string next_word = target_module->ElementaryConfabulation(actual_K);
+            result.push_back(next_word);
+            temp_input.push_back(next_word);
+        }
+
+        ++index;
+
+        Clean();
+    }
+
+    return result;
 }

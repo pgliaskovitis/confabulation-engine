@@ -35,7 +35,7 @@ public:
 
     static const float kBaseProb;
     static const unsigned int kBandGap;
-    static const unsigned short kHeapResults;
+    static const unsigned short kMaxMultiWordSize;
 
     Globals() = delete;
     Globals(const Globals& rhs) = delete;
