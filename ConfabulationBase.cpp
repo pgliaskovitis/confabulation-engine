@@ -146,10 +146,8 @@ void ConfabulationBase::Learn()
 void ConfabulationBase::Clean()
 {
     for (const std::unique_ptr<Module>& module : modules_) {
-        if (module != nullptr) {
+        if (module != nullptr)
             module->Reset();
-            module->Unfreeze();
-        }
     }
 }
 

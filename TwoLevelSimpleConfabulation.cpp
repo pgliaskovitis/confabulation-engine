@@ -1,5 +1,6 @@
 #include "TwoLevelSimpleConfabulation.h"
 #include "Globals.h"
+#include "Dbg.h"
 
 TwoLevelSimpleConfabulation::TwoLevelSimpleConfabulation(size_t num_word_modules, const std::string &symbol_file, const std::string &master_file)
     : num_word_modules_(num_word_modules)
@@ -54,41 +55,71 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
         index = index_to_complete;
     }
 
+    int initial_index_to_complete = index;
+    //log_info("Initial index to complete is %d ", initial_index_to_complete);
     std::vector<std::string> temp_input(symbols.begin(), symbols.end());
 
-    int actual_K = ActualK(temp_input, index);
-    const std::unique_ptr<Module>& target_module = modules_[index];
-    target_module->ExcitationsToZero();
+    for (size_t i = 0; i < Globals::kMaxMultiWordSize; ++i) {
 
-    // activate known symbols from input
-    Activate(temp_input);
+        int actual_K = ActualK(temp_input, index);
+        const std::unique_ptr<Module>& target_module = modules_[index];
+        target_module->ExcitationsToZero();
 
-    // find expectation on phrase module above last known word module
-    TransferExcitation(modules_[index - 1],
-                       knowledge_bases_[index - 1][num_word_modules_ + index - 1],
-                       modules_[num_word_modules_ + index - 1]);
+        // activate known symbols from input
+        Activate(temp_input);
 
-//        std::cout << "Expectation on last phrase module is : " <<
-//                     VectorSymbolToSymbol(modules_[num_word_modules_ + index - 1]->GetExpectation(), ':') <<
-//                     "\n\n\n" << std::flush;
+        // find expectation on all phrase modules before word module at initial_index_to_complete
+        for (size_t m = 0; m < initial_index_to_complete; ++m)
+            for (size_t n = num_word_modules_ + m; n >= num_word_modules_; --n) {
+                //log_info("Tranferring excitation from %u to %u", m, n);
+                TransferExcitation(modules_[m],
+                                   knowledge_bases_[m][n],
+                                   modules_[n]);
+        }
 
-    // find expectation on first unknown word module
-    TransferAllExcitations(index, target_module);
+        for (size_t m = num_word_modules_; m < num_word_modules_ + initial_index_to_complete; ++m) {
+            //log_info("Partially confabulating module %u", m);
+            if (num_word_modules_ + initial_index_to_complete - m < Globals::kMaxMultiWordSize)
+                modules_[m]->PartialConfabulation(num_word_modules_ + initial_index_to_complete - m, false);
+            else
+                modules_[m]->PartialConfabulation(Globals::kMaxMultiWordSize, false);
+        }
 
-    // freeze possible symbols on target module
-    target_module->Freeze();
+        // cleanup of phrase module directly above last input word,
+        // because it would be excited twice by the next operation
+        modules_[num_word_modules_ + initial_index_to_complete - 1]->Reset();
 
-    if (expectation) {
-        result = target_module->PartialConfabulation(actual_K, false);
-    } else {
-        std::string next_word = target_module->ElementaryConfabulation(actual_K);
-        result.push_back(next_word);
-        temp_input.push_back(next_word);
+        // find expectation on phrase modules above latest output word module and up to max-multi-word-size modules before that
+        for (size_t j = 0; j <= i; ++j)
+            for (int k = ConvertToSigned(j); k >= 0; --k) {
+                //log_info("Tranferring excitation from %u to %u", initial_index_to_complete + j - 1, num_word_modules_ + initial_index_to_complete + j - k - 1);
+                if (num_word_modules_ + initial_index_to_complete + j - 1 < num_modules_)
+                    TransferExcitation(modules_[initial_index_to_complete + j - 1],
+                                       knowledge_bases_[initial_index_to_complete + j - 1][num_word_modules_ + initial_index_to_complete + j - k - 1],
+                                       modules_[num_word_modules_ + initial_index_to_complete + j - k - 1]);
+            }
+
+        for (size_t j = 0; j <= i; ++j) {
+            //log_info("Partially confabulating module %u", initial_index_to_complete + j - 1);
+            if (num_word_modules_ + initial_index_to_complete + j - 1 < num_modules_)
+                modules_[num_word_modules_ + initial_index_to_complete + j - 1]->PartialConfabulation(ConvertToSigned(i - j + 1), false);
+        }
+
+        // find expectation on unknown word module
+        TransferAllExcitations(index, target_module);
+
+        if (expectation) {
+            result = target_module->PartialConfabulation(actual_K, false);
+        } else {
+            std::string next_word = target_module->ElementaryConfabulation(actual_K);
+            result.push_back(next_word);
+            temp_input.push_back(next_word);
+        }
+
+        ++index;
+
+        Clean();
     }
-
-    ++index;
-
-    Clean();
 
     return result;
 }

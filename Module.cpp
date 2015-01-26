@@ -263,6 +263,7 @@ std::vector<std::string> Module::PartialConfabulation(int K, bool multiconf)
 
     DOKExcitationVector<int> kb_inputs_temp(*kb_inputs_);
 
+    // cleanup of intermediate state
     Reset();
 
     result.resize(expectations->size());
