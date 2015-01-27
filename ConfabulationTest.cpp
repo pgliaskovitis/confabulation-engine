@@ -376,7 +376,7 @@ int main()
     std::string feed23 = "The thief viciously stabbed John while he was chopping ";
     std::string feed24 = "The green hat swirled and landed on the ";
     std::string feed25 = "Ominous waves surrounded us, just before we jumped ";
-    std::string feed26 = "He was helplessly enchanted by her ";
+    std::string feed26 = "He was hopelessly enchanted by her ";
     std::string feed27 = "The knight decided to kill the maiden and marry the ";
     std::string feed28 = "The council sent out its most fearsome agents to ";
     std::string feed29 = "Enlightenment goes well with a cup of ";

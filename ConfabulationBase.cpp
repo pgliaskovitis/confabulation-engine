@@ -81,7 +81,8 @@ void ConfabulationBase::Build()
                 knowledge_bases_[i][j].reset(new KnowledgeBase(id,
                                                                modules_[i]->get_symbol_mapping(),
                                                                modules_[j]->get_symbol_mapping()));
-            }
+            } else
+                knowledge_bases_[i][j].reset(nullptr);
         }
     }
 
