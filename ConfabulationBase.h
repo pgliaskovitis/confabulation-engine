@@ -44,7 +44,9 @@ public:
     void Initialize(const std::vector<std::vector<bool>>& kb_specs,
                     const std::vector<unsigned short> level_specs,
                     const std::string& symbol_file,
-                    const std::string& master_file);
+                    const std::string& master_file,
+                    unsigned short min_single_occurrences,
+                    unsigned short min_multi_occurrences);
     void Build();
     void Learn();
     void Clean();
@@ -57,6 +59,8 @@ protected:
     int K_;
     std::string symbol_file_;
     std::string master_file_;
+    unsigned short min_single_occurrences_;
+    unsigned short min_multi_occurrences_;
 
     std::unique_ptr<MultiLevelOrganizer> organizer_;
     std::vector<std::vector<bool>> kb_specs_;

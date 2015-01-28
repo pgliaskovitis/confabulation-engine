@@ -6,7 +6,11 @@
 class TwoLevelSimpleConfabulation : public ForwardConfabulation
 {
 public:
-    TwoLevelSimpleConfabulation(size_t num_word_modules, const std::string &symbol_file, const std::string &master_file);
+    TwoLevelSimpleConfabulation(size_t num_word_modules,
+                                const std::string &symbol_file,
+                                const std::string &master_file,
+                                unsigned short min_single_occurrences,
+                                unsigned short min_multi_occurrences);
     TwoLevelSimpleConfabulation(const TwoLevelSimpleConfabulation& rhs) = delete;
     TwoLevelSimpleConfabulation& operator=(const TwoLevelSimpleConfabulation& rhs) = delete;
     TwoLevelSimpleConfabulation(TwoLevelSimpleConfabulation&& rhs) = delete;

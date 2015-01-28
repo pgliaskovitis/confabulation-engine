@@ -42,13 +42,17 @@ int ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int inde
 void ConfabulationBase::Initialize(const std::vector<std::vector<bool>>& kb_specs,
                                    const std::vector<unsigned short> level_specs,
                                    const std::string &symbol_file,
-                                   const std::string &master_file)
+                                   const std::string &master_file,
+                                   unsigned short min_single_occurrences,
+                                   unsigned short min_multi_occurrences)
 {
     num_modules_ = kb_specs.size();
     kb_specs_ = kb_specs;
     level_specs_ = level_specs;
     symbol_file_ = symbol_file;
     master_file_ = master_file;
+    min_single_occurrences_ = min_single_occurrences;
+    min_multi_occurrences_ = min_multi_occurrences;
     Build();
     Learn();
 }
@@ -202,7 +206,7 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
     TextReader text_reader(symbol_file, master_file);
     text_reader.Initialize();
 
-    NGramHandler ngram_handler(Globals::kMaxMultiWordSize, 1, 5);
+    NGramHandler ngram_handler(Globals::kMaxMultiWordSize, min_single_occurrences_, min_multi_occurrences_);
 
     std::vector<std::string> sentence;
     bool finished_reading = false;

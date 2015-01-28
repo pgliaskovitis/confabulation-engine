@@ -7,7 +7,11 @@ class ForwardConfabulation : public ConfabulationBase
 {
 public:
     ForwardConfabulation() {}
-    ForwardConfabulation(size_t num_modules, const std::string &symbol_file, const std::string &master_file);
+    ForwardConfabulation(size_t num_modules,
+                         const std::string &symbol_file,
+                         const std::string &master_file,
+                         unsigned short min_single_occurrences,
+                         unsigned short min_multi_occurrences);
     ForwardConfabulation(const ForwardConfabulation& rhs) = delete;
     ForwardConfabulation& operator=(const ForwardConfabulation& rhs) = delete;
     ForwardConfabulation(ForwardConfabulation&& rhs) = delete;

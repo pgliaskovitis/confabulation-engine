@@ -1,6 +1,10 @@
 #include "ForwardConfabulation.h"
 
-ForwardConfabulation::ForwardConfabulation(size_t num_modules, const std::string &symbol_file, const std::string &master_file)
+ForwardConfabulation::ForwardConfabulation(size_t num_modules,
+                                           const std::string &symbol_file,
+                                           const std::string &master_file,
+                                           unsigned short min_single_occurrences,
+                                           unsigned short min_multi_occurrences)
 {
     num_modules_ = num_modules;
 
@@ -19,7 +23,7 @@ ForwardConfabulation::ForwardConfabulation(size_t num_modules, const std::string
     std::vector<unsigned short> level_sizes;
     level_sizes.push_back(num_modules_);
 
-    Initialize(kb_specs, level_sizes, symbol_file, master_file);
+    Initialize(kb_specs, level_sizes, symbol_file, master_file, min_single_occurrences, min_multi_occurrences);
 }
 
 std::vector<std::string> ForwardConfabulation::Confabulation(const std::vector<std::string> &symbols, int index_to_complete, bool expectation)

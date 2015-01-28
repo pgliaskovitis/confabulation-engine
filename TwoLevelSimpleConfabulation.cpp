@@ -2,7 +2,11 @@
 #include "Globals.h"
 #include "Dbg.h"
 
-TwoLevelSimpleConfabulation::TwoLevelSimpleConfabulation(size_t num_word_modules, const std::string &symbol_file, const std::string &master_file)
+TwoLevelSimpleConfabulation::TwoLevelSimpleConfabulation(size_t num_word_modules,
+                                                         const std::string &symbol_file,
+                                                         const std::string &master_file,
+                                                         unsigned short min_single_occurrences,
+                                                         unsigned short min_multi_occurrences)
     : num_word_modules_(num_word_modules)
 {
     num_modules_ = 2 * num_word_modules;
@@ -42,7 +46,7 @@ TwoLevelSimpleConfabulation::TwoLevelSimpleConfabulation(size_t num_word_modules
     level_sizes.push_back(num_word_modules);
     level_sizes.push_back(num_word_modules);
 
-    Initialize(kb_specs, level_sizes, symbol_file, master_file);
+    Initialize(kb_specs, level_sizes, symbol_file, master_file, min_single_occurrences, min_multi_occurrences);
 }
 
 std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::vector<std::string> &symbols, int index_to_complete, bool expectation)
