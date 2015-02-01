@@ -48,11 +48,18 @@ public:
                     unsigned short min_single_occurrences,
                     unsigned short min_multi_occurrences);
     void Build();
-    void Learn();
+    void Learn(size_t num_word_modules);
     void Clean();
 
-    // basic public interface for performing confabulation
     virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int index_to_complete, bool expectation) = 0;
+
+    // public methods for tests
+    void Activate(const std::vector<std::string>& symbols);
+    void TransferExcitation(const std::unique_ptr<Module>& source_module, const std::unique_ptr<KnowledgeBase>& kb, const std::unique_ptr<Module>& target_module);
+    void TransferAllExcitations(int target_index, const std::unique_ptr<Module> &target_module);
+
+    const std::unique_ptr<Module>& get_module(size_t index) { return modules_[index]; }
+    const std::unique_ptr<KnowledgeBase>& get_knowledge_base(size_t source, size_t target) { return knowledge_bases_[source][target]; }
 
 protected:
     unsigned short num_modules_;
@@ -70,9 +77,6 @@ protected:
     std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> knowledge_bases_;
 
     bool CheckVocabulary(const std::vector<std::string>& symbols);
-    void Activate(const std::vector<std::string>& symbols);
-    void TransferExcitation(const std::unique_ptr<Module>& source_module, const std::unique_ptr<KnowledgeBase>& kb, const std::unique_ptr<Module>& target_module);
-    void TransferAllExcitations(int target_index, const std::unique_ptr<Module> &target_module);
     std::vector<std::unique_ptr<SymbolMapping>> ProduceSymbolMappings(const std::string &symbol_file, const std::string &master_file);
 
     // compute index to complete with confabulation

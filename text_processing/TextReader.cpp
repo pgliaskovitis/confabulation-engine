@@ -143,8 +143,8 @@ const std::vector<std::string> TextReader::ExtractTokens(const std::string &inpu
 
     while (tok.Tokenize(Globals::kTokenDelimiters)) {
 #ifdef STOREDELIMITERS_
-        if (tok.delim() != "") {
-            output.push_back(tok.delim());
+        if (!tok.Delim().empty()) {
+            output.push_back(tok.Delim());
             //std::cout << "Found non-empty delimiter \"" << tok.delim() << "\"\n";
         }
 #endif

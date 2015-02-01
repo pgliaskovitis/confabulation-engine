@@ -56,7 +56,7 @@ std::string SymbolMapping::GetSymbol(size_t index) const
     return *existence_ptr;
 }
 
-std::set<std::string> SymbolMapping::GetAllSymbols()
+std::set<std::string> SymbolMapping::GetAllSymbols() const
 {
     std::set<std::string> result;
 

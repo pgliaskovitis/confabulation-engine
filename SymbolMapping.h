@@ -47,7 +47,7 @@ public:
 
     size_t Size() const { return symbol_to_index_->size(); }
 
-    std::set<std::string> GetAllSymbols();
+    std::set<std::string> GetAllSymbols() const;
 
     std::string ToString();
 };

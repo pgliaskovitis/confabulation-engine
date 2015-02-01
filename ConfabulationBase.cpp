@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <deque>
 #include <Globals.h>
 #include "ConfabulationBase.h"
 #include "utils/Utils.h"
@@ -54,7 +55,7 @@ void ConfabulationBase::Initialize(const std::vector<std::vector<bool>>& kb_spec
     min_single_occurrences_ = min_single_occurrences;
     min_multi_occurrences_ = min_multi_occurrences;
     Build();
-    Learn();
+    Learn(level_specs_[0]);
 }
 
 void ConfabulationBase::Build()
@@ -93,48 +94,65 @@ void ConfabulationBase::Build()
     log_info("Finished Build phase for confabulation");
 }
 
-void ConfabulationBase::Learn()
+void ConfabulationBase::Learn(size_t num_word_modules)
 {
     log_info("Starting Learn phase for confabulation");
 
     TextReader text_reader(symbol_file_, master_file_);
     text_reader.Initialize();
 
-    std::vector<std::string> sentence;
+    std::vector<std::string> read_sentence;
     bool finished_reading = false;
     do {
-        sentence = text_reader.GetNextSentenceTokens(finished_reading);
+        // in the case where the read sentence is larger than the number of word modules of the architecture,
+        // we must use a sliding window approach to learn as much as possible from the large sentence
+        read_sentence = text_reader.GetNextSentenceTokens(finished_reading);
 
-        // make sure that sentence does not wholly consist of empty strings
-        if (!(FindFirstIndexNotOfSymbol(sentence, "") < 0)) {
-            bool match_found = false;
-            const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence, match_found);
+        if (read_sentence.empty())
+            continue;
 
-            //std::cout << "Initial module activations: " << "#" << VectorSymbolToSymbol(activated_modules[0], '#') << "\n" << std::flush;
+        std::deque<std::string> read_sentence_buffer(read_sentence.begin(), read_sentence.end());
 
-            const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
+        std::cout << "\nInitial sentence read of size " << read_sentence.size() << " : " << VectorSymbolToSymbol(read_sentence, ' ') << "\n" << std::flush;
 
-            // wire up the knowledge links
-            for (const std::vector<std::string>& module_combination : module_combinations) {
+        do  {
+            size_t sentence_size = std::min(read_sentence_buffer.size(), num_word_modules);
+            std::vector<std::string> sentence(read_sentence_buffer.begin(), read_sentence_buffer.begin() + sentence_size);
+            //read_sentence_buffer.erase(read_sentence_buffer.begin(), read_sentence_buffer.begin() + sentence_size);
+            read_sentence_buffer.pop_front();
 
-                //std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, '#') << "\n" << std::flush;
+            // make sure that sentence does not wholly consist of empty strings
+            if (!(FindFirstIndexNotOfSymbol(sentence, "") < 0)) {
+                bool match_found = false;
+                const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence, match_found);
 
-                for (size_t src = 0; src < num_modules_; ++src) {
-                    if (!module_combination[src].empty()) {
-                        for (size_t targ = 0; targ < num_modules_; ++targ) {
-                            if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
-                                 knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
-//                                 std::cout << "Enhancing link [" << src << "][" << targ <<
-//                                              "] between \"" << module_combination[src] <<
-//                                              "\" and \"" << module_combination[targ] <<
-//                                              "\"\n" << std::flush;
+                std::cout << "\nInitial module activations: " << VectorSymbolToSymbol(activated_modules[0], '#') << "\n" << std::flush;
+
+                const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
+
+                // wire up the knowledge links
+                for (const std::vector<std::string>& module_combination : module_combinations) {
+
+                    std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, '#') << "\n" << std::flush;
+
+                    for (size_t src = 0; src < num_modules_; ++src) {
+                        if (!module_combination[src].empty()) {
+                            for (size_t targ = 0; targ < num_modules_; ++targ) {
+                                if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
+                                     knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
+                                     std::cout << "Enhancing link [" << src << "][" << targ <<
+                                                  "] between \"" << module_combination[src] <<
+                                                  "\" and \"" << module_combination[targ] <<
+                                                  "\"\n" << std::flush;
+                                }
                             }
                         }
                     }
+
+                    std::cout << "Finished current module activations\n" << std::flush;
                 }
             }
-        }
-
+        } while (read_sentence_buffer.size() >= 2);
     } while (!finished_reading);
 
     // compute knowledge link strengths

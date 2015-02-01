@@ -17,6 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include "Globals.h"
 #include "ConfabulationTest.h"
 #include "text_processing/SentenceTokenizer.h"
@@ -214,16 +215,60 @@ void ConfabulationTest::TestProduceKnowledgeLinkCombinations() const
         std::cout << "Combination " << i << ":" << VectorSymbolToSymbol(result[i], ',') << "\n";
 }
 
+void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, const std::string& masterfile) const
+{
+    size_t num_word_modules = 6;
+    TwoLevelSimpleConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 1);
+    TextReader reader(symbolfile, masterfile);
+    reader.Initialize();
+
+    const std::unique_ptr<Module>& module_6 = confab_engine.get_module(num_word_modules);
+
+    const std::unique_ptr<Module>& module_0 = confab_engine.get_module(0);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_0_6 = confab_engine.get_knowledge_base(0, num_word_modules);
+
+    const std::unique_ptr<Module>& module_1 = confab_engine.get_module(1);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_1_6 = confab_engine.get_knowledge_base(1, num_word_modules);
+
+    confab_engine.Activate({"the", "world"});
+    confab_engine.TransferExcitation(module_0, knowledge_base_0_6, module_6);
+    confab_engine.TransferExcitation(module_1, knowledge_base_1_6, module_6);
+
+    const std::vector<std::string>& expectation_at_target_a = module_6->GetExpectation();
+    std::cout << "Excited symbols at module " << num_word_modules << " are: \n" << VectorSymbolToSymbol(expectation_at_target_a, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string>& excitations_C1F_at_target_a = confab_engine.get_module(num_word_modules)->PartialConfabulation(1, false);
+    std::cout << "C1F confabulated symbols at module " << num_word_modules << " is: \n" << VectorSymbolToSymbol(excitations_C1F_at_target_a, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string>& excitations_C2F_at_target_a = confab_engine.get_module(num_word_modules)->PartialConfabulation(2, false);
+    std::cout << "C2F confabulated symbols at module " << num_word_modules << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_a, '\n') << "\n" << std::flush;
+
+    confab_engine.Clean();
+    confab_engine.Activate({"the", "sense"});
+    confab_engine.TransferExcitation(module_0, knowledge_base_0_6, module_6);
+    confab_engine.TransferExcitation(module_1, knowledge_base_1_6, module_6);
+
+    const std::vector<std::string>& expectation_at_target_b = module_6->GetExpectation();
+    std::cout << "Excited symbols at module " << num_word_modules << " are: \n" << VectorSymbolToSymbol(expectation_at_target_b, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string> excitations_C1F_at_target_b = confab_engine.get_module(num_word_modules)->PartialConfabulation(1, false);
+    std::cout << "C1F confabulated symbols at module " << num_word_modules << " is: \n" << VectorSymbolToSymbol(excitations_C1F_at_target_b, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string> excitations_C2F_at_target_b = confab_engine.get_module(num_word_modules)->PartialConfabulation(2, false);
+    std::cout << "C2F confabulated symbols at module " << num_word_modules << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_b, '\n') << "\n" << std::flush;
+
+}
+
 void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
-    size_t num_modules = 20;
-    ForwardConfabulation confab_engine(num_modules, symbolfile, masterfile, 1, 5);
+    size_t num_word_modules = 20;
+    ForwardConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
     for (const std::string& e : sentences) {
         const std::vector<std::string> current_feed_tokens(reader.ExtractTokens(e));
-        FillWithEmptyStrings(current_feed_tokens, num_modules);
+        FillWithEmptyStrings(current_feed_tokens, num_word_modules);
         const std::vector<std::string>& current_result_tokens = confab_engine.Confabulation(current_feed_tokens, -1, false);
         std::cout << e << current_result_tokens[0] << "\n" << std::flush;
     }
@@ -231,14 +276,14 @@ void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, c
 
 void ConfabulationTest::TestTwoLevelSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
-    size_t num_modules = 20;
-    TwoLevelSimpleConfabulation confab_engine(num_modules, symbolfile, masterfile, 1, 5);
+    size_t num_word_modules = 20;
+    TwoLevelSimpleConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
     for (const std::string& e : sentences) {
         const std::vector<std::string> current_feed_tokens(reader.ExtractTokens(e));
-        FillWithEmptyStrings(current_feed_tokens, num_modules);
+        FillWithEmptyStrings(current_feed_tokens, num_word_modules);
         const std::vector<std::string>& current_result_tokens = confab_engine.Confabulation(current_feed_tokens, -1, false);
         std::cout << e << VectorSymbolToSymbol(current_result_tokens, ' ') << "\n" << std::flush;
     }
@@ -318,6 +363,8 @@ int main()
     //test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
     //test1->TestProduceKnowledgeLinkCombinations();
+
+    test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
 
     //test1->TestTokenizePersistedKnowledge();
 
@@ -418,7 +465,7 @@ int main()
 
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 
 	return 0;

@@ -34,13 +34,15 @@ public:
 
     void TestSymbolMapping() const;
 
+    void TestTokenizePersistedKnowledge() const;
+
     void TestProduceNGrams(const std::string& symbolfile, const std::string& masterfile) const;
 
     void TestHashTrie(const std::string& symbolfile, const std::string& masterfile) const;
 
     void TestProduceKnowledgeLinkCombinations() const;
 
-    void TestTokenizePersistedKnowledge() const;
+    void TestTransferExcitations(const std::string& symbolfile, const std::string& masterfile) const;
 
     void TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
 

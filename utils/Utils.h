@@ -25,6 +25,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <set>
 #include <sstream>
 #include <limits>
 #include <iostream>
@@ -93,6 +94,22 @@ namespace
         size_t symbol_count = list_symbol.size();
         size_t i = 0;
         for (const std::string& e: list_symbol) {
+            result += e;
+            if (i < symbol_count - 1)
+                result += delim;
+            ++i;
+        }
+
+        return result;
+    }
+
+    std::string SetSymbolToSymbol(const std::set<std::string>& set_symbol, char delim)
+    {
+        std::string result("");
+
+        size_t symbol_count = set_symbol.size();
+        size_t i = 0;
+        for (const std::string& e: set_symbol) {
             result += e;
             if (i < symbol_count - 1)
                 result += delim;

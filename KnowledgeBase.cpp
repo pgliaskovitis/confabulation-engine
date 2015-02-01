@@ -24,7 +24,7 @@ KnowledgeBase::KnowledgeBase(const std::string& id, const SymbolMapping& src_map
     id_(id),
     src_map_(src_map),
     targ_map_(targ_map),
-    cooccurrence_counts_ (new DOKLinksMatrix<size_t>(targ_map.Size(), src_map.Size())),
+    cooccurrence_counts_(new DOKLinksMatrix<size_t>(targ_map.Size(), src_map.Size())),
     kbase_(new CSRLinksMatrix<float>(targ_map.Size(), src_map.Size())),
     target_symbol_sums_(targ_map.Size())
 {}
