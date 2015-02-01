@@ -101,57 +101,69 @@ void ConfabulationBase::Learn(size_t num_word_modules)
     TextReader text_reader(symbol_file_, master_file_);
     text_reader.Initialize();
 
-    std::vector<std::string> read_sentence;
     bool finished_reading = false;
+    bool large_sentence = false;
     do {
-        // in the case where the read sentence is larger than the number of word modules of the architecture,
-        // we must use a sliding window approach to learn as much as possible from the large sentence
-        read_sentence = text_reader.GetNextSentenceTokens(finished_reading);
+        std::vector<std::string> read_sentence = text_reader.GetNextSentenceTokens(finished_reading);
 
-        if (read_sentence.empty())
+        if (read_sentence.size() < 2)
             continue;
 
         std::deque<std::string> read_sentence_buffer(read_sentence.begin(), read_sentence.end());
 
-        std::cout << "\nInitial sentence read of size " << read_sentence.size() << " : " << VectorSymbolToSymbol(read_sentence, ' ') << "\n" << std::flush;
+        //std::cout << "\nInitial sentence read of size " << read_sentence.size() << " : " << VectorSymbolToSymbol(read_sentence, ' ') << "\n" << std::flush;
 
         do  {
-            size_t sentence_size = std::min(read_sentence_buffer.size(), num_word_modules);
-            std::vector<std::string> sentence(read_sentence_buffer.begin(), read_sentence_buffer.begin() + sentence_size);
-            //read_sentence_buffer.erase(read_sentence_buffer.begin(), read_sentence_buffer.begin() + sentence_size);
-            read_sentence_buffer.pop_front();
+            // in the case where the read sentence is larger than the number of word modules of the architecture,
+            // we must use a sliding window approach to learn as much as possible from this large sentence
+            size_t remaining_sentence_size = read_sentence_buffer.size();
+            size_t current_sentence_size = 0u;
+            if (num_word_modules < remaining_sentence_size) {
+                large_sentence = true;
+                current_sentence_size = num_word_modules;
+            } else
+                current_sentence_size = remaining_sentence_size;
+
+            std::vector<std::string> sentence(read_sentence_buffer.begin(), read_sentence_buffer.begin() + current_sentence_size);
+
+            if (large_sentence)
+                // in case of large sentences, a window step is chosen such that the next sentence
+                // overlaps by kMaxMultiWordSize words with the current one
+                read_sentence_buffer.erase(read_sentence_buffer.begin(), read_sentence_buffer.begin() + num_word_modules - Globals::kMaxMultiWordSize);
+            else
+                // in case of small sentences, we do not need the buffer any more
+                read_sentence_buffer.clear();
 
             // make sure that sentence does not wholly consist of empty strings
             if (!(FindFirstIndexNotOfSymbol(sentence, "") < 0)) {
                 bool match_found = false;
                 const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence, match_found);
 
-                std::cout << "\nInitial module activations: " << VectorSymbolToSymbol(activated_modules[0], '#') << "\n" << std::flush;
+//                std::cout << "\nInitial module activations: " << VectorSymbolToSymbol(activated_modules[0], '#') << "\n" << std::flush;
 
                 const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
 
                 // wire up the knowledge links
                 for (const std::vector<std::string>& module_combination : module_combinations) {
 
-                    std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, '#') << "\n" << std::flush;
+//                    std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, '#') << "\n" << std::flush;
 
                     for (size_t src = 0; src < num_modules_; ++src) {
                         if (!module_combination[src].empty()) {
                             for (size_t targ = 0; targ < num_modules_; ++targ) {
                                 if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
                                      knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
-                                     std::cout << "Enhancing link [" << src << "][" << targ <<
-                                                  "] between \"" << module_combination[src] <<
-                                                  "\" and \"" << module_combination[targ] <<
-                                                  "\"\n" << std::flush;
+//                                     std::cout << "Enhancing link [" << src << "][" << targ <<
+//                                                  "] between \"" << module_combination[src] <<
+//                                                  "\" and \"" << module_combination[targ] <<
+//                                                  "\"\n" << std::flush;
                                 }
                             }
                         }
                     }
-
-                    std::cout << "Finished current module activations\n" << std::flush;
                 }
             }
+            large_sentence = false;
         } while (read_sentence_buffer.size() >= 2);
     } while (!finished_reading);
 
