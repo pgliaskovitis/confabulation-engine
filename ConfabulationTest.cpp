@@ -278,7 +278,7 @@ void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, c
 
 void ConfabulationTest::TestTwoLevelSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
-    size_t num_word_modules = 20;
+    size_t num_word_modules = 15;
     TwoLevelSimpleConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
@@ -409,18 +409,18 @@ int main()
     std::string feed9 = "She stumbled over her dress and fell ";
     std::string feed10 = "She had not only her husband killed but also her ";
 
-    std::string feed11 = "He realized that only writers could write well, and fell into a ";
-    std::string feed12 = "He looked at her, the love of his life, and whispered ";
+    std::string feed11 = "He realized that only the dance could liberate ";
+    std::string feed12 = "He leaned into her, the love of his life, and whispered ";
     std::string feed13 = "He suddenly collapsed, crying like a ";
     std::string feed14 = "The cave was too high up in the mountain for him to ";
-    std::string feed15 = "Suffocating in a city of dull people, he started a ";
+    std::string feed15 = "Suffocating in a party of dull people, he started ";
     std::string feed16 = "She wandered in her wild paths without ";
     std::string feed17 = "The khan and the whole clan were ";
     std::string feed18 = "He contemplated upon the beauty and the ";
-    std::string feed19 = "Extreme effort had helped him get away from the ";
+    std::string feed19 = "With desperate effort he managed to get away from ";
     std::string feed20 = "Hosts of archers stood ready along the ";
 
-    std::string feed21 = "The joker laughed out loud and squeezed her ";
+    std::string feed21 = "The joker laughed sardonically and squeezed her ";
     std::string feed22 = "She moaned with pleasure when he ";
     std::string feed23 = "The thief viciously stabbed John while he was chopping ";
     std::string feed24 = "The green hat swirled and landed on the ";
@@ -429,7 +429,7 @@ int main()
     std::string feed27 = "The knight decided to kill the maiden and marry the ";
     std::string feed28 = "The council sent out its most fearsome agents to ";
     std::string feed29 = "Enlightenment goes well with a cup of ";
-    std::string feed30 = "The captain was listening silently for a while, but then he ";
+    std::string feed30 = "The captain was listening silently for a while, but then ";
 
 	allOriginalFeeds->push_back(feed1);
 	allOriginalFeeds->push_back(feed2);
@@ -467,8 +467,8 @@ int main()
 
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
-    //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 
 	return 0;
 

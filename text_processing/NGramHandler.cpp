@@ -27,7 +27,7 @@
 #include "Dbg.h"
 
 const size_t NGramHandler::kMaxSingleWordSymbols = 70000;
-const size_t NGramHandler::kMaxMultiWordSymbols = 100000;
+const size_t NGramHandler::kMaxMultiWordSymbols = 130000;
 
 NGramHandler::NGramHandler(unsigned short max_words, unsigned short min_single_occurences, unsigned short min_multi_occurences) :
     max_words_(max_words),
