@@ -80,8 +80,8 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
             TransferAllExcitations(m, modules_[m]);
 
         for (size_t m = num_word_modules_; m < num_word_modules_ + index; ++m) {
-            size_t num_desired_inputs = std::min(static_cast<size_t>(Globals::kMaxMultiWordSize),
-                                                 num_word_modules_ + index - m);
+            size_t num_desired_inputs = std::min(ConvertToSigned(Globals::kMaxMultiWordSize),
+                                                 ConvertToSigned(num_word_modules_ + index - m));
             modules_[m]->PartialConfabulation(num_desired_inputs, false);
         }
 
