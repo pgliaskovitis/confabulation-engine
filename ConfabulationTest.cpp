@@ -263,7 +263,7 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 
 void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
-    size_t num_word_modules = 20;
+    size_t num_word_modules = 15;
     ForwardConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
@@ -431,16 +431,16 @@ int main()
     std::string feed29 = "Enlightenment goes well with a cup of ";
     std::string feed30 = "The captain was listening silently for a while, but then ";
 
-	allOriginalFeeds->push_back(feed1);
-	allOriginalFeeds->push_back(feed2);
-	allOriginalFeeds->push_back(feed3);
-	allOriginalFeeds->push_back(feed4);
-	allOriginalFeeds->push_back(feed5);
-	allOriginalFeeds->push_back(feed6);
-	allOriginalFeeds->push_back(feed7);
-	allOriginalFeeds->push_back(feed8);
-	allOriginalFeeds->push_back(feed9);
-	allOriginalFeeds->push_back(feed10);
+    allOriginalFeeds->push_back(feed1);
+    allOriginalFeeds->push_back(feed2);
+    allOriginalFeeds->push_back(feed3);
+    allOriginalFeeds->push_back(feed4);
+    allOriginalFeeds->push_back(feed5);
+    allOriginalFeeds->push_back(feed6);
+    allOriginalFeeds->push_back(feed7);
+    allOriginalFeeds->push_back(feed8);
+    allOriginalFeeds->push_back(feed9);
+    allOriginalFeeds->push_back(feed10);
     allOriginalFeeds->push_back(feed11);
     allOriginalFeeds->push_back(feed12);
     allOriginalFeeds->push_back(feed13);
