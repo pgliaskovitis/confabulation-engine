@@ -407,7 +407,7 @@ int main()
     std::string feed7 = "At the slightest hint of movement, he was ready to cut ";
     std::string feed8 = "A warm and sweet scent was emanating from her ";
     std::string feed9 = "She stumbled over her dress and fell ";
-    std::string feed10 = "She had not only her husband killed but also her ";
+    std::string feed10 = "She had not only her husband killed, but also her ";
 
     std::string feed11 = "He realized that only the dance could liberate ";
     std::string feed12 = "He leaned into her, the love of his life, and whispered ";

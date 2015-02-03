@@ -268,7 +268,8 @@ release/TwoLevelSimpleConfabulation.o: TwoLevelSimpleConfabulation.cpp TwoLevelS
 		utils/Utils.h \
 		sparse_structures/IKnowledgeLinks.hpp \
 		sparse_structures/CSRLinksMatrix.hpp \
-		Globals.h
+		Globals.h \
+		Dbg.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\TwoLevelSimpleConfabulation.o TwoLevelSimpleConfabulation.cpp
 
 ####### Install
