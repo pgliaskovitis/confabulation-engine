@@ -21,5 +21,6 @@ text_data/sample_master_reduced.txt
 Adding more books/documents to the corpus can greatly increase the engine's capabilities. The text of a new 
 document should be added under text_data/ and its filename appended to the above master file.
 
-The main() function lies in ConfabulationTest.cpp. Test sentence beginnings can also be found and altered
-there.
+The main() function lies in ConfabulationTest.cpp. Test sentence beginnings can also be found and altered there.
+
+A high level schematic of the particular confabulation architectures implemented in this project can be found in Confabulation_Rationale.pdf
