@@ -412,7 +412,7 @@ int main()
     std::string feed11 = "He realized that only the dance could liberate ";
     std::string feed12 = "He leaned into her, the love of his life, and whispered ";
     std::string feed13 = "He suddenly collapsed, crying like a ";
-    std::string feed14 = "The cave was too high up in the mountain for him to ";
+    std::string feed14 = "The cave was too high up in the mountain for him ";
     std::string feed15 = "Suffocating in a party of dull people, he started ";
     std::string feed16 = "She wandered in her wild paths without ";
     std::string feed17 = "The khan and the whole clan were ";
