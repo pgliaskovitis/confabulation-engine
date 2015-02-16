@@ -28,8 +28,7 @@ TextReader::TextReader(const std::string& symbol_file, const std::string& master
     symbol_file_name_(symbol_file),
     master_file_name_(master_file),
     left_over_sentence_(nullptr)
-{
-}
+{}
 
 void TextReader::Initialize()
 {

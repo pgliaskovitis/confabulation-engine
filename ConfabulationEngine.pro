@@ -1,9 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2014-05-24T11:56:06
-#
-#-------------------------------------------------
-
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
@@ -30,7 +24,6 @@ SOURCES += \
     text_processing/TextReader.cpp \
     text_processing/SentenceTokenizer.cpp \
     text_processing/NGramHandler.cpp \
-    TemplateInstantiations.cpp \
     ConfabulationTest.cpp \
     Globals.cpp \
     SymbolMapping.cpp \
@@ -53,7 +46,6 @@ HEADERS += \
     utils/HashTrie.hpp \
     utils/Utils.h \
     utils/HashTrieNode.hpp \
-    TemplateInstantiations.h \
     ConfabulationTest.h \
     Globals.h \
     SymbolMapping.h \
