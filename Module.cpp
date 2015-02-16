@@ -52,7 +52,7 @@ void Module::ActivateSymbol(const std::string &word, int K)
         throw std::logic_error("ActivateSymbol called with negative K");
 
     try {
-        size_t index = symbol_mapping_.IndexOf(word);
+        unsigned long index = symbol_mapping_.IndexOf(word);
         if (IsFrozen()) {
             // If module is frozen, only activate symbol if contained in the active symbols
             if (frozen_indexes_->find(index) != frozen_indexes_->end()) {
@@ -68,7 +68,7 @@ void Module::ActivateSymbol(const std::string &word, int K)
     }
 }
 
-void Module::AddExcitationToIndex(size_t index, float value)
+void Module::AddExcitationToIndex(unsigned long index, float value)
 {
     normalized_excitations_.reset(nullptr);
 
@@ -94,15 +94,15 @@ void Module::AddExcitationToAllSymbols(int K)
 
     if (IsFrozen()) {
         // If module is frozen, only further activate already active symbols
-        for (size_t i : *frozen_indexes_) {
+        for (unsigned long i : *frozen_indexes_) {
             float val = PositiveClip(excitations_->GetElement(i) + K * Globals::kBandGap);
             excitations_->SetElement(i, val);
             unsigned int num_inputs = kb_inputs_->GetElement(i) + K;
             kb_inputs_->SetElement(i, num_inputs);
         }
     } else {
-        for (const std::pair<size_t, float>& e : excitations_->GetNzElements()) {
-            size_t i = e.first;
+        for (const std::pair<unsigned long, float>& e : excitations_->GetNzElements()) {
+            unsigned long i = e.first;
             float val = PositiveClip(e.second + K * Globals::kBandGap);
             excitations_->SetElement(i, val);
             unsigned int num_inputs = kb_inputs_->GetElement(i) + K;
@@ -117,15 +117,15 @@ void Module::AddExcitationVector(const IExcitationVector<float> &input)
 
     if (IsFrozen()) {
         // If module is frozen, only further activate already active symbols
-        for (size_t i : *frozen_indexes_) {
+        for (unsigned long i : *frozen_indexes_) {
             float new_val = excitations_->GetElement(i) + input.GetElement(i);
             excitations_->SetElement(i,  PositiveClip(new_val));
             kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
         }
     } else {
         excitations_->Add(input);
-        for (const std::pair<size_t, float>& e : input.GetNzElements()) {
-            size_t i = e.first;
+        for (const std::pair<unsigned long, float>& e : input.GetNzElements()) {
+            unsigned long i = e.first;
             kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
         }
     }
@@ -133,8 +133,8 @@ void Module::AddExcitationVector(const IExcitationVector<float> &input)
 
 void Module::Freeze()
 {
-    frozen_indexes_.reset(new std::set<size_t>());
-    for (const std::pair<size_t, float>& e : excitations_->GetNzElements())
+    frozen_indexes_.reset(new std::set<unsigned long>());
+    for (const std::pair<unsigned long, float>& e : excitations_->GetNzElements())
         frozen_indexes_->insert(e.first);
 }
 
@@ -152,10 +152,10 @@ const std::unique_ptr<IExcitationVector<float> > &Module::GetNormalizedExcitatio
     normalized_excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
 
     double sum = 0.0;
-    for (const std::pair<size_t, float>& e : excitations_->GetNzElements())
+    for (const std::pair<unsigned long, float>& e : excitations_->GetNzElements())
         sum += e.second;
 
-    for (const std::pair<size_t, float>& e : excitations_->GetNzElements())
+    for (const std::pair<unsigned long, float>& e : excitations_->GetNzElements())
         normalized_excitations_->SetElement(e.first, (float) (e.second / sum));
 
     return normalized_excitations_;
@@ -165,9 +165,9 @@ std::vector<std::string> Module::GetExpectation()
 {
     std::vector<std::string> result(excitations_->GetNnz());
 
-    size_t res_index = 0;
-    for (const std::pair<size_t, float>& e : excitations_->GetNzElements()) {
-        size_t index = e.first;
+    unsigned long res_index = 0;
+    for (const std::pair<unsigned long, float>& e : excitations_->GetNzElements()) {
+        unsigned long index = e.first;
         result[res_index] = symbol_mapping_.GetSymbol(index);
         ++res_index;
     }
@@ -187,16 +187,16 @@ std::string Module::ElementaryConfabulation(int K)
     // compute K if negative
     K = ActualK(K);
 
-    const std::set<std::pair<size_t, float>>& nz_excit = excitations_->GetNzElements();
+    const std::set<std::pair<unsigned long, float>>& nz_excit = excitations_->GetNzElements();
     //std::cout << "Initially excited " << nz_excit.size() << " symbols" << " \n" << std::flush;
 
     int max_index = -1;
     int n_inputs_max = -1;
 
     // try with all possible K, starting from the maximum one, until a solution is found
-    std::unique_ptr<std::pair<size_t, float>> max_excit;
+    std::unique_ptr<std::pair<unsigned long, float>> max_excit;
     do {
-        const std::set<std::pair<size_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+        const std::set<std::pair<unsigned long, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
         //std::cout << "Reduced to " << min_K_excit.size() << " symbols for K=" << K << " \n" << std::flush;
         max_excit = MaxExcitation(min_K_excit);
 
@@ -231,13 +231,13 @@ std::vector<std::string> Module::PartialConfabulation(int K, bool multiconf)
 
     std::vector<std::string> result;
 
-    std::unique_ptr<std::vector<std::pair<size_t, float>>> expectations;
+    std::unique_ptr<std::vector<std::pair<unsigned long, float>>> expectations;
 
     if (!multiconf) {
         K = ActualK(K);
-        const std::set<std::pair<size_t, float>>& nz_excit = excitations_->GetNzElements();
-        const std::set<std::pair<size_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
-        expectations.reset(new std::vector<std::pair<size_t, float>>(min_K_excit.begin(), min_K_excit.end()));
+        const std::set<std::pair<unsigned long, float>>& nz_excit = excitations_->GetNzElements();
+        const std::set<std::pair<unsigned long, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+        expectations.reset(new std::vector<std::pair<unsigned long, float>>(min_K_excit.begin(), min_K_excit.end()));
     } else {
         // we are in the multiconfabulation case, so,
         // if the max excitation level is less than B, we keep everything, otherwise
@@ -245,8 +245,8 @@ std::vector<std::string> Module::PartialConfabulation(int K, bool multiconf)
         // all the symbols that have at least as many incoming knowledge links as the
         // maximally excited one
 
-        const std::set<std::pair<size_t, float>>& nz_excit = excitations_->GetNzElements();
-        std::unique_ptr<std::pair<size_t, float>> max_excit = MaxExcitation(nz_excit);
+        const std::set<std::pair<unsigned long, float>>& nz_excit = excitations_->GetNzElements();
+        std::unique_ptr<std::pair<unsigned long, float>> max_excit = MaxExcitation(nz_excit);
 
         if (max_excit == nullptr) {
             Freeze();
@@ -256,7 +256,7 @@ std::vector<std::string> Module::PartialConfabulation(int K, bool multiconf)
         float threshold = std::max(max_excit->second - Globals::kBandGap, 0.0f);
 
         // find symbols with excitation above threshold
-        for (const std::pair<size_t, float>& e : nz_excit)
+        for (const std::pair<unsigned long, float>& e : nz_excit)
             if (e.second > threshold)
                 expectations->push_back(e);
     }
@@ -267,11 +267,11 @@ std::vector<std::string> Module::PartialConfabulation(int K, bool multiconf)
     Reset();
 
     result.resize(expectations->size());
-    size_t res_index = 0;
+    unsigned long res_index = 0;
 
     // activate only symbols with excitations above threshold
-    for (const std::pair<size_t, float>& e : *expectations) {
-        size_t index = e.first;
+    for (const std::pair<unsigned long, float>& e : *expectations) {
+        unsigned long index = e.first;
         excitations_->SetElement(index, e.second);
         kb_inputs_->SetElement(index, kb_inputs_temp.GetElement(index));
         result[res_index] = symbol_mapping_.GetSymbol(index);
@@ -283,14 +283,14 @@ std::vector<std::string> Module::PartialConfabulation(int K, bool multiconf)
     return result;
 }
 
-std::unique_ptr<std::pair<size_t, float> > Module::MaxExcitation(const std::set<std::pair<size_t, float> > &nz_excitations)
+std::unique_ptr<std::pair<unsigned long, float> > Module::MaxExcitation(const std::set<std::pair<unsigned long, float> > &nz_excitations)
 {
-    std::unique_ptr<std::pair<size_t, float>> result(nullptr);
+    std::unique_ptr<std::pair<unsigned long, float>> result(nullptr);
     float max_value = 0;
 
-    for (const std::pair<size_t, float>& e : nz_excitations) {
+    for (const std::pair<unsigned long, float>& e : nz_excitations) {
         if (result == nullptr) {
-            result.reset(new std::pair<size_t, float>(e.first, e.second));
+            result.reset(new std::pair<unsigned long, float>(e.first, e.second));
         } else if (e.second > max_value) {
             result->first = e.first;
             result->second = e.second;
@@ -301,11 +301,11 @@ std::unique_ptr<std::pair<size_t, float> > Module::MaxExcitation(const std::set<
     return result;
 }
 
-std::set<std::pair<size_t, float> > Module::ExcitationsAbove(int K, const std::set<std::pair<size_t, float> > &nz_excitations)
+std::set<std::pair<unsigned long, float> > Module::ExcitationsAbove(int K, const std::set<std::pair<unsigned long, float> > &nz_excitations)
 {
-    std::set<std::pair<size_t, float>> result;
+    std::set<std::pair<unsigned long, float>> result;
 
-    for (const std::pair<size_t, float>& e : nz_excitations) {
+    for (const std::pair<unsigned long, float>& e : nz_excitations) {
         if (kb_inputs_->GetElement(e.first) >= K) {
             result.insert(e);
         }
@@ -326,7 +326,7 @@ int Module::MaxK()
 {
     int result = 0;
 
-    for (const std::pair<size_t, float>& e : kb_inputs_->GetNzElements()) {
+    for (const std::pair<unsigned long, float>& e : kb_inputs_->GetNzElements()) {
         int val = e.second;
         if (val > result) {
             result = val;

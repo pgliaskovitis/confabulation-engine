@@ -28,7 +28,7 @@ template <typename T>
 class DOKLinksMatrix : public IKnowledgeLinks<T>
 {
 public:
-    DOKLinksMatrix(size_t num_rows, size_t num_cols);
+    DOKLinksMatrix(unsigned long num_rows, unsigned long num_cols);
     DOKLinksMatrix(IKnowledgeLinks<T>& base);
 
     DOKLinksMatrix(const DOKLinksMatrix& rhs) = delete;
@@ -36,47 +36,47 @@ public:
     DOKLinksMatrix(DOKLinksMatrix&& rhs) = delete;
     DOKLinksMatrix&& operator=(DOKLinksMatrix&& rhs) = delete;
 
-    virtual void SetElement(size_t r, size_t c, const T& value);
-    virtual void SetElementQuick(size_t r, size_t c, const T& value);
+    virtual void SetElement(unsigned long r, unsigned long c, const T& value);
+    virtual void SetElementQuick(unsigned long r, unsigned long c, const T& value);
 
-    virtual T GetElement(size_t r, size_t c) const;
-    virtual T GetElementQuick(size_t r, size_t c) const;
+    virtual T GetElement(unsigned long r, unsigned long c) const;
+    virtual T GetElementQuick(unsigned long r, unsigned long c) const;
 
-    virtual size_t get_num_rows() const { return num_rows_; }
-    virtual size_t get_num_cols() const { return num_cols_; }
+    virtual unsigned long get_num_rows() const { return num_rows_; }
+    virtual unsigned long get_num_cols() const { return num_cols_; }
 
-    virtual size_t GetNnz() const { return map_.size(); }
+    virtual unsigned long GetNnz() const { return map_.size(); }
 
     virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const;
-    virtual std::set<std::pair<std::pair<size_t, size_t>, T>> GetNzElements() const;
+    virtual std::set<std::pair<std::pair<unsigned long, unsigned long>, T>> GetNzElements() const;
 
 private:
-    const size_t num_rows_;
-    const size_t num_cols_;
+    const unsigned long num_rows_;
+    const unsigned long num_cols_;
 
-    std::map<std::pair<size_t, size_t>, T> map_;
+    std::map<std::pair<unsigned long, unsigned long>, T> map_;
 };
 
 template <typename T>
-DOKLinksMatrix<T>::DOKLinksMatrix(size_t num_rows, size_t num_cols) : num_rows_(num_rows), num_cols_(num_cols)
+DOKLinksMatrix<T>::DOKLinksMatrix(unsigned long num_rows, unsigned long num_cols) : num_rows_(num_rows), num_cols_(num_cols)
 {}
 
 template <typename T>
 DOKLinksMatrix<T>::DOKLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get_num_rows()), num_cols_(base.get_num_cols())
 {
-    for (const std::pair<std::pair<size_t, size_t>, T>& element : base.GetNzElements())
+    for (const std::pair<std::pair<unsigned long, unsigned long>, T>& element : base.GetNzElements())
         map_.insert(element);
 }
 
 template <typename T>
-T DOKLinksMatrix<T>::GetElement(size_t r, size_t c) const
+T DOKLinksMatrix<T>::GetElement(unsigned long r, unsigned long c) const
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
     return GetElementQuick(r, c);
 }
 
 template <typename T>
-T DOKLinksMatrix<T>::GetElementQuick(size_t r, size_t c) const
+T DOKLinksMatrix<T>::GetElementQuick(unsigned long r, unsigned long c) const
 {
     T result;
 
@@ -90,11 +90,11 @@ T DOKLinksMatrix<T>::GetElementQuick(size_t r, size_t c) const
 }
 
 template <typename T>
-void DOKLinksMatrix<T>::SetElement(size_t r, size_t c, const T &value)
+void DOKLinksMatrix<T>::SetElement(unsigned long r, unsigned long c, const T &value)
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
     if (IsNearlyEqual(value, 0.0)) {
-        typename std::map<std::pair<size_t, size_t>, T>::iterator it = map_.find(std::make_pair(r, c));
+        typename std::map<std::pair<unsigned long, unsigned long>, T>::iterator it = map_.find(std::make_pair(r, c));
         if (it != map_.end())
             map_.erase(it);
     } else
@@ -102,7 +102,7 @@ void DOKLinksMatrix<T>::SetElement(size_t r, size_t c, const T &value)
 }
 
 template <typename T>
-void DOKLinksMatrix<T>::SetElementQuick(size_t r, size_t c, const T& value)
+void DOKLinksMatrix<T>::SetElementQuick(unsigned long r, unsigned long c, const T& value)
 {
     map_[std::make_pair(r, c)] = value;
 }
@@ -110,14 +110,14 @@ void DOKLinksMatrix<T>::SetElementQuick(size_t r, size_t c, const T& value)
 template <typename T>
 std::unique_ptr<IExcitationVector<T>> DOKLinksMatrix<T>::Multiply(const IExcitationVector<T>& vec) const
 {
-    std::set<std::pair<size_t, T>> vec_elements = vec.GetNzElements();
+    std::set<std::pair<unsigned long, T>> vec_elements = vec.GetNzElements();
 
     T link_strength = 0.0;
     std::unique_ptr<IExcitationVector<T>> result(new DOKExcitationVector<T>(num_rows_));
 
-    for (const std::pair<size_t, T>& element : vec_elements) {
-        size_t c = element.first;
-        for (size_t r = 0; r < num_rows_; ++r) {
+    for (const std::pair<unsigned long, T>& element : vec_elements) {
+        unsigned long c = element.first;
+        for (unsigned long r = 0; r < num_rows_; ++r) {
             link_strength = GetElementQuick(r, c);
             if (!IsNearlyEqual(link_strength, 0.0)) {
                 result->SetElement(r, result->GetElementQuick(r) + link_strength * element.second);
@@ -129,11 +129,11 @@ std::unique_ptr<IExcitationVector<T>> DOKLinksMatrix<T>::Multiply(const IExcitat
 }
 
 template <typename T>
-std::set<std::pair<std::pair<size_t, size_t>, T>> DOKLinksMatrix<T>::GetNzElements() const
+std::set<std::pair<std::pair<unsigned long, unsigned long>, T>> DOKLinksMatrix<T>::GetNzElements() const
 {
-    typename std::set<std::pair<std::pair<size_t, size_t>, T>> result;
+    typename std::set<std::pair<std::pair<unsigned long, unsigned long>, T>> result;
 
-    for (typename std::map<std::pair<size_t, size_t>, T>::const_iterator it = map_.begin(); it != map_.end(); ++it)
+    for (typename std::map<std::pair<unsigned long, unsigned long>, T>::const_iterator it = map_.begin(); it != map_.end(); ++it)
         result.insert(*it);
 
     return result;

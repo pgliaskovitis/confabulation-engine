@@ -30,34 +30,34 @@ template <typename T>
 class IKnowledgeLinks
 {
 public:
-    virtual void SetElement(const size_t r, const size_t c, const T& value) = 0;
-    virtual void SetElementQuick(const size_t r, size_t c, const T& value) = 0;
+    virtual void SetElement(const unsigned long r, const unsigned long c, const T& value) = 0;
+    virtual void SetElementQuick(const unsigned long r, unsigned long c, const T& value) = 0;
 
-    virtual T GetElement(const size_t r, const size_t c) const = 0;
-    virtual T GetElementQuick(const size_t r, const size_t c) const = 0;
+    virtual T GetElement(const unsigned long r, const unsigned long c) const = 0;
+    virtual T GetElementQuick(const unsigned long r, const unsigned long c) const = 0;
 
-    virtual size_t get_num_rows() const = 0;
-    virtual size_t get_num_cols() const = 0;
+    virtual unsigned long get_num_rows() const = 0;
+    virtual unsigned long get_num_cols() const = 0;
 
-    virtual size_t GetNnz() const = 0;
+    virtual unsigned long GetNnz() const = 0;
 
-    void CheckBounds(const size_t r, const size_t c) const
+    void CheckBounds(const unsigned long r, const unsigned long c) const
     {
         if (r >= get_num_rows() || c >= get_num_cols())
             throw std::out_of_range("2D Out of Range");
     }
 
     virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const = 0;
-    virtual std::set<std::pair<std::pair<size_t, size_t>, T>> GetNzElements() const = 0;
+    virtual std::set<std::pair<std::pair<unsigned long, unsigned long>, T>> GetNzElements() const = 0;
 
     std::string ToString() const
     {
-        const size_t num_rows = get_num_rows();
-        const size_t num_cols = get_num_cols();
+        const unsigned long num_rows = get_num_rows();
+        const unsigned long num_cols = get_num_cols();
 
         std::string str = std::string("LinksMatrix [num_lines=") + std::to_string(num_rows) + ", num_cols=" + std::to_string(num_cols) + "]\n";
-        for (size_t r = 0; r < num_rows; ++r) {
-            for (size_t c = 0; c < num_cols; ++c)
+        for (unsigned long r = 0; r < num_rows; ++r) {
+            for (unsigned long c = 0; c < num_cols; ++c)
                 str += std::to_string(GetElement(r, c)) + " ";
 
             str += "\n";

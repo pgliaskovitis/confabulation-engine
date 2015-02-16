@@ -24,7 +24,7 @@ KnowledgeBase::KnowledgeBase(const std::string& id, const SymbolMapping& src_map
     id_(id),
     src_map_(src_map),
     targ_map_(targ_map),
-    cooccurrence_counts_(new DOKLinksMatrix<size_t>(targ_map.Size(), src_map.Size())),
+    cooccurrence_counts_(new DOKLinksMatrix<unsigned long>(targ_map.Size(), src_map.Size())),
     kbase_(new CSRLinksMatrix<float>(targ_map.Size(), src_map.Size())),
     target_symbol_sums_(targ_map.Size())
 {}
@@ -32,20 +32,20 @@ KnowledgeBase::KnowledgeBase(const std::string& id, const SymbolMapping& src_map
 void KnowledgeBase::Add(const std::string& src_symbol, const std::string& targ_symbol)
 {
     try {
-        size_t row = targ_map_.IndexOf(targ_symbol);
-        size_t col = src_map_.IndexOf(src_symbol);
+        unsigned long row = targ_map_.IndexOf(targ_symbol);
+        unsigned long col = src_map_.IndexOf(src_symbol);
 
         Add(row, col);
     } catch (std::out_of_range&) {
     }
 }
 
-void KnowledgeBase::Add(size_t targ_index, size_t src_index)
+void KnowledgeBase::Add(unsigned long targ_index, unsigned long src_index)
 {
     kbase_.reset(nullptr);
 
     target_symbol_sums_[targ_index]++;
-    size_t previous_count = cooccurrence_counts_->GetElement(targ_index, src_index);
+    unsigned long previous_count = cooccurrence_counts_->GetElement(targ_index, src_index);
     cooccurrence_counts_->SetElement(targ_index, src_index, previous_count + 1);
 }
 
@@ -54,19 +54,19 @@ void KnowledgeBase::ComputeLinkStrengths()
     std::unique_ptr<DOKLinksMatrix<float>> link_strengths(
                 new DOKLinksMatrix<float>(cooccurrence_counts_->get_num_rows(), cooccurrence_counts_->get_num_cols()));
 
-    for (const std::pair<std::pair<size_t, size_t>, float>& e: cooccurrence_counts_->GetNzElements()) {
-        size_t row = e.first.first;
-        size_t col = e.first.second;
+    for (const std::pair<std::pair<unsigned long, unsigned long>, float>& e: cooccurrence_counts_->GetNzElements()) {
+        unsigned long row = e.first.first;
+        unsigned long col = e.first.second;
         link_strengths->SetElement(row, col, ComputeLinkStrength(e.second / (float) target_symbol_sums_[row]));
     }
 
     kbase_.reset(new CSRLinksMatrix<float>(*link_strengths));
 }
 
-float KnowledgeBase::GetPercentOfElementsLessThanThreshold(size_t threshold)
+float KnowledgeBase::GetPercentOfElementsLessThanThreshold(unsigned long threshold)
 {
     int count = 0;
-    for (const std::pair<std::pair<size_t, size_t>, float>& e: cooccurrence_counts_->GetNzElements())
+    for (const std::pair<std::pair<unsigned long, unsigned long>, float>& e: cooccurrence_counts_->GetNzElements())
         if (e.second < threshold)
             ++count;
 

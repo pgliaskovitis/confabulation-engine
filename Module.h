@@ -40,7 +40,7 @@ public:
 
     void ActivateSymbol(const std::string& word, int K);
 
-    void AddExcitationToIndex(size_t index, float value);
+    void AddExcitationToIndex(unsigned long index, float value);
     void AddExcitationToAllSymbols(int K);
 
     void AddExcitationVector(const IExcitationVector<float>& input);
@@ -65,10 +65,10 @@ private:
     std::unique_ptr<IExcitationVector<float>> excitations_;
     std::unique_ptr<IExcitationVector<float>> normalized_excitations_;
     std::unique_ptr<IExcitationVector<int>> kb_inputs_;
-    std::unique_ptr<std::set<size_t>> frozen_indexes_;
+    std::unique_ptr<std::set<unsigned long>> frozen_indexes_;
 
-    std::unique_ptr<std::pair<size_t, float>> MaxExcitation(const std::set<std::pair<size_t, float>>& nz_excitations);
-    std::set<std::pair<size_t, float>> ExcitationsAbove(int K, const std::set<std::pair<size_t, float>>& nz_excitations);
+    std::unique_ptr<std::pair<unsigned long, float>> MaxExcitation(const std::set<std::pair<unsigned long, float>>& nz_excitations);
+    std::set<std::pair<unsigned long, float>> ExcitationsAbove(int K, const std::set<std::pair<unsigned long, float>>& nz_excitations);
     int ActualK(int K);
     int MaxK();
 };

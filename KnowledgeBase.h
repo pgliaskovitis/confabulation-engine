@@ -37,17 +37,17 @@ public:
     KnowledgeBase&& operator=(KnowledgeBase&& rhs) = delete;
 
     void Add(const std::string& src_symbol, const std::string& targ_symbol);
-    void Add(size_t targ_index, size_t src_index);
+    void Add(unsigned long targ_index, unsigned long src_index);
     void ComputeLinkStrengths();
-    float GetPercentOfElementsLessThanThreshold(size_t threshold);
+    float GetPercentOfElementsLessThanThreshold(unsigned long threshold);
     std::unique_ptr<IExcitationVector<float>> Transmit(const IExcitationVector<float>& normalized_excitations) const;
 
     std::string get_id() const { return id_; }
 
     std::string GetStats() { return std::string("number of knowledge links: ") + std::to_string(GetNumKnowledgeLinks()); }
-    size_t GetSizeSrc() { return cooccurrence_counts_->get_num_rows(); }
-    size_t GetSizeTarg() { return cooccurrence_counts_->get_num_cols(); }
-    size_t GetNumKnowledgeLinks() { return kbase_->GetNnz(); }
+    unsigned long GetSizeSrc() { return cooccurrence_counts_->get_num_rows(); }
+    unsigned long GetSizeTarg() { return cooccurrence_counts_->get_num_cols(); }
+    unsigned long GetNumKnowledgeLinks() { return kbase_->GetNnz(); }
 
 private:
     const std::string id_;
@@ -61,9 +61,9 @@ private:
 
     const SymbolMapping& src_map_;
     const SymbolMapping& targ_map_;
-    std::unique_ptr<IKnowledgeLinks<size_t>> cooccurrence_counts_;
+    std::unique_ptr<IKnowledgeLinks<unsigned long>> cooccurrence_counts_;
     std::unique_ptr<IKnowledgeLinks<float>> kbase_;
-    std::vector<size_t> target_symbol_sums_;
+    std::vector<unsigned long> target_symbol_sums_;
 };
 
 #endif // KNOWLEDGEBASEN_H

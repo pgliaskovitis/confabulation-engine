@@ -21,15 +21,15 @@
 
 SymbolMapping::SymbolMapping() :
     all_symbols_(new std::unordered_map<std::string, std::unique_ptr<std::string>>),
-    symbol_to_index_(new std::unordered_map<std::string*, size_t>),
-    index_to_symbol_(new std::unordered_map<size_t, std::string*>)
+    symbol_to_index_(new std::unordered_map<std::string*, unsigned long>),
+    index_to_symbol_(new std::unordered_map<unsigned long, std::string*>)
 {}
 
 void SymbolMapping::AddSymbol(const std::string &symbol)
 {
     std::unordered_map<std::string, std::unique_ptr<std::string>>::const_iterator existence_it = all_symbols_->find(symbol);
     if (existence_it == all_symbols_->end()) {
-        size_t index = all_symbols_->size();
+        unsigned long index = all_symbols_->size();
         std::unique_ptr<std::string> symbol_ptr(new std::string(symbol));
         all_symbols_->insert(std::make_pair(symbol, std::move(symbol_ptr)));
         std::unique_ptr<std::string>& storage_ptr = all_symbols_->at(symbol);
@@ -44,13 +44,13 @@ bool SymbolMapping::Contains(const std::string &symbol) const
     return (it != all_symbols_->end());
 }
 
-size_t SymbolMapping::IndexOf(const std::string &symbol) const
+unsigned long SymbolMapping::IndexOf(const std::string &symbol) const
 {
     const std::unique_ptr<std::string>& existence_ptr = all_symbols_->at(symbol);
     return symbol_to_index_->at(existence_ptr.get());
 }
 
-std::string SymbolMapping::GetSymbol(size_t index) const
+std::string SymbolMapping::GetSymbol(unsigned long index) const
 {
     const std::string* existence_ptr = index_to_symbol_->at(index);
     return *existence_ptr;
@@ -69,7 +69,7 @@ std::set<std::string> SymbolMapping::GetAllSymbols() const
 
 std::string SymbolMapping::ToString()
 {
-    std::unordered_map<std::string*, size_t>::const_iterator it = symbol_to_index_->begin();
+    std::unordered_map<std::string*, unsigned long>::const_iterator it = symbol_to_index_->begin();
     std::string result;
     for(; it != symbol_to_index_->end(); ++it) {
         result += *(it->first) + " ";

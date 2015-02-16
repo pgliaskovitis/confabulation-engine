@@ -39,13 +39,13 @@ namespace
             // see Knuth section 4.2.2 pages 217-218
     }
 
-    size_t BinarySearch(const std::vector<size_t>::const_iterator& begin_it, const std::vector<size_t>::const_iterator& end_it,
-                        size_t key, bool& found)
+    unsigned long BinarySearch(const std::vector<unsigned long>::const_iterator& begin_it, const std::vector<unsigned long>::const_iterator& end_it,
+                        unsigned long key, bool& found)
     {
-        std::vector<size_t>::const_iterator lower = begin_it;
-        std::vector<size_t>::const_iterator upper = end_it - 1;
+        std::vector<unsigned long>::const_iterator lower = begin_it;
+        std::vector<unsigned long>::const_iterator upper = end_it - 1;
         while (lower < upper) {
-            std::vector<size_t>::const_iterator mid = lower + (upper - lower) / 2;
+            std::vector<unsigned long>::const_iterator mid = lower + (upper - lower) / 2;
 
             if (key == *mid) {
                 found = true;
@@ -58,7 +58,7 @@ namespace
                 lower = mid + 1;
         }
 
-        size_t result = lower - begin_it;
+        unsigned long result = lower - begin_it;
 
         if (key == *(lower + result))
             found = true;
