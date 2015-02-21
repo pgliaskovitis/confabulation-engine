@@ -57,10 +57,7 @@ private:
     std::string token_; //a copy of the last token found in our copy of the source
     std::string delimiter_; //a copy of the last delimiter std::string, i.e., the one following m_token
 
-    unsigned int knowledge_extraction_phase_;
-
     std::string ExtractDelimiterToken(size_t begin, size_t end);
-
 };
 
 #endif /* SENTENCETOKENIZER_H_ */

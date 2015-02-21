@@ -28,17 +28,17 @@ template <typename T>
 class IExcitationVector
 {
 public:
-    virtual void SetElement(const unsigned long r, const T& value) = 0;
-    virtual void SetElementQuick(const unsigned long r, const T& value) = 0;
+    virtual void SetElement(const uint32_t r, const T& value) = 0;
+    virtual void SetElementQuick(const uint32_t r, const T& value) = 0;
 
-    virtual T GetElement(const unsigned long r) const = 0;
-    virtual T GetElementQuick(const unsigned long r) const = 0;
+    virtual T GetElement(const uint32_t r) const = 0;
+    virtual T GetElementQuick(const uint32_t r) const = 0;
 
-    virtual unsigned long get_num_rows() const = 0;
+    virtual uint32_t get_num_rows() const = 0;
 
-    virtual unsigned long GetNnz() const = 0;
+    virtual uint32_t GetNnz() const = 0;
 
-    void CheckBounds(const unsigned long r) const
+    void CheckBounds(const uint32_t r) const
     {
         if (r >= get_num_rows())
             throw std::out_of_range("1D Out of Range");
@@ -46,14 +46,14 @@ public:
 
     virtual void Add(const IExcitationVector& other) = 0;
 
-    virtual std::set<std::pair<unsigned long, T>> GetNzElements() const = 0;
+    virtual std::set<std::pair<uint32_t, T>> GetNzElements() const = 0;
 
     std::string ToString() const
     {
-        const unsigned long num_rows = get_num_rows();
+        const uint32_t num_rows = get_num_rows();
 
         std::string str = std::string("ExcitationVector [num_lines=") + std::to_string(num_rows) + "]\n";
-        for (unsigned long r = 0; r < num_rows; ++r) {
+        for (uint32_t r = 0; r < num_rows; ++r) {
             str += std::to_string(GetElement(r)) + " ";
             str += "\n";
         }

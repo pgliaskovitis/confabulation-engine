@@ -55,7 +55,7 @@ struct Occurrence_Cmp
 class NGramHandler
 {
 public:
-    NGramHandler(unsigned short max_words, unsigned short min_single_occurences, unsigned short min_multi_occurences);
+    NGramHandler(uint8_t max_multi_words, uint8_t min_single_occurences, uint8_t min_multi_occurences);
     NGramHandler(const NGramHandler& rhs) = delete;
     NGramHandler& operator=(const NGramHandler& rhs) = delete;
     NGramHandler(NGramHandler&& rhs) = delete;
@@ -78,9 +78,9 @@ private:
     static const size_t kMaxSingleWordSymbols;
     static const size_t kMaxMultiWordSymbols;
 
-    const unsigned short max_words_;
-    const unsigned short min_single_occurences_;
-    const unsigned short min_multi_occurences_;
+    const uint8_t max_multi_words_;
+    const uint8_t min_single_occurences_;
+    const uint8_t min_multi_occurences_;
 
     std::vector<std::map<std::vector<std::string>, size_t, StringVector_Cmp>> occurrence_counts_;
 

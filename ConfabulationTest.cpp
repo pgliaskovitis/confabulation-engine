@@ -32,7 +32,7 @@
 #include "ForwardConfabulation.h"
 #include "TwoLevelSimpleConfabulation.h"
 
-int ConfabulationTest::TestTokenizeFixedString(const std::string& input) const
+int8_t ConfabulationTest::TestTokenizeFixedString(const std::string& input) const
 {
 	SentenceTokenizer tok(input);
 
@@ -339,7 +339,7 @@ void ConfabulationTest::PerformConfabulation(Globals& globals, const std::vector
         //std::pair<float, std::string> output = globals.getKnowledgeManager()->getConfabulatedSymbol(currentfeedTokens);
         std::vector<std::string> output = globals.get_knowledge_manager().GetLayeredConfabulatedSymbol(currentfeedTokens);
         std::cout << *it << "{";
-        for (unsigned short k = 0; k < Globals::kHeapResults; k++)
+        for (uint8_t k = 0; k < Globals::kHeapResults; k++)
             std::cout << output[k] << ", ";
         std::cout << "}" << std::endl << std::endl;
     }
@@ -467,8 +467,8 @@ int main()
 
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
-    test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 
 	return 0;
 

@@ -27,11 +27,11 @@
 ConfabulationBase::ConfabulationBase() : K_(-1)
 {}
 
-int ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int index_to_complete)
+int32_t ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int8_t index_to_complete)
 {
-    int index = std::min(ConvertToSigned(symbols.size()), index_to_complete);
+    int32_t index = std::min(ConvertToSigned(symbols.size()), static_cast<int32_t>(index_to_complete));
 
-    int max_K = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
+    int32_t max_K = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
 
     if (K_ >= 0) {
        return std::min(K_, max_K);
@@ -41,11 +41,11 @@ int ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int inde
 }
 
 void ConfabulationBase::Initialize(const std::vector<std::vector<bool>>& kb_specs,
-                                   const std::vector<unsigned short> level_specs,
+                                   const std::vector<uint8_t> level_specs,
                                    const std::string &symbol_file,
                                    const std::string &master_file,
-                                   unsigned short min_single_occurrences,
-                                   unsigned short min_multi_occurrences)
+                                   uint8_t min_single_occurrences,
+                                   uint8_t min_multi_occurrences)
 {
     num_modules_ = kb_specs.size();
     kb_specs_ = kb_specs;
@@ -65,7 +65,7 @@ void ConfabulationBase::Build()
     organizer_.reset(new MultiLevelOrganizer(level_specs_, ProduceSymbolMappings(symbol_file_, master_file_)));
 
     // create the modules
-    unsigned short level = 0;
+    uint8_t level = 0;
     for (size_t i = 0; i < num_modules_; ++i) {
         if ((i != 0) && (i % level_specs_[level] == 0))
             ++level;
@@ -219,7 +219,7 @@ void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source
     target_module->AddExcitationVector(*transmitted_excitation);
 }
 
-void ConfabulationBase::TransferAllExcitations(int target_index, const std::unique_ptr<Module>& target_module)
+void ConfabulationBase::TransferAllExcitations(int8_t target_index, const std::unique_ptr<Module>& target_module)
 {
     // use only modules that can contribute to the given index as possible source modules
     for (size_t i = 0; i < knowledge_bases_.size(); ++i) {

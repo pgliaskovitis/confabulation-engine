@@ -37,41 +37,41 @@ public:
     ConfabulationBase(ConfabulationBase&& rhs) = delete;
     ConfabulationBase&& operator=(ConfabulationBase&& rhs) = delete;
 
-    int ActualK(const std::vector<std::string> &symbols, int index_to_complete);
-    int get_K() const { return K_; }
-    void set_K(int K) { K_ = K; }
+    int32_t ActualK(const std::vector<std::string> &symbols, int8_t index_to_complete);
+    int32_t get_K() const { return K_; }
+    void set_K(int32_t K) { K_ = K; }
 
     void Initialize(const std::vector<std::vector<bool>>& kb_specs,
-                    const std::vector<unsigned short> level_specs,
+                    const std::vector<uint8_t> level_specs,
                     const std::string& symbol_file,
                     const std::string& master_file,
-                    unsigned short min_single_occurrences,
-                    unsigned short min_multi_occurrences);
+                    uint8_t min_single_occurrences,
+                    uint8_t min_multi_occurrences);
     void Build();
     void Learn(size_t num_word_modules);
     void Clean();
 
-    virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int index_to_complete, bool expectation) = 0;
+    virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation) = 0;
 
     // public methods for tests
     void Activate(const std::vector<std::string>& symbols);
     void TransferExcitation(const std::unique_ptr<Module>& source_module, const std::unique_ptr<KnowledgeBase>& kb, const std::unique_ptr<Module>& target_module);
-    void TransferAllExcitations(int target_index, const std::unique_ptr<Module> &target_module);
+    void TransferAllExcitations(int8_t target_index, const std::unique_ptr<Module> &target_module);
 
     const std::unique_ptr<Module>& get_module(size_t index) { return modules_[index]; }
     const std::unique_ptr<KnowledgeBase>& get_knowledge_base(size_t source, size_t target) { return knowledge_bases_[source][target]; }
 
 protected:
-    unsigned short num_modules_;
-    int K_;
+    uint8_t num_modules_;
+    int32_t K_;
     std::string symbol_file_;
     std::string master_file_;
-    unsigned short min_single_occurrences_;
-    unsigned short min_multi_occurrences_;
+    uint8_t min_single_occurrences_;
+    uint8_t min_multi_occurrences_;
 
     std::unique_ptr<MultiLevelOrganizer> organizer_;
     std::vector<std::vector<bool>> kb_specs_;
-    std::vector<unsigned short> level_specs_;
+    std::vector<uint8_t> level_specs_;
 
     std::vector<std::unique_ptr<Module>> modules_;
     std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> knowledge_bases_;
@@ -80,13 +80,13 @@ protected:
     std::vector<std::unique_ptr<SymbolMapping>> ProduceSymbolMappings(const std::string &symbol_file, const std::string &master_file);
 
     // compute index to complete with confabulation
-    virtual int AutoIndexToComplete(const std::vector<std::string>& symbols) = 0;
+    virtual int8_t AutoIndexToComplete(const std::vector<std::string>& symbols) = 0;
 
     // check if provided index is valid in the current setup
-    virtual bool CheckIndex(const std::vector<std::string>& symbols, int index_to_complete) = 0;
+    virtual bool CheckIndex(const std::vector<std::string>& symbols, int8_t index_to_complete) = 0;
 
     // check arguments against current setup
-    virtual bool CheckArguments(const std::vector<std::string>& symbols, int index_to_complete) = 0;
+    virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete) = 0;
 };
 
 #endif // CONFABULATIONBASE_H

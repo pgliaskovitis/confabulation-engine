@@ -5,8 +5,8 @@
 TwoLevelSimpleConfabulation::TwoLevelSimpleConfabulation(size_t num_word_modules,
                                                          const std::string &symbol_file,
                                                          const std::string &master_file,
-                                                         unsigned short min_single_occurrences,
-                                                         unsigned short min_multi_occurrences)
+                                                         uint8_t min_single_occurrences,
+                                                         uint8_t min_multi_occurrences)
     : num_word_modules_(num_word_modules)
 {
     num_modules_ = 2 * num_word_modules;
@@ -42,14 +42,14 @@ TwoLevelSimpleConfabulation::TwoLevelSimpleConfabulation(size_t num_word_modules
         for (size_t j = i + 1; j < 2 * num_word_modules; ++j)
             kb_specs[i][j] = true;
 
-    std::vector<unsigned short> level_sizes;
+    std::vector<uint8_t> level_sizes;
     level_sizes.push_back(num_word_modules);
     level_sizes.push_back(num_word_modules);
 
     Initialize(kb_specs, level_sizes, symbol_file, master_file, min_single_occurrences, min_multi_occurrences);
 }
 
-std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::vector<std::string> &symbols, int index_to_complete, bool expectation)
+std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::vector<std::string> &symbols, int8_t index_to_complete, bool expectation)
 {
     std::vector<std::string> result;
     if (!CheckArguments(symbols, index_to_complete)) {
@@ -57,7 +57,7 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
         return result;
     }
 
-    int index;
+    int8_t index;
     if (index_to_complete < 0) {
         index = AutoIndexToComplete(symbols);
     } else {
@@ -68,7 +68,7 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
 
     for (size_t i = 0; i < Globals::kMaxMultiWordSize; ++i) {
 
-        int actual_K = ActualK(temp_input, index);
+        int32_t actual_K = ActualK(temp_input, index);
         const std::unique_ptr<Module>& target_module = modules_[index];
         target_module->ExcitationsToZero();
 

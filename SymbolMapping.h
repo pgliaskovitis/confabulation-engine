@@ -29,8 +29,8 @@ class SymbolMapping
 {
 private:
     std::unique_ptr<std::unordered_map<std::string, std::unique_ptr<std::string>>> all_symbols_;
-    std::unique_ptr<std::unordered_map<std::string*, unsigned long>> symbol_to_index_;
-    std::unique_ptr<std::unordered_map<unsigned long, std::string*>> index_to_symbol_;
+    std::unique_ptr<std::unordered_map<std::string*, uint32_t>> symbol_to_index_;
+    std::unique_ptr<std::unordered_map<uint32_t, std::string*>> index_to_symbol_;
 
 public:
     SymbolMapping();
@@ -42,10 +42,10 @@ public:
     void AddSymbol(const std::string& symbol);
     bool Contains(const std::string& symbol) const;
 
-    unsigned long IndexOf(const std::string& symbol) const;
-    std::string GetSymbol(unsigned long index) const;
+    uint32_t IndexOf(const std::string& symbol) const;
+    std::string GetSymbol(uint32_t index) const;
 
-    unsigned long Size() const { return symbol_to_index_->size(); }
+    uint32_t Size() const { return symbol_to_index_->size(); }
 
     std::set<std::string> GetAllSymbols() const;
 

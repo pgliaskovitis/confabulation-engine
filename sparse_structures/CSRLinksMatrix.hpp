@@ -29,7 +29,7 @@ template <typename T>
 class CSRLinksMatrix : public IKnowledgeLinks<T>
 {
 public:
-    CSRLinksMatrix(unsigned long num_rows, unsigned long num_cols);
+    CSRLinksMatrix(uint32_t num_rows, uint32_t num_cols);
     CSRLinksMatrix(IKnowledgeLinks<T>& base);
 
     CSRLinksMatrix(const CSRLinksMatrix& rhs) = delete;
@@ -37,31 +37,31 @@ public:
     CSRLinksMatrix(CSRLinksMatrix&& rhs) = delete;
     CSRLinksMatrix&& operator=(CSRLinksMatrix&& rhs) = delete;
 
-    virtual void SetElement(unsigned long r, unsigned long c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
-    virtual void SetElementQuick(unsigned long r, unsigned long c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
+    virtual void SetElement(uint32_t r, uint32_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
+    virtual void SetElementQuick(uint32_t r, uint32_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
 
-    virtual T GetElement(unsigned long r, unsigned long c) const;
-    virtual T GetElementQuick(unsigned long r, unsigned long c) const;
+    virtual T GetElement(uint32_t r, uint32_t c) const;
+    virtual T GetElementQuick(uint32_t r, uint32_t c) const;
 
-    virtual unsigned long get_num_rows() const { return num_rows_; }
-    virtual unsigned long get_num_cols() const { return num_cols_; }
+    virtual uint32_t get_num_rows() const { return num_rows_; }
+    virtual uint32_t get_num_cols() const { return num_cols_; }
 
-    virtual unsigned long GetNnz() const { return a_.size(); }
+    virtual uint32_t GetNnz() const { return a_.size(); }
 
     virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const;
-    virtual std::set<std::pair<std::pair<unsigned long, unsigned long>, T>> GetNzElements() const;
+    virtual std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> GetNzElements() const;
 
 private:
-    const unsigned long num_rows_;
-    const unsigned long num_cols_;
+    const uint32_t num_rows_;
+    const uint32_t num_cols_;
 
     std::vector<T> a_;
-    std::vector<unsigned long> ia_;
-    std::vector<unsigned long> ja_;
+    std::vector<uint32_t> ia_;
+    std::vector<uint32_t> ja_;
 };
 
 template <typename T>
-CSRLinksMatrix<T>::CSRLinksMatrix(unsigned long num_rows, unsigned long num_cols) : num_rows_(num_rows), num_cols_(num_cols)
+CSRLinksMatrix<T>::CSRLinksMatrix(uint32_t num_rows, uint32_t num_cols) : num_rows_(num_rows), num_cols_(num_cols)
 {}
 
 template <typename T>
@@ -70,12 +70,12 @@ CSRLinksMatrix<T>::CSRLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get
     a_.resize(base.GetNnz());
     ja_.resize(base.GetNnz());
 
-    int index_a = 0;
+    uint32_t index_a = 0;
     // data begins at 0 in A
     ia_.push_back(index_a);
-    unsigned long row = 0;
+    uint32_t row = 0;
 
-    for (const std::pair<std::pair<unsigned long, unsigned long>, T>& element : base.GetNzElements()) {
+    for (const std::pair<std::pair<uint32_t, uint32_t>, T>& element : base.GetNzElements()) {
         // advance in lines until the row of element
         while (row != element.first.first) {
             ia_.push_back(index_a);
@@ -95,20 +95,20 @@ CSRLinksMatrix<T>::CSRLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get
 }
 
 template <typename T>
-T CSRLinksMatrix<T>::GetElement(unsigned long r, unsigned long c) const
+T CSRLinksMatrix<T>::GetElement(uint32_t r, uint32_t c) const
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
     return GetElementQuick(r, c);
 }
 
 template <typename T>
-T CSRLinksMatrix<T>::GetElementQuick(unsigned long r, unsigned long c) const
+T CSRLinksMatrix<T>::GetElementQuick(uint32_t r, uint32_t c) const
 {
-    std::vector<unsigned long>::const_iterator begin_it = ja_.begin() + ia_[r];
-    std::vector<unsigned long>::const_iterator end_it = ja_.begin() + ia_[r + 1];
+    std::vector<uint32_t>::const_iterator begin_it = ja_.begin() + ia_[r];
+    std::vector<uint32_t>::const_iterator end_it = ja_.begin() + ia_[r + 1];
 
     bool found_element = false;
-    const unsigned long index = BinarySearch(begin_it, end_it, c, found_element);
+    const uint32_t index = BinarySearch(begin_it, end_it, c, found_element);
 
     if (found_element)
         return a_[index];
@@ -122,9 +122,9 @@ std::unique_ptr<IExcitationVector<T>> CSRLinksMatrix<T>::Multiply(const IExcitat
     std::unique_ptr<IExcitationVector<T>> result(new DOKExcitationVector<T>(num_rows_));
     T row_sum;
 
-    for (unsigned long r = 0; r < num_rows_; ++r) {
+    for (uint32_t r = 0; r < num_rows_; ++r) {
         row_sum = 0;
-        for (unsigned long i = ia_[r]; i < ia_[r + 1]; ++i) {
+        for (uint32_t i = ia_[r]; i < ia_[r + 1]; ++i) {
             row_sum += a_[i] * vec.GetElement(ja_[i]);
         }
         result->SetElement(r, row_sum);
@@ -134,12 +134,12 @@ std::unique_ptr<IExcitationVector<T>> CSRLinksMatrix<T>::Multiply(const IExcitat
 }
 
 template <typename T>
-std::set<std::pair<std::pair<unsigned long, unsigned long>, T>> CSRLinksMatrix<T>::GetNzElements() const
+std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> CSRLinksMatrix<T>::GetNzElements() const
 {
-    typename std::set<std::pair<std::pair<unsigned long, unsigned long>, T>> result;
+    typename std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> result;
 
-    for (unsigned long r = 0; r < num_rows_; ++r)
-        for (unsigned long i = ia_[r]; i < ia_[r + 1]; ++i)
+    for (uint32_t r = 0; r < num_rows_; ++r)
+        for (uint32_t i = ia_[r]; i < ia_[r + 1]; ++i)
             result.insert(std::make_pair(std::make_pair(r, ja_[i]), a_[i]));
 
     return result;

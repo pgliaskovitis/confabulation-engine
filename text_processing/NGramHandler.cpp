@@ -29,12 +29,12 @@
 const size_t NGramHandler::kMaxSingleWordSymbols = 70000;
 const size_t NGramHandler::kMaxMultiWordSymbols = 130000;
 
-NGramHandler::NGramHandler(unsigned short max_words, unsigned short min_single_occurences, unsigned short min_multi_occurences) :
-    max_words_(max_words),
+NGramHandler::NGramHandler(uint8_t max_multi_words, uint8_t min_single_occurences, uint8_t min_multi_occurences) :
+    max_multi_words_(max_multi_words),
     min_single_occurences_(min_single_occurences),
     min_multi_occurences_(min_multi_occurences)
 {
-    occurrence_counts_.resize(max_words_); //a dedicated map for each n-gram
+    occurrence_counts_.resize(max_multi_words_); //a dedicated map for each n-gram
 }
 
 void NGramHandler::ExtractAndStoreNGrams(const std::vector<std::string>& sentence_tokens)
@@ -53,14 +53,14 @@ void NGramHandler::ExtractAndStoreNGrams(const std::vector<std::string>& sentenc
 
     // for each possible multiword length,
     // count occurrences whose prefixes occured at least MIN_OCC times
-    if (sentence_size >= max_words_) {
-        for (unsigned short n_words = 2; n_words <= max_words_; ++n_words) {
-            for (unsigned short i = 0; i <= sentence_size - n_words; ++i) {
+    if (sentence_size >= max_multi_words_) {
+        for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
+            for (size_t i = 0; i <= sentence_size - n_words; ++i) {
 
                 std::vector<std::string> compound_word;
                 if (!sentence_tokens[i].empty()) {
                     compound_word.push_back(sentence_tokens[i]);
-                    for (unsigned short j = i + 1; j < i + n_words; ++j)
+                    for (size_t j = i + 1; j < i + n_words; ++j)
                         compound_word.push_back(sentence_tokens[j]);
 
                     std::map<std::vector<std::string>, size_t, StringVector_Cmp>& n_word_counts = occurrence_counts_[n_words - 1];
@@ -75,7 +75,7 @@ void NGramHandler::CleanupNGrams()
 {
     // for each possible multiword length,
     // remove occurrences whose prefixes occured fewer than MIN_OCC times
-    for (unsigned short n_words = 2; n_words <= max_words_; ++n_words) {
+    for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>& current_occ_count = occurrence_counts_[n_words - 1];
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>& prev_occ_count = occurrence_counts_[n_words - 2];
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it_end = current_occ_count.end();
@@ -123,10 +123,10 @@ void NGramHandler::CleanupNGrams()
     // now only multiwords who have "sufficiently" occurring prefixes still exist in the maps
     // remove counts of longer groups from the count of the sub groups
     // never erase counts of single words
-    for (unsigned short n_words = 3; n_words <= max_words_; ++n_words) {
+    for (uint8_t n_words = 3; n_words <= max_multi_words_; ++n_words) {
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>& current_occ_count = occurrence_counts_[n_words - 1];
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it_end = current_occ_count.end();
-        for (unsigned short subgroup_words = n_words - 1; subgroup_words >= 2; --subgroup_words) {
+        for (uint8_t subgroup_words = n_words - 1; subgroup_words >= 2; --subgroup_words) {
             std::map<std::vector<std::string>, size_t, StringVector_Cmp>& prev_occ_count = occurrence_counts_[subgroup_words - 1];
 
             for (std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = current_occ_count.begin(); it != it_end; ++it) {
@@ -147,7 +147,7 @@ void NGramHandler::CleanupNGrams()
     log_info("Finished stage II of cleaning up multigrams");
 
     // clean the words with less than min_single_occurrences
-    for (unsigned short n_words = 1; n_words <=1; ++n_words) {
+    for (uint8_t n_words = 1; n_words <=1; ++n_words) {
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[n_words - 1].begin();
         while (it != occurrence_counts_[n_words - 1].end()) {
             std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator current = it++;
@@ -158,7 +158,7 @@ void NGramHandler::CleanupNGrams()
     }
 
     // clean the groups with less than min_multi_occurrences
-    for (unsigned short n_words = 2; n_words <= max_words_; ++n_words) {
+    for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[n_words - 1].begin();
         while (it != occurrence_counts_[n_words - 1].end()) {
             std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator current = it++;
@@ -193,7 +193,7 @@ void NGramHandler::CleanupNGrams()
     }
 
     queue.clear();
-    for (unsigned short n_words = 2; n_words <= max_words_; ++n_words) {
+    for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
         typedef std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator NGramWithCountIterator;
         NGramWithCountIterator it = occurrence_counts_[n_words - 1].begin();
         while (it != occurrence_counts_[n_words - 1].end()) {
@@ -209,7 +209,7 @@ void NGramHandler::CleanupNGrams()
 
         std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
 
-        for (unsigned short n_words = 2; n_words <= max_words_; ++n_words) {
+        for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
             NGramWithCountIterator current_it = occurrence_counts_[n_words - 1].find(removed_ngram_it->first);
             if (current_it != occurrence_counts_[n_words - 1].end()) {
                 occurrence_counts_[n_words - 1].erase(current_it);

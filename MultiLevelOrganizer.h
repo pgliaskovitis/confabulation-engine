@@ -28,7 +28,7 @@
 class MultiLevelOrganizer
 {
 public:
-    MultiLevelOrganizer(const std::vector<unsigned short>& level_sizes_, std::vector<std::unique_ptr<SymbolMapping>>&& level_mappings);
+    MultiLevelOrganizer(const std::vector<uint8_t>& level_sizes_, std::vector<std::unique_ptr<SymbolMapping>>&& level_mappings);
     MultiLevelOrganizer(const MultiLevelOrganizer& rhs) = delete;
     MultiLevelOrganizer& operator=(const MultiLevelOrganizer& rhs) = delete;
     MultiLevelOrganizer(MultiLevelOrganizer&& rhs) = delete;
@@ -36,10 +36,10 @@ public:
 
     std::vector<std::vector<std::string>> Organize(const std::vector<std::string>& symbols, bool &match_found);
 
-    const std::unique_ptr<SymbolMapping>& get_mappings_for_level(unsigned short level) { return level_mappings_.at(level); }
+    const std::unique_ptr<SymbolMapping>& get_mappings_for_level(uint8_t level) { return level_mappings_.at(level); }
 
 private:
-    std::vector<unsigned short> level_sizes_;
+    std::vector<uint8_t> level_sizes_;
     std::vector<std::unique_ptr<SymbolMapping>> level_mappings_;
     std::vector<std::unique_ptr<HashTrie<std::string>>> tries_;
 };

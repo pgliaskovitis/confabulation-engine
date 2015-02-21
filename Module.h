@@ -38,10 +38,10 @@ public:
     void Reset();
     void ExcitationsToZero();
 
-    void ActivateSymbol(const std::string& word, int K);
+    void ActivateSymbol(const std::string& word, int32_t K);
 
-    void AddExcitationToIndex(unsigned long index, float value);
-    void AddExcitationToAllSymbols(int K);
+    void AddExcitationToIndex(uint32_t index, float value);
+    void AddExcitationToAllSymbols(int32_t K);
 
     void AddExcitationVector(const IExcitationVector<float>& input);
 
@@ -53,9 +53,9 @@ public:
     std::vector<std::string> GetExpectation();
 
     std::string ElementaryConfabulation();
-    std::string ElementaryConfabulation(int K);
+    std::string ElementaryConfabulation(int32_t K);
 
-    std::vector<std::string> PartialConfabulation(int K, bool multiconf);
+    std::vector<std::string> PartialConfabulation(int32_t K, bool multiconf);
 
     const SymbolMapping& get_symbol_mapping() { return symbol_mapping_; }
 
@@ -64,13 +64,13 @@ private:
 
     std::unique_ptr<IExcitationVector<float>> excitations_;
     std::unique_ptr<IExcitationVector<float>> normalized_excitations_;
-    std::unique_ptr<IExcitationVector<int>> kb_inputs_;
-    std::unique_ptr<std::set<unsigned long>> frozen_indexes_;
+    std::unique_ptr<IExcitationVector<uint32_t>> kb_inputs_;
+    std::unique_ptr<std::set<uint32_t>> frozen_indexes_;
 
-    std::unique_ptr<std::pair<unsigned long, float>> MaxExcitation(const std::set<std::pair<unsigned long, float>>& nz_excitations);
-    std::set<std::pair<unsigned long, float>> ExcitationsAbove(int K, const std::set<std::pair<unsigned long, float>>& nz_excitations);
-    int ActualK(int K);
-    int MaxK();
+    std::unique_ptr<std::pair<uint32_t, float>> MaxExcitation(const std::set<std::pair<uint32_t, float>>& nz_excitations);
+    std::set<std::pair<uint32_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint32_t, float>>& nz_excitations);
+    int32_t ActualK(int32_t K);
+    int32_t MaxK();
 };
 
 #endif // MODULE_H

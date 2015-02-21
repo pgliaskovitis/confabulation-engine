@@ -143,7 +143,7 @@ bool SentenceTokenizer::Tokenize(const std::string& delimiters)
 const std::vector<std::string> SentenceTokenizer::KnowledgeTokenize(const std::vector<std::string>& persistence_delimiters)
 {
 	size_t index0 = 0;
-    int knowledge_extraction_phase = -1;
+    int8_t knowledge_extraction_phase = -1;
     std::vector<std::string> extracted_tokens;
 
     std::string current_delimiter;

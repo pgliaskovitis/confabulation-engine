@@ -34,8 +34,8 @@ public:
     static const std::vector<std::string> kPersistenceDelimiters;
 
     static const float kBaseProb;
-    static const unsigned int kBandGap;
-    static const unsigned short kMaxMultiWordSize;
+    static const uint8_t kBandGap;
+    static const uint8_t kMaxMultiWordSize;
 
     Globals() = delete;
     Globals(const Globals& rhs) = delete;
