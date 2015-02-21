@@ -31,7 +31,6 @@ MultiLevelOrganizer::MultiLevelOrganizer(const std::vector<uint8_t>& level_sizes
         level_mappings_.push_back(std::move(level_mapping));
 
     // organize symbols in HashTries
-    size_t i = 0;
     for (const std::unique_ptr<SymbolMapping>& mapping : level_mappings_) {
         tries_.emplace_back(new HashTrie<std::string>());
         const std::set<std::string>& level_symbols = mapping->GetAllSymbols();
