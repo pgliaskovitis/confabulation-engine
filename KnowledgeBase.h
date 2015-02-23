@@ -41,6 +41,8 @@ public:
     void ComputeLinkStrengths();
     float GetPercentOfElementsLessThanThreshold(uint32_t threshold);
     std::unique_ptr<IExcitationVector<float>> Transmit(const IExcitationVector<float>& normalized_excitations) const;
+    void ResetCooccurrenceCounts() { cooccurrence_counts_.reset(); }
+    void ResetTargetSymbolSums() { target_symbol_sums_.clear(); }
 
     std::string get_id() const { return id_; }
 
@@ -58,6 +60,8 @@ private:
     // Symbols s are providing the input excitations that pass through the knowledge base
     // In order to be able to transmit excitations with regular matrix multiplication
     // the source symbols must correspond to the COLUMNS of the matrix
+    // and the target symbols to the ROWS of the matrix
+    // (hence target_symbol_sums_ are essentially the row sums)
 
     const SymbolMapping& src_map_;
     const SymbolMapping& targ_map_;

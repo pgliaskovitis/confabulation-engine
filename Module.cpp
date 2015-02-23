@@ -261,6 +261,7 @@ std::vector<std::string> Module::PartialConfabulation(int32_t K, bool multiconf)
                 expectations->push_back(e);
     }
 
+    // saving needed info from intermediate state
     DOKExcitationVector<uint32_t> kb_inputs_temp(*kb_inputs_);
 
     // cleanup of intermediate state
@@ -326,7 +327,7 @@ int32_t Module::MaxK()
 {
     int32_t result = 0;
 
-    for (const std::pair<uint32_t,uint32_t>& e : kb_inputs_->GetNzElements()) {
+    for (const std::pair<uint32_t, uint32_t>& e : kb_inputs_->GetNzElements()) {
         int32_t val = ConvertToSigned(e.second);
         if (val > result) {
             result = val;

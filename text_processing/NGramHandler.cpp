@@ -207,7 +207,7 @@ void NGramHandler::CleanupNGrams()
     while (queue.size() > kMaxMultiWordSymbols) {
         NGramWithCountIterator removed_ngram_it = queue.front();
 
-        std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
+        //std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
 
         for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
             NGramWithCountIterator current_it = occurrence_counts_[n_words - 1].find(removed_ngram_it->first);

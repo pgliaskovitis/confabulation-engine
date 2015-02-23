@@ -71,6 +71,7 @@ CSRLinksMatrix<T>::CSRLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get
     ja_.resize(base.GetNnz());
 
     uint32_t index_a = 0;
+
     // data begins at 0 in A
     ia_.push_back(index_a);
     uint32_t row = 0;

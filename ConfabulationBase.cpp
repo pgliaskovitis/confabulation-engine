@@ -30,9 +30,7 @@ ConfabulationBase::ConfabulationBase() : K_(-1)
 int32_t ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int8_t index_to_complete)
 {
     int32_t index = std::min(ConvertToSigned(symbols.size()), static_cast<int32_t>(index_to_complete));
-
     int32_t max_K = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
-
     if (K_ >= 0) {
        return std::min(K_, max_K);
     } else {
@@ -111,7 +109,7 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 
         std::deque<std::string> read_sentence_buffer(read_sentence.begin(), read_sentence.end());
 
-        //std::cout << "\nInitial sentence read of size " << read_sentence.size() << " : " << VectorSymbolToSymbol(read_sentence, ' ') << "\n" << std::flush;
+        //std::cout << "\nRead sentence of size " << read_sentence.size() << " : " << VectorSymbolToSymbol(read_sentence, ' ') << "\n" << std::flush;
 
         do  {
             // in the case where the read sentence is larger than the number of word modules of the architecture,
@@ -170,8 +168,12 @@ void ConfabulationBase::Learn(size_t num_word_modules)
     // compute knowledge link strengths
     for (const std::vector<std::unique_ptr<KnowledgeBase>>& kb_row : knowledge_bases_) {
         for (const std::unique_ptr<KnowledgeBase>& kb : kb_row) {
-            if (kb != nullptr)
+            if (kb != nullptr) {
                 kb->ComputeLinkStrengths();
+                kb->ResetCooccurrenceCounts();
+                kb->ResetTargetSymbolSums();
+                log_info("Finished computing knowledge link strengths for knowledge base %s", kb->get_id().c_str());
+            }
         }
     }
 

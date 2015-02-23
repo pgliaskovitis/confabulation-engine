@@ -44,7 +44,10 @@ public:
     void CheckBounds(const uint32_t r, const uint32_t c) const
     {
         if (r >= get_num_rows() || c >= get_num_cols())
-            throw std::out_of_range("2D Out of Range");
+            throw std::out_of_range(std::string("2D Out of Range, for row ") +
+                                    std::to_string(r) +
+                                    " and column " +
+                                    std::to_string(c));
     }
 
     virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const = 0;

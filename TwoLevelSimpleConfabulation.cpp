@@ -85,17 +85,17 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
 
         // ATTEMPT II
         // find expectation on phrase module above last fixed word module
-        for (size_t n = 0; n < index; ++n)
-            TransferExcitation(modules_[n], knowledge_bases_[n][num_word_modules_ + index - 1], modules_[num_word_modules_ + index - 1]);
-
-        modules_[num_word_modules_ + index - 1]->PartialConfabulation(1, false);
-
-        // // ATTEMPT III (more in accordance with multi-confabulation)
-        // // find expectation on phrase module above word module at index
         // for (size_t n = 0; n < index; ++n)
-        //    TransferExcitation(modules_[n], knowledge_bases_[n][num_word_modules_ + index], modules_[num_word_modules_ + index]);
+        //    TransferExcitation(modules_[n], knowledge_bases_[n][num_word_modules_ + index - 1], modules_[num_word_modules_ + index - 1]);
 
-        // modules_[num_word_modules_ + index]->PartialConfabulation(1, false);
+        // modules_[num_word_modules_ + index - 1]->PartialConfabulation(1, false);
+
+        // ATTEMPT III (more in accordance with multi-confabulation)
+        // find expectation on phrase module above word module at index
+        for (size_t n = 0; n < index; ++n)
+            TransferExcitation(modules_[n], knowledge_bases_[n][num_word_modules_ + index], modules_[num_word_modules_ + index]);
+
+        modules_[num_word_modules_ + index]->PartialConfabulation(1, false);
 
         // find expectation on unknown word module
         TransferAllExcitations(index, target_module);
