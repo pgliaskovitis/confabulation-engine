@@ -83,8 +83,8 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
         // for (size_t m = num_word_modules_; m < num_word_modules_ + index; ++m)
         //     modules_[m]->PartialConfabulation(num_word_modules_ + index - m, false);
 
-        // ATTEMPT II
-        // find expectation on phrase module above last fixed word module
+        // // ATTEMPT II
+        // // find expectation on phrase module above last fixed word module
         // for (size_t n = 0; n < index; ++n)
         //    TransferExcitation(modules_[n], knowledge_bases_[n][num_word_modules_ + index - 1], modules_[num_word_modules_ + index - 1]);
 
