@@ -78,7 +78,7 @@ std::vector<std::vector<std::string>> MultiLevelOrganizer::Organize(const std::v
             // store found multisymbol
             level[j] = ListSymbolToSymbol(match, ' ');
 
-            //std::cout << "Found match in HashTrie for " << level[j] << "\n" << std::flush;
+            // std::cout << "Found match in HashTrie for " << level[j] << "\n" << std::flush;
 
             size_t end = std::min(level.size(), j + match.size());
             while (j < end) {

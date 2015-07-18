@@ -31,6 +31,7 @@
 #include "utils/Utils.h"
 #include "ForwardConfabulation.h"
 #include "TwoLevelSimpleConfabulation.h"
+#include "TwoLevelMultiConfabulation.h"
 
 int8_t ConfabulationTest::TestTokenizeFixedString(const std::string& input) const
 {
@@ -291,6 +292,21 @@ void ConfabulationTest::TestTwoLevelSimpleConfabulation(const std::string& symbo
     }
 }
 
+void ConfabulationTest::TestTwoLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
+{
+    size_t num_word_modules = 15;
+    TwoLevelMultiConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
+    TextReader reader(symbolfile, masterfile);
+    reader.Initialize();
+
+    for (const std::string& e : sentences) {
+        const std::vector<std::string> current_feed_tokens(reader.ExtractTokens(e));
+        FillWithEmptyStrings(current_feed_tokens, num_word_modules);
+        const std::vector<std::string>& current_result_tokens = confab_engine.Confabulation(current_feed_tokens, -1, false);
+        std::cout << e << VectorSymbolToSymbol(current_result_tokens, ' ') << "\n" << std::flush;
+    }
+}
+
 /*
 void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
@@ -420,7 +436,7 @@ int main()
     std::string feed19 = "With desperate effort he managed to get away from ";
     std::string feed20 = "Hosts of archers stood ready along the ";
 
-    std::string feed21 = "The joker laughed sardonically and squeezed her ";
+    std::string feed21 = "The joker laughed sardonically and continued squeezing her ";
     std::string feed22 = "She moaned with pleasure when he ";
     std::string feed23 = "The thief viciously stabbed John while he was chopping ";
     std::string feed24 = "The green hat swirled and landed on the ";
@@ -467,9 +483,10 @@ int main()
 
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 
 	return 0;
-
 }
