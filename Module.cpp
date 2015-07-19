@@ -254,8 +254,7 @@ std::vector<std::string> Module::PartialConfabulation(int32_t K, bool multiconf)
         }
 
         float threshold = std::max(max_excit->second - Globals::kBandGap, 0.0f);
-
-        // find symbols with excitation above threshold
+        expectations.reset(new std::vector<std::pair<uint32_t, float>>());
         for (const std::pair<uint32_t, float>& e : nz_excit)
             if (e.second > threshold)
                 expectations->push_back(e);

@@ -29,7 +29,7 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 
     // word-to-past-word knowledge bases (reference frame length ago)
     for (size_t i = 1; i < num_word_modules; ++i) {
-        for (int j = i - 1; j >= 0 && j >= ConvertToSigned(i) - reference_frame_length; --j) {
+        for (int j = i - 1; j >= 0 && j >= ConvertToSigned(i) - ConvertToSigned(reference_frame_length); --j) {
             kb_specs[i][j] = true;
         }
     }
@@ -116,10 +116,10 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
         // loop around to tranfer excitation to phrase module and previous word module
         TransferExcitation(modules_[index + 1], knowledge_bases_[index + 1][index], modules_[index]);
-        result_backward_word = modules_[index]->PartialConfabulation(1, false);
+        result_backward_word = modules_[index]->PartialConfabulation(1, true);
 
         TransferExcitation(modules_[index + 1], knowledge_bases_[index + 1][num_word_modules_ + index], modules_[num_word_modules_ + index]);
-        result_backward_phrase = modules_[num_word_modules_ + index]->PartialConfabulation(1, false);
+        result_backward_phrase = modules_[num_word_modules_ + index]->PartialConfabulation(1, true);
 
         current_result_size = result_backward_word.size() + result_backward_phrase.size();
 
