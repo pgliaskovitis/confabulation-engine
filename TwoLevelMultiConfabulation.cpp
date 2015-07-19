@@ -99,22 +99,22 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     // activate known symbols from input
     Activate(temp_input);
 
+    // find expectation on phrase module above word module at index
+    TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index]);
+    modules_[num_word_modules_ + index]->PartialConfabulation(1, false);
+
+    // find expectation on unknown word module
+    TransferAllExcitations(index, modules_[index]);
+    modules_[index]->PartialConfabulation(1, false);
+
+    // find expectation on next to unknown word module
+    TransferExcitation(modules_[index], knowledge_bases_[index][index + 1], modules_[index + 1]);
+    modules_[index + 1]->PartialConfabulation(1, false);
+
+    // tighten expectation on target phrase and word modules
     do {
         previous_result_size = current_result_size;
 
-        // find expectation on phrase module above word module at index
-        TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index]);
-        modules_[num_word_modules_ + index]->PartialConfabulation(1, false);
-
-        // find expectation on unknown word module
-        TransferAllExcitations(index, modules_[index]);
-        modules_[index]->PartialConfabulation(1, false);
-
-        // find expectation on next to unknown word module
-        TransferExcitation(modules_[index], knowledge_bases_[index][index + 1], modules_[index + 1]);
-        modules_[index + 1]->PartialConfabulation(1, false);
-
-        // loop around to tranfer excitation to phrase module and previous word module
         TransferExcitation(modules_[index + 1], knowledge_bases_[index + 1][index], modules_[index]);
         result_backward_word = modules_[index]->PartialConfabulation(1, true);
 
@@ -122,6 +122,12 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         result_backward_phrase = modules_[num_word_modules_ + index]->PartialConfabulation(1, true);
 
         current_result_size = result_backward_word.size() + result_backward_phrase.size();
+
+        TransferExcitation(modules_[num_word_modules_ + index], knowledge_bases_[num_word_modules_ + index][index], modules_[index]);
+        modules_[index]->PartialConfabulation(1, true);
+
+        TransferExcitation(modules_[index],  knowledge_bases_[index][index + 1], modules_[index + 1]);
+        modules_[index + 1]->PartialConfabulation(1, true);
 
     } while (current_result_size < previous_result_size);
 
