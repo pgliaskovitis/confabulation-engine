@@ -175,12 +175,12 @@ std::vector<std::string> Module::GetExpectation()
     return result;
 }
 
-std::string Module::ElementaryConfabulation()
+std::string Module::ElementaryConfabulation(float *max_excitation)
 {
-    return ElementaryConfabulation(1);
+    return ElementaryConfabulation(1, max_excitation);
 }
 
-std::string Module::ElementaryConfabulation(int32_t K)
+std::string Module::ElementaryConfabulation(int32_t K, float *max_excitation)
 {
     normalized_excitations_.reset(nullptr);
 
@@ -219,6 +219,7 @@ std::string Module::ElementaryConfabulation(int32_t K)
     // activate only the best word found
     excitations_->SetElement(max_index, max_excit->second);
     kb_inputs_->SetElement(max_index, n_inputs_max);
+    *max_excitation = max_excit->second;
 
     Freeze();
 

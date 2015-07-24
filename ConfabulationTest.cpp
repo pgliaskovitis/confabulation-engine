@@ -421,11 +421,11 @@ int main()
     std::string feed5 = "The eagle circled above the valley, eager for ";
     std::string feed6 = "Our initial impression of the situation was ";
     std::string feed7 = "At the slightest hint of movement, he was ready to cut ";
-    std::string feed8 = "A warm and sweet scent was emanating from her ";
+    std::string feed8 = "A warm and sweet scent was coming from her ";
     std::string feed9 = "She stumbled over her dress and fell ";
     std::string feed10 = "She had not only her husband killed, but also her ";
 
-    std::string feed11 = "He realized that only the dance could liberate ";
+    std::string feed11 = "He realized that only the dance could ";
     std::string feed12 = "He leaned into her, the love of his life, and whispered ";
     std::string feed13 = "He suddenly collapsed, crying like a ";
     std::string feed14 = "The cave was too high up for him to ";

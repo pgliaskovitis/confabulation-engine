@@ -52,8 +52,8 @@ public:
     const std::unique_ptr<IExcitationVector<float>>& GetNormalizedExcitations();
     std::vector<std::string> GetExpectation();
 
-    std::string ElementaryConfabulation();
-    std::string ElementaryConfabulation(int32_t K);
+    std::string ElementaryConfabulation(float *max_excitation);
+    std::string ElementaryConfabulation(int32_t K, float *max_excitation);
 
     std::vector<std::string> PartialConfabulation(int32_t K, bool multiconf);
 

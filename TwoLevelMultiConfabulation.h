@@ -22,6 +22,8 @@ private:
     static const size_t reference_frame_length;
 
     size_t num_word_modules_;
+
+    void BasicSwirlAtIndex(int index);
 };
 
 #endif // TWOLEVELMULTICONFABULATION_H

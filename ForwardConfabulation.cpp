@@ -52,7 +52,8 @@ std::vector<std::string> ForwardConfabulation::Confabulation(const std::vector<s
     if (expectation) {
         result = target_module->PartialConfabulation(actual_K, false);
     } else {
-        result.push_back(target_module->ElementaryConfabulation(actual_K));
+        float dummy;
+        result.push_back(target_module->ElementaryConfabulation(actual_K, &dummy));
     }
 
     Clean();

@@ -52,10 +52,6 @@ public:
     uint32_t GetNumKnowledgeLinks() { return kbase_->GetNnz(); }
 
 private:
-    const std::string id_;
-
-    static float ComputeLinkStrength(double antecedent_support_probability);
-
     // The knowledge base is essentially a matrix of conditional probabilities P(s | t)
     // Symbols s are providing the input excitations that pass through the knowledge base
     // In order to be able to transmit excitations with regular matrix multiplication
@@ -63,11 +59,14 @@ private:
     // and the target symbols to the ROWS of the matrix
     // (hence target_symbol_sums_ are essentially the row sums)
 
+    const std::string id_;
     const SymbolMapping& src_map_;
     const SymbolMapping& targ_map_;
     std::unique_ptr<IKnowledgeLinks<uint32_t>> cooccurrence_counts_;
     std::unique_ptr<IKnowledgeLinks<float>> kbase_;
     std::vector<uint32_t> target_symbol_sums_;
+
+    static float ComputeLinkStrength(double antecedent_support_probability);
 };
 
 #endif // KNOWLEDGEBASEN_H

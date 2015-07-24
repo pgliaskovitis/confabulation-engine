@@ -2,7 +2,7 @@
 #include "Globals.h"
 #include "Dbg.h"
 
-const size_t TwoLevelMultiConfabulation::reference_frame_length = 4;
+const size_t TwoLevelMultiConfabulation::reference_frame_length = 5;
 
 TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
                                                        const std::string &symbol_file,
@@ -73,11 +73,6 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::vector<std::string> &symbols, int8_t index_to_complete, bool expectation)
 {
     std::vector<std::string> result;
-    std::vector<std::string> result_backward_word;
-    std::vector<std::string> result_backward_phrase;
-
-    size_t current_result_size = std::numeric_limits<size_t>::max();
-    size_t previous_result_size = 0;
 
     if (!CheckArguments(symbols, index_to_complete)) {
         std::cout << "Input sentence does not satisfy conditions for confabulation with this architecture";
@@ -99,17 +94,108 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     // activate known symbols from input
     Activate(temp_input);
 
-    // find expectation on phrase module above word module at index
+    // find initial expectation on phrase module above word module at index
     TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index]);
     modules_[num_word_modules_ + index]->PartialConfabulation(1, false);
 
-    // find expectation on unknown word module
+    // find initial expectation on word module at index
     TransferAllExcitations(index, modules_[index]);
     modules_[index]->PartialConfabulation(1, false);
 
-    // find expectation on next to unknown word module
-    TransferExcitation(modules_[index], knowledge_bases_[index][index + 1], modules_[index + 1]);
+    // find expectation on word module at index + 1
+    TransferExcitation(modules_[index],
+                       knowledge_bases_[index][index + 1],
+                       modules_[index + 1]);
     modules_[index + 1]->PartialConfabulation(1, false);
+
+    BasicSwirlAtIndex(index);
+
+    // find expectation on phrase module above word module at index + 1
+    TransferExcitation(modules_[num_word_modules_ + index],
+                       knowledge_bases_[num_word_modules_ + index][num_word_modules_ + index + 1],
+                       modules_[num_word_modules_ + index + 1]);
+    modules_[num_word_modules_ + index + 1]->PartialConfabulation(1, false);
+
+    // find expectation on word module at index + 1
+    TransferExcitation(modules_[num_word_modules_ + index + 1],
+                       knowledge_bases_[num_word_modules_ + index + 1][index + 1],
+                       modules_[index + 1]);
+    modules_[index + 1]->PartialConfabulation(1, false);
+
+    // find expectation on word module at index + 2
+    TransferExcitation(modules_[index + 1],
+                       knowledge_bases_[index + 1][index + 2],
+                       modules_[index + 2]);
+    modules_[index + 2]->PartialConfabulation(1, false);
+
+    BasicSwirlAtIndex(index + 1);
+
+    // constraint satisfaction from index + 2 towards index
+    TransferExcitation(modules_[index + 2],
+                       knowledge_bases_[index + 2][num_word_modules_ + index],
+                       modules_[num_word_modules_ + index]);
+    modules_[num_word_modules_ + index]->PartialConfabulation(1, true);
+    TransferExcitation(modules_[index + 2],
+                       knowledge_bases_[index + 2][index],
+                       modules_[index]);
+    modules_[index]->PartialConfabulation(1, true);
+
+    // find expectation on phrase module above word module at index + 2
+    TransferExcitation(modules_[num_word_modules_ + index + 1],
+                       knowledge_bases_[num_word_modules_ + index + 1][num_word_modules_ + index + 2],
+                       modules_[num_word_modules_ + index + 2]);
+    modules_[num_word_modules_ + index + 2]->PartialConfabulation(1, false);
+
+    // find expectation on word module at index + 2
+    TransferExcitation(modules_[num_word_modules_ + index + 2],
+                       knowledge_bases_[num_word_modules_ + index + 2][index + 2],
+                       modules_[index + 2]);
+    modules_[index + 2]->PartialConfabulation(1, false);
+
+    // find expectation on word module at index + 3
+    TransferExcitation(modules_[index + 2],
+                       knowledge_bases_[index + 2][index + 3],
+                       modules_[index + 3]);
+    modules_[index + 3]->PartialConfabulation(1, false);
+
+    BasicSwirlAtIndex(index + 2);
+
+    // constraint satisfaction from index + 3 towards index
+    TransferExcitation(modules_[index + 3],
+                       knowledge_bases_[index + 3][num_word_modules_ + index],
+                       modules_[num_word_modules_ + index]);
+    modules_[num_word_modules_ + index]->PartialConfabulation(1, true);
+    TransferExcitation(modules_[index + 3],
+                       knowledge_bases_[index + 3][index],
+                       modules_[index]);
+    modules_[index]->PartialConfabulation(1, true);
+
+    if (!expectation) {
+        float word_excitation;
+        float phrase_excitation;
+        std::string next_word = modules_[index]->ElementaryConfabulation(actual_K, &word_excitation);
+        std::string next_phrase =  modules_[num_word_modules_ + index]->ElementaryConfabulation(actual_K, &phrase_excitation);
+
+        result.push_back("{");
+        if (word_excitation > phrase_excitation) {
+            result.push_back(next_word);
+        } else {
+            result.push_back(next_phrase);
+        }
+        result.push_back("}");
+    }
+
+    Clean();
+
+    return result;
+}
+
+void TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
+{
+    std::vector<std::string> result_backward_word;
+    std::vector<std::string> result_backward_phrase;
+    size_t current_result_size = std::numeric_limits<size_t>::max();
+    size_t previous_result_size = 0;
 
     // tighten expectation on target phrase and word modules
     do {
@@ -130,24 +216,5 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         modules_[index + 1]->PartialConfabulation(1, true);
 
     } while (current_result_size < previous_result_size);
-
-    if (expectation) {
-        result.insert(result.begin(), result_backward_word.begin(), result_backward_word.end());
-        result.insert(result.end(), result_backward_phrase.begin(),  result_backward_phrase.end());
-    } else {
-        result.push_back("{");
-        std::string next_word = modules_[index]->ElementaryConfabulation(actual_K);
-        result.push_back(next_word);
-        result.push_back("}");
-
-        result.push_back("{");
-        std::string next_phrase =  modules_[num_word_modules_ + index]->ElementaryConfabulation(actual_K);
-        result.push_back(next_phrase);
-        result.push_back("}");
-    }
-
-    Clean();
-
-    return result;
 }
 

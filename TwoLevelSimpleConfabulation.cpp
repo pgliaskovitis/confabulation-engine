@@ -103,7 +103,8 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
         if (expectation) {
             result = target_module->PartialConfabulation(actual_K, false);
         } else {
-            std::string next_word = target_module->ElementaryConfabulation(actual_K);
+            float dummy;
+            std::string next_word = target_module->ElementaryConfabulation(actual_K, &dummy);
             result.push_back(next_word);
             temp_input.push_back(next_word);
         }
