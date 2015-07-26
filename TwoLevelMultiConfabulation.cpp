@@ -102,80 +102,86 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     TransferAllExcitations(index, modules_[index]);
     modules_[index]->PartialConfabulation(1, false);
 
-    // find expectation on word module at index + 1
-    //TransferExcitation(modules_[index],
-    //                   knowledge_bases_[index][index + 1],
-    //                   modules_[index + 1]);
-    TransferAllExcitations(index + 1, modules_[index + 1]);
-    modules_[index + 1]->PartialConfabulation(1, false);
+    if (index + 1 < num_word_modules_) {
+        // find expectation on word module at index + 1
+        //TransferExcitation(modules_[index],
+        //                   knowledge_bases_[index][index + 1],
+        //                   modules_[index + 1]);
+        TransferAllExcitations(index + 1, modules_[index + 1]);
+        modules_[index + 1]->PartialConfabulation(1, false);
 
-    BasicSwirlAtIndex(index);
+        BasicSwirlAtIndex(index);
 
-    // find expectation on phrase module above word module at index + 1
-    //TransferExcitation(modules_[num_word_modules_ + index],
-    //                   knowledge_bases_[num_word_modules_ + index][num_word_modules_ + index + 1],
-    //                   modules_[num_word_modules_ + index + 1]);
-    TransferAllExcitations(num_word_modules_ + index + 1, modules_[num_word_modules_ + index + 1]);
-    modules_[num_word_modules_ + index + 1]->PartialConfabulation(1, false);
+        // find expectation on phrase module above word module at index + 1
+        //TransferExcitation(modules_[num_word_modules_ + index],
+        //                   knowledge_bases_[num_word_modules_ + index][num_word_modules_ + index + 1],
+        //                   modules_[num_word_modules_ + index + 1]);
+        TransferAllExcitations(num_word_modules_ + index + 1, modules_[num_word_modules_ + index + 1]);
+        modules_[num_word_modules_ + index + 1]->PartialConfabulation(1, false);
 
-    // find expectation on word module at index + 1
-    //TransferExcitation(modules_[num_word_modules_ + index + 1],
-    //                   knowledge_bases_[num_word_modules_ + index + 1][index + 1],
-    //                   modules_[index + 1]);
-    TransferAllExcitations(index + 1, modules_[index + 1]);
-    modules_[index + 1]->PartialConfabulation(1, false);
+        // find expectation on word module at index + 1
+        //TransferExcitation(modules_[num_word_modules_ + index + 1],
+        //                   knowledge_bases_[num_word_modules_ + index + 1][index + 1],
+        //                   modules_[index + 1]);
+        TransferAllExcitations(index + 1, modules_[index + 1]);
+        modules_[index + 1]->PartialConfabulation(1, false);
 
-    // find expectation on word module at index + 2
-    //TransferExcitation(modules_[index + 1],
-    //                   knowledge_bases_[index + 1][index + 2],
-    //                   modules_[index + 2]);
-    TransferAllExcitations(index + 2, modules_[index + 2]);
-    modules_[index + 2]->PartialConfabulation(1, false);
+        if (index + 2 < num_word_modules_) {
+            // find expectation on word module at index + 2
+            //TransferExcitation(modules_[index + 1],
+            //                   knowledge_bases_[index + 1][index + 2],
+            //                   modules_[index + 2]);
+            TransferAllExcitations(index + 2, modules_[index + 2]);
+            modules_[index + 2]->PartialConfabulation(1, false);
 
-    BasicSwirlAtIndex(index + 1);
+            BasicSwirlAtIndex(index + 1);
 
-    // constraint satisfaction from index + 2 towards index
-    TransferExcitation(modules_[index + 2],
-                       knowledge_bases_[index + 2][num_word_modules_ + index],
-                       modules_[num_word_modules_ + index]);
-    modules_[num_word_modules_ + index]->PartialConfabulation(1, true);
-    TransferExcitation(modules_[index + 2],
-                       knowledge_bases_[index + 2][index],
-                       modules_[index]);
-    modules_[index]->PartialConfabulation(1, true);
+            // constraint satisfaction from index + 2 towards index
+            TransferExcitation(modules_[index + 2],
+                               knowledge_bases_[index + 2][num_word_modules_ + index],
+                               modules_[num_word_modules_ + index]);
+            modules_[num_word_modules_ + index]->PartialConfabulation(1, true);
+            TransferExcitation(modules_[index + 2],
+                               knowledge_bases_[index + 2][index],
+                               modules_[index]);
+            modules_[index]->PartialConfabulation(1, true);
 
-    // find expectation on phrase module above word module at index + 2
-    //TransferExcitation(modules_[num_word_modules_ + index + 1],
-    //                   knowledge_bases_[num_word_modules_ + index + 1][num_word_modules_ + index + 2],
-    //                   modules_[num_word_modules_ + index + 2]);
-    TransferAllExcitations(num_word_modules_ + index + 2, modules_[num_word_modules_ + index + 2]);
-    modules_[num_word_modules_ + index + 2]->PartialConfabulation(1, false);
+            // find expectation on phrase module above word module at index + 2
+            //TransferExcitation(modules_[num_word_modules_ + index + 1],
+            //                   knowledge_bases_[num_word_modules_ + index + 1][num_word_modules_ + index + 2],
+            //                   modules_[num_word_modules_ + index + 2]);
+            TransferAllExcitations(num_word_modules_ + index + 2, modules_[num_word_modules_ + index + 2]);
+            modules_[num_word_modules_ + index + 2]->PartialConfabulation(1, false);
 
-    // find expectation on word module at index + 2
-    //TransferExcitation(modules_[num_word_modules_ + index + 2],
-    //                   knowledge_bases_[num_word_modules_ + index + 2][index + 2],
-    //                   modules_[index + 2]);
-    TransferAllExcitations(index + 2, modules_[index + 2]);
-    modules_[index + 2]->PartialConfabulation(1, false);
+            // find expectation on word module at index + 2
+            //TransferExcitation(modules_[num_word_modules_ + index + 2],
+            //                   knowledge_bases_[num_word_modules_ + index + 2][index + 2],
+            //                   modules_[index + 2]);
+            TransferAllExcitations(index + 2, modules_[index + 2]);
+            modules_[index + 2]->PartialConfabulation(1, false);
 
-    // find expectation on word module at index + 3
-    //TransferExcitation(modules_[index + 2],
-    //                   knowledge_bases_[index + 2][index + 3],
-    //                   modules_[index + 3]);
-    TransferAllExcitations(index + 3, modules_[index + 3]);
-    modules_[index + 3]->PartialConfabulation(1, false);
+            if (index + 3 < num_word_modules_) {
+                // find expectation on word module at index + 3
+                //TransferExcitation(modules_[index + 2],
+                //                   knowledge_bases_[index + 2][index + 3],
+                //                   modules_[index + 3]);
+                TransferAllExcitations(index + 3, modules_[index + 3]);
+                modules_[index + 3]->PartialConfabulation(1, false);
 
-    BasicSwirlAtIndex(index + 2);
+                BasicSwirlAtIndex(index + 2);
 
-    // constraint satisfaction from index + 3 towards index
-    TransferExcitation(modules_[index + 3],
-                       knowledge_bases_[index + 3][num_word_modules_ + index],
-                       modules_[num_word_modules_ + index]);
-    modules_[num_word_modules_ + index]->PartialConfabulation(1, true);
-    TransferExcitation(modules_[index + 3],
-                       knowledge_bases_[index + 3][index],
-                       modules_[index]);
-    modules_[index]->PartialConfabulation(1, true);
+                // constraint satisfaction from index + 3 towards index
+                TransferExcitation(modules_[index + 3],
+                                   knowledge_bases_[index + 3][num_word_modules_ + index],
+                                   modules_[num_word_modules_ + index]);
+                modules_[num_word_modules_ + index]->PartialConfabulation(1, true);
+                TransferExcitation(modules_[index + 3],
+                                   knowledge_bases_[index + 3][index],
+                                   modules_[index]);
+                modules_[index]->PartialConfabulation(1, true);
+            }
+        }
+    }
 
     if (!expectation) {
         float word_excitation;
