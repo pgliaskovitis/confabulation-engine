@@ -112,9 +112,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         BasicSwirlAtIndex(index);
 
         // find expectation on phrase module above word module at index + 1
-        TransferExcitation(modules_[num_word_modules_ + index],
-                           knowledge_bases_[num_word_modules_ + index][num_word_modules_ + index + 1],
-                           modules_[num_word_modules_ + index + 1]);
         TransferExcitation(modules_[index],
                            knowledge_bases_[index][num_word_modules_ + index + 1],
                            modules_[num_word_modules_ + index + 1]);
@@ -146,9 +143,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             modules_[index]->PartialConfabulation(1, true);
 
             // find expectation on phrase module above word module at index + 2
-            TransferExcitation(modules_[num_word_modules_ + index + 1],
-                               knowledge_bases_[num_word_modules_ + index + 1][num_word_modules_ + index + 2],
-                               modules_[num_word_modules_ + index + 2]);
             TransferExcitation(modules_[index],
                                knowledge_bases_[index][num_word_modules_ + index + 2],
                                modules_[num_word_modules_ + index + 2]);
