@@ -117,7 +117,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                            modules_[num_word_modules_ + index + 1]);
         modules_[num_word_modules_ + index + 1]->PartialConfabulation(1, false);
 
-        // find expectation on word module at index + 1
+        // find additional expectation on word module at index + 1
         TransferExcitation(modules_[num_word_modules_ + index + 1],
                            knowledge_bases_[num_word_modules_ + index + 1][index + 1],
                            modules_[index + 1]);
@@ -151,7 +151,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                                modules_[num_word_modules_ + index + 2]);
             modules_[num_word_modules_ + index + 2]->PartialConfabulation(1, false);
 
-            // find expectation on word module at index + 2
+            // find additional expectation on word module at index + 2
             TransferExcitation(modules_[num_word_modules_ + index + 2],
                                knowledge_bases_[num_word_modules_ + index + 2][index + 2],
                                modules_[index + 2]);

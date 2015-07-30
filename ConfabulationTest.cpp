@@ -421,7 +421,7 @@ int main()
     std::string feed5 = "The eagle circled above the valley, eager for ";
     std::string feed6 = "Our initial impression of the situation was ";
     std::string feed7 = "At the slightest hint of movement, he was ready to cut ";
-    std::string feed8 = "A warm and sweet scent was coming from her ";
+    std::string feed8 = "A warm and sweet scent was rising from her ";
     std::string feed9 = "She stumbled over her dress and fell ";
     std::string feed10 = "She had not only her husband killed, but also her ";
 
