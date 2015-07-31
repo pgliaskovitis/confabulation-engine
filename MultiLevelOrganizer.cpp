@@ -27,15 +27,17 @@ MultiLevelOrganizer::MultiLevelOrganizer(const std::vector<uint8_t>& level_sizes
     level_sizes_(level_sizes)
 {
     // take control of all symbols
-    for (std::unique_ptr<SymbolMapping>& level_mapping : level_mappings)
+    for (std::unique_ptr<SymbolMapping>& level_mapping : level_mappings) {
         level_mappings_.push_back(std::move(level_mapping));
+    }
 
     // organize symbols in HashTries
     for (const std::unique_ptr<SymbolMapping>& mapping : level_mappings_) {
         tries_.emplace_back(new HashTrie<std::string>());
         const std::set<std::string>& level_symbols = mapping->GetAllSymbols();
-        for (std::string level_symbol : level_symbols)
+        for (std::string level_symbol : level_symbols) {
             tries_.back()->Add(SymbolToVectorSymbol(level_symbol, ' '));
+        }
     }
 }
 

@@ -60,8 +60,9 @@ void NGramHandler::ExtractAndStoreNGrams(const std::vector<std::string>& sentenc
                 std::vector<std::string> compound_word;
                 if (!sentence_tokens[i].empty()) {
                     compound_word.push_back(sentence_tokens[i]);
-                    for (size_t j = i + 1; j < i + n_words; ++j)
+                    for (size_t j = i + 1; j < i + n_words; ++j) {
                         compound_word.push_back(sentence_tokens[j]);
+                    }
 
                     std::map<std::vector<std::string>, size_t, StringVector_Cmp>& n_word_counts = occurrence_counts_[n_words - 1];
                     n_word_counts[compound_word]++;
@@ -108,13 +109,15 @@ void NGramHandler::CleanupNGrams()
 
 //            std::cout << "Prefix of multiword \"" << debug_output_1 << "\" is : \"" << debug_output_2 << "\" with occurrence count " << prefix_count << "\n";
 
-            if (prefix_count < min_multi_occurences_)
+            if (prefix_count < min_multi_occurences_) {
                 must_delete = true;
+            }
 
-            if (must_delete)
+            if (must_delete) {
                 current_occ_count.erase(it++);
-            else
+            } else {
                 ++it;
+            }
         }
     }
 
@@ -231,8 +234,9 @@ size_t NGramHandler::get_multi_word_count()
 {
     size_t multi_word_symbols_count = 0;
 
-    for (size_t i = 1; i < occurrence_counts_.size(); ++i)
+    for (size_t i = 1; i < occurrence_counts_.size(); ++i) {
         multi_word_symbols_count += occurrence_counts_[i].size();
+    }
 
     return multi_word_symbols_count;
 }
@@ -242,8 +246,9 @@ std::unique_ptr<SymbolMapping> NGramHandler::GetSingleWordSymbols()
     std::unique_ptr<SymbolMapping> result(new SymbolMapping());
 
     std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[0].begin();
-    for (; it != occurrence_counts_[0].end(); ++it)
+    for (; it != occurrence_counts_[0].end(); ++it) {
         result->AddSymbol(VectorSymbolToSymbol(it->first, ' '));
+    }
 
     return result;
 }
@@ -254,8 +259,9 @@ std::unique_ptr<SymbolMapping> NGramHandler::GetMultiWordSymbols()
 
     for (size_t i = 1; i < occurrence_counts_.size(); ++i) {
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[i].begin();
-        for (; it != occurrence_counts_[i].end(); ++it)
+        for (; it != occurrence_counts_[i].end(); ++it) {
             result->AddSymbol(VectorSymbolToSymbol(it->first, ' '));
+        }
     }
 
     return result;
@@ -267,8 +273,9 @@ std::unique_ptr<SymbolMapping> NGramHandler::GetAllSymbols()
 
     for (size_t i = 0; i < occurrence_counts_.size(); ++i) {
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[i].begin();
-        for (; it != occurrence_counts_[i].end(); ++it)
+        for (; it != occurrence_counts_[i].end(); ++it) {
             result->AddSymbol(VectorSymbolToSymbol(it->first, ' '));
+        }
     }
 
     return result;

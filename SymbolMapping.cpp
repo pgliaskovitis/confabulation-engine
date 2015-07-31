@@ -61,8 +61,9 @@ std::set<std::string> SymbolMapping::GetAllSymbols() const
     std::set<std::string> result;
 
     std::unordered_map<std::string, std::unique_ptr<std::string>>::const_iterator it = all_symbols_->begin();
-    for(; it != all_symbols_->end(); ++it)
+    for(; it != all_symbols_->end(); ++it) {
         result.insert(it->first);
+    }
 
     return result;
 }

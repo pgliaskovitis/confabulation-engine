@@ -43,11 +43,12 @@ public:
 
     void CheckBounds(const uint32_t r, const uint32_t c) const
     {
-        if (r >= get_num_rows() || c >= get_num_cols())
+        if (r >= get_num_rows() || c >= get_num_cols()) {
             throw std::out_of_range(std::string("2D Out of Range, for row ") +
                                     std::to_string(r) +
                                     " and column " +
                                     std::to_string(c));
+        }
     }
 
     virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const = 0;
@@ -60,8 +61,9 @@ public:
 
         std::string str = std::string("LinksMatrix [num_lines=") + std::to_string(num_rows) + ", num_cols=" + std::to_string(num_cols) + "]\n";
         for (uint32_t r = 0; r < num_rows; ++r) {
-            for (uint32_t c = 0; c < num_cols; ++c)
+            for (uint32_t c = 0; c < num_cols; ++c) {
                 str += std::to_string(GetElement(r, c)) + " ";
+            }
 
             str += "\n";
         }

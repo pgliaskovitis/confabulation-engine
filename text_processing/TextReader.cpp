@@ -57,12 +57,13 @@ const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_
 			
 			end_of_delimiter = l_string.str().find_first_not_of(Globals::kSentenceDelimiters, end_of_sentence);
 			
-            if (end_of_delimiter != std::string::npos)
+            if (end_of_delimiter != std::string::npos) {
                 //delimiter finishes in the current left_over_sentence_
                 end_of_phase = end_of_delimiter;
-            else
+            } else {
                 //delimiter does not finish in the current left_over_sentence_
                 end_of_phase = end_of_sentence + 1;
+            }
 			
 			// remove the newly found sentence from the sentence buffer
             left_over_sentence_.reset(new std::string(left_over_sentence_->substr(end_of_phase)));
@@ -155,8 +156,9 @@ void TextReader::HandleMasterFile()
 
     l_file.exceptions(std::ifstream::badbit);
     l_file.open(master_file_name_);
-    while (std::getline(l_file, filename))
+    while (std::getline(l_file, filename)) {
        text_file_names_.push_back(filename);
+    }
 
     l_file.close();
 }
@@ -212,11 +214,12 @@ void TextReader::RemoveCommonAbbreviations(std::string& input)
         if (first_index == std::string::npos) break;
 
         /* Make the replacement. */
-        if ((abbreviated_symbol != "A.D.") && (abbreviated_symbol != "B.C."))
+        if ((abbreviated_symbol != "A.D.") && (abbreviated_symbol != "B.C.")) {
             input.replace(first_index, abbreviated_symbol.size(), abbreviated_symbol.substr(0, abbreviated_symbol.size() - 1));
-        else if (abbreviated_symbol == "A.D.")
+        } else if (abbreviated_symbol == "A.D.") {
             input.replace(first_index, abbreviated_symbol.size(), "AD");
-        else if (abbreviated_symbol == "B.C.")
+        } else if (abbreviated_symbol == "B.C.") {
             input.replace(first_index, abbreviated_symbol.size(), "BC");
+        }
     }
 }

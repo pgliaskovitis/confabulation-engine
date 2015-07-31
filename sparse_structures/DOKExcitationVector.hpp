@@ -74,10 +74,12 @@ void DOKExcitationVector<T>::SetElement(const uint32_t r, const T& value)
     IExcitationVector<T>::CheckBounds(r);
     if (IsNearlyEqual(value, 0.0)) {
         typename std::unordered_map<uint32_t, T>::iterator it = map_.find(r);
-        if (it != map_.end())
+        if (it != map_.end()) {
             map_.erase(it);
-    } else
+        }
+    } else {
         SetElementQuick(r, value);
+    }
 }
 
 template <typename T>
@@ -118,8 +120,9 @@ template <typename T>
 std::set<std::pair<uint32_t, T>> DOKExcitationVector<T>::GetNzElements() const
 {
     typename std::set<std::pair<uint32_t, T>> result;
-    for (typename std::unordered_map<uint32_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it)
+    for (typename std::unordered_map<uint32_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
         result.insert(*it);
+    }
 
     return result;
 }

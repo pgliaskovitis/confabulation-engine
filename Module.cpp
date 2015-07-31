@@ -48,8 +48,9 @@ void Module::ActivateSymbol(const std::string &word, int32_t K)
 {
     normalized_excitations_.reset(nullptr);
 
-    if (K < 0)
+    if (K < 0) {
         throw std::logic_error("ActivateSymbol called with negative K");
+    }
 
     try {
         uint32_t index = symbol_mapping_.IndexOf(word);
@@ -134,8 +135,9 @@ void Module::AddExcitationVector(const IExcitationVector<float> &input)
 void Module::Freeze()
 {
     frozen_indexes_.reset(new std::set<uint32_t>());
-    for (const std::pair<uint32_t, float>& e : excitations_->GetNzElements())
+    for (const std::pair<uint32_t, float>& e : excitations_->GetNzElements()) {
         frozen_indexes_->insert(e.first);
+    }
 }
 
 void Module::Unfreeze()
@@ -152,11 +154,13 @@ const std::unique_ptr<IExcitationVector<float> > &Module::GetNormalizedExcitatio
     normalized_excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
 
     double sum = 0.0;
-    for (const std::pair<uint32_t, float>& e : excitations_->GetNzElements())
+    for (const std::pair<uint32_t, float>& e : excitations_->GetNzElements()) {
         sum += e.second;
+    }
 
-    for (const std::pair<uint32_t, float>& e : excitations_->GetNzElements())
+    for (const std::pair<uint32_t, float>& e : excitations_->GetNzElements()) {
         normalized_excitations_->SetElement(e.first, (float) (e.second / sum));
+    }
 
     return normalized_excitations_;
 }
@@ -256,9 +260,11 @@ std::vector<std::string> Module::PartialConfabulation(int32_t K, bool multiconf)
 
         float threshold = std::max(max_excit->second - Globals::kBandGap, 0.0f);
         expectations.reset(new std::vector<std::pair<uint32_t, float>>());
-        for (const std::pair<uint32_t, float>& e : nz_excit)
-            if (e.second > threshold)
+        for (const std::pair<uint32_t, float>& e : nz_excit) {
+            if (e.second > threshold) {
                 expectations->push_back(e);
+            }
+        }
     }
 
     // saving needed info from intermediate state
@@ -317,8 +323,9 @@ std::set<std::pair<uint32_t, float> > Module::ExcitationsAbove(int8_t K, const s
 
 int32_t Module::ActualK(int32_t K)
 {
-    if (K >= 0)
+    if (K >= 0) {
         return K;
+    }
 
     return MaxK() + K + 1;
 }

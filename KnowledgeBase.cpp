@@ -66,9 +66,11 @@ void KnowledgeBase::ComputeLinkStrengths()
 float KnowledgeBase::GetPercentOfElementsLessThanThreshold(uint32_t threshold)
 {
     uint32_t count = 0;
-    for (const std::pair<std::pair<uint32_t, uint32_t>, float>& e: cooccurrence_counts_->GetNzElements())
-        if (e.second < threshold)
+    for (const std::pair<std::pair<uint32_t, uint32_t>, float>& e: cooccurrence_counts_->GetNzElements()) {
+        if (e.second < threshold) {
             ++count;
+        }
+    }
 
     return count / cooccurrence_counts_->GetNnz();
 
@@ -76,16 +78,18 @@ float KnowledgeBase::GetPercentOfElementsLessThanThreshold(uint32_t threshold)
 
 std::unique_ptr<IExcitationVector<float> > KnowledgeBase::Transmit(const IExcitationVector<float> &normalized_excitations) const
 {
-    if (normalized_excitations.get_num_rows() != src_map_.Size())
+    if (normalized_excitations.get_num_rows() != src_map_.Size()) {
         throw std::out_of_range("Input excitations should match the size of the input wordsmapping");
+    }
 
     return kbase_->Multiply(normalized_excitations);
 }
 
 float KnowledgeBase::ComputeLinkStrength(double antecedent_support_probability)
 {
-    if (antecedent_support_probability > Globals::kBaseProb)
+    if (antecedent_support_probability > Globals::kBaseProb) {
         return static_cast<float>(log(antecedent_support_probability / (double) Globals::kBaseProb)) + Globals::kBandGap;
+    }
 
     return 0.0;
 }

@@ -40,9 +40,10 @@ public:
 
     void CheckBounds(const uint32_t r) const
     {
-        if (r >= get_num_rows())
+        if (r >= get_num_rows()) {
             throw std::out_of_range(std::string("1D Out of Range, for row ") +
                                     std::to_string(r));
+        }
     }
 
     virtual void Add(const IExcitationVector& other) = 0;

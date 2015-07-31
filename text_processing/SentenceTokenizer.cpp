@@ -35,12 +35,15 @@ bool SentenceTokenizer::IsCharNotAlphaNumeric(char input)
 
 bool SentenceTokenizer::IsSymbolAlphanumeric(const std::string& input)
 {
-    if (input.size() == 0)
+    if (input.size() == 0) {
       return false;
+    }
 
-    for (std::string::const_iterator it = input.begin(); it != input.end(); ++it)
-    if (!std::isalpha(*it))
-        return false;
+    for (std::string::const_iterator it = input.begin(); it != input.end(); ++it) {
+        if (!std::isalpha(*it)) {
+            return false;
+        }
+    }
 
     return true;
 }
@@ -128,10 +131,10 @@ bool SentenceTokenizer::Tokenize(const std::string& delimiters)
 	_DEBUG*/
 
     // Save the result on the token
-    if (index_ == std::string::npos)
+    if (index_ == std::string::npos) {
         token_ = source_.substr(index0);
         //std::cout << "m_token infinite is " << m_token << "\n";
-    else {
+    } else {
         size_t length_token = index_ - index0;
         token_ = source_.substr(index0, length_token);
         //std::cout << "m_token finite is " << m_token << "\n";
@@ -219,8 +222,9 @@ std::string SentenceTokenizer::ExtractDelimiterToken(size_t begin, size_t end)
     delimiter_partial = source_.substr(begin, length_delim);
 
     size_t str_begin = delimiter_partial.find_first_not_of(' ');
-    if (str_begin == std::string::npos)
+    if (str_begin == std::string::npos) {
 		return ""; // no content in the delimiter other than white space
+    }
 
     size_t str_end = delimiter_partial.find_last_not_of(' ');
     size_t str_range = str_end - str_begin + 1;

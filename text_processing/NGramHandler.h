@@ -32,12 +32,14 @@ struct StringVector_Cmp
     bool operator() (const std::vector<std::string>& a, const std::vector<std::string> b)
     {
         std::string a_string("");
-        for (const std::string& e: a)
+        for (const std::string& e: a) {
             a_string += e;
+        }
 
         std::string b_string("");
-        for (const std::string& e: b)
+        for (const std::string& e: b) {
             b_string += e;
+        }
 
         return strcmp(a_string.c_str(), b_string.c_str()) < 0;
     }

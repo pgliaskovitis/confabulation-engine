@@ -35,8 +35,8 @@ namespace
     bool IsNearlyEqual(float x, float y)
     {
         const double epsilon = 1e-6;
-            return std::abs(x - y) <= epsilon * std::abs(x);
-            // see Knuth section 4.2.2 pages 217-218
+        return std::abs(x - y) <= epsilon * std::abs(x);
+        // see Knuth section 4.2.2 pages 217-218
     }
 
     uint32_t BinarySearch(const std::vector<uint32_t>::const_iterator& begin_it, const std::vector<uint32_t>::const_iterator& end_it,
@@ -52,16 +52,18 @@ namespace
                 return (mid - begin_it);
             }
 
-            if (key < *mid)
+            if (key < *mid) {
                 upper = mid - 1;
-            else
+            } else {
                 lower = mid + 1;
+            }
         }
 
         uint32_t result = lower - begin_it;
 
-        if (key == *(lower + result))
+        if (key == *(lower + result)) {
             found = true;
+        }
 
         return result;
     }
@@ -79,8 +81,9 @@ namespace
         size_t i = 0;
         for (const std::string& e: vector_symbol) {
             result += e;
-            if (i < symbol_count - 1)
+            if (i < symbol_count - 1) {
                 result += delim;
+            }
             ++i;
         }
 
@@ -95,8 +98,9 @@ namespace
         size_t i = 0;
         for (const std::string& e: list_symbol) {
             result += e;
-            if (i < symbol_count - 1)
+            if (i < symbol_count - 1) {
                 result += delim;
+            }
             ++i;
         }
 
@@ -111,8 +115,9 @@ namespace
         size_t i = 0;
         for (const std::string& e: set_symbol) {
             result += e;
-            if (i < symbol_count - 1)
+            if (i < symbol_count - 1) {
                 result += delim;
+            }
             ++i;
         }
 
@@ -134,11 +139,13 @@ namespace
 
     int32_t ConvertToSigned(uint32_t x)
     {
-        if (x <= std::numeric_limits<int32_t>::max())
+        if (x <= std::numeric_limits<int32_t>::max()) {
             return static_cast<int32_t>(x);
+        }
 
-        if (x >= std::numeric_limits<int32_t>::min())
+        if (x >= std::numeric_limits<int32_t>::min()) {
             return static_cast<int32_t>(x - std::numeric_limits<int32_t>::min()) + std::numeric_limits<int32_t>::min();
+        }
 
         throw x;
     }
@@ -147,8 +154,9 @@ namespace
     {
         std::vector<std::string> result(input);
         if (input.size() < max_size) {
-            for (size_t i = result.size(); i < max_size; ++i)
+            for (size_t i = result.size(); i < max_size; ++i) {
                 result.push_back("");
+            }
         }
 
         return result;
@@ -157,27 +165,33 @@ namespace
     size_t FindNumberOfEmptyStringsBeforeIndex(const std::vector<std::string>& symbols, int index)
     {
         size_t result = 0;
-        for (int i = 0; i < index; ++i)
-            if (symbols[i].empty())
+        for (int i = 0; i < index; ++i) {
+            if (symbols[i].empty()) {
                 ++result;
+            }
+        }
 
         return result;
     }
 
     int FindFirstIndexOfSymbol(const std::vector<std::string>& symbols, const std::string& target_string)
     {
-        for (size_t i = 0; i < symbols.size(); ++i)
-            if (symbols[i] == target_string)
+        for (size_t i = 0; i < symbols.size(); ++i) {
+            if (symbols[i] == target_string) {
                 return ConvertToSigned(i);
+            }
+        }
 
         return -1;
     }
 
     int FindFirstIndexNotOfSymbol(const std::vector<std::string>& symbols, const std::string& target_string)
     {
-        for (size_t i = 0; i < symbols.size(); ++i)
-            if (symbols[i] != target_string)
+        for (size_t i = 0; i < symbols.size(); ++i) {
+            if (symbols[i] != target_string) {
                 return ConvertToSigned(i);
+            }
+        }
 
         return -1;
     }

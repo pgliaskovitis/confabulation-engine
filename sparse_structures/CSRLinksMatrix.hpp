@@ -111,10 +111,11 @@ T CSRLinksMatrix<T>::GetElementQuick(uint32_t r, uint32_t c) const
     bool found_element = false;
     const uint32_t index = BinarySearch(begin_it, end_it, c, found_element);
 
-    if (found_element)
+    if (found_element) {
         return a_[index];
-    else
+    } else {
         return 0;
+    }
 }
 
 template <typename T>
@@ -139,9 +140,11 @@ std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> CSRLinksMatrix<T>::GetNzEl
 {
     typename std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> result;
 
-    for (uint32_t r = 0; r < num_rows_; ++r)
-        for (uint32_t i = ia_[r]; i < ia_[r + 1]; ++i)
+    for (uint32_t r = 0; r < num_rows_; ++r) {
+        for (uint32_t i = ia_[r]; i < ia_[r + 1]; ++i) {
             result.insert(std::make_pair(std::make_pair(r, ja_[i]), a_[i]));
+        }
+    }
 
     return result;
 }

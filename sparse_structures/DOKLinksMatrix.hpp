@@ -64,8 +64,9 @@ DOKLinksMatrix<T>::DOKLinksMatrix(uint32_t num_rows, uint32_t num_cols) : num_ro
 template <typename T>
 DOKLinksMatrix<T>::DOKLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get_num_rows()), num_cols_(base.get_num_cols())
 {
-    for (const std::pair<std::pair<uint32_t, uint32_t>, T>& element : base.GetNzElements())
+    for (const std::pair<std::pair<uint32_t, uint32_t>, T>& element : base.GetNzElements()) {
         map_.insert(element);
+    }
 }
 
 template <typename T>
@@ -95,10 +96,12 @@ void DOKLinksMatrix<T>::SetElement(uint32_t r, uint32_t c, const T &value)
     IKnowledgeLinks<T>::CheckBounds(r, c);
     if (IsNearlyEqual(value, 0.0)) {
         typename std::map<std::pair<uint32_t, uint32_t>, T>::iterator it = map_.find(std::make_pair(r, c));
-        if (it != map_.end())
+        if (it != map_.end()) {
             map_.erase(it);
-    } else
+        }
+    } else {
         SetElementQuick(r, c, value);
+    }
 }
 
 template <typename T>
