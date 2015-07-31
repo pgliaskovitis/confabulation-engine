@@ -111,15 +111,19 @@ bool ForwardConfabulation::CheckArguments(const std::vector<std::string> &symbol
             return false;
         }
 
-        if (CheckIndex(symbols, index_to_complete))
+        if (CheckIndex(symbols, index_to_complete)) {
             return CheckVocabulary(symbols);
-        else return false;
+        } else {
+            return false;
+        }
     }
 
     // autodetect mode
     int8_t index = AutoIndexToComplete(symbols);
 
-    if (CheckIndex(symbols, index))
+    if (CheckIndex(symbols, index)) {
         return CheckVocabulary(symbols);
-    else return false;
+    } else {
+        return false;
+    }
 }

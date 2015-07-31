@@ -65,8 +65,9 @@ void ConfabulationBase::Build()
     // create the modules
     uint8_t level = 0;
     for (size_t i = 0; i < num_modules_; ++i) {
-        if ((i != 0) && (i % level_specs_[level] == 0))
+        if ((i != 0) && (i % level_specs_[level] == 0)) {
             ++level;
+        }
 
         const std::unique_ptr<SymbolMapping>& symbols_at_level = organizer_->get_mappings_for_level(level);
         modules_.emplace_back(new Module(*symbols_at_level));
@@ -104,8 +105,9 @@ void ConfabulationBase::Learn(size_t num_word_modules)
     do {
         std::vector<std::string> read_sentence = text_reader.GetNextSentenceTokens(finished_reading);
 
-        if (read_sentence.size() < 2)
+        if (read_sentence.size() < 2) {
             continue;
+        }
 
         std::deque<std::string> read_sentence_buffer(read_sentence.begin(), read_sentence.end());
 
@@ -119,18 +121,20 @@ void ConfabulationBase::Learn(size_t num_word_modules)
             if (num_word_modules < remaining_sentence_size) {
                 large_sentence = true;
                 current_sentence_size = num_word_modules;
-            } else
+            } else {
                 current_sentence_size = remaining_sentence_size;
+            }
 
             std::vector<std::string> sentence(read_sentence_buffer.begin(), read_sentence_buffer.begin() + current_sentence_size);
 
-            if (large_sentence)
+            if (large_sentence) {
                 // in case of large sentences, a window step is chosen such that the next sentence
                 // overlaps by kMaxMultiWordSize words with the current one
                 read_sentence_buffer.erase(read_sentence_buffer.begin(), read_sentence_buffer.begin() + num_word_modules - Globals::kMaxMultiWordSize);
-            else
+            } else {
                 // in case of small sentences, we do not need the buffer any more
                 read_sentence_buffer.clear();
+            }
 
             // make sure that sentence does not wholly consist of empty strings
             if (!(FindFirstIndexNotOfSymbol(sentence, "") < 0)) {
@@ -183,8 +187,9 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 void ConfabulationBase::Clean()
 {
     for (const std::unique_ptr<Module>& module : modules_) {
-        if (module != nullptr)
+        if (module != nullptr) {
             module->Reset();
+        }
     }
 }
 

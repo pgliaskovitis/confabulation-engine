@@ -307,61 +307,6 @@ void ConfabulationTest::TestTwoLevelMultiConfabulation(const std::string& symbol
     }
 }
 
-/*
-void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
-{
-    Globals globals;
-    std::shared_ptr<TextReader> reader(new TextReader(globals));
-    std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(3, globals));
-    std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
-
-    manager->Init();
-    globals.set_knowledge_manager(manager);
-    globals.set_text_reader(reader);
-    globals.set_ngram_handler(ngram_handler);
-    reader->HandleSymbolFile(symbolfile);
-
-    reader->HandleAllTextFiles(masterfile);
-
-    manager->CleanUpWeakLinks();
-    PerformConfabulation(globals, sentences);
-    manager->PersistRecallableKnowledge();
-}
-
-void ConfabulationTest::TestConfabulationWithPersistedKnowledge(const std::string& symbolfile, const std::string& supplementfile, const std::vector<std::string>& sentences) const
-{
-    Globals globals;
-    std::shared_ptr<TextReader> reader(new TextReader(globals));
-    std::shared_ptr<NGramHandler> ngram_handler(new NGramHandler(3, globals));
-    std::shared_ptr<KnowledgeManager> manager(new KnowledgeManager(globals));
-
-    manager->Init();
-    globals.set_knowledge_manager(manager);
-    globals.set_text_reader(reader);
-    globals.set_ngram_handler(ngram_handler);
-    reader->HandleSymbolFile(symbolfile);
-
-    manager->RecallPersistedKnowledge();
-    reader->HandleAllTextFiles(supplementfile);
-    manager->CleanUpWeakLinks();
-    PerformConfabulation(globals, sentences);
-    manager->PersistRecallableKnowledge();
-}
-
-void ConfabulationTest::PerformConfabulation(Globals& globals, const std::vector<std::string>& sentences) const
-{
-    for (std::vector<std::string>::const_iterator it = sentences.begin(); it != sentences.end(); ++it) {
-        std::vector<std::string> currentfeedTokens = globals.get_text_reader().ExtractSentenceTokens(*it);
-        //std::pair<float, std::string> output = globals.getKnowledgeManager()->getConfabulatedSymbol(currentfeedTokens);
-        std::vector<std::string> output = globals.get_knowledge_manager().GetLayeredConfabulatedSymbol(currentfeedTokens);
-        std::cout << *it << "{";
-        for (uint8_t k = 0; k < Globals::kHeapResults; k++)
-            std::cout << output[k] << ", ";
-        std::cout << "}" << std::endl << std::endl;
-    }
-}
-*/
-
 int main()
 {
 	std::shared_ptr<ConfabulationTest> test1(new ConfabulationTest());

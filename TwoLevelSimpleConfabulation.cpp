@@ -87,10 +87,7 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
         Activate(temp_input);
 
         // find expectation on phrase module above word module at index
-        for (size_t n = 0; n < index; ++n) {
-            TransferExcitation(modules_[n], knowledge_bases_[n][num_word_modules_ + index], modules_[num_word_modules_ + index]);
-        }
-
+        TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index]);
         modules_[num_word_modules_ + index]->PartialConfabulation(1, false);
 
         // find expectation on unknown word module
