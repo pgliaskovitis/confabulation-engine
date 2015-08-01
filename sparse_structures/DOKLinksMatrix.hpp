@@ -136,8 +136,9 @@ std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> DOKLinksMatrix<T>::GetNzEl
 {
     typename std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> result;
 
-    for (typename std::map<std::pair<uint32_t, uint32_t>, T>::const_iterator it = map_.begin(); it != map_.end(); ++it)
+    for (typename std::map<std::pair<uint32_t, uint32_t>, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
         result.insert(*it);
+    }
 
     return result;
 }
