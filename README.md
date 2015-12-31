@@ -3,7 +3,7 @@ confab-engine
 
 Implementation of language cognition and generation based on Robert Hecht Nielsen's Confabulation Theory.
 
-As an interesting remark, having been studying Reccurrent Neural Networks recently, the mechanisms do bear a resemblance to the 'swirl' operation of multiconfabulation. Multiconfabulation can be thought of as a "Recurrent Maximum Likelihood" system. Of course, in confabulation there is no concept of optimizing an objective function.
+As an interesting remark, having been studying Recurrent Neural Networks recently, the mechanisms do bear a resemblance to the 'swirl' operation of multiconfabulation. Multiconfabulation can effectively be thought of as a "Recurrent Maximum Likelihood" system. Of course, in confabulation there is no concept of optimizing an objective function.
 
 Should anyone be interested, most promising directions for expanding the confabulation project are currently:
 I) Capability to generate punctuation marks and especially fullstops. The goal is to move on to generation of multiple sentences.
