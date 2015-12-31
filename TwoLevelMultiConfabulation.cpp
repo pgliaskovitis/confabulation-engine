@@ -88,7 +88,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
     std::vector<std::string> temp_input(symbols.begin(), symbols.end());
 
-    for (int intermediate_result_count = 0; intermediate_result_count < 4 && index < num_word_modules_; ++intermediate_result_count) {
+    for (; index < num_word_modules_;) {
         int32_t actual_K = std::min<int32_t>(ActualK(temp_input, index), 4);
         modules_[index]->ExcitationsToZero();
 
@@ -233,18 +233,19 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             if (word_excitation > phrase_excitation) {
                 result.push_back(next_word);
                 temp_input.push_back(next_word);
+                ++index;
             } else {
                 result.push_back(next_phrase);
                 const std::vector<std::string>& result_tokens = SymbolToVectorSymbol(next_phrase, ' ');
                 for (int m; m < result_tokens.size(); ++m) {
                     temp_input.push_back(result_tokens.at(m));
                 }
+                index += result_tokens.size();
             }
             result.push_back("}");
         }
 
         Clean();
-        ++index;
     }
 
     return result;
