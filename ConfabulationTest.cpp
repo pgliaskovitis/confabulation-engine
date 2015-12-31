@@ -359,19 +359,19 @@ int main()
 
     std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 
-    std::string feed1 = "The hooded men were chanting beneath the ";
+    std::string feed1 = "The hooded men were chanting beneath ";
     std::string feed2 = "An army of little insects gathered on top of ";
-    std::string feed3 = "The prostitute smiled and slowly caressed his ";
+    std::string feed3 = "The prostitute smiled and slowly caressed ";
     std::string feed4 = "A dark winter was eating through the ";
-    std::string feed5 = "The eagle circled above the valley, eager for ";
+    std::string feed5 = "The dragon circled above the valley, eager for ";
     std::string feed6 = "Our initial impression of the situation was ";
     std::string feed7 = "At the slightest hint of movement, he was ready to cut ";
-    std::string feed8 = "A warm and sweet scent was rising from her ";
-    std::string feed9 = "She stumbled over her dress and fell ";
+    std::string feed8 = "A warm and sweet scent was coming from her ";
+    std::string feed9 = "She stumbled over her dress and ";
     std::string feed10 = "She had not only her husband killed, but also her ";
 
     std::string feed11 = "He realized that only the dance could ";
-    std::string feed12 = "He leaned into her, the love of his life, and whispered ";
+    std::string feed12 = "He leaned into her, the love of his life, and ";
     std::string feed13 = "He suddenly collapsed, crying like a ";
     std::string feed14 = "The cave was too high up for him to ";
     std::string feed15 = "Suffocating in a party of dull people, he started ";
@@ -381,15 +381,15 @@ int main()
     std::string feed19 = "With desperate effort he managed to get away from ";
     std::string feed20 = "Hosts of archers stood ready along the ";
 
-    std::string feed21 = "The joker laughed sardonically and continued squeezing her ";
+    std::string feed21 = "The joker laughed sardonically and continued ";
     std::string feed22 = "She moaned with pleasure when he ";
-    std::string feed23 = "The thief viciously stabbed John while he was chopping ";
+    std::string feed23 = "The thief viciously stabbed John while he was ";
     std::string feed24 = "The green hat swirled and landed on the ";
-    std::string feed25 = "Ominous waves surrounded us, just before we jumped ";
+    std::string feed25 = "Ominous waves surrounded us, just before we ";
     std::string feed26 = "He was hopelessly enchanted by her ";
-    std::string feed27 = "The knight decided to kill the maiden and marry the ";
+    std::string feed27 = "The knight decided to kill the maiden and ";
     std::string feed28 = "The council sent out its most fearsome agents to ";
-    std::string feed29 = "Enlightenment goes well with a cup of ";
+    std::string feed29 = "Enlightenment goes well with a ";
     std::string feed30 = "The captain was listening silently for a while, but then ";
 
     allOriginalFeeds->push_back(feed1);
