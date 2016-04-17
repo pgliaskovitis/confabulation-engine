@@ -1,11 +1,11 @@
-confab-engine
-=============
+confabulation-engine
+====================
 
 Implementation of language cognition and generation based on Robert Hecht Nielsen's Confabulation Theory.
 
-As an interesting remark, having been studying Recurrent Neural Networks recently, the mechanisms do bear a resemblance to the 'swirl' operation of multiconfabulation. Multiconfabulation can effectively be thought of as a "Recurrent Maximum Likelihood" system. Of course, in confabulation there is no concept of optimizing an objective function.
+Having been studying Recurrent Neural Networks recently, the mechanisms do bear a resemblance to the 'swirl' operation of multiconfabulation. Multiconfabulation can effectively be thought of as a "Recurrent Maximum Likelihood" system. Of course, in confabulation there is no concept of optimizing an objective function.
 
-Should anyone be interested, most promising directions for expanding the confabulation project are currently:
+Most promising directions for expanding the confabulation project are currently:
 I) Capability to generate punctuation marks and especially fullstops. The goal is to move on to generation of multiple sentences.
 II) Capability to perform matrix multiplications on the GPU, i.e., using CUDA. This will speed up language generation (but not knowledge learning).
 III) Capability to perform incremental knowledge learning, i.e., add the knowledge from a single new book directly to an already persisted set of knowledge bases.
