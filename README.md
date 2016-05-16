@@ -6,6 +6,7 @@ Implementation of language cognition and generation based on Robert Hecht Nielse
 Having been studying Recurrent Neural Networks recently, the mechanisms do bear a resemblance to the 'swirl' operation of multiconfabulation. Multiconfabulation can effectively be thought of as a "Recurrent Maximum Likelihood" system. Of course, in confabulation there is no concept of optimizing an objective function.
 
 Most promising directions for expanding the confabulation project are currently:
+
 I) Capability to generate punctuation marks and especially fullstops. The goal is to move on to generation of multiple sentences.
 
 II) Capability to perform matrix multiplications on the GPU, i.e., using CUDA. This will speed up language generation (but not knowledge learning).
