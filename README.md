@@ -5,7 +5,8 @@ Implementation of language cognition and generation based on Robert Hecht Nielse
 
 Having been studying Recurrent Neural Networks recently, the mechanisms do bear a resemblance to the 'swirl' operation of multiconfabulation. Multiconfabulation can effectively be thought of as a "Recurrent Maximum Likelihood" system. Of course, in confabulation there is no concept of optimizing an objective function.
 
-Most promising directions for expanding the confabulation project are currently:
+Possible expansions
+-------------------
 
 I) Capability to generate punctuation marks and especially fullstops. The goal is to move on to generation of multiple sentences.
 
@@ -14,6 +15,9 @@ II) Capability to perform matrix multiplications on the GPU, i.e., using CUDA. T
 III) Capability to perform incremental knowledge learning, i.e., add the knowledge from a single new book directly to an already persisted set of knowledge bases.
 
 IV) Capability to have soft representation of symbols vs the hard representation as it stands now. Symbols are currently represented as strings and matching of the symbols on input sentences must be exact. A soft representation would allow more than one related symbols from a given input to be excited proportionally to a distance metric. Possible soft representations could be the feature vectors learned from a Deep Neural Network (also known as word vectors). 
+
+Installation
+------------
 
 The confabulation project has been developed primarily in QtCreator. Project files for QtCreator are available. In order 
 to build the project independently of QtCreator you will need the qmake facility (e.g., you can install
