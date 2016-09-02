@@ -10,13 +10,15 @@ Possible Extensions
 
 In decreasing order of importance:
 
-I) Capability to perform incremental knowledge learning, i.e., add the knowledge from a single new book directly to an already persisted set of knowledge bases.
+I) Capability to persist knowledge bases in files, most probably in their dictionary form. Learning and language generation currently happen only in-memory.
 
-II) Capability to have soft representation of symbols vs the hard representation as it stands now. Symbols are currently represented as strings and matching of the symbols on input sentences must be exact. A soft representation would allow more than one related symbols from a given input to be excited proportionally to a distance metric. Possible soft representations could be the feature vectors learned from a Deep Neural Network (also known as word vectors). 
+II) Capability to perform incremental knowledge learning, i.e., add the knowledge from a single new source directly to an already persisted set of knowledge bases. This would require storage of both co-occurrence counts and total occurrences for each symbol (i.e., both numerator and denominator in conditional probability terms).
 
-III) Capability to perform matrix multiplications on the GPU, i.e., using CUDA. This will speed up language generation (but not knowledge learning).
+III) Capability to have soft representation of symbols vs the hard representation as it stands now. Symbols are currently represented as strings and matching of the symbols on input sentences must be exact. A soft representation would allow more than one related symbols from a given input to be excited proportionally to a distance metric. Possible soft representations could be the feature vectors learned from a Deep Neural Network (also known as word vectors). 
 
-IV) Capability to generate punctuation marks and especially fullstops. The goal is to move on to generation of multiple sentences.
+IV) Capability to perform matrix multiplications on the GPU, i.e., using CUDA. This will speed up language generation (but not knowledge learning).
+
+V) Capability to generate punctuation marks and especially fullstops. The goal is to move on to generation of multiple sentences.
 
 Installation
 ------------
