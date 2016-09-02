@@ -73,7 +73,6 @@ float KnowledgeBase::GetPercentOfElementsLessThanThreshold(uint32_t threshold)
     }
 
     return count / cooccurrence_counts_->GetNnz();
-
 }
 
 std::unique_ptr<IExcitationVector<float> > KnowledgeBase::Transmit(const IExcitationVector<float> &normalized_excitations) const

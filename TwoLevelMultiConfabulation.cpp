@@ -190,7 +190,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             }
         }
 
-
         // one final excitation boost
         if (index + 3 < num_word_modules_) {
             TransferExcitation(modules_[index + 3],
