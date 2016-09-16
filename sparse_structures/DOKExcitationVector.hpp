@@ -64,8 +64,9 @@ DOKExcitationVector<T>::DOKExcitationVector(const uint32_t num_rows) : num_rows_
 template <typename T>
 DOKExcitationVector<T>::DOKExcitationVector(const IExcitationVector<T> &base) : num_rows_(base.get_num_rows())
 {
-    for (const std::pair<uint32_t, T>& element : base.GetNzElements())
+    for (const std::pair<uint32_t, T>& element : base.GetNzElements()) {
         map_[element.first] = element.second;
+    }
 }
 
 template <typename T>

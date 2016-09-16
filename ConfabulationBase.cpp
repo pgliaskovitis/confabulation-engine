@@ -155,10 +155,12 @@ void ConfabulationBase::Learn(size_t num_word_modules)
                             for (size_t targ = 0; targ < num_modules_; ++targ) {
                                 if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
                                      knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
-//                                     std::cout << "Enhancing link [" << src << "][" << targ <<
+//                                     if (src == 1 && targ == 7) {
+//                                        std::cout << "Enhancing link [" << src << "][" << targ <<
 //                                                  "] between \"" << module_combination[src] <<
 //                                                  "\" and \"" << module_combination[targ] <<
 //                                                  "\"\n" << std::flush;
+//                                     }
                                 }
                             }
                         }

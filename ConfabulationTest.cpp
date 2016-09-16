@@ -234,7 +234,20 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     const std::unique_ptr<KnowledgeBase>& knowledge_base_1_6 = confab_engine.get_knowledge_base(1, num_word_modules);
     const std::unique_ptr<KnowledgeBase>& knowledge_base_1_7 = confab_engine.get_knowledge_base(1, num_word_modules + 1);
 
-    confab_engine.Activate({"the", "world"});
+    const std::unique_ptr<Module>& module_2 = confab_engine.get_module(2);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_2_6 = confab_engine.get_knowledge_base(2, num_word_modules);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_2_7 = confab_engine.get_knowledge_base(2, num_word_modules + 1);
+
+    // preliminary checks on modules
+    const std::set<std::string>& all_module_0_symbols = module_0->get_symbol_mapping().GetAllSymbols();
+    const std::set<std::string>& all_module_1_symbols = module_1->get_symbol_mapping().GetAllSymbols();
+    assert(all_module_0_symbols.size() == all_module_1_symbols.size());
+
+    const std::set<std::string>& all_module_6_symbols = module_6->get_symbol_mapping().GetAllSymbols();
+    const std::set<std::string>& all_module_7_symbols = module_7->get_symbol_mapping().GetAllSymbols();
+    assert(all_module_6_symbols.size() == all_module_7_symbols.size());
+
+    confab_engine.Activate({"the", "sense"});
     confab_engine.TransferExcitation(module_0, knowledge_base_0_6, module_6);
     confab_engine.TransferExcitation(module_1, knowledge_base_1_6, module_6);
 
@@ -242,15 +255,15 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     std::cout << "Excited symbols at module " << num_word_modules << " are: \n" << VectorSymbolToSymbol(expectation_at_target_a, '\n') << "\n" << std::flush;
 
     const std::vector<std::string>& excitations_C1F_at_target_a = module_6->PartialConfabulation(1, false);
-    std::cout << "C1F confabulated symbols at module " << num_word_modules << " is: \n" << VectorSymbolToSymbol(excitations_C1F_at_target_a, '\n') << "\n" << std::flush;
+    std::cout << "C1F confabulated symbols at module " << num_word_modules << " are: \n" << VectorSymbolToSymbol(excitations_C1F_at_target_a, '\n') << "\n" << std::flush;
 
     const std::vector<std::string>& excitations_C2F_at_target_a = module_6->PartialConfabulation(2, false);
-    std::cout << "C2F confabulated symbols at module " << num_word_modules << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_a, '\n') << "\n" << std::flush;
+    std::cout << "C2F confabulated symbol at module " << num_word_modules << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_a, '\n') << "\n" << std::flush;
 
     confab_engine.Clean();
-    confab_engine.Activate({"the", "sense"});
-    confab_engine.TransferExcitation(module_0, knowledge_base_0_7, module_7);
+    confab_engine.Activate({"", "the", "sense"});
     confab_engine.TransferExcitation(module_1, knowledge_base_1_7, module_7);
+    confab_engine.TransferExcitation(module_2, knowledge_base_2_7, module_7);
 
     const std::vector<std::string>& expectation_at_target_b = module_7->GetExpectation();
     std::cout << "Excited symbols at module " << num_word_modules + 1 << " are: \n" << VectorSymbolToSymbol(expectation_at_target_b, '\n') << "\n" << std::flush;
@@ -259,7 +272,7 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     std::cout << "C1F confabulated symbols at module " << num_word_modules + 1 << " is: \n" << VectorSymbolToSymbol(excitations_C1F_at_target_b, '\n') << "\n" << std::flush;
 
     const std::vector<std::string> excitations_C2F_at_target_b = module_7->PartialConfabulation(2, false);
-    std::cout << "C2F confabulated symbols at module " << num_word_modules + 1 << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_b, '\n') << "\n" << std::flush;
+    std::cout << "C2F confabulated symbol at module " << num_word_modules + 1 << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_b, '\n') << "\n" << std::flush;
 }
 
 void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
