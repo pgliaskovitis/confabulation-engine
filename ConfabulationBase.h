@@ -60,6 +60,7 @@ public:
 
     const std::unique_ptr<Module>& get_module(size_t index) { return modules_[index]; }
     const std::unique_ptr<KnowledgeBase>& get_knowledge_base(size_t source, size_t target) { return knowledge_bases_[source][target]; }
+    const std::unique_ptr<MultiLevelOrganizer>& get_organizer() { return organizer_; }
 
 protected:
     uint8_t num_modules_;

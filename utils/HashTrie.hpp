@@ -23,6 +23,7 @@
 #include <vector>
 #include <list>
 #include "HashTrieNode.hpp"
+#include "Utils.h"
 
 template <typename T>
 class HashTrie {
@@ -38,6 +39,8 @@ public:
     void AddAll(const std::vector<std::vector<T>>& sequences);
 
     std::list<T> FindLongest(const std::list<T>& sequence) const;
+
+    std::vector<std::list<T>> FindAll(const std::list<T>& sequence) const;
 
     size_t Size() { return size_; }
 
@@ -95,13 +98,42 @@ std::list<T> HashTrie<T>::FindLongest(const std::list<T>& sequence) const {
                 for (T& u_e : unconfirmed) {
                     result.push_back(std::move(u_e));
                 }
-
                 unconfirmed.clear();
             }
 
             current_node_ptr = &child;
         } catch (std::out_of_range) {
             return result;
+        }
+    }
+
+    return result;
+}
+
+template <typename T>
+std::vector<std::list<T>> HashTrie<T>::FindAll(const std::list<T>& sequence) const {
+
+    std::vector<std::list<T>> result;
+    std::list<T> partial;
+    bool partial_is_symbol;
+
+    const HashTrieNode<T>* current_node_ptr = &root_;
+
+    for (const T& e : sequence) {
+        try {
+            const HashTrieNode<T>& child = current_node_ptr->Get(e);
+            partial.push_back(e);
+            if (child.is_leaf()) {
+                partial_is_symbol = true;
+            }
+            current_node_ptr = &child;
+        } catch (std::out_of_range) {
+        }
+
+        if (partial.size() > 1 && partial_is_symbol) {
+            std::list<T> partial_copy(partial.begin(), partial.end());
+            result.push_back(std::move(partial_copy));
+            partial_is_symbol = false;
         }
     }
 

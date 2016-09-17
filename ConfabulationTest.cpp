@@ -216,7 +216,7 @@ void ConfabulationTest::TestProduceKnowledgeLinkCombinations() const
         std::cout << "Combination " << i << ":" << VectorSymbolToSymbol(result_1[i], ',') << "\n";
     }
 
-    std:cout << "\n" << std::flush;
+    std::cout << "\n" << std::flush;
 
     std::vector<std::vector<std::string>> input_2 = {
         {"as", "for", "the", "evil", "witch", "she"},
@@ -233,7 +233,7 @@ void ConfabulationTest::TestProduceKnowledgeLinkCombinations() const
 
 void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, const std::string& masterfile) const
 {
-    size_t num_word_modules = 6;
+    size_t num_word_modules = 10;
     TwoLevelSimpleConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 1);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
@@ -243,14 +243,12 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 
     const std::unique_ptr<Module>& module_0 = confab_engine.get_module(0);
     const std::unique_ptr<KnowledgeBase>& knowledge_base_0_6 = confab_engine.get_knowledge_base(0, num_word_modules);
-    const std::unique_ptr<KnowledgeBase>& knowledge_base_0_7 = confab_engine.get_knowledge_base(0, num_word_modules + 1);
 
     const std::unique_ptr<Module>& module_1 = confab_engine.get_module(1);
     const std::unique_ptr<KnowledgeBase>& knowledge_base_1_6 = confab_engine.get_knowledge_base(1, num_word_modules);
     const std::unique_ptr<KnowledgeBase>& knowledge_base_1_7 = confab_engine.get_knowledge_base(1, num_word_modules + 1);
 
     const std::unique_ptr<Module>& module_2 = confab_engine.get_module(2);
-    const std::unique_ptr<KnowledgeBase>& knowledge_base_2_6 = confab_engine.get_knowledge_base(2, num_word_modules);
     const std::unique_ptr<KnowledgeBase>& knowledge_base_2_7 = confab_engine.get_knowledge_base(2, num_word_modules + 1);
 
     // preliminary checks on modules
@@ -261,6 +259,26 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     const std::set<std::string>& all_module_6_symbols = module_6->get_symbol_mapping().GetAllSymbols();
     const std::set<std::string>& all_module_7_symbols = module_7->get_symbol_mapping().GetAllSymbols();
     assert(all_module_6_symbols.size() == all_module_7_symbols.size());
+
+    // preliminary checks on tries
+    const std::unique_ptr<HashTrie<std::string>>& level_1_trie = confab_engine.get_organizer()->get_trie_for_level(1);
+    std::vector<std::list<std::string>> all_subsequences_1 = level_1_trie->FindAll({"the", "sense", "of", "duty"});
+    std::cout << "Trie results: " << "\n" << std::flush;
+    for (const std::list<std::string>& e: all_subsequences_1) {
+        std::cout << ListSymbolToSymbol(e, ' ') << "\n" << std::flush;
+    }
+
+    std::vector<std::list<std::string>> all_subsequences_2 = level_1_trie->FindAll({"the", "sense", "of", "humor"});
+    std::cout << "Trie results: " << "\n" << std::flush;
+    for (const std::list<std::string>& e: all_subsequences_2) {
+        std::cout << ListSymbolToSymbol(e, ' ') << "\n" << std::flush;
+    }
+
+    std::vector<std::list<std::string>> all_subsequences_3 = level_1_trie->FindAll({"the", "world", "has", "rubbed"});
+    std::cout << "Trie results: " << "\n" << std::flush;
+    for (const std::list<std::string>& e: all_subsequences_3) {
+        std::cout << ListSymbolToSymbol(e, ' ') << "\n" << std::flush;
+    }
 
     confab_engine.Activate({"the", "sense"});
     confab_engine.TransferExcitation(module_0, knowledge_base_0_6, module_6);
