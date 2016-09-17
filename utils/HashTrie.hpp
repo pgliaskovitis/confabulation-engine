@@ -92,9 +92,9 @@ std::list<T> HashTrie<T>::FindLongest(const std::list<T>& sequence) const {
 
             unconfirmed.push_back(e);
             if (child.is_leaf()) {
-
-                for (T& u_e : unconfirmed)
+                for (T& u_e : unconfirmed) {
                     result.push_back(std::move(u_e));
+                }
 
                 unconfirmed.clear();
             }

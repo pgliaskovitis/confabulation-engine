@@ -204,16 +204,31 @@ void ConfabulationTest::TestHashTrie(const std::string& symbolfile, const std::s
 
 void ConfabulationTest::TestProduceKnowledgeLinkCombinations() const
 {
-    std::vector<std::vector<std::string>> input = {
+    std::vector<std::vector<std::string>> input_1 = {
         {"as", "for", "the", "evil", "witch", "she"},
         {"as for the", "", "", "evil witch", ""},
         {"fairy tale", ""}
     };
 
-    const std::vector<std::vector<std::string>> result = ProduceKnowledgeLinkCombinations(input, 13);
+    const std::vector<std::vector<std::string>> result_1 = ProduceKnowledgeLinkCombinations(input_1, 13);
 
-    for (size_t i = 0; i < result.size(); ++i)
-        std::cout << "Combination " << i << ":" << VectorSymbolToSymbol(result[i], ',') << "\n";
+    for (size_t i = 0; i < result_1.size(); ++i) {
+        std::cout << "Combination " << i << ":" << VectorSymbolToSymbol(result_1[i], ',') << "\n";
+    }
+
+    std:cout << "\n" << std::flush;
+
+    std::vector<std::vector<std::string>> input_2 = {
+        {"as", "for", "the", "evil", "witch", "she"},
+        {"as for", "", "", "evil witch", ""},
+        {"fairy tale", ""}
+    };
+
+    const std::vector<std::vector<std::string>> result_2 = ProduceKnowledgeLinkCombinations(input_2, 13);
+
+    for (size_t i = 0; i < result_2.size(); ++i) {
+        std::cout << "Combination " << i << ":" << VectorSymbolToSymbol(result_2[i], ',') << "\n";
+    }
 }
 
 void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, const std::string& masterfile) const
