@@ -59,7 +59,7 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
     for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
         kb_specs[i][i - num_word_modules] = true;
         if (i - num_word_modules < num_word_modules - 1) {
-            kb_specs[i][i - num_word_modules + 1];
+            kb_specs[i][i - num_word_modules + 1] = true;
         }
     }
 
