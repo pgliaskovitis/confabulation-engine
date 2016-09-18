@@ -120,10 +120,10 @@ std::vector<std::vector<std::vector<std::string>>> MultiLevelOrganizer::Organize
                 // store found multisymbol
                 level[k] = std::move(ListSymbolToSymbol(match, ' '));
 
-                if (j > 0) {
-                    std::cout << "Searched for match for combination " << i << " at level " << j << ": " << ListSymbolToSymbol(temp_symbols_list, ' ') << "\n" << std::flush;
-                    std::cout << "Found match in HashTrie at level " << j << ": " << level[k] << "\n" << std::flush;
-                }
+                // if (j > 0) {
+                //    std::cout << "Searched for match for combination " << i << " at level " << j << ": " << ListSymbolToSymbol(temp_symbols_list, ' ') << "\n" << std::flush;
+                //    std::cout << "Found match in HashTrie at level " << j << ": " << level[k] << "\n" << std::flush;
+                // }
 
                 size_t end = std::min(level.size(), k + match.size());
                 while (k < end) {
