@@ -25,7 +25,6 @@ KnowledgeBase::KnowledgeBase(const std::string& id, const SymbolMapping& src_map
     src_map_(src_map),
     targ_map_(targ_map),
     cooccurrence_counts_(new DOKLinksMatrix<uint32_t>(targ_map.Size(), src_map.Size())),
-    kbase_(new CSRLinksMatrix<float>(targ_map.Size(), src_map.Size())),
     target_symbol_sums_(targ_map.Size())
 {}
 
@@ -42,8 +41,6 @@ void KnowledgeBase::Add(const std::string& src_symbol, const std::string& targ_s
 
 void KnowledgeBase::Add(uint32_t targ_index, uint32_t src_index)
 {
-    kbase_.reset(nullptr);
-
     target_symbol_sums_[targ_index]++;
     uint32_t previous_count = cooccurrence_counts_->GetElement(targ_index, src_index);
     cooccurrence_counts_->SetElement(targ_index, src_index, previous_count + 1);
@@ -51,13 +48,12 @@ void KnowledgeBase::Add(uint32_t targ_index, uint32_t src_index)
 
 void KnowledgeBase::ComputeLinkStrengths()
 {
-    std::unique_ptr<DOKLinksMatrix<float>> link_strengths(
-                new DOKLinksMatrix<float>(cooccurrence_counts_->get_num_rows(), cooccurrence_counts_->get_num_cols()));
+    std::unique_ptr<DOKLinksMatrix<float>> link_strengths(new DOKLinksMatrix<float>(cooccurrence_counts_->get_num_rows(), cooccurrence_counts_->get_num_cols()));
 
     for (const std::pair<std::pair<uint32_t, uint32_t>, float>& e: cooccurrence_counts_->GetNzElements()) {
         uint32_t row = e.first.first;
         uint32_t col = e.first.second;
-        link_strengths->SetElement(row, col, ComputeLinkStrength(e.second / (float) target_symbol_sums_[row]));
+        link_strengths->SetElement(row, col, ComputeLinkStrength(float(e.second) / (float) target_symbol_sums_[row]));
     }
 
     kbase_.reset(new CSRLinksMatrix<float>(*link_strengths));

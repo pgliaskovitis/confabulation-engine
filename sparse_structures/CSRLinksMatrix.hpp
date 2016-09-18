@@ -37,6 +37,8 @@ public:
     CSRLinksMatrix(CSRLinksMatrix&& rhs) = delete;
     CSRLinksMatrix&& operator=(CSRLinksMatrix&& rhs) = delete;
 
+    ~CSRLinksMatrix();
+
     virtual void SetElement(uint32_t r, uint32_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
     virtual void SetElementQuick(uint32_t r, uint32_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
 
@@ -63,6 +65,14 @@ private:
 template <typename T>
 CSRLinksMatrix<T>::CSRLinksMatrix(uint32_t num_rows, uint32_t num_cols) : num_rows_(num_rows), num_cols_(num_cols)
 {}
+
+template <typename T>
+CSRLinksMatrix<T>::~CSRLinksMatrix()
+{
+    a_.clear();
+    ia_.clear();
+    ja_.clear();
+}
 
 template <typename T>
 CSRLinksMatrix<T>::CSRLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get_num_rows()), num_cols_(base.get_num_cols())

@@ -37,6 +37,8 @@ public:
     ConfabulationBase(ConfabulationBase&& rhs) = delete;
     ConfabulationBase&& operator=(ConfabulationBase&& rhs) = delete;
 
+    ~ConfabulationBase();
+
     int32_t ActualK(const std::vector<std::string> &symbols, int8_t index_to_complete);
     int32_t get_K() const { return K_; }
     void set_K(int32_t K) { K_ = K; }

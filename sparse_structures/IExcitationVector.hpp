@@ -28,6 +28,8 @@ template <typename T>
 class IExcitationVector
 {
 public:
+    virtual ~IExcitationVector() {}
+
     virtual void SetElement(const uint32_t r, const T& value) = 0;
     virtual void SetElementQuick(const uint32_t r, const T& value) = 0;
 

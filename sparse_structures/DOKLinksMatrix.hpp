@@ -36,6 +36,8 @@ public:
     DOKLinksMatrix(DOKLinksMatrix&& rhs) = delete;
     DOKLinksMatrix&& operator=(DOKLinksMatrix&& rhs) = delete;
 
+    ~DOKLinksMatrix();
+
     virtual void SetElement(uint32_t r, uint32_t c, const T& value);
     virtual void SetElementQuick(uint32_t r, uint32_t c, const T& value);
 
@@ -67,6 +69,12 @@ DOKLinksMatrix<T>::DOKLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get
     for (const std::pair<std::pair<uint32_t, uint32_t>, T>& element : base.GetNzElements()) {
         map_.insert(element);
     }
+}
+
+template <typename T>
+DOKLinksMatrix<T>::~DOKLinksMatrix()
+{
+    map_.clear();
 }
 
 template <typename T>

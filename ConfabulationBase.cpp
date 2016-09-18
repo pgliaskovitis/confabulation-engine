@@ -27,6 +27,12 @@
 ConfabulationBase::ConfabulationBase() : K_(-1)
 {}
 
+ConfabulationBase::~ConfabulationBase()
+{
+    modules_.clear();
+    knowledge_bases_.clear();
+}
+
 int32_t ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int8_t index_to_complete)
 {
     int32_t index = std::min(ConvertToSigned(symbols.size()), static_cast<int32_t>(index_to_complete));

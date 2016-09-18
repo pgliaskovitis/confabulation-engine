@@ -30,6 +30,8 @@ template <typename T>
 class IKnowledgeLinks
 {
 public:
+    virtual ~IKnowledgeLinks() {}
+
     virtual void SetElement(const uint32_t r, const uint32_t c, const T& value) = 0;
     virtual void SetElementQuick(const uint32_t r, uint32_t c, const T& value) = 0;
 

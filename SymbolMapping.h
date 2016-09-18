@@ -27,11 +27,6 @@
 
 class SymbolMapping
 {
-private:
-    std::unique_ptr<std::unordered_map<std::string, std::unique_ptr<std::string>>> all_symbols_;
-    std::unique_ptr<std::unordered_map<std::string*, uint32_t>> symbol_to_index_;
-    std::unique_ptr<std::unordered_map<uint32_t, std::string*>> index_to_symbol_;
-
 public:
     SymbolMapping();
     SymbolMapping(const SymbolMapping& rhs) = delete;
@@ -50,6 +45,11 @@ public:
     std::set<std::string> GetAllSymbols() const;
 
     std::string ToString();
+
+private:
+    std::unique_ptr<std::unordered_map<std::string, std::unique_ptr<std::string>>> all_symbols_;
+    std::unique_ptr<std::unordered_map<std::string*, uint32_t>> symbol_to_index_;
+    std::unique_ptr<std::unordered_map<uint32_t, std::string*>> index_to_symbol_;
 };
 
 #endif // SYMBOLMAPPING_H

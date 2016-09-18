@@ -38,6 +38,8 @@ public:
     DOKExcitationVector(DOKExcitationVector&& rhs) = delete;
     DOKExcitationVector&& operator=(DOKExcitationVector&& rhs) = delete;
 
+    ~DOKExcitationVector();
+
     virtual void SetElement(const uint32_t r, const T& value);
     virtual void SetElementQuick(const uint32_t r, const T& value);
 
@@ -67,6 +69,12 @@ DOKExcitationVector<T>::DOKExcitationVector(const IExcitationVector<T> &base) : 
     for (const std::pair<uint32_t, T>& element : base.GetNzElements()) {
         map_[element.first] = element.second;
     }
+}
+
+template <typename T>
+DOKExcitationVector<T>::~DOKExcitationVector()
+{
+    map_.clear();
 }
 
 template <typename T>
