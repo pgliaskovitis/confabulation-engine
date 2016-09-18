@@ -34,7 +34,7 @@ public:
     MultiLevelOrganizer(MultiLevelOrganizer&& rhs) = delete;
     MultiLevelOrganizer&& operator=(MultiLevelOrganizer&& rhs) = delete;
 
-    std::vector<std::vector<std::string>> Organize(const std::vector<std::string>& symbols, bool &match_found);
+    std::vector<std::vector<std::vector<std::string>>> Organize(const std::vector<std::string>& symbols);
 
     const std::unique_ptr<SymbolMapping>& get_mappings_for_level(uint8_t level) { return level_mappings_.at(level); }
     const std::unique_ptr<HashTrie<std::string>>& get_trie_for_level(uint8_t level) { return tries_.at(level); }

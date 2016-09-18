@@ -19,6 +19,7 @@
 
 #include <list>
 #include <algorithm>
+#include <Globals.h>
 #include "MultiLevelOrganizer.h"
 #include "utils/Utils.h"
 
@@ -50,48 +51,88 @@ MultiLevelOrganizer::MultiLevelOrganizer(const std::vector<uint8_t>& level_sizes
 // where multisymbol_11 = symbol_1 + symbol_2 + symbol_3
 //       multisymbol_12 = symbol_4 + symbol_5
 //       multisymbol_21 = multisymbol_11 + multisymbol_12
-std::vector<std::vector<std::string>> MultiLevelOrganizer::Organize(const std::vector<std::string>& symbols, bool& match_found)
+std::vector<std::vector<std::vector<std::string>>> MultiLevelOrganizer::Organize(const std::vector<std::string>& symbols)
 {
+    size_t n_combinations = Globals::kMaxMultiWordSize - 1;
     size_t n_levels = level_sizes_.size();
-    std::vector<std::vector<std::string>> levels;
-    levels.resize(n_levels);
 
-    for (size_t i = 0; i < n_levels; ++i) {
-        std::vector<std::string>& level = levels[i];
-        level.resize(level_sizes_[i]);
+    std::vector<std::vector<std::vector<std::string>>> possible_level_combinations;
+    possible_level_combinations.resize(n_combinations);
+
+    for (size_t i = 0; i < n_combinations; ++i) {
+        std::vector<std::vector<std::string>>& level_combination = possible_level_combinations[i];
+        level_combination.resize(n_levels);
+        for (size_t j = 0; j < n_levels; ++j) {
+            std::vector<std::string>& level = level_combination[j];
+            level.resize(level_sizes_[j]);
+        }
     }
 
-    for (size_t i = 0; i < n_levels; ++i) {
-        std::vector<std::string>& level = levels[i];
-        const HashTrie<std::string>& trie = *(tries_.at(i));
-        std::list<std::string> temp_symbols_list(symbols.begin(), symbols.end());
+    for (size_t i = 0; i < n_combinations; i++) {
+        std::vector<std::vector<std::string>>& level_combination = possible_level_combinations[i];
+        for (size_t j = 0; j < n_levels; ++j) {
+            std::list<std::string> temp_symbols_list(symbols.begin(), symbols.end());
+            std::vector<std::string>& level = level_combination[j];
+            const HashTrie<std::string>& trie = *(tries_.at(j));
 
-        // find longest match and remove matched symbols from beginning of sentence
-        size_t j = 0;
-        while (j < level.size() && !temp_symbols_list.empty()) {
+            // find longest match and remove matched symbols from beginning of sentence
+            size_t k = 0;
+            while (k < level.size() && !temp_symbols_list.empty()) {
 
-            std::list<std::string> match = trie.FindLongest(temp_symbols_list);
+                std::list<std::string> match;
+                if (i == 0 || j == 0) {
+                    // always find longest match for level 0 (words) and first combination of multiwords
+                    match = std::move(trie.FindLongest(temp_symbols_list));
+                } else {
+                    // find all matches for next combinations
+                    const std::vector<std::list<std::string>>& all_matches = trie.FindAll(temp_symbols_list);
 
-            if (match.empty()) {
-                match_found = false;
-                return levels;
-            }
+                    // first try to match exact size multiwords
+                    for (const std::list<std::string>& e: all_matches) {
+                        if (e.size() == n_combinations - i) {
+                            match = std::move(e);
+                        }
+                    }
 
-            // store found multisymbol
-            level[j] = ListSymbolToSymbol(match, ' ');
+                    // then try to match shorter multiwords
+                    if (match.empty()) {
+                        for (const std::list<std::string>& e: all_matches) {
+                            if (e.size() < n_combinations - i) {
+                                match = std::move(e);
+                            }
+                        }
+                    }
 
-            // if (i > 0) {
-            //    std::cout << "Searched for longest match at level " << i << ": " << ListSymbolToSymbol(temp_symbols_list, '-') << " at level " << i << "\n" << std::flush;
-            //    std::cout << "Found longest match in HashTrie at level " << i << ": " << level[j] << "\n" << std::flush;
-            // }
+                    // then try to match longer multiwords
+                    if (match.empty()) {
+                        for (const std::list<std::string>& e: all_matches) {
+                            if (e.size() > n_combinations - i) {
+                                match = std::move(e);
+                            }
+                        }
+                    }
+                }
 
-            size_t end = std::min(level.size(), j + match.size());
-            while (j < end) {
-                temp_symbols_list.pop_front();
-                ++j;
+                if (match.empty()) {
+                    break;
+                }
+
+                // store found multisymbol
+                level[k] = std::move(ListSymbolToSymbol(match, ' '));
+
+                if (j > 0) {
+                    std::cout << "Searched for match for combination " << i << " at level " << j << ": " << ListSymbolToSymbol(temp_symbols_list, ' ') << "\n" << std::flush;
+                    std::cout << "Found match in HashTrie at level " << j << ": " << level[k] << "\n" << std::flush;
+                }
+
+                size_t end = std::min(level.size(), k + match.size());
+                while (k < end) {
+                    temp_symbols_list.pop_front();
+                    ++k;
+                }
             }
         }
     }
 
-    return levels;
+    return possible_level_combinations;
 }

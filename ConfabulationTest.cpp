@@ -306,6 +306,20 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 
     const std::vector<std::string> excitations_C2F_at_target_b = module_7->PartialConfabulation(2, false);
     std::cout << "C2F confabulated symbol at module " << num_word_modules + 1 << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_b, '\n') << "\n" << std::flush;
+
+    confab_engine.Clean();
+    confab_engine.Activate({"", "the", "world"});
+    confab_engine.TransferExcitation(module_1, knowledge_base_1_7, module_7);
+    confab_engine.TransferExcitation(module_2, knowledge_base_2_7, module_7);
+
+    const std::vector<std::string>& expectation_at_target_c = module_7->GetExpectation();
+    std::cout << "Excited symbols at module " << num_word_modules + 1 << " are: \n" << VectorSymbolToSymbol(expectation_at_target_c, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string> excitations_C1F_at_target_c = module_7->PartialConfabulation(1, false);
+    std::cout << "C1F confabulated symbols at module " << num_word_modules + 1 << " is: \n" << VectorSymbolToSymbol(excitations_C1F_at_target_c, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string> excitations_C2F_at_target_c = module_7->PartialConfabulation(2, false);
+    std::cout << "C2F confabulated symbol at module " << num_word_modules + 1 << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_c, '\n') << "\n" << std::flush;
 }
 
 void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
@@ -373,7 +387,7 @@ int main()
 
     //test1->TestProduceKnowledgeLinkCombinations();
 
-    //test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
+    test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
 
     //test1->TestTokenizePersistedKnowledge();
 
