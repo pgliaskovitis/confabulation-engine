@@ -230,7 +230,7 @@ std::string Module::ElementaryConfabulation(int32_t K, float *max_excitation)
     return symbol_mapping_.GetSymbol(max_index);
 }
 
-std::vector<std::string> Module::PartialConfabulation(int32_t K, bool multiconf)
+std::vector<std::string> Module::PartialConfabulation(int32_t K)
 {
     normalized_excitations_.reset(nullptr);
 
@@ -238,34 +238,10 @@ std::vector<std::string> Module::PartialConfabulation(int32_t K, bool multiconf)
 
     std::unique_ptr<std::vector<std::pair<uint32_t, float>>> expectations;
 
-    if (!multiconf) {
-        K = ActualK(K);
-        const std::set<std::pair<uint32_t, float>>& nz_excit = excitations_->GetNzElements();
-        const std::set<std::pair<uint32_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
-        expectations.reset(new std::vector<std::pair<uint32_t, float>>(min_K_excit.begin(), min_K_excit.end()));
-    } else {
-        // we are in the multiconfabulation case, so,
-        // if the max excitation level is less than B, we keep everything, otherwise
-        // we keep all the values such that value >= (max - BandGap), i.e.,
-        // all the symbols that have at least as many incoming knowledge links as the
-        // maximally excited one
-
-        const std::set<std::pair<uint32_t, float>>& nz_excit = excitations_->GetNzElements();
-        std::unique_ptr<std::pair<uint32_t, float>> max_excit = MaxExcitation(nz_excit);
-
-        if (max_excit == nullptr) {
-            Freeze();
-            return result;
-        }
-
-        float threshold = std::max(max_excit->second - Globals::kBandGap, 0.0f);
-        expectations.reset(new std::vector<std::pair<uint32_t, float>>());
-        for (const std::pair<uint32_t, float>& e : nz_excit) {
-            if (e.second > threshold) {
-                expectations->push_back(e);
-            }
-        }
-    }
+    K = ActualK(K);
+    const std::set<std::pair<uint32_t, float>>& nz_excit = excitations_->GetNzElements();
+    const std::set<std::pair<uint32_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+    expectations.reset(new std::vector<std::pair<uint32_t, float>>(min_K_excit.begin(), min_K_excit.end()));
 
     // saving needed info from intermediate state
     DOKExcitationVector<uint32_t> kb_inputs_temp(*kb_inputs_);

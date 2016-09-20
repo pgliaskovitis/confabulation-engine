@@ -287,10 +287,10 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     const std::vector<std::string>& expectation_at_target_a = module_6->GetExpectation();
     std::cout << "Excited symbols at module " << num_word_modules << " are: \n" << VectorSymbolToSymbol(expectation_at_target_a, '\n') << "\n" << std::flush;
 
-    const std::vector<std::string>& excitations_C1F_at_target_a = module_6->PartialConfabulation(1, false);
+    const std::vector<std::string>& excitations_C1F_at_target_a = module_6->PartialConfabulation(1);
     std::cout << "C1F confabulated symbols at module " << num_word_modules << " are: \n" << VectorSymbolToSymbol(excitations_C1F_at_target_a, '\n') << "\n" << std::flush;
 
-    const std::vector<std::string>& excitations_C2F_at_target_a = module_6->PartialConfabulation(2, false);
+    const std::vector<std::string>& excitations_C2F_at_target_a = module_6->PartialConfabulation(2);
     std::cout << "C2F confabulated symbol at module " << num_word_modules << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_a, '\n') << "\n" << std::flush;
 
     confab_engine.Clean();
@@ -301,10 +301,10 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     const std::vector<std::string>& expectation_at_target_b = module_7->GetExpectation();
     std::cout << "Excited symbols at module " << num_word_modules + 1 << " are: \n" << VectorSymbolToSymbol(expectation_at_target_b, '\n') << "\n" << std::flush;
 
-    const std::vector<std::string> excitations_C1F_at_target_b = module_7->PartialConfabulation(1, false);
+    const std::vector<std::string> excitations_C1F_at_target_b = module_7->PartialConfabulation(1);
     std::cout << "C1F confabulated symbols at module " << num_word_modules + 1 << " is: \n" << VectorSymbolToSymbol(excitations_C1F_at_target_b, '\n') << "\n" << std::flush;
 
-    const std::vector<std::string> excitations_C2F_at_target_b = module_7->PartialConfabulation(2, false);
+    const std::vector<std::string> excitations_C2F_at_target_b = module_7->PartialConfabulation(2);
     std::cout << "C2F confabulated symbol at module " << num_word_modules + 1 << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_b, '\n') << "\n" << std::flush;
 
     confab_engine.Clean();
@@ -315,10 +315,10 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     const std::vector<std::string>& expectation_at_target_c = module_7->GetExpectation();
     std::cout << "Excited symbols at module " << num_word_modules + 1 << " are: \n" << VectorSymbolToSymbol(expectation_at_target_c, '\n') << "\n" << std::flush;
 
-    const std::vector<std::string> excitations_C1F_at_target_c = module_7->PartialConfabulation(1, false);
+    const std::vector<std::string> excitations_C1F_at_target_c = module_7->PartialConfabulation(1);
     std::cout << "C1F confabulated symbols at module " << num_word_modules + 1 << " is: \n" << VectorSymbolToSymbol(excitations_C1F_at_target_c, '\n') << "\n" << std::flush;
 
-    const std::vector<std::string> excitations_C2F_at_target_c = module_7->PartialConfabulation(2, false);
+    const std::vector<std::string> excitations_C2F_at_target_c = module_7->PartialConfabulation(2);
     std::cout << "C2F confabulated symbol at module " << num_word_modules + 1 << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_c, '\n') << "\n" << std::flush;
 }
 

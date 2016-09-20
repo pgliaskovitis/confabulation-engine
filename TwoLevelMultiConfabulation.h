@@ -23,7 +23,7 @@ private:
 
     size_t num_word_modules_;
 
-    void BasicSwirlAtIndex(int index);
+    size_t BasicSwirlAtIndex(int index);
 };
 
 #endif // TWOLEVELMULTICONFABULATION_H

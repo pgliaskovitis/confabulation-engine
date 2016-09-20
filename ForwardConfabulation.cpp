@@ -50,7 +50,7 @@ std::vector<std::string> ForwardConfabulation::Confabulation(const std::vector<s
     TransferAllExcitations(index, target_module);
 
     if (expectation) {
-        result = target_module->PartialConfabulation(actual_K, false);
+        result = target_module->PartialConfabulation(actual_K);
     } else {
         float dummy;
         result.push_back(target_module->ElementaryConfabulation(actual_K, &dummy));

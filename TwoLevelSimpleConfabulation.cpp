@@ -88,13 +88,13 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
 
         // find expectation on phrase module above word module at index
         TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index]);
-        modules_[num_word_modules_ + index]->PartialConfabulation(1, false);
+        modules_[num_word_modules_ + index]->PartialConfabulation(1);
 
         // find expectation on unknown word module
         TransferAllExcitations(index, target_module);
 
         if (expectation) {
-            result = target_module->PartialConfabulation(actual_K, false);
+            result = target_module->PartialConfabulation(actual_K);
         } else {
             float dummy;
             std::string next_word = target_module->ElementaryConfabulation(actual_K, &dummy);

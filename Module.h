@@ -55,7 +55,7 @@ public:
     std::string ElementaryConfabulation(float *max_excitation);
     std::string ElementaryConfabulation(int32_t K, float *max_excitation);
 
-    std::vector<std::string> PartialConfabulation(int32_t K, bool multiconf);
+    std::vector<std::string> PartialConfabulation(int32_t K);
 
     const SymbolMapping& get_symbol_mapping() { return symbol_mapping_; }
 
