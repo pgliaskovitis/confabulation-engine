@@ -38,10 +38,10 @@ public:
     void Reset();
     void ExcitationsToZero();
 
-    void ActivateSymbol(const std::string& word, int32_t K);
+    void ActivateSymbol(const std::string& word, int16_t K);
 
     void AddExcitationToIndex(uint32_t index, float value);
-    void AddExcitationToAllSymbols(int32_t K);
+    void AddExcitationToAllSymbols(int16_t K);
 
     void AddExcitationVector(const IExcitationVector<float>& input);
 
@@ -53,9 +53,9 @@ public:
     std::vector<std::string> GetExpectation();
 
     std::string ElementaryConfabulation(float *max_excitation);
-    std::string ElementaryConfabulation(int32_t K, float *max_excitation);
+    std::string ElementaryConfabulation(int16_t K, float *max_excitation);
 
-    std::vector<std::string> PartialConfabulation(int32_t K);
+    std::vector<std::string> PartialConfabulation(int16_t K);
 
     const SymbolMapping& get_symbol_mapping() { return symbol_mapping_; }
 
@@ -69,8 +69,8 @@ private:
 
     std::unique_ptr<std::pair<uint32_t, float>> MaxExcitation(const std::set<std::pair<uint32_t, float>>& nz_excitations);
     std::set<std::pair<uint32_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint32_t, float>>& nz_excitations);
-    int32_t ActualK(int32_t K);
-    int32_t MaxK();
+    int16_t ActualK(int16_t K);
+    int16_t MaxK();
 };
 
 #endif // MODULE_H

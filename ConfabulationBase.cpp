@@ -33,10 +33,10 @@ ConfabulationBase::~ConfabulationBase()
     knowledge_bases_.clear();
 }
 
-int32_t ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int8_t index_to_complete)
+int16_t ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int8_t index_to_complete)
 {
-    int32_t index = std::min(ConvertToSigned(symbols.size()), static_cast<int32_t>(index_to_complete));
-    int32_t max_K = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
+    int16_t index = std::min(ConvertToSigned(symbols.size()), static_cast<int16_t>(index_to_complete));
+    int16_t max_K = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
     if (K_ >= 0) {
        return std::min(K_, max_K);
     } else {

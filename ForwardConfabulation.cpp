@@ -41,7 +41,7 @@ std::vector<std::string> ForwardConfabulation::Confabulation(const std::vector<s
         index = index_to_complete;
     }
 
-    int32_t actual_K = ActualK(symbols, index);
+    int16_t actual_K = ActualK(symbols, index);
     const std::unique_ptr<Module>& target_module = modules_[index];
     target_module->ExcitationsToZero();
 
