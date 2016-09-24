@@ -30,7 +30,7 @@ template <typename T>
 class DOKExcitationVector : public IExcitationVector<T>
 {
 public:
-    DOKExcitationVector(const uint32_t num_rows);
+    DOKExcitationVector(const uint16_t num_rows);
     DOKExcitationVector(const IExcitationVector<T>& base);
 
     DOKExcitationVector(const DOKExcitationVector& rhs) = delete;
@@ -40,33 +40,33 @@ public:
 
     ~DOKExcitationVector();
 
-    virtual void SetElement(const uint32_t r, const T& value);
-    virtual void SetElementQuick(const uint32_t r, const T& value);
+    virtual void SetElement(const uint16_t r, const T& value);
+    virtual void SetElementQuick(const uint16_t r, const T& value);
 
-    virtual T GetElement(const uint32_t r) const;
-    virtual T GetElementQuick(const uint32_t r) const;
+    virtual T GetElement(const uint16_t r) const;
+    virtual T GetElementQuick(const uint16_t r) const;
 
-    virtual uint32_t get_num_rows() const { return num_rows_; }
+    virtual uint16_t get_num_rows() const { return num_rows_; }
 
-    virtual uint32_t GetNnz() const { return map_.size(); }
+    virtual uint16_t GetNnz() const { return map_.size(); }
 
     virtual void Add(const IExcitationVector<T>& other);
-    virtual std::set<std::pair<uint32_t, T>> GetNzElements() const;
+    virtual std::set<std::pair<uint16_t, T>> GetNzElements() const;
 
 private:
-    const uint32_t num_rows_;
+    const uint16_t num_rows_;
 
-    std::unordered_map<uint32_t, T> map_;
+    std::unordered_map<uint16_t, T> map_;
 };
 
 template <typename T>
-DOKExcitationVector<T>::DOKExcitationVector(const uint32_t num_rows) : num_rows_(num_rows)
+DOKExcitationVector<T>::DOKExcitationVector(const uint16_t num_rows) : num_rows_(num_rows)
 {}
 
 template <typename T>
 DOKExcitationVector<T>::DOKExcitationVector(const IExcitationVector<T> &base) : num_rows_(base.get_num_rows())
 {
-    for (const std::pair<uint32_t, T>& element : base.GetNzElements()) {
+    for (const std::pair<uint16_t, T>& element : base.GetNzElements()) {
         map_[element.first] = element.second;
     }
 }
@@ -78,11 +78,11 @@ DOKExcitationVector<T>::~DOKExcitationVector()
 }
 
 template <typename T>
-void DOKExcitationVector<T>::SetElement(const uint32_t r, const T& value)
+void DOKExcitationVector<T>::SetElement(const uint16_t r, const T& value)
 {
     IExcitationVector<T>::CheckBounds(r);
     if (IsNearlyEqual(value, 0.0)) {
-        typename std::unordered_map<uint32_t, T>::iterator it = map_.find(r);
+        typename std::unordered_map<uint16_t, T>::iterator it = map_.find(r);
         if (it != map_.end()) {
             map_.erase(it);
         }
@@ -92,20 +92,20 @@ void DOKExcitationVector<T>::SetElement(const uint32_t r, const T& value)
 }
 
 template <typename T>
-void DOKExcitationVector<T>::SetElementQuick(const uint32_t r, const T &value)
+void DOKExcitationVector<T>::SetElementQuick(const uint16_t r, const T &value)
 {
     map_[r] = value;
 }
 
 template <typename T>
-T DOKExcitationVector<T>::GetElement(const uint32_t r) const
+T DOKExcitationVector<T>::GetElement(const uint16_t r) const
 {
     IExcitationVector<T>::CheckBounds(r);
     return GetElementQuick(r);
 }
 
 template <typename T>
-T DOKExcitationVector<T>::GetElementQuick(const uint32_t r) const
+T DOKExcitationVector<T>::GetElementQuick(const uint16_t r) const
 {
     T result;
 
@@ -120,16 +120,16 @@ T DOKExcitationVector<T>::GetElementQuick(const uint32_t r) const
 
 template <typename T>
 void DOKExcitationVector<T>::Add(const IExcitationVector<T>& other) {
-    for (const std::pair<uint32_t, T>& element : other.GetNzElements()) {
+    for (const std::pair<uint16_t, T>& element : other.GetNzElements()) {
         SetElement(element.first, PositiveClip(element.second + GetElement(element.first)));
     }
 }
 
 template <typename T>
-std::set<std::pair<uint32_t, T>> DOKExcitationVector<T>::GetNzElements() const
+std::set<std::pair<uint16_t, T>> DOKExcitationVector<T>::GetNzElements() const
 {
-    typename std::set<std::pair<uint32_t, T>> result;
-    for (typename std::unordered_map<uint32_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+    typename std::set<std::pair<uint16_t, T>> result;
+    for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
         result.insert(*it);
     }
 

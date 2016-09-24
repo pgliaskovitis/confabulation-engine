@@ -191,7 +191,7 @@ std::string Module::ElementaryConfabulation(int16_t K, float *max_excitation)
     // compute K if negative
     K = ActualK(K);
 
-    const std::set<std::pair<uint32_t, float>>& nz_excit = excitations_->GetNzElements();
+    const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
     //std::cout << "Initially excited " << nz_excit.size() << " symbols" << " \n" << std::flush;
 
     uint32_t max_index = 0;
@@ -200,7 +200,7 @@ std::string Module::ElementaryConfabulation(int16_t K, float *max_excitation)
     // try with all possible K, starting from the maximum one, until a solution is found
     std::unique_ptr<std::pair<uint32_t, float>> max_excit;
     do {
-        const std::set<std::pair<uint32_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+        const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
         //std::cout << "Reduced to " << min_K_excit.size() << " symbols for K=" << K << " \n" << std::flush;
         max_excit = MaxExcitation(min_K_excit);
 
@@ -239,8 +239,8 @@ std::vector<std::string> Module::PartialConfabulation(int16_t K)
     std::unique_ptr<std::vector<std::pair<uint32_t, float>>> expectations;
 
     K = ActualK(K);
-    const std::set<std::pair<uint32_t, float>>& nz_excit = excitations_->GetNzElements();
-    const std::set<std::pair<uint32_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+    const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
+    const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
     expectations.reset(new std::vector<std::pair<uint32_t, float>>(min_K_excit.begin(), min_K_excit.end()));
 
     // saving needed info from intermediate state
@@ -266,12 +266,12 @@ std::vector<std::string> Module::PartialConfabulation(int16_t K)
     return result;
 }
 
-std::unique_ptr<std::pair<uint32_t, float> > Module::MaxExcitation(const std::set<std::pair<uint32_t, float> > &nz_excitations)
+std::unique_ptr<std::pair<uint32_t, float> > Module::MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations)
 {
     std::unique_ptr<std::pair<uint32_t, float>> result(nullptr);
     float max_value = 0;
 
-    for (const std::pair<uint32_t, float>& e : nz_excitations) {
+    for (const std::pair<uint16_t, float>& e : nz_excitations) {
         if (result == nullptr) {
             result.reset(new std::pair<uint32_t, float>(e.first, e.second));
         } else if (e.second > max_value) {
@@ -284,11 +284,11 @@ std::unique_ptr<std::pair<uint32_t, float> > Module::MaxExcitation(const std::se
     return result;
 }
 
-std::set<std::pair<uint32_t, float> > Module::ExcitationsAbove(int8_t K, const std::set<std::pair<uint32_t, float> > &nz_excitations)
+std::set<std::pair<uint16_t, float> > Module::ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float> > &nz_excitations)
 {
-    std::set<std::pair<uint32_t, float>> result;
+    std::set<std::pair<uint16_t, float>> result;
 
-    for (const std::pair<uint32_t, float>& e : nz_excitations) {
+    for (const std::pair<uint16_t, float>& e : nz_excitations) {
         if (kb_inputs_->GetElement(e.first) >= K) {
             result.insert(e);
         }

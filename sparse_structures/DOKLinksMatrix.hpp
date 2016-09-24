@@ -121,7 +121,7 @@ void DOKLinksMatrix<T>::SetElementQuick(uint16_t r, uint16_t c, const T& value)
 template <typename T>
 std::unique_ptr<IExcitationVector<T>> DOKLinksMatrix<T>::Multiply(const IExcitationVector<T>& vec) const
 {
-    std::set<std::pair<uint32_t, T>> vec_elements = vec.GetNzElements();
+    std::set<std::pair<uint16_t, T>> vec_elements = vec.GetNzElements();
 
     T link_strength = 0.0;
     std::unique_ptr<IExcitationVector<T>> result(new DOKExcitationVector<T>(num_rows_));
