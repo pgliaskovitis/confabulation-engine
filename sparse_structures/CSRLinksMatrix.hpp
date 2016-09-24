@@ -51,11 +51,11 @@ public:
     virtual uint32_t GetNnz() const { return a_.size(); }
 
     virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const;
-    virtual std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> GetNzElements() const;
+    virtual std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> GetNzElements() const;
 
 private:
-    const uint32_t num_rows_;
-    const uint32_t num_cols_;
+    const uint16_t num_rows_;
+    const uint16_t num_cols_;
 
     std::vector<T> a_;
     std::vector<uint32_t> ia_;
@@ -146,9 +146,9 @@ std::unique_ptr<IExcitationVector<T>> CSRLinksMatrix<T>::Multiply(const IExcitat
 }
 
 template <typename T>
-std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> CSRLinksMatrix<T>::GetNzElements() const
+std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> CSRLinksMatrix<T>::GetNzElements() const
 {
-    typename std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> result;
+    typename std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> result;
 
     for (uint32_t r = 0; r < num_rows_; ++r) {
         for (uint32_t i = ia_[r]; i < ia_[r + 1]; ++i) {

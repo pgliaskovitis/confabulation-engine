@@ -54,7 +54,7 @@ public:
     }
 
     virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const = 0;
-    virtual std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> GetNzElements() const = 0;
+    virtual std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> GetNzElements() const = 0;
 
     std::string ToString() const
     {

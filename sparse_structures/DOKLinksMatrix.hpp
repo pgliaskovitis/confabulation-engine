@@ -50,13 +50,13 @@ public:
     virtual uint32_t GetNnz() const { return map_.size(); }
 
     virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const;
-    virtual std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> GetNzElements() const;
+    virtual std::set<std::pair<std::pair<uint16_t, uint16_t>, T> > GetNzElements() const;
 
 private:
-    const uint32_t num_rows_;
-    const uint32_t num_cols_;
+    const uint16_t num_rows_;
+    const uint16_t num_cols_;
 
-    std::map<std::pair<uint32_t, uint32_t>, T> map_;
+    std::map<std::pair<uint16_t, uint16_t>, T> map_;
 };
 
 template <typename T>
@@ -103,7 +103,7 @@ void DOKLinksMatrix<T>::SetElement(uint32_t r, uint32_t c, const T &value)
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
     if (IsNearlyEqual(value, 0.0)) {
-        typename std::map<std::pair<uint32_t, uint32_t>, T>::iterator it = map_.find(std::make_pair(r, c));
+        typename std::map<std::pair<uint16_t, uint16_t>, T>::iterator it = map_.find(std::make_pair(r, c));
         if (it != map_.end()) {
             map_.erase(it);
         }
@@ -140,11 +140,11 @@ std::unique_ptr<IExcitationVector<T>> DOKLinksMatrix<T>::Multiply(const IExcitat
 }
 
 template <typename T>
-std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> DOKLinksMatrix<T>::GetNzElements() const
+std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> DOKLinksMatrix<T>::GetNzElements() const
 {
-    typename std::set<std::pair<std::pair<uint32_t, uint32_t>, T>> result;
+    typename std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> result;
 
-    for (typename std::map<std::pair<uint32_t, uint32_t>, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+    for (typename std::map<std::pair<uint16_t, uint16_t>, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
         result.insert(*it);
     }
 
