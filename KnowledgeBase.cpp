@@ -31,8 +31,8 @@ KnowledgeBase::KnowledgeBase(const std::string& id, const SymbolMapping& src_map
 void KnowledgeBase::Add(const std::string& src_symbol, const std::string& targ_symbol)
 {
     try {
-        uint32_t row = targ_map_.IndexOf(targ_symbol);
-        uint32_t col = src_map_.IndexOf(src_symbol);
+        uint16_t row = targ_map_.IndexOf(targ_symbol);
+        uint16_t col = src_map_.IndexOf(src_symbol);
 
         Add(row, col);
     } catch (std::out_of_range&) {
@@ -50,9 +50,9 @@ void KnowledgeBase::ComputeLinkStrengths()
 {
     std::unique_ptr<DOKLinksMatrix<float>> link_strengths(new DOKLinksMatrix<float>(cooccurrence_counts_->get_num_rows(), cooccurrence_counts_->get_num_cols()));
 
-    for (const std::pair<std::pair<uint32_t, uint32_t>, float>& e: cooccurrence_counts_->GetNzElements()) {
-        uint32_t row = e.first.first;
-        uint32_t col = e.first.second;
+    for (const std::pair<std::pair<uint16_t, uint16_t>, float>& e: cooccurrence_counts_->GetNzElements()) {
+        uint16_t row = e.first.first;
+        uint16_t col = e.first.second;
         link_strengths->SetElement(row, col, ComputeLinkStrength(float(e.second) / (float) target_symbol_sums_[row]));
     }
 

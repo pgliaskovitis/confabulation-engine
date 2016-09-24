@@ -53,7 +53,7 @@ void Module::ActivateSymbol(const std::string &word, int16_t K)
     }
 
     try {
-        uint32_t index = symbol_mapping_.IndexOf(word);
+        uint16_t index = symbol_mapping_.IndexOf(word);
         if (IsFrozen()) {
             // If module is frozen, only activate symbol if contained in the active symbols
             if (frozen_indexes_->find(index) != frozen_indexes_->end()) {
@@ -69,7 +69,7 @@ void Module::ActivateSymbol(const std::string &word, int16_t K)
     }
 }
 
-void Module::AddExcitationToIndex(uint32_t index, float value)
+void Module::AddExcitationToIndex(uint16_t index, float value)
 {
     normalized_excitations_.reset(nullptr);
 
@@ -78,13 +78,13 @@ void Module::AddExcitationToIndex(uint32_t index, float value)
         if (frozen_indexes_->find(index) != frozen_indexes_->end()) {
             float new_val = excitations_->GetElement(index) + value;
             excitations_->SetElement(index, PositiveClip(new_val)); //value could be negative
-            uint32_t num_inputs = static_cast<uint32_t>(new_val / Globals::kBandGap);
+            uint16_t num_inputs = static_cast<uint16_t>(new_val / Globals::kBandGap);
             kb_inputs_->SetElement(index, num_inputs + kb_inputs_->GetElement(index));
         }
     } else {
         float new_val = excitations_->GetElement(index) + value;
         excitations_->SetElement(index, PositiveClip(new_val)); //value could be negative
-        uint32_t num_inputs = static_cast<uint32_t>(new_val / Globals::kBandGap);
+        uint16_t num_inputs = static_cast<uint16_t>(new_val / Globals::kBandGap);
         kb_inputs_->SetElement(index, num_inputs + kb_inputs_->GetElement(index));
     }
 }
@@ -95,18 +95,18 @@ void Module::AddExcitationToAllSymbols(int16_t K)
 
     if (IsFrozen()) {
         // If module is frozen, only further activate already active symbols
-        for (uint32_t i : *frozen_indexes_) {
+        for (uint16_t i : *frozen_indexes_) {
             float val = PositiveClip(excitations_->GetElement(i) + K * Globals::kBandGap);
             excitations_->SetElement(i, val);
-            uint32_t num_inputs = kb_inputs_->GetElement(i) + K;
+            uint16_t num_inputs = kb_inputs_->GetElement(i) + K;
             kb_inputs_->SetElement(i, num_inputs);
         }
     } else {
-        for (const std::pair<uint32_t, float>& e : excitations_->GetNzElements()) {
-            uint32_t i = e.first;
+        for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
+            uint16_t i = e.first;
             float val = PositiveClip(e.second + K * Globals::kBandGap);
             excitations_->SetElement(i, val);
-            uint32_t num_inputs = kb_inputs_->GetElement(i) + K;
+            uint16_t num_inputs = kb_inputs_->GetElement(i) + K;
             kb_inputs_->SetElement(i, num_inputs);
         }
     }
@@ -118,15 +118,15 @@ void Module::AddExcitationVector(const IExcitationVector<float> &input)
 
     if (IsFrozen()) {
         // If module is frozen, only further activate already active symbols
-        for (uint32_t i : *frozen_indexes_) {
+        for (uint16_t i : *frozen_indexes_) {
             float new_val = excitations_->GetElement(i) + input.GetElement(i);
             excitations_->SetElement(i,  PositiveClip(new_val));
             kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
         }
     } else {
         excitations_->Add(input);
-        for (const std::pair<uint32_t, float>& e : input.GetNzElements()) {
-            uint32_t i = e.first;
+        for (const std::pair<uint16_t, float>& e : input.GetNzElements()) {
+            uint16_t i = e.first;
             kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
         }
     }
@@ -134,8 +134,8 @@ void Module::AddExcitationVector(const IExcitationVector<float> &input)
 
 void Module::Freeze()
 {
-    frozen_indexes_.reset(new std::set<uint32_t>());
-    for (const std::pair<uint32_t, float>& e : excitations_->GetNzElements()) {
+    frozen_indexes_.reset(new std::set<uint16_t>());
+    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
         frozen_indexes_->insert(e.first);
     }
 }
@@ -154,11 +154,11 @@ const std::unique_ptr<IExcitationVector<float> > &Module::GetNormalizedExcitatio
     normalized_excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
 
     double sum = 0.0;
-    for (const std::pair<uint32_t, float>& e : excitations_->GetNzElements()) {
+    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
         sum += e.second;
     }
 
-    for (const std::pair<uint32_t, float>& e : excitations_->GetNzElements()) {
+    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
         normalized_excitations_->SetElement(e.first, (float) (e.second / sum));
     }
 
@@ -169,9 +169,9 @@ std::vector<std::string> Module::GetExpectation()
 {
     std::vector<std::string> result(excitations_->GetNnz());
 
-    uint32_t res_index = 0;
-    for (const std::pair<uint32_t, float>& e : excitations_->GetNzElements()) {
-        uint32_t index = e.first;
+    uint16_t res_index = 0;
+    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
+        uint16_t index = e.first;
         result[res_index] = symbol_mapping_.GetSymbol(index);
         ++res_index;
     }
@@ -194,11 +194,11 @@ std::string Module::ElementaryConfabulation(int16_t K, float *max_excitation)
     const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
     //std::cout << "Initially excited " << nz_excit.size() << " symbols" << " \n" << std::flush;
 
-    uint32_t max_index = 0;
-    uint32_t n_inputs_max = 0;
+    uint16_t max_index = 0;
+    uint16_t n_inputs_max = 0;
 
     // try with all possible K, starting from the maximum one, until a solution is found
-    std::unique_ptr<std::pair<uint32_t, float>> max_excit;
+    std::unique_ptr<std::pair<uint16_t, float>> max_excit;
     do {
         const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
         //std::cout << "Reduced to " << min_K_excit.size() << " symbols for K=" << K << " \n" << std::flush;
@@ -236,12 +236,12 @@ std::vector<std::string> Module::PartialConfabulation(int16_t K)
 
     std::vector<std::string> result;
 
-    std::unique_ptr<std::vector<std::pair<uint32_t, float>>> expectations;
+    std::unique_ptr<std::vector<std::pair<uint16_t, float>>> expectations;
 
     K = ActualK(K);
     const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
     const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
-    expectations.reset(new std::vector<std::pair<uint32_t, float>>(min_K_excit.begin(), min_K_excit.end()));
+    expectations.reset(new std::vector<std::pair<uint16_t, float>>(min_K_excit.begin(), min_K_excit.end()));
 
     // saving needed info from intermediate state
     DOKExcitationVector<uint32_t> kb_inputs_temp(*kb_inputs_);
@@ -250,11 +250,11 @@ std::vector<std::string> Module::PartialConfabulation(int16_t K)
     Reset();
 
     result.resize(expectations->size());
-    uint32_t res_index = 0;
+    uint16_t res_index = 0;
 
     // activate only symbols with excitations above threshold
-    for (const std::pair<uint32_t, float>& e : *expectations) {
-        uint32_t index = e.first;
+    for (const std::pair<uint16_t, float>& e : *expectations) {
+        uint16_t index = e.first;
         excitations_->SetElement(index, e.second);
         kb_inputs_->SetElement(index, kb_inputs_temp.GetElement(index));
         result[res_index] = symbol_mapping_.GetSymbol(index);
@@ -266,14 +266,14 @@ std::vector<std::string> Module::PartialConfabulation(int16_t K)
     return result;
 }
 
-std::unique_ptr<std::pair<uint32_t, float> > Module::MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations)
+std::unique_ptr<std::pair<uint16_t, float> > Module::MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations)
 {
-    std::unique_ptr<std::pair<uint32_t, float>> result(nullptr);
+    std::unique_ptr<std::pair<uint16_t, float>> result(nullptr);
     float max_value = 0;
 
     for (const std::pair<uint16_t, float>& e : nz_excitations) {
         if (result == nullptr) {
-            result.reset(new std::pair<uint32_t, float>(e.first, e.second));
+            result.reset(new std::pair<uint16_t, float>(e.first, e.second));
         } else if (e.second > max_value) {
             result->first = e.first;
             result->second = e.second;
@@ -310,7 +310,7 @@ int16_t Module::MaxK()
 {
     int16_t result = 0;
 
-    for (const std::pair<uint32_t, uint32_t>& e : kb_inputs_->GetNzElements()) {
+    for (const std::pair<uint16_t, uint16_t>& e : kb_inputs_->GetNzElements()) {
         int16_t val = ConvertToSigned(e.second);
         if (val > result) {
             result = val;
