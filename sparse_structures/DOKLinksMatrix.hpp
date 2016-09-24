@@ -44,8 +44,8 @@ public:
     virtual T GetElement(uint16_t r, uint16_t c) const;
     virtual T GetElementQuick(uint16_t r, uint16_t c) const;
 
-    virtual uint32_t get_num_rows() const { return num_rows_; }
-    virtual uint32_t get_num_cols() const { return num_cols_; }
+    virtual uint16_t get_num_rows() const { return num_rows_; }
+    virtual uint16_t get_num_cols() const { return num_cols_; }
 
     virtual uint32_t GetNnz() const { return map_.size(); }
 
@@ -128,7 +128,7 @@ std::unique_ptr<IExcitationVector<T>> DOKLinksMatrix<T>::Multiply(const IExcitat
 
     for (const std::pair<uint32_t, T>& element : vec_elements) {
         uint32_t c = element.first;
-        for (uint32_t r = 0; r < num_rows_; ++r) {
+        for (uint16_t r = 0; r < num_rows_; ++r) {
             link_strength = GetElementQuick(r, c);
             if (!IsNearlyEqual(link_strength, 0.0)) {
                 result->SetElement(r, result->GetElementQuick(r) + link_strength * element.second);

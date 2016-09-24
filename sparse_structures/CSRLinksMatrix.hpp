@@ -45,8 +45,8 @@ public:
     virtual T GetElement(uint16_t r, uint16_t c) const;
     virtual T GetElementQuick(uint16_t r, uint16_t c) const;
 
-    virtual uint32_t get_num_rows() const { return num_rows_; }
-    virtual uint32_t get_num_cols() const { return num_cols_; }
+    virtual uint16_t get_num_rows() const { return num_rows_; }
+    virtual uint16_t get_num_cols() const { return num_cols_; }
 
     virtual uint32_t GetNnz() const { return a_.size(); }
 
@@ -134,7 +134,7 @@ std::unique_ptr<IExcitationVector<T>> CSRLinksMatrix<T>::Multiply(const IExcitat
     std::unique_ptr<IExcitationVector<T>> result(new DOKExcitationVector<T>(num_rows_));
     T row_sum;
 
-    for (uint32_t r = 0; r < num_rows_; ++r) {
+    for (uint16_t r = 0; r < num_rows_; ++r) {
         row_sum = 0;
         for (uint32_t i = ia_[r]; i < ia_[r + 1]; ++i) {
             row_sum += a_[i] * vec.GetElement(ja_[i]);
@@ -150,7 +150,7 @@ std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> CSRLinksMatrix<T>::GetNzEl
 {
     typename std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> result;
 
-    for (uint32_t r = 0; r < num_rows_; ++r) {
+    for (uint16_t r = 0; r < num_rows_; ++r) {
         for (uint32_t i = ia_[r]; i < ia_[r + 1]; ++i) {
             result.insert(std::make_pair(std::make_pair(r, ja_[i]), a_[i]));
         }

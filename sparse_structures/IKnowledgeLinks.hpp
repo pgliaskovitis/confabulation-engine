@@ -38,8 +38,8 @@ public:
     virtual T GetElement(const uint16_t r, const uint16_t c) const = 0;
     virtual T GetElementQuick(const uint16_t r, const uint16_t c) const = 0;
 
-    virtual uint32_t get_num_rows() const = 0;
-    virtual uint32_t get_num_cols() const = 0;
+    virtual uint16_t get_num_rows() const = 0;
+    virtual uint16_t get_num_cols() const = 0;
 
     virtual uint32_t GetNnz() const = 0;
 
