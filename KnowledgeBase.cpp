@@ -39,7 +39,7 @@ void KnowledgeBase::Add(const std::string& src_symbol, const std::string& targ_s
     }
 }
 
-void KnowledgeBase::Add(uint32_t targ_index, uint32_t src_index)
+void KnowledgeBase::Add(uint16_t targ_index, uint16_t src_index)
 {
     target_symbol_sums_[targ_index]++;
     uint32_t previous_count = cooccurrence_counts_->GetElement(targ_index, src_index);
@@ -62,7 +62,7 @@ void KnowledgeBase::ComputeLinkStrengths()
 float KnowledgeBase::GetPercentOfElementsLessThanThreshold(uint32_t threshold)
 {
     uint32_t count = 0;
-    for (const std::pair<std::pair<uint32_t, uint32_t>, float>& e: cooccurrence_counts_->GetNzElements()) {
+    for (const std::pair<std::pair<uint16_t, uint16_t>, float>& e: cooccurrence_counts_->GetNzElements()) {
         if (e.second < threshold) {
             ++count;
         }
