@@ -28,7 +28,7 @@ template <typename T>
 class DOKLinksMatrix : public IKnowledgeLinks<T>
 {
 public:
-    DOKLinksMatrix(uint32_t num_rows, uint32_t num_cols);
+    DOKLinksMatrix(uint16_t num_rows, uint16_t num_cols);
     DOKLinksMatrix(IKnowledgeLinks<T>& base);
 
     DOKLinksMatrix(const DOKLinksMatrix& rhs) = delete;
@@ -38,11 +38,11 @@ public:
 
     ~DOKLinksMatrix();
 
-    virtual void SetElement(uint32_t r, uint32_t c, const T& value);
-    virtual void SetElementQuick(uint32_t r, uint32_t c, const T& value);
+    virtual void SetElement(uint16_t r, uint16_t c, const T& value);
+    virtual void SetElementQuick(uint16_t r, uint16_t c, const T& value);
 
-    virtual T GetElement(uint32_t r, uint32_t c) const;
-    virtual T GetElementQuick(uint32_t r, uint32_t c) const;
+    virtual T GetElement(uint16_t r, uint16_t c) const;
+    virtual T GetElementQuick(uint16_t r, uint16_t c) const;
 
     virtual uint32_t get_num_rows() const { return num_rows_; }
     virtual uint32_t get_num_cols() const { return num_cols_; }
@@ -60,7 +60,7 @@ private:
 };
 
 template <typename T>
-DOKLinksMatrix<T>::DOKLinksMatrix(uint32_t num_rows, uint32_t num_cols) : num_rows_(num_rows), num_cols_(num_cols)
+DOKLinksMatrix<T>::DOKLinksMatrix(uint16_t num_rows, uint16_t num_cols) : num_rows_(num_rows), num_cols_(num_cols)
 {}
 
 template <typename T>
@@ -78,14 +78,14 @@ DOKLinksMatrix<T>::~DOKLinksMatrix()
 }
 
 template <typename T>
-T DOKLinksMatrix<T>::GetElement(uint32_t r, uint32_t c) const
+T DOKLinksMatrix<T>::GetElement(uint16_t r, uint16_t c) const
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
     return GetElementQuick(r, c);
 }
 
 template <typename T>
-T DOKLinksMatrix<T>::GetElementQuick(uint32_t r, uint32_t c) const
+T DOKLinksMatrix<T>::GetElementQuick(uint16_t r, uint16_t c) const
 {
     T result;
 
@@ -99,7 +99,7 @@ T DOKLinksMatrix<T>::GetElementQuick(uint32_t r, uint32_t c) const
 }
 
 template <typename T>
-void DOKLinksMatrix<T>::SetElement(uint32_t r, uint32_t c, const T &value)
+void DOKLinksMatrix<T>::SetElement(uint16_t r, uint16_t c, const T &value)
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
     if (IsNearlyEqual(value, 0.0)) {
@@ -113,7 +113,7 @@ void DOKLinksMatrix<T>::SetElement(uint32_t r, uint32_t c, const T &value)
 }
 
 template <typename T>
-void DOKLinksMatrix<T>::SetElementQuick(uint32_t r, uint32_t c, const T& value)
+void DOKLinksMatrix<T>::SetElementQuick(uint16_t r, uint16_t c, const T& value)
 {
     map_[std::make_pair(r, c)] = value;
 }

@@ -32,18 +32,18 @@ class IKnowledgeLinks
 public:
     virtual ~IKnowledgeLinks() {}
 
-    virtual void SetElement(const uint32_t r, const uint32_t c, const T& value) = 0;
-    virtual void SetElementQuick(const uint32_t r, uint32_t c, const T& value) = 0;
+    virtual void SetElement(const uint16_t r, const uint16_t c, const T& value) = 0;
+    virtual void SetElementQuick(const uint16_t r, uint16_t c, const T& value) = 0;
 
-    virtual T GetElement(const uint32_t r, const uint32_t c) const = 0;
-    virtual T GetElementQuick(const uint32_t r, const uint32_t c) const = 0;
+    virtual T GetElement(const uint16_t r, const uint16_t c) const = 0;
+    virtual T GetElementQuick(const uint16_t r, const uint16_t c) const = 0;
 
     virtual uint32_t get_num_rows() const = 0;
     virtual uint32_t get_num_cols() const = 0;
 
     virtual uint32_t GetNnz() const = 0;
 
-    void CheckBounds(const uint32_t r, const uint32_t c) const
+    void CheckBounds(const uint16_t r, const uint16_t c) const
     {
         if (r >= get_num_rows() || c >= get_num_cols()) {
             throw std::out_of_range(std::string("2D Out of Range, for row ") +

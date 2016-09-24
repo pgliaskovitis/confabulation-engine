@@ -29,7 +29,7 @@ template <typename T>
 class CSRLinksMatrix : public IKnowledgeLinks<T>
 {
 public:
-    CSRLinksMatrix(uint32_t num_rows, uint32_t num_cols);
+    CSRLinksMatrix(uint16_t num_rows, uint16_t num_cols);
     CSRLinksMatrix(IKnowledgeLinks<T>& base);
 
     CSRLinksMatrix(const CSRLinksMatrix& rhs) = delete;
@@ -39,11 +39,11 @@ public:
 
     ~CSRLinksMatrix();
 
-    virtual void SetElement(uint32_t r, uint32_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
-    virtual void SetElementQuick(uint32_t r, uint32_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
+    virtual void SetElement(uint16_t r, uint16_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
+    virtual void SetElementQuick(uint16_t r, uint16_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
 
-    virtual T GetElement(uint32_t r, uint32_t c) const;
-    virtual T GetElementQuick(uint32_t r, uint32_t c) const;
+    virtual T GetElement(uint16_t r, uint16_t c) const;
+    virtual T GetElementQuick(uint16_t r, uint16_t c) const;
 
     virtual uint32_t get_num_rows() const { return num_rows_; }
     virtual uint32_t get_num_cols() const { return num_cols_; }
@@ -63,7 +63,7 @@ private:
 };
 
 template <typename T>
-CSRLinksMatrix<T>::CSRLinksMatrix(uint32_t num_rows, uint32_t num_cols) : num_rows_(num_rows), num_cols_(num_cols)
+CSRLinksMatrix<T>::CSRLinksMatrix(uint16_t num_rows, uint16_t num_cols) : num_rows_(num_rows), num_cols_(num_cols)
 {}
 
 template <typename T>
@@ -106,14 +106,14 @@ CSRLinksMatrix<T>::CSRLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get
 }
 
 template <typename T>
-T CSRLinksMatrix<T>::GetElement(uint32_t r, uint32_t c) const
+T CSRLinksMatrix<T>::GetElement(uint16_t r, uint16_t c) const
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
     return GetElementQuick(r, c);
 }
 
 template <typename T>
-T CSRLinksMatrix<T>::GetElementQuick(uint32_t r, uint32_t c) const
+T CSRLinksMatrix<T>::GetElementQuick(uint16_t r, uint16_t c) const
 {
     std::vector<uint32_t>::const_iterator begin_it = ja_.begin() + ia_[r];
     std::vector<uint32_t>::const_iterator end_it = ja_.begin() + ia_[r + 1];
