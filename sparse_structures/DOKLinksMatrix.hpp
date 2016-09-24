@@ -66,7 +66,7 @@ DOKLinksMatrix<T>::DOKLinksMatrix(uint32_t num_rows, uint32_t num_cols) : num_ro
 template <typename T>
 DOKLinksMatrix<T>::DOKLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get_num_rows()), num_cols_(base.get_num_cols())
 {
-    for (const std::pair<std::pair<uint32_t, uint32_t>, T>& element : base.GetNzElements()) {
+    for (const std::pair<std::pair<uint16_t, uint16_t>, T>& element : base.GetNzElements()) {
         map_.insert(element);
     }
 }
