@@ -47,8 +47,8 @@ public:
     std::string get_id() const { return id_; }
 
     std::string GetStats() { return std::string("number of knowledge links: ") + std::to_string(GetNumKnowledgeLinks()); }
-    uint32_t GetSizeSrc() { return cooccurrence_counts_->get_num_rows(); }
-    uint32_t GetSizeTarg() { return cooccurrence_counts_->get_num_cols(); }
+    uint16_t GetSizeSrc() { return cooccurrence_counts_->get_num_rows(); }
+    uint16_t GetSizeTarg() { return cooccurrence_counts_->get_num_cols(); }
     uint32_t GetNumKnowledgeLinks() { return kbase_->GetNnz(); }
 
 private:
