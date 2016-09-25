@@ -39,9 +39,9 @@ public:
 
     ~ConfabulationBase();
 
-    int16_t ActualK(const std::vector<std::string> &symbols, int8_t index_to_complete);
-    int16_t get_K() const { return K_; }
-    void set_K(int16_t K) { K_ = K; }
+    int8_t ActualK(const std::vector<std::string> &symbols, int8_t index_to_complete);
+    int8_t get_K() const { return K_; }
+    void set_K(int8_t K) { K_ = K; }
 
     void Initialize(const std::vector<std::vector<bool>>& kb_specs,
                     const std::vector<uint8_t> level_specs,
@@ -66,7 +66,7 @@ public:
 
 protected:
     uint8_t num_modules_;
-    int16_t K_;
+    int8_t K_;
     std::string symbol_file_;
     std::string master_file_;
     uint8_t min_single_occurrences_;

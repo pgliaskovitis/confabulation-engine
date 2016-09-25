@@ -44,7 +44,7 @@ void Module::ExcitationsToZero()
     kb_inputs_.reset(new DOKExcitationVector<uint32_t>(symbol_mapping_.Size()));
 }
 
-void Module::ActivateSymbol(const std::string &word, int16_t K)
+void Module::ActivateSymbol(const std::string &word, int8_t K)
 {
     normalized_excitations_.reset(nullptr);
 
@@ -69,7 +69,7 @@ void Module::ActivateSymbol(const std::string &word, int16_t K)
     }
 }
 
-void Module::AddExcitationToIndex(uint16_t index, float value)
+void Module::AddExcitationToIndex(uint8_t index, float value)
 {
     normalized_excitations_.reset(nullptr);
 
@@ -89,7 +89,7 @@ void Module::AddExcitationToIndex(uint16_t index, float value)
     }
 }
 
-void Module::AddExcitationToAllSymbols(int16_t K)
+void Module::AddExcitationToAllSymbols(int8_t K)
 {
     normalized_excitations_.reset(nullptr);
 
@@ -184,7 +184,7 @@ std::string Module::ElementaryConfabulation(float *max_excitation)
     return ElementaryConfabulation(1, max_excitation);
 }
 
-std::string Module::ElementaryConfabulation(int16_t K, float *max_excitation)
+std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 {
     normalized_excitations_.reset(nullptr);
 
@@ -230,7 +230,7 @@ std::string Module::ElementaryConfabulation(int16_t K, float *max_excitation)
     return symbol_mapping_.GetSymbol(max_index);
 }
 
-std::vector<std::string> Module::PartialConfabulation(int16_t K)
+std::vector<std::string> Module::PartialConfabulation(int8_t K)
 {
     normalized_excitations_.reset(nullptr);
 
@@ -297,7 +297,7 @@ std::set<std::pair<uint16_t, float> > Module::ExcitationsAbove(int8_t K, const s
     return result;
 }
 
-int16_t Module::ActualK(int16_t K)
+int8_t Module::ActualK(int8_t K)
 {
     if (K >= 0) {
         return K;
@@ -306,12 +306,12 @@ int16_t Module::ActualK(int16_t K)
     return MaxK() + K + 1;
 }
 
-int16_t Module::MaxK()
+int8_t Module::MaxK()
 {
-    int16_t result = 0;
+    int8_t result = 0;
 
     for (const std::pair<uint16_t, uint16_t>& e : kb_inputs_->GetNzElements()) {
-        int16_t val = ConvertToSigned(e.second);
+        int8_t val = ConvertToSigned(e.second);
         if (val > result) {
             result = val;
         }

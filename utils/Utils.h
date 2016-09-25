@@ -137,14 +137,14 @@ namespace
         return result;
     }
 
-    int16_t ConvertToSigned(uint32_t x)
+    int32_t ConvertToSigned(uint32_t x)
     {
-        if (x <= std::numeric_limits<int16_t>::max()) {
-            return static_cast<int16_t>(x);
+        if (x <= std::numeric_limits<int32_t>::max()) {
+            return static_cast<int32_t>(x);
         }
 
-        if (x >= std::numeric_limits<int16_t>::min()) {
-            return static_cast<int16_t>(x - std::numeric_limits<int16_t>::min()) + std::numeric_limits<int16_t>::min();
+        if (x >= std::numeric_limits<int32_t>::min()) {
+            return static_cast<int32_t>(x - std::numeric_limits<int32_t>::min()) + std::numeric_limits<int32_t>::min();
         }
 
         throw x;

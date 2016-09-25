@@ -387,11 +387,11 @@ int main()
 
     //test1->TestProduceKnowledgeLinkCombinations();
 
-    test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
+    //test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
 
     //test1->TestTokenizePersistedKnowledge();
 
-    std::string copy_feed1 = "The umbrella was a black and prosaic "; //bundle
+    std::string copy_feed1 = "Tormented by reflection, or for whom strife has become a "; //plaything
     std::string copy_feed2 = "I will accept the post three times and refuse it "; //afterwards
     std::string copy_feed3 = "He scuttled across the room rather like a "; //rabbit
     std::string copy_feed4 = "In short, there is in life an element of elfin "; //coincidence
@@ -416,6 +416,7 @@ int main()
     allCopyFeeds->push_back(copy_feed10);
 
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
+    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
     std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 

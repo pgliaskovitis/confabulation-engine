@@ -79,7 +79,7 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
 
     for (size_t i = 0; i < Globals::kMaxMultiWordSize; ++i) {
 
-        int16_t actual_K = ActualK(temp_input, index);
+        int8_t actual_K = ActualK(temp_input, index);
         const std::unique_ptr<Module>& target_module = modules_[index];
         target_module->ExcitationsToZero();
 

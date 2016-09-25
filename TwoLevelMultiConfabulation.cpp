@@ -92,7 +92,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     std::vector<std::string> temp_input(symbols.begin(), symbols.end());
 
     for (; index < num_word_modules_;) {
-        int16_t actual_K = std::min<int16_t>(ActualK(temp_input, index), 4);
+        int8_t actual_K = std::min<int8_t>(ActualK(temp_input, index), 4);
         modules_[index]->ExcitationsToZero();
 
         // activate known symbols from input

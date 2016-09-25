@@ -86,7 +86,7 @@ CSRLinksMatrix<T>::CSRLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get
     ia_.push_back(index_a);
     uint32_t row = 0;
 
-    for (const std::pair<std::pair<uint32_t, uint32_t>, T>& element : base.GetNzElements()) {
+    for (const std::pair<std::pair<uint16_t, uint16_t>, T>& element : base.GetNzElements()) {
         // advance in lines until the row of element
         while (row != element.first.first) {
             ia_.push_back(index_a);
