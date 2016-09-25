@@ -64,7 +64,7 @@ private:
 
     std::unique_ptr<IExcitationVector<float>> excitations_;
     std::unique_ptr<IExcitationVector<float>> normalized_excitations_;
-    std::unique_ptr<IExcitationVector<uint32_t>> kb_inputs_;
+    std::unique_ptr<IExcitationVector<uint8_t>> kb_inputs_;
     std::unique_ptr<std::set<uint16_t>> frozen_indexes_;
 
     std::unique_ptr<std::pair<uint16_t, float>> MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations);

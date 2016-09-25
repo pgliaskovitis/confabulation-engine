@@ -387,7 +387,7 @@ int main()
 
     //test1->TestProduceKnowledgeLinkCombinations();
 
-    //test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
+    test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
 
     //test1->TestTokenizePersistedKnowledge();
 

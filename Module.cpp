@@ -26,7 +26,7 @@ Module::Module(const SymbolMapping &symbol_mapping) :
     symbol_mapping_(symbol_mapping),
     excitations_(new DOKExcitationVector<float>(symbol_mapping.Size())),
     normalized_excitations_(nullptr),
-    kb_inputs_(new DOKExcitationVector<uint32_t>(symbol_mapping.Size()))
+    kb_inputs_(new DOKExcitationVector<uint8_t>(symbol_mapping.Size()))
 {
     Reset();
 }
@@ -41,7 +41,7 @@ void Module::ExcitationsToZero()
 {
     normalized_excitations_.reset(nullptr);
     excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
-    kb_inputs_.reset(new DOKExcitationVector<uint32_t>(symbol_mapping_.Size()));
+    kb_inputs_.reset(new DOKExcitationVector<uint8_t>(symbol_mapping_.Size()));
 }
 
 void Module::ActivateSymbol(const std::string &word, int8_t K)
@@ -244,7 +244,7 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
     expectations.reset(new std::vector<std::pair<uint16_t, float>>(min_K_excit.begin(), min_K_excit.end()));
 
     // saving needed info from intermediate state
-    DOKExcitationVector<uint32_t> kb_inputs_temp(*kb_inputs_);
+    DOKExcitationVector<uint8_t> kb_inputs_temp(*kb_inputs_);
 
     // cleanup of intermediate state
     Reset();
@@ -310,7 +310,7 @@ int8_t Module::MaxK()
 {
     int8_t result = 0;
 
-    for (const std::pair<uint16_t, uint16_t>& e : kb_inputs_->GetNzElements()) {
+    for (const std::pair<uint16_t, uint8_t>& e : kb_inputs_->GetNzElements()) {
         int8_t val = ConvertToSigned(e.second);
         if (val > result) {
             result = val;
