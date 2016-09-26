@@ -18,6 +18,7 @@
  */
 
 #include <sstream>
+#include <regex>
 #include "TextReader.h"
 #include "Globals.h"
 #include "SentenceTokenizer.h"
@@ -170,14 +171,15 @@ const std::vector<std::string> TextReader::ExtractTokens(const std::string &inpu
     SentenceTokenizer tok(input);
 
     while (tok.Tokenize(Globals::kTokenDelimiters)) {
-#ifdef STOREDELIMITERS_
         if (!tok.Delim().empty()) {
-            output.push_back(tok.Delim());
-            //std::cout << "Found non-empty delimiter \"" << tok.delim() << "\"\n";
+            //std::cout << "Found non-empty delimiter \"" << tok.Delim() << "\"\n";
+            std::regex comma_regex(",+"); // matches commas
+            if(std::regex_match(tok.Delim(), comma_regex)) {
+                output.push_back(tok.Delim());
+            }
         }
-#endif
         std::string newToken = tok.Str();
-        //std::cout << newToken << std::endl;
+        //std::cout << "Found token \"" << newToken << "\"" << std::endl;
         CleanToken(newToken);
         output.push_back(newToken);
     }

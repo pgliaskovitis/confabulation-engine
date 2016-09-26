@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <regex>
 #include "Globals.h"
 #include "ConfabulationTest.h"
 #include "text_processing/SentenceTokenizer.h"
@@ -33,14 +34,34 @@
 #include "TwoLevelSimpleConfabulation.h"
 #include "TwoLevelMultiConfabulation.h"
 
-int8_t ConfabulationTest::TestTokenizeFixedString(const std::string& input) const
+void ConfabulationTest::TestTokenizeSentences(const std::string& input) const
 {
 	SentenceTokenizer tok(input);
 
-    while (tok.Tokenize(Globals::kSentenceDelimiters))
-        std::cout << tok.Str() << std::endl;
+    int i = 0;
+    while (tok.Tokenize(Globals::kSentenceDelimiters)) {
+        std::cout << tok.Str() << " " << i++ << std::endl;
+    }
+}
 
-	return 0;
+void ConfabulationTest::TestTokenizeWithinSentences(const std::string& input) const
+{
+    SentenceTokenizer tok(input);
+
+    int i = 0;
+    while (tok.Tokenize(Globals::kSentenceDelimiters)) {
+        SentenceTokenizer inner_tok(tok.Str());
+        while (inner_tok.Tokenize(Globals::kTokenDelimiters)) {
+            if (!inner_tok.Delim().empty()) {
+                std::regex comma_regex(",+"); // matches commas
+                //std::regex comma_regex("^[ \t]+|[,]+|^[ \t]+");
+                if(std::regex_match(inner_tok.Delim(), comma_regex)) {
+                    std::cout << inner_tok.Delim() << " " << i++ << std::endl;
+                }
+            }
+            std::cout << inner_tok.Str() << " " << i++ << std::endl;
+        }
+    }
 }
 
 void ConfabulationTest::TestDOKExcitationVector() const
@@ -371,7 +392,9 @@ int main()
 {
 	std::shared_ptr<ConfabulationTest> test1(new ConfabulationTest());
 
-    //test1->TestFixedString("This is, alas, the primal knowledge. \"My fumblings will be your quickening, minion.\"");
+    //test1->TestTokenizeSentences("This is, alas, the primal knowledge. The magic exists, but is not for everyone. \"My fumblings will be your quickening, minion.\"");
+
+    //test1->TestTokenizeWithinSentences("This is,  alas , the primal knowledge. The magic exists  ,but is not for everyone. \"My fumblings will be your quickening  ,   minion.\"");
 
     //test1->TestDOKExcitationVector();
 
@@ -387,7 +410,7 @@ int main()
 
     //test1->TestProduceKnowledgeLinkCombinations();
 
-    test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
+    //test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
 
     //test1->TestTokenizePersistedKnowledge();
 

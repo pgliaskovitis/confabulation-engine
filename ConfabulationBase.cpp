@@ -117,7 +117,7 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 
         std::deque<std::string> read_sentence_buffer(read_sentence.begin(), read_sentence.end());
 
-        //std::cout << "\nRead sentence of size " << read_sentence.size() << " : " << VectorSymbolToSymbol(read_sentence, ' ') << "\n" << std::flush;
+        // std::cout << "\nRead sentence of size " << read_sentence.size() << " : " << VectorSymbolToSymbol(read_sentence, ' ') << "\n" << std::flush;
 
         do  {
             // in the case where the read sentence is larger than the number of word modules of the architecture,

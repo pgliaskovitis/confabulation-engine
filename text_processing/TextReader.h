@@ -28,10 +28,6 @@
 #include <memory>
 #include <algorithm>
 
-#ifndef STOREDELIMITERS_
-//#define STOREDELIMITERS_
-#endif
-
 class TextReader
 {
 public:

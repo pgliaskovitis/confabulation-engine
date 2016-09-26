@@ -26,7 +26,8 @@
 class ConfabulationTest
 {
 public:
-    int8_t TestTokenizeFixedString(const std::string& input) const;
+    void TestTokenizeSentences(const std::string& input) const;
+    void TestTokenizeWithinSentences(const std::string& input) const;
 
     void TestDOKExcitationVector() const;
     void TestDOKLinksMatrix() const;
