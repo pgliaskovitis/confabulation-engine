@@ -2,8 +2,6 @@
 #include "Globals.h"
 #include "Dbg.h"
 
-const size_t TwoLevelMultiConfabulation::reference_frame_length = 5;
-
 TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
                                                        const std::string &symbol_file,
                                                        const std::string &master_file,
@@ -22,35 +20,35 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 
     // word-to-future-word knowledge bases (reference frame length ahead)
     for (size_t i = 0; i < num_word_modules; ++i) {
-        for (size_t j = i + 1; j < num_word_modules && j < i + 1 + reference_frame_length; ++j) {
+        for (size_t j = i + 1; j < num_word_modules && j < i + 1 + Globals::kReferenceFrameLength; ++j) {
             kb_specs[i][j] = true;
         }
     }
 
     // word-to-past-word knowledge bases (reference frame length ago)
     for (size_t i = 1; i < num_word_modules; ++i) {
-        for (int j = i - 1; j >= 0 && j >= ConvertToSigned(i) - ConvertToSigned(reference_frame_length); --j) {
+        for (int j = i - 1; j >= 0 && j >= ConvertToSigned(i) - ConvertToSigned(Globals::kReferenceFrameLength); --j) {
             kb_specs[i][j] = true;
         }
     }
 
     // word-to-future-phrase knowledge bases (reference frame length ahead)
     for (size_t i = 0; i < num_word_modules; ++i) {
-        for (size_t j = num_word_modules + i + 1; j < 2 * num_word_modules && j < num_word_modules + i + 1 + reference_frame_length; ++j) {
+        for (size_t j = num_word_modules + i + 1; j < 2 * num_word_modules && j < num_word_modules + i + 1 + Globals::kReferenceFrameLength; ++j) {
             kb_specs[i][j] = true;
         }
     }
 
     // word-to-past-phrase knowledge bases (reference frame length ago)
     for (size_t i = 0; i < num_word_modules; ++i) {
-        for (size_t j = num_word_modules + i; j >= num_word_modules && j >= num_word_modules + (i - reference_frame_length); --j) {
+        for (size_t j = num_word_modules + i; j >= num_word_modules && j >= num_word_modules + (i - Globals::kReferenceFrameLength); --j) {
             kb_specs[i][j] = true;
         }
     }
 
     // phrase-to-phrase knowledge bases (reference frame length ahead)
     for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
-        for (size_t j = i + 1; j < 2 * num_word_modules && j < i + 1 + reference_frame_length; ++j) {
+        for (size_t j = i + 1; j < 2 * num_word_modules && j < i + 1 + Globals::kReferenceFrameLength; ++j) {
             kb_specs[i][j] = true;
         }
     }

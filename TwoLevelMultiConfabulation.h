@@ -19,8 +19,6 @@ public:
     virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation);
 
 private:
-    static const size_t reference_frame_length;
-
     size_t num_word_modules_;
 
     size_t BasicSwirlAtIndex(int index);
