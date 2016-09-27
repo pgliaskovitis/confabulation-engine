@@ -54,7 +54,6 @@ void ConfabulationTest::TestTokenizeWithinSentences(const std::string& input) co
         while (inner_tok.Tokenize(Globals::kTokenDelimiters)) {
             if (!inner_tok.Delim().empty()) {
                 std::regex comma_regex(",+"); // matches commas
-                //std::regex comma_regex("^[ \t]+|[,]+|^[ \t]+");
                 if(std::regex_match(inner_tok.Delim(), comma_regex)) {
                     std::cout << inner_tok.Delim() << " " << i++ << std::endl;
                 }
@@ -410,7 +409,7 @@ int main()
 
     //test1->TestProduceKnowledgeLinkCombinations();
 
-    //test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
+    test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
 
     //test1->TestTokenizePersistedKnowledge();
 

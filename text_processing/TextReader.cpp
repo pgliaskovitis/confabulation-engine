@@ -171,6 +171,7 @@ const std::vector<std::string> TextReader::ExtractTokens(const std::string &inpu
     SentenceTokenizer tok(input);
 
     while (tok.Tokenize(Globals::kTokenDelimiters)) {
+        /*
         if (!tok.Delim().empty()) {
             //std::cout << "Found non-empty delimiter \"" << tok.Delim() << "\"\n";
             std::regex comma_regex(",+"); // matches commas
@@ -178,6 +179,7 @@ const std::vector<std::string> TextReader::ExtractTokens(const std::string &inpu
                 output.push_back(tok.Delim());
             }
         }
+        */
         std::string newToken = tok.Str();
         //std::cout << "Found token \"" << newToken << "\"" << std::endl;
         CleanToken(newToken);
