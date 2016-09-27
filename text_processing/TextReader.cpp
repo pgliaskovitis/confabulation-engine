@@ -71,7 +71,7 @@ const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_
 			
 			const std::vector<std::string>& current_sentence_tokens = ExtractTokens(l_string.str().substr(0, end_of_phase));
 
-            //std::cout << "Sentence from left_over : " << VectorSymbolToSymbol(current_sentence_tokens, ' ') << "\n" << std::flush;
+            // std::cout << "Sentence from left_over : " << VectorSymbolToSymbol(current_sentence_tokens, ' ') << "\n" << std::flush;
 
             return current_sentence_tokens;
 		}
@@ -108,7 +108,7 @@ const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_
 
             const std::vector<std::string>& current_sentence_tokens = ExtractTokens(l_string.str().substr(0, end_of_phase));
 
-            //std::cout << "Sentence : " << VectorSymbolToSymbol(current_sentence_tokens, ' ') << "\n" << std::flush;
+            // std::cout << "Sentence : " << VectorSymbolToSymbol(current_sentence_tokens, ' ') << "\n" << std::flush;
 
             return current_sentence_tokens;
         }
@@ -173,7 +173,7 @@ const std::vector<std::string> TextReader::ExtractTokens(const std::string &inpu
     while (tok.Tokenize(Globals::kTokenDelimiters)) {
         /*
         if (!tok.Delim().empty()) {
-            //std::cout << "Found non-empty delimiter \"" << tok.Delim() << "\"\n";
+            // std::cout << "Found non-empty delimiter \"" << tok.Delim() << "\"\n";
             std::regex comma_regex(",+"); // matches commas
             if(std::regex_match(tok.Delim(), comma_regex)) {
                 output.push_back(tok.Delim());
@@ -181,7 +181,7 @@ const std::vector<std::string> TextReader::ExtractTokens(const std::string &inpu
         }
         */
         std::string newToken = tok.Str();
-        //std::cout << "Found token \"" << newToken << "\"" << std::endl;
+        // std::cout << "Found token \"" << newToken << "\"" << std::endl;
         CleanToken(newToken);
         output.push_back(newToken);
     }
