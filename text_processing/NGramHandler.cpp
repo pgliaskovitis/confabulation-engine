@@ -107,7 +107,7 @@ void NGramHandler::CleanupNGrams()
                 must_delete = true;
             }
 
-//            std::cout << "Prefix of multiword \"" << debug_output_1 << "\" is : \"" << debug_output_2 << "\" with occurrence count " << prefix_count << "\n";
+            // std::cout << "Prefix of multiword \"" << debug_output_1 << "\" is : \"" << debug_output_2 << "\" with occurrence count " << prefix_count << "\n";
 
             if (prefix_count < min_multi_occurences_) {
                 must_delete = true;
@@ -188,7 +188,7 @@ void NGramHandler::CleanupNGrams()
     while (queue.size() > kMaxSingleWordSymbols) {
         NGramWithCountIterator removed_ngram_it = queue.front();
 
-        //std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
+        // std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
 
         NGramWithCountIterator current_it = occurrence_counts_[0].find(removed_ngram_it->first);
         occurrence_counts_[0].erase(current_it);
@@ -210,7 +210,7 @@ void NGramHandler::CleanupNGrams()
     while (queue.size() > kMaxMultiWordSymbols) {
         NGramWithCountIterator removed_ngram_it = queue.front();
 
-        //std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
+        // std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
 
         for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
             NGramWithCountIterator current_it = occurrence_counts_[n_words - 1].find(removed_ngram_it->first);
