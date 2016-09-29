@@ -32,23 +32,23 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
         }
     }
 
-    // word-to-future-phrase knowledge bases (max multi-word length ahead)
+    // word-to-future-phrase knowledge bases (max phrase length ahead)
     for (size_t i = 0; i < num_word_modules; ++i) {
         for (size_t j = num_word_modules + i + 1; j < 2 * num_word_modules && j < num_word_modules + i + 1 + Globals::kMaxMultiWordSize; ++j) {
             kb_specs[i][j] = true;
         }
     }
 
-    // word-to-past-phrase knowledge bases (max multi-word length ago)
+    // word-to-past-phrase knowledge bases (max phrase length ago)
     for (size_t i = 0; i < num_word_modules; ++i) {
         for (size_t j = num_word_modules + i; j >= num_word_modules && j >= num_word_modules + (i - Globals::kMaxMultiWordSize); --j) {
             kb_specs[i][j] = true;
         }
     }
 
-    // phrase-to-phrase knowledge bases (reference frame length ahead)
+    // phrase-to-phrase knowledge bases (max phrase length ahead - no single word phrases here)
     for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
-        for (size_t j = i + 1; j < 2 * num_word_modules && j < i + 1 + Globals::kReferenceFrameSize; ++j) {
+        for (size_t j = i + 2; j < 2 * num_word_modules && j < i + 1 + Globals::kMaxMultiWordSize; ++j) {
             kb_specs[i][j] = true;
         }
     }
