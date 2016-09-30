@@ -25,9 +25,9 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
         }
     }
 
-    // word-to-past-word knowledge bases (reference frame length ago)
+    // word-to-past-word knowledge bases (max phrase length ago)
     for (size_t i = 1; i < num_word_modules; ++i) {
-        for (int j = i - 1; j >= 0 && j >= ConvertToSigned(i) - ConvertToSigned(Globals::kReferenceFrameSize); --j) {
+        for (int j = i - 1; j >= 0 && j >= ConvertToSigned(i) - ConvertToSigned(Globals::kMaxMultiWordSize); --j) {
             kb_specs[i][j] = true;
         }
     }
@@ -46,9 +46,9 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
         }
     }
 
-    // phrase-to-phrase knowledge bases (max phrase length ahead - no single word phrases here)
+    // phrase-to-phrase knowledge bases (reference frame length ahead - no single word phrases here)
     for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
-        for (size_t j = i + 2; j < 2 * num_word_modules && j < i + 1 + Globals::kMaxMultiWordSize; ++j) {
+        for (size_t j = i + 2; j < 2 * num_word_modules && j < i + 1 + Globals::kReferenceFrameSize; ++j) {
             kb_specs[i][j] = true;
         }
     }
