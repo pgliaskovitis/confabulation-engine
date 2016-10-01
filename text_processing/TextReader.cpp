@@ -207,7 +207,7 @@ void TextReader::RemoveCommonAbbreviations(std::string& input)
     while (temp_index != std::string::npos) {
         temp_index = 0;
         for (std::vector<std::string>::const_iterator it = Globals::kCommonAbbreviations.begin(); it != Globals::kCommonAbbreviations.end(); ++it) {
-            /* Locate the substring to replace. */
+            // Locate the substring to replace
             temp_index = input.find(*it, 0);
             if (temp_index < first_index) {
                 first_index = temp_index;
@@ -217,7 +217,7 @@ void TextReader::RemoveCommonAbbreviations(std::string& input)
 
         if (first_index == std::string::npos) break;
 
-        /* Make the replacement. */
+        // Make the replacement
         if ((abbreviated_symbol != "A.D.") && (abbreviated_symbol != "B.C.")) {
             input.replace(first_index, abbreviated_symbol.size(), abbreviated_symbol.substr(0, abbreviated_symbol.size() - 1));
         } else if (abbreviated_symbol == "A.D.") {

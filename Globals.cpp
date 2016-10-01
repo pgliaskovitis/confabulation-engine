@@ -23,14 +23,14 @@
 // Sentence delimiters are considered to enclose some full meaning
 // Token delimiters are noise in the raw documents
 
-const std::string Globals::kSentenceDelimiters = "\",.!?;:";
+const std::string Globals::kSentenceDelimiters = "\".!?;:";
 const std::string Globals::kTokenDelimiters = " `\",.!?;:@#$%^&*()-/\\_=+~[]{}<>0123456789";
 const std::vector<std::string> Globals::kCommonAbbreviations = {"Mr.", "Mrs.", "Dr.", "etc.", "Jr.", "Sr.", "Co.", "Ltd.", "A.D.", "B.C.", "ch.", "Ch.", "CH."};
 const std::string Globals::kDummy = "DummySymbol";
 const std::vector<std::string> Globals::kPersistenceDelimiters = {":::", "{--->", "|||", "}--->"};
 
 const float Globals::kBaseProb = 0.0001;
-const uint8_t Globals::kBandGap = 3;
+const uint8_t Globals::kBandGap = 5;
 const uint8_t Globals::kMaxMultiWordSize = 4;
 const uint8_t Globals::kReferenceFrameSize = 7;
-const bool Globals::kDelimitersAsSymbols = false;
+const bool Globals::kDelimitersAsSymbols = true;

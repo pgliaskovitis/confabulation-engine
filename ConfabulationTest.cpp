@@ -421,7 +421,7 @@ int main()
     std::string copy_feed6 = "In his own mind he had completely surrendered "; //himself
     std::string copy_feed7 = "Every one is grave in public, and funny in "; //private
     std::string copy_feed8 = "He had seen a great poet prostituting his muse to "; //journalism
-    std::string copy_feed9 = "It was clear that they were the accursed of all men, and they knew not "; //why
+    std::string copy_feed9 = "They were the accursed of all men, and they knew not "; //why
     std::string copy_feed10 = "His long bare neck and sloping shoulders were the shape of a champagne "; //bottle
 
     std::shared_ptr<std::vector<std::string>> allCopyFeeds(new std::vector<std::string>());
