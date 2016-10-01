@@ -413,16 +413,27 @@ int main()
 
     //test1->TestTokenizePersistedKnowledge();
 
-    std::string copy_feed1 = "Tormented by reflection, or for whom strife has become a "; //plaything
-    std::string copy_feed2 = "I will accept the post three times and refuse it "; //afterwards
-    std::string copy_feed3 = "He scuttled across the room rather like a "; //rabbit
-    std::string copy_feed4 = "In short, there is in life an element of elfin "; //coincidence
-    std::string copy_feed5 = "At night the wicket gate is replaced by a solid "; //door
-    std::string copy_feed6 = "In his own mind he had completely surrendered "; //himself
-    std::string copy_feed7 = "Every one is grave in public, and funny in "; //private
-    std::string copy_feed8 = "He had seen a great poet prostituting his muse to "; //journalism
-    std::string copy_feed9 = "They were the accursed of all men, and they knew not "; //why
-    std::string copy_feed10 = "His long bare neck and sloping shoulders were the shape of a champagne "; //bottle
+    std::string copy_feed1 = "Tormented by reflection, or for whom strife has become a "; // plaything
+    std::string copy_feed2 = "I will accept the post three times and refuse it "; // afterwards
+    std::string copy_feed3 = "He scuttled across the room rather like a "; // rabbit
+    std::string copy_feed4 = "In short, there is in life an element of elfin "; // coincidence
+    std::string copy_feed5 = "At night the wicket gate is replaced by a solid "; // door
+    std::string copy_feed6 = "In his own mind he had completely surrendered "; // himself
+    std::string copy_feed7 = "Every one is grave in public, and funny in "; // private
+    std::string copy_feed8 = "He had seen a great poet prostituting his muse to "; // journalism
+    std::string copy_feed9 = "The whole company, therefore, piled themselves on top of "; // stacks
+    std::string copy_feed10 = "His long bare neck and sloping shoulders were the shape of a champagne "; // bottle
+
+    std::string copy_feed11 = "It was a pleasure to me even to see her "; // take off her bonnet and shawl
+    std::string copy_feed12 = "She laid hands on the pears counted out "; // by her father, and piled them in a pyramid
+    std::string copy_feed13 = "Yet, for all his good impulses, he "; // could not bring himself to make profession
+    std::string copy_feed14 = "Only, if you want to avoid storms "; // at home for the future, do not leave me for three weeks
+    std::string copy_feed15 = "To do really good work, my boy, means that "; // that you will draw out the energy
+    std::string copy_feed16 = "Even the man's start and suspicious stare "; // as the priest went by were consonant enough
+    std::string copy_feed17 = "But he gave everyone the impression of a man "; // with a black past and a dangerous future
+    std::string copy_feed18 = "The wheel grew larger and larger "; // till it filled heaven like the wheel of stars
+    std::string copy_feed19 = "While the author and the victims alike treated "; // the whole matter as a silly public charade
+    std::string copy_feed20 = "And it is a bad sign in a nation "; // when such things are done very well
 
     std::shared_ptr<std::vector<std::string>> allCopyFeeds(new std::vector<std::string>());
 
@@ -436,42 +447,52 @@ int main()
     allCopyFeeds->push_back(copy_feed8);
     allCopyFeeds->push_back(copy_feed9);
     allCopyFeeds->push_back(copy_feed10);
+    allCopyFeeds->push_back(copy_feed11);
+    allCopyFeeds->push_back(copy_feed12);
+    allCopyFeeds->push_back(copy_feed13);
+    allCopyFeeds->push_back(copy_feed14);
+    allCopyFeeds->push_back(copy_feed15);
+    allCopyFeeds->push_back(copy_feed16);
+    allCopyFeeds->push_back(copy_feed17);
+    allCopyFeeds->push_back(copy_feed18);
+    allCopyFeeds->push_back(copy_feed19);
+    allCopyFeeds->push_back(copy_feed20);
 
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
-    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
+    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
     std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 
     std::string feed1 = "The hooded men were chanting beneath the ";
-    std::string feed2 = "An army of little insects gathered on top of ";
+    std::string feed2 = "An army of little insects had gathered on top of ";
     std::string feed3 = "The prostitute smiled and kissed his ";
     std::string feed4 = "A dark winter was eating through the ";
     std::string feed5 = "The dragon circled above the valley, eager for ";
     std::string feed6 = "Our initial impression of the situation was ";
-    std::string feed7 = "At the slightest hint of movement, he was ready to cut ";
+    std::string feed7 = "At the first hint of movement, he was ready to ";
     std::string feed8 = "A warm and sweet scent was coming from her ";
     std::string feed9 = "She stumbled over her dress and fell ";
-    std::string feed10 = "She had not only her husband killed, but also her ";
+    std::string feed10 = "She had not only her husband poisoned, but also her ";
 
-    std::string feed11 = "He realized that only the dance could ";
-    std::string feed12 = "He leaned into her, the love of his life, and ";
+    std::string feed11 = "Only the dance could ";
+    std::string feed12 = "He leaned into her, and ";
     std::string feed13 = "He suddenly collapsed, crying like a ";
-    std::string feed14 = "The cave was too high up for him to ";
-    std::string feed15 = "Suffocating in a party of dull people, he started ";
+    std::string feed14 = "The cave was too high up for her to ";
+    std::string feed15 = "In that party of dull people, he started ";
     std::string feed16 = "She wandered in her wild paths without ";
     std::string feed17 = "The khan and the whole clan were ";
-    std::string feed18 = "He contemplated upon the beauty and the ";
+    std::string feed18 = "The beauty and the ";
     std::string feed19 = "With desperate effort he managed to get away from ";
     std::string feed20 = "Hosts of archers stood ready along the ";
 
     std::string feed21 = "The joker laughed sardonically and continued ";
     std::string feed22 = "She moaned with pleasure when he ";
-    std::string feed23 = "The thief viciously stabbed John while he was ";
+    std::string feed23 = "The thief stabbed John while he was ";
     std::string feed24 = "The green hat swirled and landed on the ";
     std::string feed25 = "Ominous waves surrounded us, just before we ";
     std::string feed26 = "He was hopelessly enchanted by her ";
     std::string feed27 = "The knight decided to kill the maiden and ";
-    std::string feed28 = "The council sent out its most fearsome agents to ";
+    std::string feed28 = "The council sent out its most dedicated agents to ";
     std::string feed29 = "Enlightenment goes well with a ";
     std::string feed30 = "The captain was listening silently for a while, but then ";
 
@@ -513,7 +534,7 @@ int main()
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 
 	return 0;

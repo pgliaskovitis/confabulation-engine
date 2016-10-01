@@ -273,7 +273,7 @@ size_t TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
         current_result_size = result_backward_word.size() + result_backward_phrase.size();
 
         TransferExcitation(modules_[num_word_modules_ + index], knowledge_bases_[num_word_modules_ + index][index], modules_[index]);
-        modules_[index]->PartialConfabulation(swirl_progression + 2);
+        modules_[index]->PartialConfabulation(swirl_progression + 1);
 
         TransferExcitation(modules_[index],  knowledge_bases_[index][index + 1], modules_[index + 1]);
         modules_[index + 1]->PartialConfabulation(swirl_progression + 1);
