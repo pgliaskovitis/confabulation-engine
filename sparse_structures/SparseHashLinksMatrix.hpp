@@ -2,24 +2,7 @@
 #define SPARSEHASHLINKSMATRIX_HPP
 
 #include <google/sparse_hash_map>
-
-struct PairHash {
-public:
-  template <typename T, typename U>
-  std::size_t operator()(const std::pair<T, U> &x) const
-  {
-    return std::hash<T>()(x.first) ^ std::hash<U>()(x.second);
-  }
-};
-
-struct PairEquals {
-public:
-  template <typename T>
-  bool operator()(const std::pair<T, T> &x, const std::pair<T, T> &y) const
-  {
-    return x == y;
-  }
-};
+#include "IKnowledgeLinks.hpp"
 
 template <typename T>
 class SparseHashLinksMatrix : public IKnowledgeLinks<T>

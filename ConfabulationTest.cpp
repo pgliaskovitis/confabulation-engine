@@ -431,7 +431,7 @@ int main()
 
     std::string copy_feed11 = "It was a pleasure to me even to see her "; // take off her bonnet and shawl
     std::string copy_feed12 = "She laid hands on the pears counted out "; // by her father, and piled them in a pyramid
-    std::string copy_feed13 = "Yet, for all his good impulses, he "; // could not bring himself to make profession
+    std::string copy_feed13 = "Yet, for all his good impulses, he "; // could not bring himself to make profession of
     std::string copy_feed14 = "Only, if you want to avoid storms "; // at home for the future, do not leave me for three weeks
     std::string copy_feed15 = "To do really good work, my boy, means that "; // that you will draw out the energy
     std::string copy_feed16 = "Even the man's start and suspicious stare "; // as the priest went by were consonant enough

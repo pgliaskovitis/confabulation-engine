@@ -20,7 +20,7 @@
 #ifndef DOKLINKSMATRIX_H
 #define DOKLINKSMATRIX_H
 
-#include <map>
+#include <unordered_map>
 #include "DOKExcitationVector.hpp"
 #include "IKnowledgeLinks.hpp"
 
@@ -56,7 +56,7 @@ private:
     const uint16_t num_rows_;
     const uint16_t num_cols_;
 
-    std::map<std::pair<uint16_t, uint16_t>, T> map_;
+    std::unordered_map<std::pair<uint16_t, uint16_t>, T, PairHash, PairEquals> map_;
 };
 
 template <typename T>
@@ -103,7 +103,7 @@ void DOKLinksMatrix<T>::SetElement(uint16_t r, uint16_t c, const T &value)
 {
     IKnowledgeLinks<T>::CheckBounds(r, c);
     if (IsNearlyEqual(value, 0.0)) {
-        typename std::map<std::pair<uint16_t, uint16_t>, T>::iterator it = map_.find(std::make_pair(r, c));
+        typename std::unordered_map<std::pair<uint16_t, uint16_t>, T, PairHash, PairEquals>::iterator it = map_.find(std::make_pair(r, c));
         if (it != map_.end()) {
             map_.erase(it);
         }
@@ -144,7 +144,7 @@ std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> DOKLinksMatrix<T>::GetNzEl
 {
     typename std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> result;
 
-    for (typename std::map<std::pair<uint16_t, uint16_t>, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+    for (typename std::unordered_map<std::pair<uint16_t, uint16_t>, T, PairHash, PairEquals>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
         result.insert(*it);
     }
 
