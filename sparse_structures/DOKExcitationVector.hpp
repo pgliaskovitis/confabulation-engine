@@ -129,6 +129,7 @@ template <typename T>
 std::set<std::pair<uint16_t, T>> DOKExcitationVector<T>::GetNzElements() const
 {
     typename std::set<std::pair<uint16_t, T>> result;
+
     for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
         result.insert(*it);
     }

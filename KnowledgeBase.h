@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "sparse_structures/DOKLinksMatrix.hpp"
+#include "sparse_structures/SparseHashLinksMatrix.hpp"
 #include "sparse_structures/CSRLinksMatrix.hpp"
 #include "SymbolMapping.h"
 
