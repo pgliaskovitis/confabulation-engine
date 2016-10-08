@@ -472,25 +472,25 @@ int main()
     std::string feed2 = "An army of little insects had gathered on top of ";
     std::string feed3 = "The prostitute smiled and kissed his ";
     std::string feed4 = "A dark winter was eating through the ";
-    std::string feed5 = "The dragon circled above the valley, eager for ";
-    std::string feed6 = "Our initial impression of the situation was ";
+    std::string feed5 = "The dragon circled above the valley, hungry for ";
+    std::string feed6 = "Our initial impression of the situation was too ";
     std::string feed7 = "At the slightest hint of movement, he was ready to ";
     std::string feed8 = "A warm and sweet scent was coming from her ";
     std::string feed9 = "She stumbled over her dress and ";
-    std::string feed10 = "She had not only her husband poisoned, but also her ";
+    std::string feed10 = "She had not only her husband poisoned, but also ";
 
-    std::string feed11 = "Only the dance could ";
-    std::string feed12 = "He leaned into her, and ";
+    std::string feed11 = "Suddenly it was clear that only dancing could ";
+    std::string feed12 = "He leaned into her, the love of his life, and ";
     std::string feed13 = "He suddenly collapsed, crying like a ";
-    std::string feed14 = "The cave was too high up to ";
+    std::string feed14 = "The cave was too high up for him to ";
     std::string feed15 = "In that party of dull people, he started ";
     std::string feed16 = "She wandered her wild paths without ";
     std::string feed17 = "The khan and the whole clan were ";
-    std::string feed18 = "The beauty and the ";
-    std::string feed19 = "With desperate effort he managed to get away from ";
+    std::string feed18 = "All that beauty had turned into ";
+    std::string feed19 = "With one last desperate effort he managed to ";
     std::string feed20 = "Hosts of archers stood ready along the ";
 
-    std::string feed21 = "The joker laughed sardonically and continued ";
+    std::string feed21 = "The joker laughed and continued ";
     std::string feed22 = "She moaned with pleasure when ";
     std::string feed23 = "The thief stabbed John while he was ";
     std::string feed24 = "The green hat swayed and landed on the ";

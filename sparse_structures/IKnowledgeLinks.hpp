@@ -28,20 +28,24 @@
 
 struct PairHash {
 public:
-  template <typename T, typename U>
-  std::size_t operator()(const std::pair<T, U> &x) const
-  {
-    return std::hash<T>()(x.first) ^ std::hash<U>()(x.second);
-  }
+    std::size_t operator()(const std::pair<uint16_t, uint16_t> &x) const
+    {
+      return x.first * std::numeric_limits<uint16_t>::max() + x.second;
+    }
+    template <typename T, typename U>
+    std::size_t operator()(const std::pair<T, U> &x) const
+    {
+        return std::hash<T>()(x.first) ^ std::hash<U>()(x.second);
+    }
 };
 
 struct PairEquals {
 public:
-  template <typename T>
-  bool operator()(const std::pair<T, T> &x, const std::pair<T, T> &y) const
-  {
-    return x == y;
-  }
+    template <typename T>
+    bool operator()(const std::pair<T, T> &x, const std::pair<T, T> &y) const
+    {
+        return x == y;
+    }
 };
 
 template <typename T>
