@@ -182,6 +182,8 @@ void NGramHandler::CleanupNGrams()
         queue.push_back(current);
     }
 
+    log_info("Finished stage IV of cleaning up multigrams");
+
     Occurrence_Cmp occurence_cmp;
     std::sort(queue.begin(), queue.end(), occurence_cmp);
 
@@ -195,6 +197,8 @@ void NGramHandler::CleanupNGrams()
         queue.pop_front();
     }
 
+    log_info("Finished stage V of cleaning up multigrams");
+
     queue.clear();
     for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
         typedef std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator NGramWithCountIterator;
@@ -206,6 +210,8 @@ void NGramHandler::CleanupNGrams()
     }
 
     std::sort(queue.begin(), queue.end(), occurence_cmp);
+
+    log_info("Finished stage VI of cleaning up multigrams");
 
     while (queue.size() > kMaxMultiWordSymbols) {
         NGramWithCountIterator removed_ngram_it = queue.front();
@@ -222,7 +228,7 @@ void NGramHandler::CleanupNGrams()
         queue.pop_front();
     }
 
-    log_info("Finished stage IV of cleaning up multigrams");
+    log_info("Finished stage VII of cleaning up multigrams");
 }
 
 size_t NGramHandler::get_single_word_count()
