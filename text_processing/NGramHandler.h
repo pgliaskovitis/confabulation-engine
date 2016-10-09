@@ -47,10 +47,10 @@ struct StringVector_Cmp
 
 struct Occurrence_Cmp
 {
-    bool operator() (const std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator& a,
-                     const std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator& b)
+    bool operator() (const std::pair<std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator, size_t>& a,
+                     const std::pair<std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator, size_t>& b)
     {
-        return (a->second < b->second);
+        return (a.first->second < b.first->second);
     }
 };
 

@@ -22,6 +22,7 @@
 #include <queue>
 #include <deque>
 #include <algorithm>
+#include <assert.h>
 #include "NGramHandler.h"
 #include "utils/Utils.h"
 #include "Dbg.h"
@@ -34,7 +35,7 @@ NGramHandler::NGramHandler(uint8_t max_multi_words, uint8_t min_single_occurence
     min_single_occurences_(min_single_occurences),
     min_multi_occurences_(min_multi_occurences)
 {
-    occurrence_counts_.resize(max_multi_words_); //a dedicated map for each n-gram
+    occurrence_counts_.resize(max_multi_words_); // a dedicated map for each n-gram
 }
 
 void NGramHandler::ExtractAndStoreNGrams(const std::vector<std::string>& sentence_tokens)
@@ -175,11 +176,11 @@ void NGramHandler::CleanupNGrams()
 
     // limit single and multiword counts to their chosen maximum values
     typedef std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator NGramWithCountIterator;
-    std::deque<NGramWithCountIterator> queue;
+    std::deque<std::pair<NGramWithCountIterator, size_t>> queue;
     NGramWithCountIterator it = occurrence_counts_[0].begin();
     while (it != occurrence_counts_[0].end()) {
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator current = it++;
-        queue.push_back(current);
+        queue.push_back(std::make_pair(current, 0));
     }
 
     log_info("Finished stage IV of cleaning up multigrams");
@@ -188,11 +189,11 @@ void NGramHandler::CleanupNGrams()
     std::sort(queue.begin(), queue.end(), occurence_cmp);
 
     while (queue.size() > kMaxSingleWordSymbols) {
-        NGramWithCountIterator removed_ngram_it = queue.front();
+        const std::pair<NGramWithCountIterator, size_t>& removed_ngram_it = queue.front();
 
         // std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
 
-        NGramWithCountIterator current_it = occurrence_counts_[0].find(removed_ngram_it->first);
+        NGramWithCountIterator current_it = occurrence_counts_[0].find(removed_ngram_it.first->first);
         occurrence_counts_[0].erase(current_it);
         queue.pop_front();
     }
@@ -200,12 +201,12 @@ void NGramHandler::CleanupNGrams()
     log_info("Finished stage V of cleaning up multigrams");
 
     queue.clear();
+
     for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
-        typedef std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator NGramWithCountIterator;
         NGramWithCountIterator it = occurrence_counts_[n_words - 1].begin();
         while (it != occurrence_counts_[n_words - 1].end()) {
             std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator current = it++;
-            queue.push_back(current);
+            queue.push_back(std::make_pair(current, n_words - 1));
         }
     }
 
@@ -214,17 +215,15 @@ void NGramHandler::CleanupNGrams()
     log_info("Finished stage VI of cleaning up multigrams");
 
     while (queue.size() > kMaxMultiWordSymbols) {
-        NGramWithCountIterator removed_ngram_it = queue.front();
+        const std::pair<NGramWithCountIterator, size_t>& removed_ngram_it = queue.front();
 
-        // std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
+        // std::cout << "Will erase NGram \"" << VectorSymbolToSymbol(removed_ngram_it.first->first, ' ') << "\" with count " << removed_ngram_it.first->second << "\n" << std::flush;
 
-        for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
-            NGramWithCountIterator current_it = occurrence_counts_[n_words - 1].find(removed_ngram_it->first);
-            if (current_it != occurrence_counts_[n_words - 1].end()) {
-                occurrence_counts_[n_words - 1].erase(current_it);
-                break;
-            }
+        NGramWithCountIterator current_it = occurrence_counts_[removed_ngram_it.second].find(removed_ngram_it.first->first);
+        if (current_it != occurrence_counts_[removed_ngram_it.second].end()) {
+            occurrence_counts_[removed_ngram_it.second].erase(current_it);
         }
+
         queue.pop_front();
     }
 
