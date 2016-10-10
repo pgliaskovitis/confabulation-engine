@@ -272,10 +272,14 @@ size_t TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
 
         current_result_size = result_backward_word.size() + result_backward_phrase.size();
 
+        // these twp steps needed because words and phrases are separate in our architecture
         TransferExcitation(modules_[num_word_modules_ + index], knowledge_bases_[num_word_modules_ + index][index], modules_[index]);
-        modules_[index]->PartialConfabulation(swirl_progression + 1);
+        modules_[index]->PartialConfabulation(swirl_progression + 2);
 
-        TransferExcitation(modules_[index],  knowledge_bases_[index][index + 1], modules_[index + 1]);
+        TransferExcitation(modules_[index], knowledge_bases_[index][num_word_modules_ + index], modules_[num_word_modules_ + index]);
+        modules_[index]->PartialConfabulation(swirl_progression + 2);
+
+        TransferExcitation(modules_[index], knowledge_bases_[index][index + 1], modules_[index + 1]);
         modules_[index + 1]->PartialConfabulation(swirl_progression + 1);
 
         ++swirl_progression;
