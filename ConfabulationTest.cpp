@@ -349,7 +349,7 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 
 void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
-    size_t num_word_modules = 15;
+    size_t num_word_modules = Globals::kReferenceFrameSize + 1;
     ForwardConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
@@ -364,7 +364,7 @@ void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, c
 
 void ConfabulationTest::TestTwoLevelSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
-    size_t num_word_modules = 15;
+    size_t num_word_modules = Globals::kReferenceFrameSize + 1;
     TwoLevelSimpleConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
@@ -379,7 +379,7 @@ void ConfabulationTest::TestTwoLevelSimpleConfabulation(const std::string& symbo
 
 void ConfabulationTest::TestTwoLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
-    size_t num_word_modules = 15;
+    size_t num_word_modules = Globals::kReferenceFrameSize + 1;
     TwoLevelMultiConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
@@ -499,7 +499,7 @@ int main()
     std::string feed27 = "The knight decided to kill the maiden and ";
     std::string feed28 = "The council sent out its most dedicated agents to ";
     std::string feed29 = "Enlightenment goes well with a ";
-    std::string feed30 = "The captain was listening silently for a while, but then ";
+    std::string feed30 = "The captain listened silent for a while, and then ";
 
     allOriginalFeeds->push_back(feed1);
     allOriginalFeeds->push_back(feed2);
@@ -539,8 +539,8 @@ int main()
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
-    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 
 	return 0;
 }
