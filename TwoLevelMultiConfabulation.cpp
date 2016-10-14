@@ -56,9 +56,6 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
     // phrase-to-word knowledge bases (only directly below and directly next to below)
     for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
         kb_specs[i][i - num_word_modules] = true;
-        if (i - num_word_modules < num_word_modules - 1) {
-            kb_specs[i][i - num_word_modules + 1];
-        }
     }
 
     std::vector<uint8_t> level_sizes;
@@ -105,7 +102,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         modules_[index]->PartialConfabulation(1);
 
         if (index + 1 < num_word_modules_) {
-            swirl_progression_0 = BasicSwirlAtIndex(index);
+            swirl_progression_0 = BasicSwirlAtIndex(index, 1, 1);
 
             // find expectation on phrase module above word module at index + 1
             TransferExcitation(modules_[index],
@@ -120,7 +117,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             modules_[index + 1]->PartialConfabulation(swirl_progression_0 + 1);
 
             if (index + 2 < num_word_modules_) {
-                swirl_progression_1 = BasicSwirlAtIndex(index + 1);
+                swirl_progression_1 = BasicSwirlAtIndex(index + 1, swirl_progression_0 + 1, 1);
 
                 // constraint satisfaction from index + 2 towards index
                 TransferExcitation(modules_[index + 2],
@@ -133,9 +130,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                 modules_[index]->PartialConfabulation(swirl_progression_0 + 3);
 
                 // find expectation on phrase module above word module at index + 2
-                TransferExcitation(modules_[index],
-                                   knowledge_bases_[index][num_word_modules_ + index + 2],
-                                   modules_[num_word_modules_ + index + 2]);
                 TransferExcitation(modules_[index + 1],
                                    knowledge_bases_[index + 1][num_word_modules_ + index + 2],
                                    modules_[num_word_modules_ + index + 2]);
@@ -148,7 +142,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                 modules_[index + 2]->PartialConfabulation(swirl_progression_1 + 1);
 
                 if (index + 3 < num_word_modules_) {
-                    swirl_progression_2 = BasicSwirlAtIndex(index + 2);
+                    swirl_progression_2 = BasicSwirlAtIndex(index + 2, swirl_progression_1 + 1, 1);
 
                     // constraint satisfaction from index + 3 towards index
                     TransferExcitation(modules_[index + 3],
@@ -233,7 +227,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     return result;
 }
 
-size_t TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
+size_t TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index, size_t initial_word_progression, size_t initial_phrase_progression)
 {
     std::vector<std::string> result_backward_word;
     std::vector<std::string> result_backward_phrase;
@@ -249,7 +243,7 @@ size_t TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
         TransferExcitation(modules_[num_word_modules_ + index],
                            knowledge_bases_[num_word_modules_ + index][index],
                            modules_[index]);
-        modules_[index]->PartialConfabulation(swirl_progression + 1);
+        modules_[index]->PartialConfabulation(initial_word_progression + 1);
 
         // no previous excitation
         TransferExcitation(modules_[index],
@@ -261,13 +255,13 @@ size_t TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
         TransferExcitation(modules_[index + 1],
                            knowledge_bases_[index + 1][num_word_modules_ + index],
                            modules_[num_word_modules_ + index]);
-        result_backward_phrase = modules_[num_word_modules_ + index]->PartialConfabulation(swirl_progression + 1);
+        result_backward_phrase = modules_[num_word_modules_ + index]->PartialConfabulation(initial_phrase_progression + 1);
 
         // previous excitation is from first step of this swirl (+1)
         TransferExcitation(modules_[index + 1],
                            knowledge_bases_[index + 1][index],
                            modules_[index]);
-        result_backward_word = modules_[index]->PartialConfabulation(swirl_progression + 2);
+        result_backward_word = modules_[index]->PartialConfabulation(initial_word_progression + 2);
 
         current_result_size = result_backward_word.size() + result_backward_phrase.size();
         ++swirl_progression;

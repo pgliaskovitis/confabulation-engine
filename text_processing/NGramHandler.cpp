@@ -126,7 +126,7 @@ void NGramHandler::CleanupNGrams()
     log_info("Finished stage III of cleaning up multigrams");
 
     // for each possible multiword length,
-    // remove occurrences whose words occured fewer than MIN_OCC times
+    // remove occurrences whose words occurred fewer than min_multi_occurrences times
     for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>& current_occ_count = occurrence_counts_[n_words - 1];
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it_end = current_occ_count.end();
@@ -164,7 +164,7 @@ void NGramHandler::CleanupNGrams()
     log_info("Finished stage IV of cleaning up multigrams");
 
     // for each possible multiword length,
-    // remove occurrences whose prefixes occured fewer than MIN_OCC times
+    // remove occurrences whose prefixes occurred fewer than min_multi_occurrences times
     for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>& current_occ_count = occurrence_counts_[n_words - 1];
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>& prev_occ_count = occurrence_counts_[n_words - 2];

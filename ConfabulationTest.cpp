@@ -420,25 +420,25 @@ int main()
 
     std::string copy_feed1 = "Tormented by reflection, or for whom strife has become a "; // plaything
     std::string copy_feed2 = "I will accept the post three times and refuse it "; // afterwards
-    std::string copy_feed3 = "He scuttled across the room rather like a "; // rabbit
-    std::string copy_feed4 = "In short, there is in life an element of elfin "; // coincidence
+    std::string copy_feed3 = "Then he turned his own rather fatuous face to the "; // company
+    std::string copy_feed4 = "Only a man who knows nothing of motors talks of motoring without "; // petrol
     std::string copy_feed5 = "At night the wicket gate is replaced by a solid "; // door
-    std::string copy_feed6 = "In his own mind he had completely surrendered "; // himself
-    std::string copy_feed7 = "Every one is grave in public, and funny in "; // private
-    std::string copy_feed8 = "He had seen a great poet prostituting his muse to "; // journalism
-    std::string copy_feed9 = "The whole company, therefore, piled themselves on top of "; // stacks
-    std::string copy_feed10 = "His long bare neck and sloping shoulders were the shape of a champagne "; // bottle
+    std::string copy_feed6 = "He knew that he was doing wrong, and did it "; // deliberately
+    std::string copy_feed7 = "A second moan brought her to the landing near his "; // room
+    std::string copy_feed8 = "He noticed a group of busts mounted on wooden pedestals, painted to resemble "; // marble
+    std::string copy_feed9 = "Across these was still moving the square black mob like one monstrous "; // beetle
+    std::string copy_feed10 = "He was very pale, and he wore blue "; // spectacles
 
-    std::string copy_feed11 = "It was a pleasure to me even to see her "; // take off her bonnet and shawl
+    std::string copy_feed11 = "And this dainty change of toilette "; // had been made for me
     std::string copy_feed12 = "She laid hands on the pears counted out "; // by her father, and piled them in a pyramid
-    std::string copy_feed13 = "Yet, for all his good impulses, he "; // could not bring himself to make profession of
+    std::string copy_feed13 = "For all his good impulses, he "; // could not bring himself to make profession of the
     std::string copy_feed14 = "Only, if you want to avoid storms "; // at home for the future, do not leave me for three weeks
     std::string copy_feed15 = "To do really good work, my boy, means that "; // that you will draw out the energy
     std::string copy_feed16 = "Even the man's start and suspicious stare "; // as the priest went by were consonant enough
     std::string copy_feed17 = "But he gave everyone the impression of a man "; // with a black past and a dangerous future
     std::string copy_feed18 = "The wheel grew larger and larger "; // till it filled heaven like the wheel of stars
     std::string copy_feed19 = "While the author and the victims alike treated "; // the whole matter as a silly public charade
-    std::string copy_feed20 = "And it is a bad sign in a nation "; // when such things are done very well
+    std::string copy_feed20 = "The difficulty is therefore that the actual raising of "; // the standard of athletics has probably been
 
     std::shared_ptr<std::vector<std::string>> allCopyFeeds(new std::vector<std::string>());
 
@@ -539,8 +539,8 @@ int main()
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
-    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 
 	return 0;
 }
