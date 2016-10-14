@@ -166,7 +166,8 @@ debug/ConfabulationTest.o: ConfabulationTest.cpp Globals.h \
 		MultiLevelOrganizer.h \
 		Module.h \
 		KnowledgeBase.h \
-		TwoLevelSimpleConfabulation.h
+		TwoLevelSimpleConfabulation.h \
+		TwoLevelMultiConfabulation.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\ConfabulationTest.o ConfabulationTest.cpp
 
 debug/Globals.o: Globals.cpp Globals.h \
@@ -196,7 +197,8 @@ debug/Module.o: Module.cpp Module.h \
 		sparse_structures/DOKExcitationVector.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\Module.o Module.cpp
 
-debug/MultiLevelOrganizer.o: MultiLevelOrganizer.cpp MultiLevelOrganizer.h \
+debug/MultiLevelOrganizer.o: MultiLevelOrganizer.cpp Globals.h \
+		MultiLevelOrganizer.h \
 		SymbolMapping.h \
 		utils/HashTrie.hpp \
 		utils/HashTrieNode.hpp \

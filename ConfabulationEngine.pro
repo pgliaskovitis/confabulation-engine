@@ -57,6 +57,7 @@ HEADERS += \
     ForwardConfabulation.h \
     TwoLevelSimpleConfabulation.h \
     Dbg.h \
-    TwoLevelMultiConfabulation.h
+    TwoLevelMultiConfabulation.h \
+    sparse_structures/SparseHashLinksMatrix.hpp
 
 
