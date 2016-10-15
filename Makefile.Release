@@ -166,6 +166,13 @@ release/ConfabulationTest.o: ConfabulationTest.cpp Globals.h \
 		MultiLevelOrganizer.h \
 		Module.h \
 		KnowledgeBase.h \
+		sparse_structures/SparseHashLinksMatrix.hpp \
+		google/sparse_hash_map \
+		google/sparsehash/config.h \
+		google/sparsehash/hash_fun.h \
+		google/sparsehash/sparsehashtable.h \
+		google/sparsetable \
+		google/type_traits.h \
 		TwoLevelSimpleConfabulation.h \
 		TwoLevelMultiConfabulation.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ConfabulationTest.o ConfabulationTest.cpp
@@ -184,6 +191,13 @@ release/KnowledgeBase.o: KnowledgeBase.cpp KnowledgeBase.h \
 		utils/Utils.h \
 		sparse_structures/IExcitationVector.hpp \
 		sparse_structures/IKnowledgeLinks.hpp \
+		sparse_structures/SparseHashLinksMatrix.hpp \
+		google/sparse_hash_map \
+		google/sparsehash/config.h \
+		google/sparsehash/hash_fun.h \
+		google/sparsehash/sparsehashtable.h \
+		google/sparsetable \
+		google/type_traits.h \
 		sparse_structures/CSRLinksMatrix.hpp \
 		SymbolMapping.h \
 		Globals.h
@@ -220,6 +234,13 @@ release/ConfabulationBase.o: ConfabulationBase.cpp Globals.h \
 		sparse_structures/DOKLinksMatrix.hpp \
 		sparse_structures/DOKExcitationVector.hpp \
 		sparse_structures/IKnowledgeLinks.hpp \
+		sparse_structures/SparseHashLinksMatrix.hpp \
+		google/sparse_hash_map \
+		google/sparsehash/config.h \
+		google/sparsehash/hash_fun.h \
+		google/sparsehash/sparsehashtable.h \
+		google/sparsetable \
+		google/type_traits.h \
 		sparse_structures/CSRLinksMatrix.hpp \
 		Dbg.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ConfabulationBase.o ConfabulationBase.cpp
@@ -239,6 +260,13 @@ release/ForwardConfabulation.o: ForwardConfabulation.cpp ForwardConfabulation.h 
 		sparse_structures/DOKLinksMatrix.hpp \
 		sparse_structures/DOKExcitationVector.hpp \
 		sparse_structures/IKnowledgeLinks.hpp \
+		sparse_structures/SparseHashLinksMatrix.hpp \
+		google/sparse_hash_map \
+		google/sparsehash/config.h \
+		google/sparsehash/hash_fun.h \
+		google/sparsehash/sparsehashtable.h \
+		google/sparsetable \
+		google/type_traits.h \
 		sparse_structures/CSRLinksMatrix.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ForwardConfabulation.o ForwardConfabulation.cpp
 
@@ -258,6 +286,13 @@ release/TwoLevelSimpleConfabulation.o: TwoLevelSimpleConfabulation.cpp TwoLevelS
 		sparse_structures/DOKLinksMatrix.hpp \
 		sparse_structures/DOKExcitationVector.hpp \
 		sparse_structures/IKnowledgeLinks.hpp \
+		sparse_structures/SparseHashLinksMatrix.hpp \
+		google/sparse_hash_map \
+		google/sparsehash/config.h \
+		google/sparsehash/hash_fun.h \
+		google/sparsehash/sparsehashtable.h \
+		google/sparsetable \
+		google/type_traits.h \
 		sparse_structures/CSRLinksMatrix.hpp \
 		Globals.h \
 		Dbg.h
@@ -279,6 +314,13 @@ release/TwoLevelMultiConfabulation.o: TwoLevelMultiConfabulation.cpp TwoLevelMul
 		sparse_structures/DOKLinksMatrix.hpp \
 		sparse_structures/DOKExcitationVector.hpp \
 		sparse_structures/IKnowledgeLinks.hpp \
+		sparse_structures/SparseHashLinksMatrix.hpp \
+		google/sparse_hash_map \
+		google/sparsehash/config.h \
+		google/sparsehash/hash_fun.h \
+		google/sparsehash/sparsehashtable.h \
+		google/sparsetable \
+		google/type_traits.h \
 		sparse_structures/CSRLinksMatrix.hpp \
 		Globals.h \
 		Dbg.h
