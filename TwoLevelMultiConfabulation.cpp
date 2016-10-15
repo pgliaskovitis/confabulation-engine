@@ -117,8 +117,11 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                                    modules_[index]);
                 modules_[index]->AdditivePartialConfabulation(1);
 
+                BasicTransitionAtIndex(index);
+                BasicTransitionAtIndex(index + 1);
+
                 if (index + 3 < num_word_modules_) {
-                    swirl_progression_2 = BasicSwirlAtIndex(index + 2);
+                    swirl_progression_2 = BasicTransitionAtIndex(index + 2);
 
                     // constraint satisfaction from index + 3 towards index
                     TransferExcitation(modules_[index + 3],
@@ -139,6 +142,10 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                                        knowledge_bases_[index + 3][index + 1],
                                        modules_[index + 1]);
                     modules_[index]->AdditivePartialConfabulation(1);
+
+                    BasicTransitionAtIndex(index);
+                    BasicTransitionAtIndex(index + 1);
+                    BasicTransitionAtIndex(index + 2);
                 }
             }
         }

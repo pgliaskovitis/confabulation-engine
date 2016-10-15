@@ -431,11 +431,11 @@ int main()
 
     std::string copy_feed11 = "And this dainty change of toilette "; // had been made for me
     std::string copy_feed12 = "She laid hands on the pears counted out "; // by her father, and piled them in a pyramid
-    std::string copy_feed13 = "For all his good impulses, he "; // could not bring himself to make profession of the
+    std::string copy_feed13 = "Yet, for all his good impulses, he "; // could not bring himself to make profession of the
     std::string copy_feed14 = "Only, if you want to avoid storms "; // at home for the future, do not leave me for three weeks
     std::string copy_feed15 = "To do really good work, my boy, means that "; // that you will draw out the energy
     std::string copy_feed16 = "Even the man's start and suspicious stare "; // as the priest went by were consonant enough
-    std::string copy_feed17 = "He gave everyone the impression of a man "; // with a black past and a dangerous future
+    std::string copy_feed17 = "Turnbull was of that more masculine type in which "; // a sense of responsibility increases the appetite
     std::string copy_feed18 = "The wheel grew larger and larger "; // till it filled heaven like the wheel of stars
     std::string copy_feed19 = "While the author and the victims alike treated "; // the whole matter as a silly public charade
     std::string copy_feed20 = "The difficulty is therefore that the actual raising of "; // the standard of athletics has probably been
