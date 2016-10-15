@@ -21,9 +21,9 @@ public:
 private:
     size_t num_word_modules_;
 
-    size_t BasicSwirlAtIndex(int index, size_t initial_word_progression, size_t initial_phrase_progression);
+    size_t BasicSwirlAtIndex(int index, size_t initial_word_progression, size_t initial_phrase_progression, size_t next_word_progression);
 
-    size_t BasicTransitionAtIndex(int index, size_t initial_word_progression, size_t initial_phrase_progression);
+    size_t BasicTransitionAtIndex(int index, size_t initial_word_progression, size_t initial_phrase_progression, size_t initial_next_word_progression);
 };
 
 #endif // TWOLEVELMULTICONFABULATION_H
