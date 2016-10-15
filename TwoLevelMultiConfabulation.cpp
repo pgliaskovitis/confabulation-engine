@@ -87,7 +87,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     std::vector<std::string> temp_input(symbols.begin(), symbols.end());
 
     for (; index < num_word_modules_;) {
-        int8_t actual_K = std::min<int8_t>(ActualK(temp_input, index), 4);
+        int8_t actual_K = ActualK(temp_input, index);
         modules_[index]->ExcitationsToZero();
 
         // activate known symbols from input
@@ -99,7 +99,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
         // find initial expectation on word module at index (including phrase module above)
         TransferAllExcitations(index, modules_[index]);
-        modules_[index]->AdditivePartialConfabulation(1);
+        modules_[index]->AdditivePartialConfabulation(Globals::kMaxMultiWordSize);
 
         if (index + 1 < num_word_modules_) {
             swirl_progression_0 = BasicTransitionAtIndex(index);
@@ -117,11 +117,11 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                                    modules_[index]);
                 modules_[index]->AdditivePartialConfabulation(1);
 
-                BasicTransitionAtIndex(index);
-                BasicTransitionAtIndex(index + 1);
+                // BasicTransitionAtIndex(index);
+                // BasicTransitionAtIndex(index + 1);
 
                 if (index + 3 < num_word_modules_) {
-                    swirl_progression_2 = BasicTransitionAtIndex(index + 2);
+                    swirl_progression_2 = BasicSwirlAtIndex(index + 2);
 
                     // constraint satisfaction from index + 3 towards index
                     TransferExcitation(modules_[index + 3],
@@ -143,9 +143,9 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                                        modules_[index + 1]);
                     modules_[index]->AdditivePartialConfabulation(1);
 
-                    BasicTransitionAtIndex(index);
-                    BasicTransitionAtIndex(index + 1);
-                    BasicTransitionAtIndex(index + 2);
+                    // BasicTransitionAtIndex(index);
+                    // BasicTransitionAtIndex(index + 1);
+                    // BasicSwirlAtIndex(index + 2);
                 }
             }
         }
@@ -225,7 +225,7 @@ size_t TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
         TransferExcitation(modules_[num_word_modules_ + index],
                            knowledge_bases_[num_word_modules_ + index][index],
                            modules_[index]);
-        modules_[index]->AdditivePartialConfabulation(1);
+        modules_[index]->AdditivePartialConfabulation(0);
 
         TransferExcitation(modules_[index],
                            knowledge_bases_[index][index + 1],
@@ -263,7 +263,7 @@ size_t TwoLevelMultiConfabulation::BasicTransitionAtIndex(int index)
     TransferExcitation(modules_[num_word_modules_ + index + 1],
                        knowledge_bases_[num_word_modules_ + index + 1][index + 1],
                        modules_[index + 1]);
-    modules_[index + 1]->AdditivePartialConfabulation(1);
+    modules_[index + 1]->AdditivePartialConfabulation(0);
 
     return swirl_progression;
 }
