@@ -435,7 +435,7 @@ int main()
     std::string copy_feed14 = "Only, if you want to avoid storms "; // at home for the future, do not leave me for three weeks
     std::string copy_feed15 = "To do really good work, my boy, means that "; // that you will draw out the energy
     std::string copy_feed16 = "Even the man's start and suspicious stare "; // as the priest went by were consonant enough
-    std::string copy_feed17 = "But he gave everyone the impression of a man "; // with a black past and a dangerous future
+    std::string copy_feed17 = "He gave everyone the impression of a man "; // with a black past and a dangerous future
     std::string copy_feed18 = "The wheel grew larger and larger "; // till it filled heaven like the wheel of stars
     std::string copy_feed19 = "While the author and the victims alike treated "; // the whole matter as a silly public charade
     std::string copy_feed20 = "The difficulty is therefore that the actual raising of "; // the standard of athletics has probably been
@@ -464,7 +464,7 @@ int main()
     allCopyFeeds->push_back(copy_feed20);
 
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
-    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
+    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
     std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 
@@ -539,7 +539,7 @@ int main()
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 
 	return 0;

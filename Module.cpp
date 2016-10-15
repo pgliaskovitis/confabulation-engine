@@ -26,7 +26,8 @@ Module::Module(const SymbolMapping &symbol_mapping) :
     symbol_mapping_(symbol_mapping),
     excitations_(new DOKExcitationVector<float>(symbol_mapping.Size())),
     normalized_excitations_(nullptr),
-    kb_inputs_(new DOKExcitationVector<uint8_t>(symbol_mapping.Size()))
+    kb_inputs_(new DOKExcitationVector<uint8_t>(symbol_mapping.Size())),
+    current_excitation_level_(0)
 {
     Reset();
 }
@@ -42,6 +43,7 @@ void Module::ExcitationsToZero()
     normalized_excitations_.reset(nullptr);
     excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
     kb_inputs_.reset(new DOKExcitationVector<uint8_t>(symbol_mapping_.Size()));
+    current_excitation_level_ = 0;
 }
 
 void Module::ActivateSymbol(const std::string &word, int8_t K)
@@ -264,6 +266,12 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
     Freeze();
 
     return result;
+}
+
+std::vector<std::string> Module::AdditivePartialConfabulation(int8_t K)
+{
+    current_excitation_level_ += K;
+    return PartialConfabulation(current_excitation_level_);
 }
 
 std::unique_ptr<std::pair<uint16_t, float> > Module::MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations)

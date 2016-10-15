@@ -56,6 +56,7 @@ public:
     std::string ElementaryConfabulation(int8_t K, float *max_excitation);
 
     std::vector<std::string> PartialConfabulation(int8_t K);
+    std::vector<std::string> AdditivePartialConfabulation(int8_t K);
 
     const SymbolMapping& get_symbol_mapping() { return symbol_mapping_; }
 
@@ -71,6 +72,8 @@ private:
     std::set<std::pair<uint16_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float>>& nz_excitations);
     int8_t ActualK(int8_t K);
     int8_t MaxK();
+
+    size_t current_excitation_level_;
 };
 
 #endif // MODULE_H
