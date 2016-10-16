@@ -259,11 +259,5 @@ size_t TwoLevelMultiConfabulation::BasicTransitionAtIndex(int index)
                        modules_[num_word_modules_ + index + 1]);
     modules_[num_word_modules_ + index + 1]->AdditivePartialConfabulation(1);
 
-    // find additional expectation on word module at index + 1
-    TransferExcitation(modules_[num_word_modules_ + index + 1],
-                       knowledge_bases_[num_word_modules_ + index + 1][index + 1],
-                       modules_[index + 1]);
-    modules_[index + 1]->AdditivePartialConfabulation(0);
-
     return swirl_progression;
 }
