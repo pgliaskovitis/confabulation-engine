@@ -365,7 +365,7 @@ void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, c
 void ConfabulationTest::TestTwoLevelSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
     size_t num_word_modules = Globals::kReferenceFrameSize + 1;
-    TwoLevelSimpleConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
+    TwoLevelSimpleConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 1);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
@@ -380,7 +380,7 @@ void ConfabulationTest::TestTwoLevelSimpleConfabulation(const std::string& symbo
 void ConfabulationTest::TestTwoLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
     size_t num_word_modules = Globals::kReferenceFrameSize + 1;
-    TwoLevelMultiConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
+    TwoLevelMultiConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 1);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
@@ -499,7 +499,7 @@ int main()
     std::string feed27 = "The knight decided to kill the maiden and ";
     std::string feed28 = "The council sent out its most dedicated agents to ";
     std::string feed29 = "Enlightenment goes well with a ";
-    std::string feed30 = "The captain listened silent for a while, and then ";
+    std::string feed30 = "The captain was silent for a while, but then ";
 
     allOriginalFeeds->push_back(feed1);
     allOriginalFeeds->push_back(feed2);
