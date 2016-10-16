@@ -464,35 +464,35 @@ int main()
     allCopyFeeds->push_back(copy_feed20);
 
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
-    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
+    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
     std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 
     std::string feed1 = "The hooded men were chanting beneath the ";
     std::string feed2 = "An army of little insects had gathered on top of ";
-    std::string feed3 = "The prostitute smiled and kissed his ";
-    std::string feed4 = "A dark winter was eating through the ";
+    std::string feed3 = "The girl smiled and caressed ";
+    std::string feed4 = "A dark winter was eating through the evening ";
     std::string feed5 = "The dragon circled above the valley, hungry for ";
-    std::string feed6 = "Our initial impression of the situation was too ";
+    std::string feed6 = "Our initial assessment of the situation had been ";
     std::string feed7 = "At the slightest hint of movement, he was ready to ";
-    std::string feed8 = "A warm and sweet scent was coming from her ";
+    std::string feed8 = "A strong scent of cinnamon was coming from her ";
     std::string feed9 = "She stumbled over her dress and ";
     std::string feed10 = "She had not only her husband poisoned, but also ";
 
-    std::string feed11 = "Suddenly it was clear that only dancing could ";
+    std::string feed11 = "It was clear that only dancing could reach ";
     std::string feed12 = "He leaned into her, the love of his life, and ";
-    std::string feed13 = "He suddenly collapsed, crying like a ";
+    std::string feed13 = "Jack suddenly collapsed, crying like a ";
     std::string feed14 = "The cave was too high up for him to ";
     std::string feed15 = "In that party of dull people, he started ";
     std::string feed16 = "She wandered her wild paths without ";
     std::string feed17 = "The khan and the whole clan were ";
-    std::string feed18 = "All that beauty had turned into ";
+    std::string feed18 = "All that beauty had suddenly turned into ";
     std::string feed19 = "With one last desperate effort he managed to ";
     std::string feed20 = "Hosts of archers stood ready along the ";
 
     std::string feed21 = "The joker laughed and continued ";
     std::string feed22 = "She moaned with pleasure when ";
-    std::string feed23 = "The thief stabbed John while he was ";
+    std::string feed23 = "The thief stabbed Jack while he was ";
     std::string feed24 = "The green hat swayed and landed on the ";
     std::string feed25 = "Ominous waves surrounded us, just before we ";
     std::string feed26 = "He was hopelessly enchanted by ";
@@ -540,7 +540,7 @@ int main()
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
     //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
-    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 
 	return 0;
 }
