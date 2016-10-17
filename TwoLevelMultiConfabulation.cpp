@@ -103,39 +103,11 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
             if (index + 2 < num_word_modules_) {
                 FullTransitionAtIndex(index + 1);
-
-                // constraint satisfaction from index + 2 towards index
-                TransferExcitation(modules_[index + 2],
-                                   knowledge_bases_[index + 2][num_word_modules_ + index],
-                                   modules_[num_word_modules_ + index]);
-                modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
-                TransferExcitation(modules_[index + 2],
-                                   knowledge_bases_[index + 2][index],
-                                   modules_[index]);
-                modules_[index]->AdditivePartialConfabulation(1);
+                FullSwirlOverMultipleIndices(index, 2);
 
                 if (index + 3 < num_word_modules_) {
                     FullSwirlAtIndex(index + 2);
-
-                    // constraint satisfaction from index + 3 towards index
-                    TransferExcitation(modules_[index + 3],
-                                       knowledge_bases_[index + 3][num_word_modules_ + index],
-                                       modules_[num_word_modules_ + index]);
-                    modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
-                    TransferExcitation(modules_[index + 3],
-                                       knowledge_bases_[index + 3][index],
-                                       modules_[index]);
-                    modules_[index]->AdditivePartialConfabulation(1);
-
-                    // constraint satisfaction from index + 3 towards index + 1
-                    TransferExcitation(modules_[index + 3],
-                                       knowledge_bases_[index + 3][num_word_modules_ + index + 1],
-                                       modules_[num_word_modules_ + index + 1]);
-                    modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
-                    TransferExcitation(modules_[index + 3],
-                                       knowledge_bases_[index + 3][index + 1],
-                                       modules_[index + 1]);
-                    modules_[index]->AdditivePartialConfabulation(1);
+                    FullSwirlOverMultipleIndices(index, 3);
                 }
             }
         }
@@ -245,17 +217,32 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlAtIndex(int index)
     return result;
 }
 
+// tighten expectation from index + span towards index
 std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices(int index, int span)
 {
-    std::vector<std::string> result;
-    size_t current_result_size = std::numeric_limits<size_t>::max();
+    std::vector<std::string> result = std::move(modules_[index]->AdditivePartialConfabulation(0));
+    size_t current_result_size = result.size();
     size_t previous_result_size = 0;
 
     do {
         previous_result_size = current_result_size;
         result.clear();
-        result = std::move(BasicTransitionOverMultipleIndices(index, span));
+
+        TransferExcitation(modules_[index + span],
+                           knowledge_bases_[index + span][num_word_modules_ + index],
+                           modules_[num_word_modules_ + index]);
+        modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
+        TransferExcitation(modules_[index + span],
+                           knowledge_bases_[index + span][index],
+                           modules_[index]);
+        result = std::move(modules_[index]->AdditivePartialConfabulation(1));
         current_result_size = result.size();
+
+        if (current_result_size == previous_result_size) {
+            break;
+        }
+
+        BasicTransitionOverMultipleIndices(index, span);
     } while (current_result_size < previous_result_size);
 
     return result;
@@ -280,6 +267,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultiple
     for (int cursor = 0; cursor < span; ++cursor) {
         if (cursor == 0) {
             result = std::move(BasicTransitionAtIndex(index + cursor));
+        } else if (cursor == span - 1){
+            BasicSwirlAtIndex(index + cursor);
         } else {
             BasicTransitionAtIndex(index + cursor);
         }
