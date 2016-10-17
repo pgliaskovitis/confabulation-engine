@@ -21,9 +21,13 @@ public:
 private:
     size_t num_word_modules_;
 
-    size_t BasicSwirlAtIndex(int index);
+    std::vector<std::string> BasicSwirlAtIndex(int index);
+    std::vector<std::string> FullSwirlAtIndex(int index);
+    std::vector<std::string> FullSwirlOverMultipleIndices(int index, int span);
 
-    size_t BasicTransitionAtIndex(int index);
+    std::vector<std::string> BasicTransitionAtIndex(int index);
+    std::vector<std::string> BasicTransitionOverMultipleIndices(int index, int span);
+    std::vector<std::string> FullTransitionAtIndex(int index);
 };
 
 #endif // TWOLEVELMULTICONFABULATION_H

@@ -68,9 +68,6 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::vector<std::string> &symbols, int8_t index_to_complete, bool expectation)
 {
     std::vector<std::string> result;
-    size_t swirl_progression_0 = 0;
-    size_t swirl_progression_1 = 0;
-    size_t swirl_progression_2 = 0;
 
     if (!CheckArguments(symbols, index_to_complete)) {
         std::cout << "Input sentence does not satisfy conditions for confabulation with this architecture";
@@ -102,10 +99,10 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         modules_[index]->AdditivePartialConfabulation(Globals::kMaxMultiWordSize);
 
         if (index + 1 < num_word_modules_) {
-            swirl_progression_0 = BasicTransitionAtIndex(index);
+            FullTransitionAtIndex(index);
 
             if (index + 2 < num_word_modules_) {
-                swirl_progression_1 = BasicTransitionAtIndex(index + 1);
+                FullTransitionAtIndex(index + 1);
 
                 // constraint satisfaction from index + 2 towards index
                 TransferExcitation(modules_[index + 2],
@@ -117,11 +114,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                                    modules_[index]);
                 modules_[index]->AdditivePartialConfabulation(1);
 
-                BasicTransitionAtIndex(index);
-                BasicTransitionAtIndex(index + 1);
-
                 if (index + 3 < num_word_modules_) {
-                    swirl_progression_2 = BasicSwirlAtIndex(index + 2);
+                    FullSwirlAtIndex(index + 2);
 
                     // constraint satisfaction from index + 3 towards index
                     TransferExcitation(modules_[index + 3],
@@ -142,10 +136,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                                        knowledge_bases_[index + 3][index + 1],
                                        modules_[index + 1]);
                     modules_[index]->AdditivePartialConfabulation(1);
-
-                    BasicTransitionAtIndex(index);
-                    BasicTransitionAtIndex(index + 1);
-                    BasicSwirlAtIndex(index + 2);
                 }
             }
         }
@@ -210,54 +200,103 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     return result;
 }
 
-size_t TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
+// tighten expectation on target (phrase and) word modules once
+std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
 {
-    std::vector<std::string> result_backward_word;
-    std::vector<std::string> result_backward_phrase;
+    std::vector<std::string> result;
+
+    TransferExcitation(modules_[num_word_modules_ + index],
+                       knowledge_bases_[num_word_modules_ + index][index],
+                       modules_[index]);
+    modules_[index]->AdditivePartialConfabulation(0);
+
+    TransferExcitation(modules_[index],
+                       knowledge_bases_[index][index + 1],
+                       modules_[index + 1]);
+    modules_[index + 1]->AdditivePartialConfabulation(1);
+
+    TransferExcitation(modules_[index + 1],
+                       knowledge_bases_[index + 1][num_word_modules_ + index],
+                       modules_[num_word_modules_ + index]);
+    modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
+
+    TransferExcitation(modules_[index + 1],
+                       knowledge_bases_[index + 1][index],
+                       modules_[index]);
+    result = std::move(modules_[index]->AdditivePartialConfabulation(1));
+
+    return result;
+}
+
+// tighten expectation on target (phrase and) word modules continuously
+std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlAtIndex(int index)
+{
+    std::vector<std::string> result;
     size_t current_result_size = std::numeric_limits<size_t>::max();
     size_t previous_result_size = 0;
 
-    // tighten expectation on target phrase and word modules
-    size_t swirl_progression = 1;
+    do {
+        previous_result_size = current_result_size;
+        result.clear();
+        result = std::move(BasicSwirlAtIndex(index));
+        current_result_size = result.size();
+    } while (current_result_size < previous_result_size);
+
+    return result;
+}
+
+std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices(int index, int span)
+{
+    std::vector<std::string> result;
+    size_t current_result_size = std::numeric_limits<size_t>::max();
+    size_t previous_result_size = 0;
 
     do {
         previous_result_size = current_result_size;
-        TransferExcitation(modules_[num_word_modules_ + index],
-                           knowledge_bases_[num_word_modules_ + index][index],
-                           modules_[index]);
-        modules_[index]->AdditivePartialConfabulation(0);
-
-        TransferExcitation(modules_[index],
-                           knowledge_bases_[index][index + 1],
-                           modules_[index + 1]);
-        modules_[index + 1]->AdditivePartialConfabulation(1);
-
-        TransferExcitation(modules_[index + 1],
-                           knowledge_bases_[index + 1][num_word_modules_ + index],
-                           modules_[num_word_modules_ + index]);
-        result_backward_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
-
-        TransferExcitation(modules_[index + 1],
-                           knowledge_bases_[index + 1][index],
-                           modules_[index]);
-        result_backward_word = modules_[index]->AdditivePartialConfabulation(1);
-
-        current_result_size = result_backward_word.size() + result_backward_phrase.size();
-        ++swirl_progression;
+        result.clear();
+        result = std::move(BasicTransitionOverMultipleIndices(index, span));
+        current_result_size = result.size();
     } while (current_result_size < previous_result_size);
 
-    return swirl_progression - 1;
+    return result;
 }
 
-size_t TwoLevelMultiConfabulation::BasicTransitionAtIndex(int index)
+std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionAtIndex(int index)
 {
-    size_t swirl_progression = BasicSwirlAtIndex(index);
+    const std::vector<std::string>& result = BasicSwirlAtIndex(index);
 
-    // find expectation on phrase module above word module at index + 1
     TransferExcitation(modules_[index],
                        knowledge_bases_[index][num_word_modules_ + index + 1],
                        modules_[num_word_modules_ + index + 1]);
     modules_[num_word_modules_ + index + 1]->AdditivePartialConfabulation(1);
 
-    return swirl_progression;
+    return result;
 }
+
+std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultipleIndices(int index, int span)
+{
+    std::vector<std::string> result;
+
+    for (int cursor = 0; cursor < span; ++cursor) {
+        if (cursor == 0) {
+            result = std::move(BasicTransitionAtIndex(index + cursor));
+        } else {
+            BasicTransitionAtIndex(index + cursor);
+        }
+    }
+
+    return result;
+}
+
+std::vector<std::string> TwoLevelMultiConfabulation::FullTransitionAtIndex(int index)
+{
+    const std::vector<std::string>& result = FullSwirlAtIndex(index);
+
+    TransferExcitation(modules_[index],
+                       knowledge_bases_[index][num_word_modules_ + index + 1],
+                       modules_[num_word_modules_ + index + 1]);
+    modules_[num_word_modules_ + index + 1]->AdditivePartialConfabulation(1);
+
+    return result;
+}
+

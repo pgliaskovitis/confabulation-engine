@@ -112,12 +112,12 @@ void NGramHandler::CleanupNGrams()
 
     log_info("Finished stage II of cleaning up multigrams");
 
-    // clean the groups with less than min_multi_occurrences
+    // clean the groups with less than min_single_occurrences
     for (uint8_t n_words = 2; n_words <= max_multi_words_; ++n_words) {
         std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[n_words - 1].begin();
         while (it != occurrence_counts_[n_words - 1].end()) {
             std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator current = it++;
-            if (current->second < min_multi_occurences_) {
+            if (current->second < min_single_occurences_) {
                 occurrence_counts_[n_words - 1].erase(current);
             }
         }
