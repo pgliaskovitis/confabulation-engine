@@ -195,7 +195,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index
     TransferExcitation(modules_[index + 1],
                        knowledge_bases_[index + 1][index],
                        modules_[index]);
-    result = std::move(modules_[index]->AdditivePartialConfabulation(1));
+    result = modules_[index]->AdditivePartialConfabulation(1);
 
     return result;
 }
@@ -209,8 +209,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlAtIndex(int index)
 
     do {
         previous_result_size = current_result_size;
-        result.clear();
-        result = std::move(BasicSwirlAtIndex(index));
+        result = BasicSwirlAtIndex(index);
         current_result_size = result.size();
     } while (current_result_size < previous_result_size);
 
@@ -220,7 +219,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlAtIndex(int index)
 // tighten expectation from index + span towards index
 std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices(int index, int span)
 {
-    std::vector<std::string> result = std::move(modules_[index]->AdditivePartialConfabulation(0));
+    std::vector<std::string> result = modules_[index]->AdditivePartialConfabulation(0);
     size_t current_result_size = result.size();
     size_t previous_result_size = 0;
 
@@ -235,7 +234,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
         TransferExcitation(modules_[index + span],
                            knowledge_bases_[index + span][index],
                            modules_[index]);
-        result = std::move(modules_[index]->AdditivePartialConfabulation(1));
+        result = modules_[index]->AdditivePartialConfabulation(1);
         current_result_size = result.size();
 
         if (current_result_size == previous_result_size) {
@@ -266,7 +265,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultiple
 
     for (int cursor = 0; cursor < span; ++cursor) {
         if (cursor == 0) {
-            result = std::move(BasicTransitionAtIndex(index + cursor));
+            result = BasicTransitionAtIndex(index + cursor);
         } else if (cursor == span - 1){
             BasicSwirlAtIndex(index + cursor);
         } else {
