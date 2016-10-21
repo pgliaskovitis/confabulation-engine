@@ -51,6 +51,8 @@ public:
 
     void TestTwoLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
 
+    void TestOneLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
+
 private:
     void PerformConfabulation(Globals& globals, const std::vector<std::string>& sentences) const;
 };

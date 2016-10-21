@@ -33,7 +33,8 @@ SOURCES += \
     ConfabulationBase.cpp \
     ForwardConfabulation.cpp \
     TwoLevelSimpleConfabulation.cpp \
-    TwoLevelMultiConfabulation.cpp
+    TwoLevelMultiConfabulation.cpp \
+    OneLevelMulticonfabulation.cpp
 
 HEADERS += \
     sparse_structures/CSRLinksMatrix.hpp \
@@ -58,6 +59,7 @@ HEADERS += \
     TwoLevelSimpleConfabulation.h \
     Dbg.h \
     TwoLevelMultiConfabulation.h \
-    sparse_structures/SparseHashLinksMatrix.hpp
+    sparse_structures/SparseHashLinksMatrix.hpp \
+    OneLevelMultiConfabulation.h
 
 

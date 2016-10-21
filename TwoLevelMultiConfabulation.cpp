@@ -225,7 +225,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 
     do {
         previous_result_size = current_result_size;
-        result.clear();
 
         TransferExcitation(modules_[index + span],
                            knowledge_bases_[index + span][num_word_modules_ + index],
@@ -266,7 +265,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultiple
     for (int cursor = 0; cursor < span; ++cursor) {
         if (cursor == 0) {
             result = BasicTransitionAtIndex(index + cursor);
-        } else if (cursor == span - 1){
+        } else if (cursor == span - 1) {
             BasicSwirlAtIndex(index + cursor);
         } else {
             BasicTransitionAtIndex(index + cursor);
@@ -287,4 +286,3 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullTransitionAtIndex(int i
 
     return result;
 }
-
