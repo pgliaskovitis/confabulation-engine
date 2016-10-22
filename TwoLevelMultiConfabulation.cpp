@@ -85,18 +85,28 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
     for (; index < index + Globals::kMaxMultiWordSize;) {
         int8_t actual_K = ActualK(temp_input, index);
-        modules_[index]->ExcitationsToZero();
+        int8_t initial_excitation_level = std::min<uint8_t>(Globals::kMaxMultiWordSize, actual_K);
 
-        // activate known symbols from input
-        Activate(temp_input);
+        std::vector<std::string> initial_result;
+        do {
+            modules_[index]->ExcitationsToZero();
 
-        // find initial expectation on phrase module above word module at index
-        TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index]);
-        modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
+            // activate known symbols from input
+            Activate(temp_input);
 
-        // find initial expectation on word module at index (including phrase module above)
-        TransferAllExcitations(index, modules_[index]);
-        modules_[index]->AdditivePartialConfabulation(Globals::kMaxMultiWordSize);
+            // find initial expectation on phrase module above word module at index
+            TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index]);
+            modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
+
+            // find initial expectation on word module at index (including phrase module above)
+            TransferAllExcitations(index, modules_[index]);
+            initial_result = modules_[index]->AdditivePartialConfabulation(initial_excitation_level);
+            initial_excitation_level--;
+        } while (initial_result.size() == 0 || initial_excitation_level < 0);
+
+        if (initial_excitation_level < 0) {
+            return result;
+        }
 
         if (index + 1 < num_word_modules_) {
             FullTransitionAtIndex(index);

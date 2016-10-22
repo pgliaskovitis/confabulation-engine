@@ -58,14 +58,24 @@ std::vector<std::string> OneLevelMultiConfabulation::Confabulation(const std::ve
 
     for (; index < index + Globals::kMaxMultiWordSize;) {
         int8_t actual_K = ActualK(temp_input, index);
-        modules_[index]->ExcitationsToZero();
+        int8_t initial_excitation_level = std::min<uint8_t>(Globals::kMaxMultiWordSize, actual_K);
+        std::vector<std::string> initial_result;
 
-        // activate known symbols from input
-        Activate(temp_input);
+        do {
+            modules_[index]->ExcitationsToZero();
 
-        // find initial expectation on word module at index
-        TransferAllExcitations(index, modules_[index]);
-        modules_[index]->AdditivePartialConfabulation(Globals::kMaxMultiWordSize);
+            // activate known symbols from input
+            Activate(temp_input);
+
+            // find initial expectation on word module at index (including phrase module above)
+            TransferAllExcitations(index, modules_[index]);
+            initial_result = modules_[index]->AdditivePartialConfabulation(initial_excitation_level);
+            initial_excitation_level--;
+        } while (initial_result.size() == 0 || initial_excitation_level < 0);
+
+        if (initial_excitation_level < 0) {
+            return result;
+        }
 
         if (index + 1 < num_word_modules_) {
             FullSwirlAtIndex(index);
