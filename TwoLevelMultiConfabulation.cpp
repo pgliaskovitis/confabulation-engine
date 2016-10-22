@@ -80,10 +80,11 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     } else {
         index = index_to_complete;
     }
+    int8_t end_completion = index + Globals::kMaxMultiWordSize;
 
     std::vector<std::string> temp_input(symbols.begin(), symbols.end());
 
-    for (; index < index + Globals::kMaxMultiWordSize;) {
+    for (; index < end_completion;) {
         int8_t actual_K = ActualK(temp_input, index);
         int8_t initial_excitation_level = std::min<int8_t>(Globals::kMaxMultiWordSize, actual_K);
 
