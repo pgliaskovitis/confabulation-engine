@@ -519,7 +519,7 @@ int main()
     std::string feed30 = "The captain was silent for a while, but then ";
 
     std::string feed31 = "Ultimately, his quest was one of ";
-    std::string feed32 = "Luckily, there will always exist ";
+    std::string feed32 = "Fortunately, there will always exist ";
     std::string feed33 = "As it turns out, luck favors the ";
 
     allOriginalFeeds->push_back(feed31);

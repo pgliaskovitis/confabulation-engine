@@ -117,8 +117,13 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                 FullSwirlOverMultipleIndices(index, 2);
 
                 if (index + 3 < num_word_modules_) {
-                    FullSwirlAtIndex(index + 2);
+                    FullTransitionAtIndex(index + 2);
                     FullSwirlOverMultipleIndices(index, 3);
+
+                    if (index + 4 < num_word_modules_) {
+                        FullSwirlAtIndex(index + 3);
+                        FullSwirlOverMultipleIndices(index, 4);
+                    }
                 }
             }
         }

@@ -88,6 +88,11 @@ std::vector<std::string> OneLevelMultiConfabulation::Confabulation(const std::ve
                 if (index + 3 < num_word_modules_) {
                     FullSwirlAtIndex(index + 2);
                     FullSwirlOverMultipleIndices(index, 3);
+
+                    if (index + 4 < num_word_modules_) {
+                        FullSwirlAtIndex(index + 3);
+                        FullSwirlOverMultipleIndices(index, 4);
+                    }
                 }
             }
         }
