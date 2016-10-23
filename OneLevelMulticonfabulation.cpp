@@ -73,7 +73,7 @@ std::vector<std::string> OneLevelMultiConfabulation::Confabulation(const std::ve
             initial_result = modules_[index]->AdditivePartialConfabulation(initial_excitation_level);
             initial_excitation_level--;
 
-        } while (initial_result.size() == 0 || initial_excitation_level == 0);
+        } while (initial_result.size() == 0 && initial_excitation_level > 0);
 
         if (initial_excitation_level == 0) {
             return result;
@@ -122,8 +122,6 @@ std::vector<std::string> OneLevelMultiConfabulation::Confabulation(const std::ve
             ++index;
             result.push_back("}");
         }
-
-        std::cout << "Check5" << std::endl;
 
         Clean();
     }
