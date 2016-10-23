@@ -72,10 +72,9 @@ std::vector<std::string> OneLevelMultiConfabulation::Confabulation(const std::ve
             TransferAllExcitations(index, modules_[index]);
             initial_result = modules_[index]->AdditivePartialConfabulation(initial_excitation_level);
             initial_excitation_level--;
-
         } while (initial_result.size() == 0 && initial_excitation_level > 0);
 
-        if (initial_excitation_level == 0) {
+        if (initial_result.size() == 0) {
             return result;
         }
 

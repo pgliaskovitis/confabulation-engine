@@ -105,7 +105,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             initial_excitation_level--;
         } while (initial_result.size() == 0 && initial_excitation_level > 0);
 
-        if (initial_excitation_level == 0) {
+        if (initial_result.size() == 0) {
             return result;
         }
 
