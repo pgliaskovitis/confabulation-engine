@@ -23,7 +23,7 @@ Confabulation architectures are a kind of analog constraint satisfaction mechani
 
 The temporal feedback mechanism of Recurrent Neural Networks (RNNs) does bear a resemblance to the 'swirl' operation of multiconfabulation. Multiconfabulation can effectively be thought of as a "Recurrent Maximum Likelihood" system. Of course, in confabulation there is no concept of optimizing an objective function. Furthermore, RNNs encode the whole space of possible word contexts into a single real vector (or a set of real vectors), the RNN state. Yet, there is of now no interpretable correspondence of these vectors to symbols as there could presumably be in the human brain.
 
-The strength and intricacy of confabulation lies in that it can combine all modes of human sensory perception under a single unifying framework of abstarct symbols. The concept of "apple" can be simultaneously connected to a symbol for the image of an apple, a symbol for the smell of an apple and a symbol for the taste of an apple.
+The strength and intricacy of confabulation lies in that it can combine all modes of human sensory perception under a single unifying framework of abstract symbols. The concept of "apple" can be simultaneously connected to a symbol for the image of an apple, a symbol for the smell of an apple and a symbol for the taste of an apple.
 
 As I see it, a very interesting avenue of work would be to try and combine the distributed representations of neural nets, especially for visual stimuli, with a confabulation architecture.
 
