@@ -63,7 +63,7 @@ std::vector<std::string> OneLevelMultiConfabulation::Confabulation(const std::ve
         std::vector<std::string> initial_result;
 
         do {
-            modules_[index]->ExcitationsToZero();
+            Clean();
 
             // activate known symbols from input
             Activate(temp_input);
@@ -75,6 +75,7 @@ std::vector<std::string> OneLevelMultiConfabulation::Confabulation(const std::ve
         } while (initial_result.size() == 0 && initial_excitation_level > 0);
 
         if (initial_result.size() == 0) {
+            std::cout << "Failed to initialize at initial excitation level: " << (int)initial_excitation_level + 1 << std::endl;
             return result;
         }
 

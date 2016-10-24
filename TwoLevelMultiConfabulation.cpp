@@ -87,10 +87,10 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     for (; index < end_completion;) {
         int8_t actual_K = ActualK(temp_input, index);
         int8_t initial_excitation_level = std::min<int8_t>(Globals::kMaxMultiWordSize, actual_K);
-
         std::vector<std::string> initial_result;
+
         do {
-            modules_[index]->ExcitationsToZero();
+            Clean();
 
             // activate known symbols from input
             Activate(temp_input);
@@ -106,6 +106,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         } while (initial_result.size() == 0 && initial_excitation_level > 0);
 
         if (initial_result.size() == 0) {
+            std::cout << "Failed to initialize at initial excitation level: " << (int)initial_excitation_level + 1 << std::endl;
             return result;
         }
 
