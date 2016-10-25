@@ -3,7 +3,29 @@ confabulation-engine
 
 Implementation of language cognition and generation based on Robert Hecht Nielsen's Confabulation Theory.
 
-The temporal feedback mechanism of Recurrent Neural Networks does bear a resemblance to the 'swirl' operation of multiconfabulation. Multiconfabulation can effectively be thought of as a "Recurrent Maximum Likelihood" system. Of course, in confabulation there is no concept of optimizing an objective function.
+Introduction
+------------
+
+Confabulation theory is a model of how cognition (understanding) could work in the brains of humans and animals (crows for example). 
+
+The theory proposes collections of neurons organized into "symbols" that are in turn organized into modules that are in turn organized into hierachical architectures. "Symbols" are learned throughout childhood and can be recalled at will, as well as logically produce other symbols (logic here is meant in a propositional Aristotelian calculus sense). The logical coherence among symbols is based on discrete maximum likelihood, with the added twist that the winner symbol "takes all", i.e., it is the only activated conclusion overshadowing all others in its corresponding module. This is effectively propositional logic by means of maximum likelihood. 
+
+The principles of the theory are very general and can be applied to all aspects of human sensory perception. A word can be a "symbol", as can be a phoneme, a particular sound signal, the output of an edge detector, or the representations learned by the hidden layers of a deep convolutional neural network. 
+
+The theory is described in detail in Robert Hecht Nielsen's 2006 book "Confabulation Theory: The Mechanism of Thought". To test the point in hand, in the book, the theory is used as a cognitive and generative model for text data. The goal is to be given a sequence of starting words, with or without an abstract theme known, and for the system to "understand" these words and continue the sentence on its own. 
+
+This is where the fun starts! Confabulation systems, depending on what you provide as reading material can produce any nymber of interesting results. 
+
+Relation to other models
+------------------------
+
+Confabulation architectures are a kind of analog constraint satisfaction mechanism. The confabulation 'swirl' is essentially a parallelizable constraint satisfaction machine. In that sense, they are very related to Markov Random Fields (MRFs -- or the more specific Restricted Boltzmann Machines RBMs), although here there is no underlying joint probability distribution learning, at least not explicitly. And, unlike general MRFs, confabulation architectures are by definition parallelizable.
+
+The temporal feedback mechanism of Recurrent Neural Networks (RNNs) does bear a resemblance to the 'swirl' operation of multiconfabulation. Multiconfabulation can effectively be thought of as a "Recurrent Maximum Likelihood" system. Of course, in confabulation there is no concept of optimizing an objective function. Furthermore, RNNs encode the whole space of possible word contexts into a single real vector (or a set of real vectors), the RNN state. Yet, there is of now no interpretable correspondence of these vectors to symbols as there could presumably be in the human brain.
+
+The strength and intricacy of confabulation lies in that it can combine all modes of human sensory perception under a single unifying framework of abstract symbols. The concept of "apple" can be simultaneously connected to a symbol for the image of an apple, a symbol for the smell of an apple and a symbol for the taste of an apple.
+
+As I see it, a very interesting avenue of work would be to try and combine the distributed representations of neural nets, especially for visual stimuli, with a confabulation architecture.
 
 Possible Extensions
 -------------------
@@ -22,6 +44,8 @@ V) Capability to generate punctuation marks and especially fullstops. The goal i
 
 Installation
 ------------
+
+You will need to have Google SparseHash installed.
 
 The confabulation project has been developed primarily in QtCreator. Project files for QtCreator are available. In order 
 to build the project independently of QtCreator you will need the qmake facility (e.g., you can install
