@@ -79,21 +79,15 @@ std::vector<std::string> OneLevelMultiConfabulation::Confabulation(const std::ve
             return result;
         }
 
-        if (index + 1 < num_word_modules_) {
-            FullSwirlAtIndex(index);
-
-            if (index + 2 < num_word_modules_) {
-                FullSwirlAtIndex(index + 1);
-                FullSwirlOverMultipleIndices(index, 2);
-
-                if (index + 3 < num_word_modules_) {
-                    FullSwirlAtIndex(index + 2);
-                    FullSwirlOverMultipleIndices(index, 3);
-
-                    if (index + 4 < num_word_modules_) {
-                        FullSwirlAtIndex(index + 3);
-                        FullSwirlOverMultipleIndices(index, 4);
-                    }
+        for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
+            if (context_span == 1) {
+                if (index + context_span < num_word_modules_) {
+                    FullSwirlAtIndex(index);
+                }
+            } else {
+                if (index + context_span < num_word_modules_) {
+                    FullSwirlAtIndex(index + context_span - 1);
+                    FullSwirlOverMultipleIndices(index, context_span);
                 }
             }
         }
