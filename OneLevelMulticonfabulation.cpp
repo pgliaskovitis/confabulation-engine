@@ -93,22 +93,12 @@ std::vector<std::string> OneLevelMultiConfabulation::Confabulation(const std::ve
         }
 
         // one final excitation boost
-        if (index + 3 < num_word_modules_) {
-            TransferExcitation(modules_[index + 3],
-                               knowledge_bases_[index + 3][index],
-                               modules_[index]);
-        }
-
-        if (index + 2 < num_word_modules_) {
-            TransferExcitation(modules_[index + 2],
-                               knowledge_bases_[index + 2][index],
-                               modules_[index]);
-        }
-
-        if (index + 1 < num_word_modules_) {
-            TransferExcitation(modules_[index + 1],
-                               knowledge_bases_[index + 1][index],
-                               modules_[index]);
+        for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
+            if (index + context_span < num_word_modules_) {
+                TransferExcitation(modules_[index + context_span],
+                                   knowledge_bases_[index + context_span][index],
+                                   modules_[index]);
+            }
         }
 
         if (!expectation) {
