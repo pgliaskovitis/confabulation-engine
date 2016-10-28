@@ -37,6 +37,7 @@ public:
     static const uint8_t kBandGap;
     static const uint8_t kMaxMultiWordSize;
     static const uint8_t kReferenceFrameSize;
+    static const uint8_t kMaxCompletionSize;
     static const bool kDelimitersAsSymbols;
 
     Globals() = delete;

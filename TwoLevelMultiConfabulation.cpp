@@ -80,7 +80,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     } else {
         index = index_to_complete;
     }
-    int8_t end_completion = index + Globals::kMaxMultiWordSize;
+    int8_t end_completion = index + Globals::kMaxCompletionSize;
 
     std::vector<std::string> temp_input(symbols.begin(), symbols.end());
 

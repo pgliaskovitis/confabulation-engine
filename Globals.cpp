@@ -31,6 +31,7 @@ const std::vector<std::string> Globals::kPersistenceDelimiters = {":::", "{--->"
 
 const float Globals::kBaseProb = 0.0001;
 const uint8_t Globals::kBandGap = 5;
-const uint8_t Globals::kMaxMultiWordSize = 4;
+const uint8_t Globals::kMaxMultiWordSize = 5;
 const uint8_t Globals::kReferenceFrameSize = 20 - 1;
-const bool Globals::kDelimitersAsSymbols = false;
+const uint8_t Globals::kMaxCompletionSize = 7;
+const bool Globals::kDelimitersAsSymbols = true;
