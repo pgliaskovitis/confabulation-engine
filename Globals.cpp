@@ -34,4 +34,4 @@ const uint8_t Globals::kBandGap = 5;
 const uint8_t Globals::kMaxMultiWordSize = 5;
 const uint8_t Globals::kReferenceFrameSize = 20 - 1;
 const uint8_t Globals::kMaxCompletionSize = 7;
-const bool Globals::kDelimitersAsSymbols = true;
+const bool Globals::kDelimitersAsSymbols = false;

@@ -507,20 +507,25 @@ int main()
     std::string feed19 = "With one last desperate effort he managed to ";
     std::string feed20 = "Hosts of archers stood ready along the ";
 
-    std::string feed21 = "The joker laughed and continued ";
-    std::string feed22 = "She moaned with pleasure when ";
     std::string feed23 = "The thief stabbed him while he was ";
     std::string feed24 = "The green leaf swayed and landed on ";
     std::string feed25 = "Ominous waves surrounded us, just before we ";
     std::string feed26 = "He was hopelessly enchanted by ";
     std::string feed27 = "The knight decided to kill the maiden and ";
     std::string feed28 = "The council sent out its most dedicated agents to ";
-    std::string feed29 = "Enlightenment goes well with a ";
     std::string feed30 = "The captain was silent for a while, but then ";
+
+    std::string feed21 = "The joker laughed and continued ";
+    std::string feed22 = "She moaned with pleasure when ";
+    std::string feed29 = "Enlightenment goes well with a ";
 
     std::string feed31 = "Ultimately, his quest was one of ";
     std::string feed32 = "Fortunately, there will always exist ";
     std::string feed33 = "As it turns out, luck favors the ";
+
+    allOriginalFeeds->push_back(feed21);
+    allOriginalFeeds->push_back(feed22);
+    allOriginalFeeds->push_back(feed29);
 
     allOriginalFeeds->push_back(feed31);
     allOriginalFeeds->push_back(feed32);
@@ -546,15 +551,12 @@ int main()
     allOriginalFeeds->push_back(feed18);
     allOriginalFeeds->push_back(feed19);
     allOriginalFeeds->push_back(feed20);
-    allOriginalFeeds->push_back(feed21);
-    allOriginalFeeds->push_back(feed22);
     allOriginalFeeds->push_back(feed23);
     allOriginalFeeds->push_back(feed24);
     allOriginalFeeds->push_back(feed25);
     allOriginalFeeds->push_back(feed26);
     allOriginalFeeds->push_back(feed27);
     allOriginalFeeds->push_back(feed28);
-    allOriginalFeeds->push_back(feed29);
     allOriginalFeeds->push_back(feed30);
 
     //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
@@ -562,12 +564,16 @@ int main()
 
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
     //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
     //test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    //test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
 
 	return 0;
 }
