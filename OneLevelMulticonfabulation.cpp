@@ -59,7 +59,7 @@ std::vector<std::string> OneLevelMultiConfabulation::Confabulation(const std::ve
 
     for (; index < end_completion;) {
         int8_t actual_K = ActualK(temp_input, index);
-        int8_t initial_excitation_level = std::min<int8_t>(Globals::kMaxMultiWordSize, actual_K);
+        int8_t initial_excitation_level = std::max<int8_t>(Globals::kMaxMultiWordSize, actual_K);
         std::vector<std::string> initial_result;
 
         do {

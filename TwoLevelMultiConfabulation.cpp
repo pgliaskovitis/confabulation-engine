@@ -86,7 +86,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
     for (; index < end_completion;) {
         int8_t actual_K = ActualK(temp_input, index);
-        int8_t initial_excitation_level = std::min<int8_t>(Globals::kMaxMultiWordSize, actual_K);
+        int8_t initial_excitation_level = std::max<int8_t>(Globals::kMaxMultiWordSize, actual_K);
         std::vector<std::string> initial_result;
 
         do {
@@ -123,6 +123,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             }
         }
 
+        // one final excitation boost
         for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
             if (index + context_span < num_word_modules_) {
                 TransferExcitation(modules_[index + context_span],
