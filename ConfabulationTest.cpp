@@ -496,7 +496,7 @@ int main()
     std::string feed9 = "She stumbled over her dress and ";
     std::string feed10 = "She had her husband poisoned and her lover ";
 
-    std::string feed11 = "It was clear that only dancing could reach ";
+    std::string feed11 = "It was clear that only dancing could ";
     std::string feed12 = "He leaned into her, the love of his life, and ";
     std::string feed13 = "He suddenly collapsed, crying like a ";
     std::string feed14 = "The cave was too high up for him to ";
@@ -508,7 +508,7 @@ int main()
     std::string feed20 = "Hosts of archers stood ready along the ";
 
     std::string feed21 = "The joker laughed and continued ";
-    std::string feed22 = "She moaned with pleasure when ";
+    std::string feed22 = "She moaned softly when ";
     std::string feed23 = "The thief stabbed him while he was ";
     std::string feed24 = "The green leaf swayed and landed on ";
     std::string feed25 = "Ominous waves surrounded us, just before we ";
