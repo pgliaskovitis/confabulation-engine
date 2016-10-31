@@ -167,12 +167,14 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 // tighten expectation on target (phrase and) word modules once
 std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
 {
-    std::vector<std::string> result;
+    std::vector<std::string> result_word;
 
+    std::vector<std::string> current_result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
+    int8_t phrase_word_transition = current_result_phrase.size() ? 1 : 0;
     TransferExcitation(modules_[num_word_modules_ + index],
                        knowledge_bases_[num_word_modules_ + index][index],
                        modules_[index]);
-    modules_[index]->AdditivePartialConfabulation(0);
+    modules_[index]->AdditivePartialConfabulation(phrase_word_transition);
 
     TransferExcitation(modules_[index],
                        knowledge_bases_[index][index + 1],
@@ -187,9 +189,9 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index
     TransferExcitation(modules_[index + 1],
                        knowledge_bases_[index + 1][index],
                        modules_[index]);
-    result = modules_[index]->AdditivePartialConfabulation(1);
+    result_word = modules_[index]->AdditivePartialConfabulation(1);
 
-    return result;
+    return result_word;
 }
 
 // tighten expectation on target (phrase and) word modules continuously
