@@ -23,12 +23,10 @@
 #include <deque>
 #include <algorithm>
 #include <assert.h>
+#include "Globals.h"
 #include "NGramHandler.h"
 #include "utils/Utils.h"
 #include "Dbg.h"
-
-const size_t NGramHandler::kMaxSingleWordSymbols = 65535;
-const size_t NGramHandler::kMaxMultiWordSymbols = 65535;
 
 NGramHandler::NGramHandler(uint8_t max_multi_words, uint8_t min_single_occurences, uint8_t min_multi_occurences) :
     max_multi_words_(max_multi_words),
@@ -100,7 +98,7 @@ void NGramHandler::CleanupNGrams()
     Occurrence_Cmp occurence_cmp;
     std::sort(queue.begin(), queue.end(), occurence_cmp);
 
-    while (queue.size() > kMaxSingleWordSymbols) {
+    while (queue.size() > Globals::kMaxSingleWordSymbols) {
         const std::pair<NGramWithCountIterator, size_t>& removed_ngram_it = queue.front();
 
         // std::cout << "Erasing NGram \"" << VectorSymbolToSymbol(removed_ngram_it->first, ' ') << "\" with count " << removed_ngram_it->second << "\n" << std::flush;
@@ -199,31 +197,28 @@ void NGramHandler::CleanupNGrams()
 
     log_info("Finished stage V of cleaning up multigrams");
 
-    // now only multiwords who have "sufficiently" occurring prefixes still exist in the maps
-    // remove counts of longer groups from the count of the sub groups
-    // never erase counts of single words
-    for (uint8_t n_words = 3; n_words <= max_multi_words_; ++n_words) {
-        std::map<std::vector<std::string>, size_t, StringVector_Cmp>& current_occ_count = occurrence_counts_[n_words - 1];
-        std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it_end = current_occ_count.end();
-        for (uint8_t subgroup_words = n_words - 1; subgroup_words >= 2; --subgroup_words) {
-            std::map<std::vector<std::string>, size_t, StringVector_Cmp>& prev_occ_count = occurrence_counts_[subgroup_words - 1];
+    if (Globals::kFavorLargerPhrases) {
+        // now only multiwords who have "sufficiently" occurring prefixes still exist in the maps
+        // remove counts of longer phrases from the counts of their prefix phrases
+        // never erase counts of single words
+        for (uint8_t n_words = 3; n_words <= max_multi_words_; ++n_words) {
+            std::map<std::vector<std::string>, size_t, StringVector_Cmp>& current_occ_count = occurrence_counts_[n_words - 1];
+            std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it_end = current_occ_count.end();
+            for (uint8_t subgroup_words = n_words - 1; subgroup_words >= 2; --subgroup_words) {
+                std::map<std::vector<std::string>, size_t, StringVector_Cmp>& prev_occ_count = occurrence_counts_[subgroup_words - 1];
 
-            for (std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = current_occ_count.begin(); it != it_end; ++it) {
-                if (it->second >= min_multi_occurences_) {
-                    std::vector<std::string>::const_iterator symbol_it = (it->first).begin();
-                    std::vector<std::string> prefix(symbol_it, symbol_it + subgroup_words);
-
-                    symbol_it = (it->first).end();
-                    std::vector<std::string> suffix(symbol_it - subgroup_words, symbol_it);
-
-                    prev_occ_count[prefix] -= it->second;
-                    prev_occ_count[suffix] -= it->second;
+                for (std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = current_occ_count.begin(); it != it_end; ++it) {
+                    if (it->second >= min_multi_occurences_) {
+                        std::vector<std::string>::const_iterator symbol_it = (it->first).begin();
+                        std::vector<std::string> prefix(symbol_it, symbol_it + subgroup_words);
+                        prev_occ_count[prefix] -= it->second;
+                    }
                 }
             }
         }
-    }
 
-    log_info("Finished stage VI of cleaning up multigrams");
+        log_info("Finished stage VI of cleaning up multigrams");
+    }
 
     queue.clear();
 
@@ -238,7 +233,7 @@ void NGramHandler::CleanupNGrams()
 
     std::sort(queue.begin(), queue.end(), occurence_cmp);
 
-    while (queue.size() > kMaxMultiWordSymbols) {
+    while (queue.size() > Globals::kMaxMultiWordSymbols) {
         const std::pair<NGramWithCountIterator, size_t>& removed_ngram_it = queue.front();
 
         // std::cout << "Will erase NGram \"" << VectorSymbolToSymbol(removed_ngram_it.first->first, ' ') << "\" with count " << removed_ngram_it.first->second << "\n" << std::flush;

@@ -296,6 +296,7 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     const std::set<std::string>& all_module_6_symbols = module_6->get_symbol_mapping().GetAllSymbols();
     const std::set<std::string>& all_module_7_symbols = module_7->get_symbol_mapping().GetAllSymbols();
     assert(all_module_6_symbols.size() == all_module_7_symbols.size());
+    std::cout << "Symbols at module " << num_word_modules << " are: \n" << SetSymbolToSymbol(all_module_6_symbols, '\n') << "\n" << std::flush;
 
     // preliminary checks on tries
     const std::unique_ptr<HashTrie<std::string>>& level_1_trie = confab_engine.get_organizer()->get_trie_for_level(1);
@@ -367,19 +368,19 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     confab_engine.TransferExcitation(module_6, knowledge_base_6_4, module_4);
 
     const std::vector<std::string>& expectation_at_target_d = module_0->GetExpectation();
-    std::cout << "Excited symbols at module 0 are: \n" << VectorSymbolToSymbol(expectation_at_target_d, '\n') << "\n" << std::flush;
+    std::cout << "C1F confabulated symbols at module 0 are: \n" << VectorSymbolToSymbol(expectation_at_target_d, '\n') << "\n" << std::flush;
 
     const std::vector<std::string>& expectation_at_target_e = module_1->GetExpectation();
-    std::cout << "Excited symbols at module 1 are: \n" << VectorSymbolToSymbol(expectation_at_target_e, '\n') << "\n" << std::flush;
+    std::cout << "C1F confabulated symbols at module 1 are: \n" << VectorSymbolToSymbol(expectation_at_target_e, '\n') << "\n" << std::flush;
 
     const std::vector<std::string>& expectation_at_target_f = module_2->GetExpectation();
-    std::cout << "Excited symbols at module 2 are: \n" << VectorSymbolToSymbol(expectation_at_target_f, '\n') << "\n" << std::flush;
+    std::cout << "C1F confabulated symbols at module 2 are: \n" << VectorSymbolToSymbol(expectation_at_target_f, '\n') << "\n" << std::flush;
 
     const std::vector<std::string>& expectation_at_target_g = module_3->GetExpectation();
-    std::cout << "Excited symbols at module 3 are: \n" << VectorSymbolToSymbol(expectation_at_target_g, '\n') << "\n" << std::flush;
+    std::cout << "C1F confabulated symbols at module 3 are: \n" << VectorSymbolToSymbol(expectation_at_target_g, '\n') << "\n" << std::flush;
 
     const std::vector<std::string>& expectation_at_target_h = module_4->GetExpectation();
-    std::cout << "Excited symbols at module 4 are: \n" << VectorSymbolToSymbol(expectation_at_target_h, '\n') << "\n" << std::flush;
+    std::cout << "C1F confabulated symbols at module 4 are: \n" << VectorSymbolToSymbol(expectation_at_target_h, '\n') << "\n" << std::flush;
 
     confab_engine.Clean();
     confab_engine.Activate({"", "", "", "", "", "", "", "", "", "", "", "the voice of honor clamors"});
@@ -390,19 +391,19 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     confab_engine.TransferExcitation(module_7, knowledge_base_7_5, module_5);
 
     const std::vector<std::string>& expectation_at_target_i = module_1->GetExpectation();
-    std::cout << "Excited symbols at module 1 are: \n" << VectorSymbolToSymbol(expectation_at_target_i, '\n') << "\n" << std::flush;
+    std::cout << "C1F confabulated symbols at module 1 are: \n" << VectorSymbolToSymbol(expectation_at_target_i, '\n') << "\n" << std::flush;
 
     const std::vector<std::string>& expectation_at_target_j = module_2->GetExpectation();
-    std::cout << "Excited symbols at module 2 are: \n" << VectorSymbolToSymbol(expectation_at_target_j, '\n') << "\n" << std::flush;
+    std::cout << "C1F confabulated symbols at module 2 are: \n" << VectorSymbolToSymbol(expectation_at_target_j, '\n') << "\n" << std::flush;
 
     const std::vector<std::string>& expectation_at_target_k = module_3->GetExpectation();
-    std::cout << "Excited symbols at module 3 are: \n" << VectorSymbolToSymbol(expectation_at_target_k, '\n') << "\n" << std::flush;
+    std::cout << "C1F confabulated symbols at module 3 are: \n" << VectorSymbolToSymbol(expectation_at_target_k, '\n') << "\n" << std::flush;
 
     const std::vector<std::string>& expectation_at_target_l = module_4->GetExpectation();
-    std::cout << "Excited symbols at module 4 are: \n" << VectorSymbolToSymbol(expectation_at_target_l, '\n') << "\n" << std::flush;
+    std::cout << "C1F confabulated symbols at module 4 are: \n" << VectorSymbolToSymbol(expectation_at_target_l, '\n') << "\n" << std::flush;
 
     const std::vector<std::string>& expectation_at_target_m = module_5->GetExpectation();
-    std::cout << "Excited symbols at module 5 are: \n" << VectorSymbolToSymbol(expectation_at_target_m, '\n') << "\n" << std::flush;
+    std::cout << "C1F confabulated symbols at module 5 are: \n" << VectorSymbolToSymbol(expectation_at_target_m, '\n') << "\n" << std::flush;
 }
 
 void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
@@ -553,13 +554,13 @@ int main()
     std::string feed9 = "She stumbled over her dress and ";
     std::string feed10 = "She had her husband poisoned and her lover ";
 
-    std::string feed11 = "It was clear that only dancing could ";
+    std::string feed11 = "In the end, only dancing could ";
     std::string feed12 = "He leaned into her, the love of his life, and ";
     std::string feed13 = "He suddenly collapsed, crying like a ";
     std::string feed14 = "The cave was too high up for him to ";
     std::string feed15 = "In that party of dull people, he started ";
     std::string feed16 = "She led her wild life without ";
-    std::string feed17 = "The khan and the whole clan were ";
+    std::string feed17 = "The chief and the whole clan were ";
     std::string feed18 = "All that beauty had suddenly turned into ";
     std::string feed19 = "With one last desperate effort he managed to ";
     std::string feed20 = "Hosts of archers stood ready along the ";

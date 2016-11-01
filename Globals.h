@@ -39,6 +39,9 @@ public:
     static const uint8_t kReferenceFrameSize;
     static const uint8_t kMaxCompletionSize;
     static const bool kDelimitersAsSymbols;
+    static const size_t kMaxSingleWordSymbols;
+    static const size_t kMaxMultiWordSymbols;
+    static const bool kFavorLargerPhrases;
 
     Globals() = delete;
     Globals(const Globals& rhs) = delete;

@@ -35,3 +35,6 @@ const uint8_t Globals::kMaxMultiWordSize = 5;
 const uint8_t Globals::kReferenceFrameSize = 20 - 1;
 const uint8_t Globals::kMaxCompletionSize = 7;
 const bool Globals::kDelimitersAsSymbols = false;
+const size_t Globals::kMaxSingleWordSymbols = 65535;
+const size_t Globals::kMaxMultiWordSymbols = 65535;
+const bool Globals::kFavorLargerPhrases = false;

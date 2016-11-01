@@ -77,9 +77,6 @@ public:
     std::unique_ptr<SymbolMapping> GetAllSymbols();
 
 private:
-    static const size_t kMaxSingleWordSymbols;
-    static const size_t kMaxMultiWordSymbols;
-
     const uint8_t max_multi_words_;
     const uint8_t min_single_occurences_;
     const uint8_t min_multi_occurences_;
