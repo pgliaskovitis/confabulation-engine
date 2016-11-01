@@ -259,18 +259,29 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
+    const std::unique_ptr<Module>& module_0 = confab_engine.get_module(0);
+    const std::unique_ptr<Module>& module_1 = confab_engine.get_module(1);
+    const std::unique_ptr<Module>& module_2 = confab_engine.get_module(2);
+    const std::unique_ptr<Module>& module_3 = confab_engine.get_module(3);
+    const std::unique_ptr<Module>& module_5 = confab_engine.get_module(5);
+    const std::unique_ptr<Module>& module_4 = confab_engine.get_module(4);
     const std::unique_ptr<Module>& module_6 = confab_engine.get_module(num_word_modules);
     const std::unique_ptr<Module>& module_7 = confab_engine.get_module(num_word_modules + 1);
 
-    const std::unique_ptr<Module>& module_0 = confab_engine.get_module(0);
     const std::unique_ptr<KnowledgeBase>& knowledge_base_0_6 = confab_engine.get_knowledge_base(0, num_word_modules);
-
-    const std::unique_ptr<Module>& module_1 = confab_engine.get_module(1);
     const std::unique_ptr<KnowledgeBase>& knowledge_base_1_6 = confab_engine.get_knowledge_base(1, num_word_modules);
     const std::unique_ptr<KnowledgeBase>& knowledge_base_1_7 = confab_engine.get_knowledge_base(1, num_word_modules + 1);
-
-    const std::unique_ptr<Module>& module_2 = confab_engine.get_module(2);
     const std::unique_ptr<KnowledgeBase>& knowledge_base_2_7 = confab_engine.get_knowledge_base(2, num_word_modules + 1);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_6_0 = confab_engine.get_knowledge_base(num_word_modules, 0);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_6_1 = confab_engine.get_knowledge_base(num_word_modules, 1);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_6_2 = confab_engine.get_knowledge_base(num_word_modules, 2);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_6_3 = confab_engine.get_knowledge_base(num_word_modules, 3);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_6_4 = confab_engine.get_knowledge_base(num_word_modules, 4);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_7_1 = confab_engine.get_knowledge_base(num_word_modules + 1, 1);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_7_2 = confab_engine.get_knowledge_base(num_word_modules + 1, 2);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_7_3 = confab_engine.get_knowledge_base(num_word_modules + 1, 3);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_7_4 = confab_engine.get_knowledge_base(num_word_modules + 1, 4);
+    const std::unique_ptr<KnowledgeBase>& knowledge_base_7_5 = confab_engine.get_knowledge_base(num_word_modules + 1, 5);
 
     std::cout << "Knowledge base 0-6: " << knowledge_base_0_6->GetNumKnowledgeLinks() << " links" << std::endl;
     std::cout << "Knowledge base 1-6: " << knowledge_base_1_6->GetNumKnowledgeLinks() << " links" << std::endl;
@@ -289,19 +300,19 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
     // preliminary checks on tries
     const std::unique_ptr<HashTrie<std::string>>& level_1_trie = confab_engine.get_organizer()->get_trie_for_level(1);
     std::vector<std::list<std::string>> all_subsequences_1 = level_1_trie->FindAll({"the", "sense", "of", "duty"});
-    std::cout << "Trie results: " << "\n" << std::flush;
+    std::cout << "Trie results I: " << "\n" << std::flush;
     for (const std::list<std::string>& e: all_subsequences_1) {
         std::cout << ListSymbolToSymbol(e, ' ') << "\n" << std::flush;
     }
 
     std::vector<std::list<std::string>> all_subsequences_2 = level_1_trie->FindAll({"the", "sense", "of", "humor"});
-    std::cout << "Trie results: " << "\n" << std::flush;
+    std::cout << "Trie results II: " << "\n" << std::flush;
     for (const std::list<std::string>& e: all_subsequences_2) {
         std::cout << ListSymbolToSymbol(e, ' ') << "\n" << std::flush;
     }
 
     std::vector<std::list<std::string>> all_subsequences_3 = level_1_trie->FindAll({"the", "world", "has", "rubbed"});
-    std::cout << "Trie results: " << "\n" << std::flush;
+    std::cout << "Trie results III: " << "\n" << std::flush;
     for (const std::list<std::string>& e: all_subsequences_3) {
         std::cout << ListSymbolToSymbol(e, ' ') << "\n" << std::flush;
     }
@@ -346,6 +357,52 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 
     const std::vector<std::string> excitations_C2F_at_target_c = module_7->PartialConfabulation(2);
     std::cout << "C2F confabulated symbol at module " << num_word_modules + 1 << " is: \n" << VectorSymbolToSymbol(excitations_C2F_at_target_c, '\n') << "\n" << std::flush;
+
+    confab_engine.Clean();
+    confab_engine.Activate({"", "", "", "", "", "", "", "", "", "", "the voice of honor clamors"});
+    confab_engine.TransferExcitation(module_6, knowledge_base_6_0, module_0);
+    confab_engine.TransferExcitation(module_6, knowledge_base_6_1, module_1);
+    confab_engine.TransferExcitation(module_6, knowledge_base_6_2, module_2);
+    confab_engine.TransferExcitation(module_6, knowledge_base_6_3, module_3);
+    confab_engine.TransferExcitation(module_6, knowledge_base_6_4, module_4);
+
+    const std::vector<std::string>& expectation_at_target_d = module_0->GetExpectation();
+    std::cout << "Excited symbols at module 0 are: \n" << VectorSymbolToSymbol(expectation_at_target_d, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string>& expectation_at_target_e = module_1->GetExpectation();
+    std::cout << "Excited symbols at module 1 are: \n" << VectorSymbolToSymbol(expectation_at_target_e, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string>& expectation_at_target_f = module_2->GetExpectation();
+    std::cout << "Excited symbols at module 2 are: \n" << VectorSymbolToSymbol(expectation_at_target_f, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string>& expectation_at_target_g = module_3->GetExpectation();
+    std::cout << "Excited symbols at module 3 are: \n" << VectorSymbolToSymbol(expectation_at_target_g, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string>& expectation_at_target_h = module_4->GetExpectation();
+    std::cout << "Excited symbols at module 4 are: \n" << VectorSymbolToSymbol(expectation_at_target_h, '\n') << "\n" << std::flush;
+
+    confab_engine.Clean();
+    confab_engine.Activate({"", "", "", "", "", "", "", "", "", "", "", "the voice of honor clamors"});
+    confab_engine.TransferExcitation(module_7, knowledge_base_7_1, module_1);
+    confab_engine.TransferExcitation(module_7, knowledge_base_7_2, module_2);
+    confab_engine.TransferExcitation(module_7, knowledge_base_7_3, module_3);
+    confab_engine.TransferExcitation(module_7, knowledge_base_7_4, module_4);
+    confab_engine.TransferExcitation(module_7, knowledge_base_7_5, module_5);
+
+    const std::vector<std::string>& expectation_at_target_i = module_1->GetExpectation();
+    std::cout << "Excited symbols at module 1 are: \n" << VectorSymbolToSymbol(expectation_at_target_i, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string>& expectation_at_target_j = module_2->GetExpectation();
+    std::cout << "Excited symbols at module 2 are: \n" << VectorSymbolToSymbol(expectation_at_target_j, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string>& expectation_at_target_k = module_3->GetExpectation();
+    std::cout << "Excited symbols at module 3 are: \n" << VectorSymbolToSymbol(expectation_at_target_k, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string>& expectation_at_target_l = module_4->GetExpectation();
+    std::cout << "Excited symbols at module 4 are: \n" << VectorSymbolToSymbol(expectation_at_target_l, '\n') << "\n" << std::flush;
+
+    const std::vector<std::string>& expectation_at_target_m = module_5->GetExpectation();
+    std::cout << "Excited symbols at module 5 are: \n" << VectorSymbolToSymbol(expectation_at_target_m, '\n') << "\n" << std::flush;
 }
 
 void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
