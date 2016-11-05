@@ -212,6 +212,9 @@ void NGramHandler::CleanupNGrams()
                         std::vector<std::string>::const_iterator symbol_it = (it->first).begin();
                         std::vector<std::string> prefix(symbol_it, symbol_it + subgroup_words);
                         prev_occ_count[prefix] -= it->second;
+                        // symbol_it = (it->first).end();
+                        // std::vector<std::string> suffix(symbol_it - subgroup_words, symbol_it);
+                        // prev_occ_count[suffix] -= it->second;
                     }
                 }
             }

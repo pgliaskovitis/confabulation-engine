@@ -436,10 +436,10 @@ void ConfabulationTest::TestTwoLevelSimpleConfabulation(const std::string& symbo
     }
 }
 
-void ConfabulationTest::TestTwoLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
+void ConfabulationTest::TestOneLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
     size_t num_word_modules = Globals::kReferenceFrameSize + 1;
-    TwoLevelMultiConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
+    OneLevelMultiConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 1);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
@@ -451,10 +451,10 @@ void ConfabulationTest::TestTwoLevelMultiConfabulation(const std::string& symbol
     }
 }
 
-void ConfabulationTest::TestOneLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
+void ConfabulationTest::TestTwoLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
 {
     size_t num_word_modules = Globals::kReferenceFrameSize + 1;
-    OneLevelMultiConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 5);
+    TwoLevelMultiConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 1);
     TextReader reader(symbolfile, masterfile);
     reader.Initialize();
 
