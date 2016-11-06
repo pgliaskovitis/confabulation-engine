@@ -546,7 +546,7 @@ int main()
     std::string feed1 = "The hooded men were chanting beneath the ";
     std::string feed2 = "An army of little insects had gathered on top of ";
     std::string feed3 = "The girl smiled and caressed ";
-    std::string feed4 = "A dark winter was eating through the evening ";
+    std::string feed4 = "A dark winter was eating through the ";
     std::string feed5 = "The dragon circled above the valley, hungry for ";
     std::string feed6 = "Our initial assessment of the situation had been ";
     std::string feed7 = "At the slightest hint of movement, he was ready to ";
@@ -566,7 +566,7 @@ int main()
     std::string feed20 = "Hosts of archers stood ready along the ";
 
     std::string feed21 = "The joker laughed and continued ";
-    std::string feed22 = "She moaned softly when ";
+    std::string feed22 = "She moaned softly when he ";
     std::string feed23 = "The thief stabbed him while he was ";
     std::string feed24 = "The green leaf swayed and landed on ";
     std::string feed25 = "Ominous waves surrounded us, just before we ";
