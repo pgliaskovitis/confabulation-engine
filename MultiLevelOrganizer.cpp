@@ -80,8 +80,8 @@ std::vector<std::vector<std::vector<std::string>>> MultiLevelOrganizer::Organize
             while (k < level.size() && !temp_symbols_list.empty()) {
 
                 std::list<std::string> match;
-                if (i == 0 || j == 0) {
-                    // always find longest match for level 0 (words) and first combination of multiwords
+                if (j == 0) {
+                    // always find longest match for level 0 (words)
                     match = std::move(trie.FindLongest(temp_symbols_list));
                 } else {
                     // find all matches for next combinations
