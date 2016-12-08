@@ -48,11 +48,14 @@ Installation
 You will need to have Google SparseHash installed.
 
 The confabulation project has been developed primarily in QtCreator. Project files for QtCreator are available. In order 
-to build the project independently of QtCreator you will need the qmake facility (e.g., you can install
-it via sudo apt-get-install qt4-qmake). After installing qmake, do: 
+to build the project independently of QtCreator you will need the qmake facility:
+
+sudo apt-get install qt5-default
 
 qmake -r
+
 make clean
+
 make 
 
 However the project is built, i.e., either within QtCreator or with regular make, please ensure that the produced 
