@@ -79,13 +79,13 @@ void Module::AddExcitationToIndex(uint8_t index, float value)
         // If module is frozen, only activate index if contained in the active indices
         if (frozen_indexes_->find(index) != frozen_indexes_->end()) {
             float new_val = excitations_->GetElement(index) + value;
-            excitations_->SetElement(index, PositiveClip(new_val)); //value could be negative
+            excitations_->SetElement(index, PositiveClip(new_val)); // value could be negative
             uint16_t num_inputs = static_cast<uint16_t>(new_val / Globals::kBandGap);
             kb_inputs_->SetElement(index, num_inputs + kb_inputs_->GetElement(index));
         }
     } else {
         float new_val = excitations_->GetElement(index) + value;
-        excitations_->SetElement(index, PositiveClip(new_val)); //value could be negative
+        excitations_->SetElement(index, PositiveClip(new_val)); // value could be negative
         uint16_t num_inputs = static_cast<uint16_t>(new_val / Globals::kBandGap);
         kb_inputs_->SetElement(index, num_inputs + kb_inputs_->GetElement(index));
     }
@@ -194,7 +194,7 @@ std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
     K = ActualK(K);
 
     const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
-    //std::cout << "Initially excited " << nz_excit.size() << " symbols" << " \n" << std::flush;
+    // std::cout << "Initially excited " << nz_excit.size() << " symbols" << " \n" << std::flush;
 
     uint16_t max_index = 0;
     uint16_t n_inputs_max = 0;
@@ -203,7 +203,7 @@ std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
     std::unique_ptr<std::pair<uint16_t, float>> max_excit;
     do {
         const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
-        //std::cout << "Reduced to " << min_K_excit.size() << " symbols for K=" << K << " \n" << std::flush;
+        // std::cout << "Reduced to " << min_K_excit.size() << " symbols for K=" << K << " \n" << std::flush;
         max_excit = MaxExcitation(min_K_excit);
 
         if (max_excit != nullptr) {

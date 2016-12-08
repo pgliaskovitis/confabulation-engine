@@ -84,7 +84,9 @@ std::unique_ptr<IExcitationVector<float> > KnowledgeBase::Transmit(const IExcita
 float KnowledgeBase::ComputeLinkStrength(double antecedent_support_probability)
 {
     if (antecedent_support_probability > Globals::kBaseProb) {
-        return static_cast<float>(log(antecedent_support_probability / (double) Globals::kBaseProb)) + Globals::kBandGap;
+        return static_cast<float>(log(antecedent_support_probability / (double) Globals::kBaseProb) + Globals::kBandGap);
+    } else if (antecedent_support_probability > 0) {
+        return static_cast<float>(Globals::kBandGap);
     }
 
     return 0.0;
