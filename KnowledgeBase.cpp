@@ -85,7 +85,7 @@ float KnowledgeBase::ComputeLinkStrength(double antecedent_support_probability)
 {
     if (antecedent_support_probability > Globals::kBaseProb) {
         return static_cast<float>(log(antecedent_support_probability / (double) Globals::kBaseProb) + Globals::kBandGap);
-    } else if (antecedent_support_probability > 0) {
+    } else if (antecedent_support_probability > 0.0f) {
         return static_cast<float>(Globals::kBandGap);
     }
 
