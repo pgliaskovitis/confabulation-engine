@@ -49,6 +49,7 @@ public:
     void Unfreeze();
     bool IsFrozen() const { return frozen_indexes_ != nullptr; }
 
+    const std::unique_ptr<IExcitationVector<float>>& GetExcitations();
     const std::unique_ptr<IExcitationVector<float>>& GetNormalizedExcitations();
     std::vector<std::string> GetExpectation();
 

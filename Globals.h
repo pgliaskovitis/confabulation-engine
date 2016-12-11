@@ -42,6 +42,7 @@ public:
     static const size_t kMaxMultiWordSymbols;
     static const bool kDelimitersAsSymbols;
     static const bool kFavorLargerPhrases;
+    static const bool kNormalizeExcitations;
 
     Globals() = delete;
     Globals(const Globals& rhs) = delete;

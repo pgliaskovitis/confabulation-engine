@@ -230,9 +230,16 @@ void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
 
 void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source_module, const std::unique_ptr<KnowledgeBase> &kb, const std::unique_ptr<Module> &target_module)
 {
-    const std::unique_ptr<IExcitationVector<float>>& source_excitation = source_module->GetNormalizedExcitations();
-    const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
-    target_module->AddExcitationVector(*transmitted_excitation);
+    if (Globals::kNormalizeExcitations) {
+        const std::unique_ptr<IExcitationVector<float>>& source_excitation = source_module->GetExcitations();
+        const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
+        transmitted_excitation->Normalize();
+        target_module->AddExcitationVector(*transmitted_excitation);
+    } else {
+        const std::unique_ptr<IExcitationVector<float>>& source_excitation = source_module->GetExcitations();
+        const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
+        target_module->AddExcitationVector(*transmitted_excitation);
+    }
 }
 
 void ConfabulationBase::TransferAllExcitations(int8_t target_index, const std::unique_ptr<Module>& target_module)

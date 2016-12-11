@@ -51,6 +51,7 @@ public:
     virtual uint16_t GetNnz() const { return map_.size(); }
 
     virtual void Add(const IExcitationVector<T>& other);
+    virtual void Normalize();
     virtual std::set<std::pair<uint16_t, T>> GetNzElements() const;
 
 private:
@@ -122,6 +123,22 @@ template <typename T>
 void DOKExcitationVector<T>::Add(const IExcitationVector<T>& other) {
     for (const std::pair<uint16_t, T>& element : other.GetNzElements()) {
         SetElement(element.first, PositiveClip(element.second + GetElement(element.first)));
+    }
+}
+
+template <typename T>
+void DOKExcitationVector<T>::Normalize()
+{
+    double sum = 0.0;
+
+    for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+        sum += it->second;
+    }
+
+    if (sum > 0.0) {
+        for (typename std::unordered_map<uint16_t, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
+            it->second = it->second / sum;
+        }
     }
 }
 

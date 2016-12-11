@@ -147,6 +147,11 @@ void Module::Unfreeze()
     frozen_indexes_.reset(nullptr);
 }
 
+const std::unique_ptr<IExcitationVector<float> > &Module::GetExcitations()
+{
+    return excitations_;
+}
+
 const std::unique_ptr<IExcitationVector<float> > &Module::GetNormalizedExcitations()
 {
     if (normalized_excitations_ != nullptr) {
@@ -155,14 +160,11 @@ const std::unique_ptr<IExcitationVector<float> > &Module::GetNormalizedExcitatio
 
     normalized_excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
 
-    double sum = 0.0;
     for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
-        sum += e.second;
+        normalized_excitations_->SetElement(e.first, e.second);
     }
 
-    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
-        normalized_excitations_->SetElement(e.first, (float) (e.second / sum));
-    }
+    normalized_excitations_->Normalize();
 
     return normalized_excitations_;
 }

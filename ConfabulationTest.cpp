@@ -470,27 +470,27 @@ int main()
 {
 	std::shared_ptr<ConfabulationTest> test1(new ConfabulationTest());
 
-    //test1->TestTokenizeSentences("This is, alas, the primal knowledge. The magic exists, but is not for everyone. \"My fumblings will be your quickening, minion.\"");
+    // test1->TestTokenizeSentences("This is, alas, the primal knowledge. The magic exists, but is not for everyone. \"My fumblings will be your quickening, minion.\"");
 
-    //test1->TestTokenizeWithinSentences("This is,  alas , the primal knowledge. The magic exists  ,but is not for everyone. \"My fumblings will be your quickening  ,   minion.\"");
+    // test1->TestTokenizeWithinSentences("This is,  alas , the primal knowledge. The magic exists  ,but is not for everyone. \"My fumblings will be your quickening  ,   minion.\"");
 
-    //test1->TestDOKExcitationVector();
+    // test1->TestDOKExcitationVector();
 
-    //test1->TestDOKLinksMatrix();
+    // test1->TestDOKLinksMatrix();
 
-    //test1->TestCSRLinksMatrix();
+    // test1->TestCSRLinksMatrix();
 
-    //test1->TestSymbolMapping();
+    // test1->TestSymbolMapping();
 
-    //test1->TestProduceNGrams("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+    // test1->TestProduceNGrams("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
-    //test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
+    // test1->TestHashTrie("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt");
 
-    //test1->TestProduceKnowledgeLinkCombinations();
+    // test1->TestProduceKnowledgeLinkCombinations();
 
     test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
 
-    //test1->TestTokenizePersistedKnowledge();
+    // test1->TestTokenizePersistedKnowledge();
 
     std::string copy_feed1 = "Tormented by reflection, or for whom strife has become a "; // plaything
     std::string copy_feed2 = "I will accept the post three times and refuse it "; // afterwards
@@ -537,9 +537,9 @@ int main()
     allCopyFeeds->push_back(copy_feed19);
     allCopyFeeds->push_back(copy_feed20);
 
-    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
-    //test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
-    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
+    // test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
+    // test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
+    // test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
     std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 
@@ -615,24 +615,24 @@ int main()
     allOriginalFeeds->push_back(feed29);
     allOriginalFeeds->push_back(feed30);
 
-    //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
-    //test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
+    // test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
+    // test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
 
-    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
-    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    //test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
+    // test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    // test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    // test1->TestSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
 
-    //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
-    //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    //test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
+    // test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    // test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    // test1->TestTwoLevelSimpleConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
 
-    //test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
-    //test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    //test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
+    // test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    // test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    // test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
 
-    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    // test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
     test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
-    //test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
+    // test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
 
 	return 0;
 }
