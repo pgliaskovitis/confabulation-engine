@@ -137,7 +137,7 @@ void DOKExcitationVector<T>::Normalize()
 
     if (sum > 0.0) {
         for (typename std::unordered_map<uint16_t, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
-            it->second = it->second / sum;
+            it->second /= sum;
         }
     }
 }

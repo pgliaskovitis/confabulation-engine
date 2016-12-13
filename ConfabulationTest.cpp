@@ -88,6 +88,10 @@ void ConfabulationTest::TestDOKExcitationVector() const
      my_vec_ptr1->Add(*my_vec_ptr2);
 
      std::cout << "Vector after addition:" << std::endl << my_vec_ptr1->ToString();
+
+     my_vec_ptr1->Normalize();
+
+     std::cout << "Vector after normalization:" << std::endl << my_vec_ptr1->ToString();
 }
 
 void ConfabulationTest::TestDOKLinksMatrix() const
@@ -488,7 +492,7 @@ int main()
 
     // test1->TestProduceKnowledgeLinkCombinations();
 
-    test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
+    // test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
 
     // test1->TestTokenizePersistedKnowledge();
 

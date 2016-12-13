@@ -25,7 +25,6 @@
 Module::Module(const SymbolMapping &symbol_mapping) :
     symbol_mapping_(symbol_mapping),
     excitations_(new DOKExcitationVector<float>(symbol_mapping.Size())),
-    normalized_excitations_(nullptr),
     kb_inputs_(new DOKExcitationVector<uint8_t>(symbol_mapping.Size())),
     current_excitation_level_(0)
 {
@@ -40,7 +39,6 @@ void Module::Reset()
 
 void Module::ExcitationsToZero()
 {
-    normalized_excitations_.reset(nullptr);
     excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
     kb_inputs_.reset(new DOKExcitationVector<uint8_t>(symbol_mapping_.Size()));
     current_excitation_level_ = 0;
@@ -48,8 +46,6 @@ void Module::ExcitationsToZero()
 
 void Module::ActivateSymbol(const std::string &word, int8_t K)
 {
-    normalized_excitations_.reset(nullptr);
-
     if (K < 0) {
         throw std::logic_error("ActivateSymbol called with negative K");
     }
@@ -73,8 +69,6 @@ void Module::ActivateSymbol(const std::string &word, int8_t K)
 
 void Module::AddExcitationToIndex(uint8_t index, float value)
 {
-    normalized_excitations_.reset(nullptr);
-
     if (IsFrozen()) {
         // If module is frozen, only activate index if contained in the active indices
         if (frozen_indexes_->find(index) != frozen_indexes_->end()) {
@@ -93,8 +87,6 @@ void Module::AddExcitationToIndex(uint8_t index, float value)
 
 void Module::AddExcitationToAllSymbols(int8_t K)
 {
-    normalized_excitations_.reset(nullptr);
-
     if (IsFrozen()) {
         // If module is frozen, only further activate already active symbols
         for (uint16_t i : *frozen_indexes_) {
@@ -116,8 +108,6 @@ void Module::AddExcitationToAllSymbols(int8_t K)
 
 void Module::AddExcitationVector(const IExcitationVector<float> &input)
 {
-    normalized_excitations_.reset(nullptr);
-
     if (IsFrozen()) {
         // If module is frozen, only further activate already active symbols
         for (uint16_t i : *frozen_indexes_) {
@@ -132,6 +122,11 @@ void Module::AddExcitationVector(const IExcitationVector<float> &input)
             kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
         }
     }
+}
+
+void Module::NormalizeExcitations()
+{
+    excitations_->Normalize();
 }
 
 void Module::Freeze()
@@ -152,21 +147,19 @@ const std::unique_ptr<IExcitationVector<float> > &Module::GetExcitations()
     return excitations_;
 }
 
-const std::unique_ptr<IExcitationVector<float> > &Module::GetNormalizedExcitations()
+std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations()
 {
-    if (normalized_excitations_ != nullptr) {
-        return normalized_excitations_;
-    }
+    std::unique_ptr<IExcitationVector<float>> normalized_excitations;
 
-    normalized_excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
+    normalized_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
 
     for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
-        normalized_excitations_->SetElement(e.first, e.second);
+        normalized_excitations->SetElement(e.first, e.second);
     }
 
-    normalized_excitations_->Normalize();
+    normalized_excitations->Normalize();
 
-    return normalized_excitations_;
+    return normalized_excitations;
 }
 
 std::vector<std::string> Module::GetExpectation()
@@ -190,8 +183,6 @@ std::string Module::ElementaryConfabulation(float *max_excitation)
 
 std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 {
-    normalized_excitations_.reset(nullptr);
-
     // compute K if negative
     K = ActualK(K);
 
@@ -236,8 +227,6 @@ std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 
 std::vector<std::string> Module::PartialConfabulation(int8_t K)
 {
-    normalized_excitations_.reset(nullptr);
-
     std::vector<std::string> result;
 
     std::unique_ptr<std::vector<std::pair<uint16_t, float>>> expectations;

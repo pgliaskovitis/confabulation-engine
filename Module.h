@@ -45,12 +45,14 @@ public:
 
     void AddExcitationVector(const IExcitationVector<float>& input);
 
+    void NormalizeExcitations();
+
     void Freeze();
     void Unfreeze();
     bool IsFrozen() const { return frozen_indexes_ != nullptr; }
 
     const std::unique_ptr<IExcitationVector<float>>& GetExcitations();
-    const std::unique_ptr<IExcitationVector<float>>& GetNormalizedExcitations();
+    std::unique_ptr<IExcitationVector<float>> GetNormalizedExcitations();
     std::vector<std::string> GetExpectation();
 
     std::string ElementaryConfabulation(float *max_excitation);
@@ -65,7 +67,6 @@ private:
     const SymbolMapping& symbol_mapping_;
 
     std::unique_ptr<IExcitationVector<float>> excitations_;
-    std::unique_ptr<IExcitationVector<float>> normalized_excitations_;
     std::unique_ptr<IExcitationVector<uint8_t>> kb_inputs_;
     std::unique_ptr<std::set<uint16_t>> frozen_indexes_;
 

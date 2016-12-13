@@ -38,4 +38,5 @@ const size_t Globals::kMaxSingleWordSymbols = 65535;
 const size_t Globals::kMaxMultiWordSymbols = 65535;
 const bool Globals::kDelimitersAsSymbols = false;
 const bool Globals::kFavorLargerPhrases = false;
-const bool Globals::kNormalizeExcitations = true;
+const bool Globals::kNormalizeInputs = true;
+const bool Globals::kNormalizeTransfers = false;
