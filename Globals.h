@@ -43,8 +43,6 @@ public:
     static const bool kDelimitersAsSymbols;
     static const bool kFavorLargerPhrases;
     static const bool kNormalizeInputs;
-    static const bool kNormalizeTransfers;
-    static const bool kNormalizeOutputs;
 
     Globals() = delete;
     Globals(const Globals& rhs) = delete;
