@@ -19,7 +19,7 @@ This is where the fun starts! Confabulation systems, depending on what you provi
 Relation to other models
 ------------------------
 
-Confabulation architectures are a kind of analog constraint satisfaction mechanism. The confabulation "swirl" is essentially a parallelizable constraint satisfaction machine. In that sense, they are very related to Markov Random Fields (MRFs -- or the more specific Restricted Boltzmann Machines RBMs), although here there is no underlying joint probability distribution learning, at least not explicitly. And, unlike general MRFs, confabulation architectures are by definition parallelizable.
+Confabulation architectures are very related to Markov Random Fields (MRFs -- or the more specific Restricted Boltzmann Machines RBMs), Attractor Neural Networks and Energy Models in general. However, here there is no underlying joint probability distribution learning and no energy minimization objectives, at least not explicitly. And, unlike general MRFs, confabulation architectures are by definition parallelizable.
 
 The temporal feedback mechanism of Recurrent Neural Networks (RNNs) does bear a resemblance to the "swirl" operation. The latter can effectively be thought of as "Recurrent Maximum Likelihood". Of course, in confabulation there is no concept of optimizing an objective function. Furthermore, RNNs encode the whole space of possible word contexts into a single real vector (or a set of real vectors), the RNN state. Yet, there is of now no interpretable correspondence of these vectors to symbols as there could presumably be in the human brain. 
 
