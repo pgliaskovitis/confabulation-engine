@@ -67,45 +67,6 @@ void Module::ActivateSymbol(const std::string &word, int8_t K)
     }
 }
 
-void Module::AddExcitationToIndex(uint8_t index, float value)
-{
-    if (IsFrozen()) {
-        // If module is frozen, only activate index if contained in the active indices
-        if (frozen_indexes_->find(index) != frozen_indexes_->end()) {
-            float new_val = excitations_->GetElement(index) + value;
-            excitations_->SetElement(index, PositiveClip(new_val)); // value could be negative
-            uint16_t num_inputs = static_cast<uint16_t>(new_val / Globals::kBandGap);
-            kb_inputs_->SetElement(index, num_inputs + kb_inputs_->GetElement(index));
-        }
-    } else {
-        float new_val = excitations_->GetElement(index) + value;
-        excitations_->SetElement(index, PositiveClip(new_val)); // value could be negative
-        uint16_t num_inputs = static_cast<uint16_t>(new_val / Globals::kBandGap);
-        kb_inputs_->SetElement(index, num_inputs + kb_inputs_->GetElement(index));
-    }
-}
-
-void Module::AddExcitationToAllSymbols(int8_t K)
-{
-    if (IsFrozen()) {
-        // If module is frozen, only further activate already active symbols
-        for (uint16_t i : *frozen_indexes_) {
-            float val = PositiveClip(excitations_->GetElement(i) + K * Globals::kBandGap);
-            excitations_->SetElement(i, val);
-            uint16_t num_inputs = kb_inputs_->GetElement(i) + K;
-            kb_inputs_->SetElement(i, num_inputs);
-        }
-    } else {
-        for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
-            uint16_t i = e.first;
-            float val = PositiveClip(e.second + K * Globals::kBandGap);
-            excitations_->SetElement(i, val);
-            uint16_t num_inputs = kb_inputs_->GetElement(i) + K;
-            kb_inputs_->SetElement(i, num_inputs);
-        }
-    }
-}
-
 void Module::AddExcitationVector(const IExcitationVector<float> &input)
 {
     if (IsFrozen()) {
