@@ -40,9 +40,6 @@ public:
 
     void ActivateSymbol(const std::string& word, int8_t K);
 
-    void AddExcitationToIndex(uint8_t index, float value);
-    void AddExcitationToAllSymbols(int8_t K);
-
     void AddExcitationVector(const IExcitationVector<float>& input);
 
     void NormalizeExcitations();
