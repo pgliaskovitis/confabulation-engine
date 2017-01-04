@@ -39,9 +39,7 @@ public:
     void ExcitationsToZero();
 
     void ActivateSymbol(const std::string& word, int8_t K);
-
     void AddExcitationVector(const IExcitationVector<float>& input);
-
     void NormalizeExcitations();
 
     void Freeze();

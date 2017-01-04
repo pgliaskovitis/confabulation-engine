@@ -249,7 +249,7 @@ std::set<std::pair<uint16_t, float> > Module::ExcitationsAbove(int8_t K, const s
     std::set<std::pair<uint16_t, float>> result;
 
     for (const std::pair<uint16_t, float>& e : nz_excitations) {
-        if (kb_inputs_->GetElement(e.first) >= K) {
+        if (kb_inputs_->GetElement(e.first) >= K * Globals::kBandGap) {
             result.insert(e);
         }
     }
