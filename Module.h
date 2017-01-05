@@ -67,8 +67,6 @@ private:
 
     std::unique_ptr<std::pair<uint16_t, float>> MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations);
     std::set<std::pair<uint16_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float>>& nz_excitations);
-    int8_t ActualK(int8_t K);
-    int8_t MaxK();
 
     size_t current_excitation_level_;
 };

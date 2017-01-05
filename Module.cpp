@@ -144,9 +144,6 @@ std::string Module::ElementaryConfabulation(float *max_excitation)
 
 std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 {
-    // compute K if negative
-    K = ActualK(K);
-
     const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
     // std::cout << "Initially excited " << nz_excit.size() << " symbols" << " \n" << std::flush;
 
@@ -192,7 +189,6 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
 
     std::unique_ptr<std::vector<std::pair<uint16_t, float>>> expectations;
 
-    K = ActualK(K);
     const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
     const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
     expectations.reset(new std::vector<std::pair<uint16_t, float>>(min_K_excit.begin(), min_K_excit.end()));
@@ -249,31 +245,8 @@ std::set<std::pair<uint16_t, float> > Module::ExcitationsAbove(int8_t K, const s
     std::set<std::pair<uint16_t, float>> result;
 
     for (const std::pair<uint16_t, float>& e : nz_excitations) {
-        if (kb_inputs_->GetElement(e.first) >= K * Globals::kBandGap) {
+        if (kb_inputs_->GetElement(e.first) >= K) {
             result.insert(e);
-        }
-    }
-
-    return result;
-}
-
-int8_t Module::ActualK(int8_t K)
-{
-    if (K >= 0) {
-        return K;
-    }
-
-    return MaxK() + K + 1;
-}
-
-int8_t Module::MaxK()
-{
-    int8_t result = 0;
-
-    for (const std::pair<uint16_t, uint8_t>& e : kb_inputs_->GetNzElements()) {
-        int8_t val = ConvertToSigned(e.second);
-        if (val > result) {
-            result = val;
         }
     }
 

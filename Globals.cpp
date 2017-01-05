@@ -29,8 +29,8 @@ const std::vector<std::string> Globals::kCommonAbbreviations = {"Mr.", "Mrs.", "
 const std::string Globals::kDummy = "DummySymbol";
 const std::vector<std::string> Globals::kPersistenceDelimiters = {":::", "{--->", "|||", "}--->"};
 
-const float Globals::kBaseProb = 0.0001;
-const uint8_t Globals::kBandGap = 1;
+const float Globals::kBaseProb = 0.0001f;
+const float Globals::kBandGap = 0.1f;
 const uint8_t Globals::kMaxMultiWordSize = 4;
 const uint8_t Globals::kReferenceFrameSize = 15 - 1;
 const uint8_t Globals::kMaxCompletionSize = 7;
