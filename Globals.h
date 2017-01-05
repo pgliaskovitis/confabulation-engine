@@ -35,6 +35,7 @@ public:
 
     static const float kBaseProb;
     static const float kBandGap;
+    static const float kSynapseAmplifier;
     static const uint8_t kMaxMultiWordSize;
     static const uint8_t kReferenceFrameSize;
     static const uint8_t kMaxCompletionSize;
