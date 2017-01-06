@@ -70,7 +70,7 @@ void Module::ActivateSymbol(const std::string &word, int8_t K)
 void Module::AddExcitationVector(const IExcitationVector<float> &input)
 {
     if (IsFrozen()) {
-        // If module is frozen, only further activate already active symbols
+        // If module is frozen, further activate only already active symbols
         for (uint16_t i : *frozen_indexes_) {
             float new_val = excitations_->GetElement(i) + input.GetElement(i);
             excitations_->SetElement(i,  PositiveClip(new_val));
@@ -111,11 +111,17 @@ const std::unique_ptr<IExcitationVector<float> > &Module::GetExcitations()
 std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations()
 {
     std::unique_ptr<IExcitationVector<float>> normalized_excitations;
-
     normalized_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
 
-    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
-        normalized_excitations->SetElement(e.first, e.second);
+    if (IsFrozen()) {
+        // If module is frozen, normalize only among already active symbols
+        for (uint16_t i : *frozen_indexes_) {
+            normalized_excitations->SetElement(i, excitations_->GetElement(i));
+        }
+    } else {
+        for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
+            normalized_excitations->SetElement(e.first, e.second);
+        }
     }
 
     normalized_excitations->Normalize();
@@ -145,7 +151,6 @@ std::string Module::ElementaryConfabulation(float *max_excitation)
 std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 {
     const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
-    // std::cout << "Initially excited " << nz_excit.size() << " symbols" << " \n" << std::flush;
 
     uint16_t max_index = 0;
     uint16_t n_inputs_max = 0;
@@ -154,7 +159,6 @@ std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
     std::unique_ptr<std::pair<uint16_t, float>> max_excit;
     do {
         const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
-        // std::cout << "Reduced to " << min_K_excit.size() << " symbols for K=" << K << " \n" << std::flush;
         max_excit = MaxExcitation(min_K_excit);
 
         if (max_excit != nullptr) {
@@ -186,8 +190,11 @@ std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 std::vector<std::string> Module::PartialConfabulation(int8_t K)
 {
     std::vector<std::string> result;
-
     std::unique_ptr<std::vector<std::pair<uint16_t, float>>> expectations;
+
+    if (K < 0) {
+        throw std::logic_error("PartialConfabulation called with negative K");
+    }
 
     const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
     const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
@@ -196,7 +203,7 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
     // saving needed info from intermediate state
     DOKExcitationVector<uint8_t> kb_inputs_temp(*kb_inputs_);
 
-    // cleanup of intermediate state
+    // cleanup intermediate state
     Reset();
 
     result.resize(expectations->size());

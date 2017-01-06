@@ -40,8 +40,9 @@ public:
     void Add(const std::string& src_symbol, const std::string& targ_symbol);
     void Add(uint16_t targ_index, uint16_t src_index);
     void ComputeLinkStrengths();
-    float GetPercentOfElementsLessThanThreshold(uint32_t threshold);
+
     std::unique_ptr<IExcitationVector<float>> Transmit(const IExcitationVector<float>& normalized_excitations) const;
+
     void ResetCooccurrenceCounts() { cooccurrence_counts_.reset(); }
     void ResetTargetSymbolSums() { target_symbol_sums_.clear(); }
 

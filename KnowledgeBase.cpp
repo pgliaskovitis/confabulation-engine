@@ -60,18 +60,6 @@ void KnowledgeBase::ComputeLinkStrengths()
     kbase_.reset(new CSRLinksMatrix<float>(*link_strengths));
 }
 
-float KnowledgeBase::GetPercentOfElementsLessThanThreshold(uint32_t threshold)
-{
-    uint32_t count = 0;
-    for (const std::pair<std::pair<uint16_t, uint16_t>, float>& e: cooccurrence_counts_->GetNzElements()) {
-        if (e.second < threshold) {
-            ++count;
-        }
-    }
-
-    return count / cooccurrence_counts_->GetNnz();
-}
-
 std::unique_ptr<IExcitationVector<float> > KnowledgeBase::Transmit(const IExcitationVector<float> &normalized_excitations) const
 {
     if (normalized_excitations.get_num_rows() != src_map_.Size()) {
@@ -85,7 +73,7 @@ float KnowledgeBase::ComputeLinkStrength(double antecedent_support_probability)
 {
     if (antecedent_support_probability > Globals::kBaseProb) {
         return static_cast<float>(Globals::kSynapseAmplifier *
-                                  log(antecedent_support_probability / (double) Globals::kBaseProb) +
+                                  log2(antecedent_support_probability / (double) Globals::kBaseProb) +
                                   Globals::kBandGap);
     } else if (antecedent_support_probability > 0.0f) {
         return static_cast<float>(Globals::kBandGap);
