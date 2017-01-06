@@ -223,7 +223,6 @@ void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
     for (size_t i = 0; i < std::min(symbols.size(), modules_.size()); ++i) {
         if ((!symbols[i].empty()) && (modules_[i] != nullptr)) {
             modules_[i]->ActivateSymbol(symbols[i], 1);
-            modules_[i]->Freeze();
         }
     }
 }

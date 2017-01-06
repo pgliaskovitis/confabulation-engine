@@ -34,7 +34,6 @@ Module::Module(const SymbolMapping &symbol_mapping) :
 void Module::Reset()
 {
     ExcitationsToZero();
-    Unfreeze();
 }
 
 void Module::ExcitationsToZero()
@@ -52,16 +51,8 @@ void Module::ActivateSymbol(const std::string &word, int8_t K)
 
     try {
         uint16_t index = symbol_mapping_.IndexOf(word);
-        if (IsFrozen()) {
-            // If module is frozen, only activate symbol if contained in the active symbols
-            if (frozen_indexes_->find(index) != frozen_indexes_->end()) {
-                excitations_->SetElement(index, K * Globals::kBandGap);
-                kb_inputs_->SetElement(index, K);
-            }
-        } else {
-            excitations_->SetElement(index, K * Globals::kBandGap);
-            kb_inputs_->SetElement(index, K);
-        }
+        excitations_->SetElement(index, K * Globals::kBandGap);
+        kb_inputs_->SetElement(index, K);
     } catch (std::out_of_range&) {
         std::cout << "Word \"" << word << "\" could not be found in symbol mapping of module during activation" << "\n" << std::flush;
     }
@@ -69,38 +60,16 @@ void Module::ActivateSymbol(const std::string &word, int8_t K)
 
 void Module::AddExcitationVector(const IExcitationVector<float> &input)
 {
-    if (IsFrozen()) {
-        // If module is frozen, further activate only already active symbols
-        for (uint16_t i : *frozen_indexes_) {
-            float new_val = excitations_->GetElement(i) + input.GetElement(i);
-            excitations_->SetElement(i,  PositiveClip(new_val));
-            kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
-        }
-    } else {
-        excitations_->Add(input);
-        for (const std::pair<uint16_t, float>& e : input.GetNzElements()) {
-            uint16_t i = e.first;
-            kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
-        }
+    excitations_->Add(input);
+    for (const std::pair<uint16_t, float>& e : input.GetNzElements()) {
+        uint16_t i = e.first;
+        kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
     }
 }
 
 void Module::NormalizeExcitations()
 {
     excitations_->Normalize();
-}
-
-void Module::Freeze()
-{
-    frozen_indexes_.reset(new std::set<uint16_t>());
-    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
-        frozen_indexes_->insert(e.first);
-    }
-}
-
-void Module::Unfreeze()
-{
-    frozen_indexes_.reset(nullptr);
 }
 
 const std::unique_ptr<IExcitationVector<float> > &Module::GetExcitations()
@@ -113,15 +82,8 @@ std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations()
     std::unique_ptr<IExcitationVector<float>> normalized_excitations;
     normalized_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
 
-    if (IsFrozen()) {
-        // If module is frozen, normalize only among already active symbols
-        for (uint16_t i : *frozen_indexes_) {
-            normalized_excitations->SetElement(i, excitations_->GetElement(i));
-        }
-    } else {
-        for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
-            normalized_excitations->SetElement(e.first, e.second);
-        }
+    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
+        normalized_excitations->SetElement(e.first, e.second);
     }
 
     normalized_excitations->Normalize();
@@ -173,7 +135,6 @@ std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
     ExcitationsToZero();
 
     if (max_excit == nullptr) {
-        Freeze();
         return Globals::kDummy;
     }
 
@@ -181,8 +142,6 @@ std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
     excitations_->SetElement(max_index, max_excit->second);
     kb_inputs_->SetElement(max_index, n_inputs_max);
     *max_excitation = max_excit->second;
-
-    Freeze();
 
     return symbol_mapping_.GetSymbol(max_index);
 }
@@ -217,8 +176,6 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
         result[res_index] = symbol_mapping_.GetSymbol(index);
         ++res_index;
     }
-
-    Freeze();
 
     return result;
 }

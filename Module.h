@@ -42,10 +42,6 @@ public:
     void AddExcitationVector(const IExcitationVector<float>& input);
     void NormalizeExcitations();
 
-    void Freeze();
-    void Unfreeze();
-    bool IsFrozen() const { return frozen_indexes_ != nullptr; }
-
     const std::unique_ptr<IExcitationVector<float>>& GetExcitations();
     std::unique_ptr<IExcitationVector<float>> GetNormalizedExcitations();
     std::vector<std::string> GetExpectation();
@@ -63,7 +59,6 @@ private:
 
     std::unique_ptr<IExcitationVector<float>> excitations_;
     std::unique_ptr<IExcitationVector<uint8_t>> kb_inputs_;
-    std::unique_ptr<std::set<uint16_t>> frozen_indexes_;
 
     std::unique_ptr<std::pair<uint16_t, float>> MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations);
     std::set<std::pair<uint16_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float>>& nz_excitations);
