@@ -7,12 +7,12 @@ Implementation of language cognition and generation based on Robert Hecht Nielse
 
 "The nature of cognition is very different from that of computing. So much depends upon designing clever architectures of modules and knowledge bases and upon using clever, highly threaded, but very simple thought processes to control these architectures."
 
-                                                  Confabulation Theory - The Mechanism of Thought, -- Robert Hecht Nielsen
+                                  Confabulation Theory - The Mechanism of Thought, --Robert Hecht Nielsen
 
 Introduction
 ------------
 
-Confabulation theory is a model of how cognition (understanding) could work in the brains of humans and animals (crows for example). It is essentially a *graph-based* model for cognition.
+Confabulation theory is a model of how cognition (understanding) could work in the brains of humans and animals (crows for example). It is essentially a massively parallelizable *graph-based* model for cognition.
 
 Imagine a graph node that can take on any one of multiple values/features. These values/features can be anything, e.g., strings, real vectors etc. Graph nodes are "modules". Node values are "symbols". 
 
@@ -37,7 +37,7 @@ The principles of the theory are very general and can be applied to all aspects 
 Relation to other models
 ------------------------
 
-At the neuronal level, confabulation theory allows for modules to be neural attractor networks having the symbols as stable states and for knowledge links to also be neural networks. However, until the simulation of massive separate neural subnetworks is possible in hardware, handling things at the neuronal level to get results initially proves unwieldy. 
+At the neuronal level, confabulation theory allows for modules to be neural attractor networks having the symbols as stable states and for knowledge links to also be neural networks. However, until the simulation of massive separate neural sub-networks is possible in hardware, handling things at the neuronal level to get results initially proves unwieldy. 
 
 At the symbolic level, confabulation architectures are very related to Markov Random Fields (MRFs -- or the more specific Restricted Boltzmann Machines RBMs), Attractor Neural Networks and Energy Models in general. However, here there is no underlying joint probability distribution learning and no energy minimization objectives, at least not explicitly. And, unlike general MRFs, confabulation architectures are by definition massively parallelizable.
 
