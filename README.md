@@ -12,21 +12,21 @@ Implementation of language cognition and generation based on Robert Hecht Nielse
 Introduction
 ------------
 
-Confabulation theory is a model of how cognition (understanding) could work in the brains of humans and animals (crows for example). It is essentially a massively parallelizable *graph-based* model for cognition.
+Confabulation theory is a model of how cognition (understanding) could work in the brains of humans and animals (crows for example). It is essentially a _**massively parallelizable graph-based model**_ for cognition.
 
-Imagine a graph node that can take on any one of multiple values/features. These values/features can be anything, e.g., strings, real vectors etc. Graph nodes are "modules". Node values are "symbols". 
+Imagine a graph node that can take on any one of multiple values/features. These values/features can be anything, e.g., strings, real vectors etc. Graph nodes are *modules*. Node values are *symbols*. 
 
-A confabulation architecture is a directed graph of multi-valued nodes. 
+A *confabulation architecture* is a directed graph of multi-valued nodes. 
 
-Nodes in the graph are connected to each other with directed edges. Edges are "knowledge links". An edge passes energy (excitation) from a source node to a target node, multiplied by its weight. However, the weight must encompass all pairs of possible values (symbols) of the source and target nodes, i.e., the edge weight is a matrix (or tensor) itself. The weight represents the conditional probability of the source symbol occurring given the target symbol has occurred, i.e., it is a likelihood value.
+Nodes in the graph are connected to each other with directed edges. Edges are *knowledge links*. An edge passes energy (excitation) from a source node to a target node, multiplied by its weight. However, the weight must encompass all pairs of possible values (symbols) of the source and target nodes, i.e., the edge weight is a matrix (or tensor) itself. The weight represents the conditional probability of the source symbol occurring given the target symbol has occurred, i.e., it is a likelihood value.
 
-"Confabulation" per se is contraction of the values professed by a node. Partial contraction (partial confabulation) can happen by silencing those symbols that are excited below a threshold. Extreme contraction (elementary confabulation) keeps only the module symbol with the maximum excitation and silences all others.
+*Confabulation* is contraction of the values professed by a node. Partial contraction (partial confabulation) can happen by silencing those symbols that are excited below a threshold. Extreme contraction (elementary confabulation) keeps only the module symbol with the maximum excitation and silences all others.
 
-A "thought process" is a highly concurrent program passing around energy in the graph and contracting the nodes (confabulating), so that, in the end, every node in the architecture professes a single value, i.e., a single symbol.
+A *thought process* is a highly concurrent program passing around energy in the graph and contracting the nodes (confabulating), so that, in the end, every node in the architecture professes a single value, i.e., a single symbol.
 
-The symbols and knowledge links can be learned *by any appropriate workable means*, i.e., *any mathematical model that learns features or likelihoods* (e.g., standard neural nets).
+The symbols and knowledge links can be learned _**by any appropriate workable means**_, i.e., _**any mathematical model that learns features or likelihoods**_ (e.g., standard neural nets).
 
-Thought processes are themselves confabulation architectures. The confabulation "swirl" is a thought process.
+Thought processes are themselves confabulation architectures. The confabulation _swirl_ is such a thought process.
 
 The interesting problem is how to learn new and effective thought processes. Embodied intelligence may be a way to do this.
 
@@ -41,7 +41,7 @@ At the neuronal level, confabulation theory allows for modules to be neural attr
 
 At the symbolic level, confabulation architectures are very related to Markov Random Fields (MRFs -- or the more specific Restricted Boltzmann Machines RBMs), Attractor Neural Networks and Energy Models in general. However, here there is no underlying joint probability distribution learning and no energy minimization objectives, at least not explicitly. And, unlike general MRFs, confabulation architectures are by definition massively parallelizable.
 
-The temporal feedback mechanism of Recurrent Neural Networks (RNNs) does bear a resemblance to the "swirl" thought process. The latter can effectively be thought of as "Recurrent Maximum Likelihood". Of course, in confabulation there is no concept of optimizing an objective function. Furthermore, RNNs encode the whole space of possible word contexts into a single real vector (or a set of real vectors), the RNN state. Yet, there is of now no interpretable correspondence of these vectors to symbols as there could presumably be in the human brain. 
+The temporal feedback mechanism of Recurrent Neural Networks (RNNs) does bear a resemblance to the swirl thought process. The latter can effectively be thought of as "Recurrent Maximum Likelihood". Of course, in confabulation there is no concept of optimizing an objective function. Furthermore, RNNs encode the whole space of possible word contexts into a single real vector (or a set of real vectors), the RNN state. Yet, there is of now no interpretable correspondence of these vectors to symbols as there could presumably be in the human brain. 
 
 The strength and intricacy of confabulation lies in that it can combine all modes of human sensory perception under a single unifying framework of abstract symbols. The concept of "apple" can be simultaneously connected to a symbol for the image of an apple, a symbol for the smell of an apple and a symbol for the taste of an apple. A word can be a "symbol", as can be a phoneme, a particular sound signal, the output of an edge detector, or the representations learned by the hidden layers of a deep convolutional neural network. 
 
