@@ -3,7 +3,7 @@ confabulation-engine
 
 Implementation of language cognition and generation based on Robert Hecht Nielsen's Confabulation Theory.
 
-"One of the most exasperating things about confabulation theory is that it seems inpossible that just forming links between co-occurring symbols and then using these links to approximately maximize cogency could ever yield anything resembling human cognition. The theory appears to be nothing but a giant mountain of wishful thinking! That such a simple construction can do all of cognition is indeed astounding."
+"One of the most exasperating things about confabulation theory is that it seems inpossible that just forming links between co-occurring symbols and then using these links to approximately maximize cogency could ever yield anything resembling human cognition. The theory appears to be nothing but a giant mountain of wishful thinking! That such a simple construction can do all of cognition is indeed astounding. Yet that is precisely the claim of confabulation theory."
 
 "The nature of cognition is very different from that of computing. So much depends upon designing clever architectures of modules and knowledge bases and upon using clever, highly threaded, but very simple thought processes to control these architectures."
 
