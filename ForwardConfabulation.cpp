@@ -41,7 +41,7 @@ std::vector<std::string> ForwardConfabulation::Confabulation(const std::vector<s
         index = index_to_complete;
     }
 
-    int8_t actual_K = ActualK(symbols, index);
+    int8_t start_pos = GetStartPosition(symbols, index);
     const std::unique_ptr<Module>& target_module = modules_[index];
     target_module->ExcitationsToZero();
 
@@ -50,10 +50,10 @@ std::vector<std::string> ForwardConfabulation::Confabulation(const std::vector<s
     TransferAllExcitations(index, target_module);
 
     if (expectation) {
-        result = target_module->PartialConfabulation(actual_K);
+        result = target_module->PartialConfabulation(start_pos);
     } else {
         float dummy;
-        result.push_back(target_module->ElementaryConfabulation(actual_K, &dummy));
+        result.push_back(target_module->ElementaryConfabulation(start_pos, &dummy));
     }
 
     Clean();

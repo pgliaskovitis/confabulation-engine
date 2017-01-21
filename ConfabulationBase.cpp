@@ -24,7 +24,7 @@
 #include "utils/Utils.h"
 #include "Dbg.h"
 
-ConfabulationBase::ConfabulationBase() : K_(-1)
+ConfabulationBase::ConfabulationBase() : start_position_(-1)
 {}
 
 ConfabulationBase::~ConfabulationBase()
@@ -33,14 +33,14 @@ ConfabulationBase::~ConfabulationBase()
     knowledge_bases_.clear();
 }
 
-int8_t ConfabulationBase::ActualK(const std::vector<std::string> &symbols, int8_t index_to_complete)
+int8_t ConfabulationBase::GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete)
 {
     int8_t index = std::min(static_cast<int8_t>(ConvertToSigned(symbols.size())), static_cast<int8_t>(index_to_complete));
-    int8_t max_K = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
-    if (K_ >= 0) {
-       return std::min(K_, max_K);
+    int8_t max_nonempty_pos = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
+    if (start_position_ >= 0) {
+       return std::min(start_position_, max_nonempty_pos);
     } else {
-       return max_K;
+       return max_nonempty_pos;
     }
 }
 

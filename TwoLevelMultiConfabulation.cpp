@@ -85,9 +85,10 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     std::vector<std::string> temp_input(symbols.begin(), symbols.end());
 
     for (; index < end_completion && index < num_word_modules_;) {
-        int8_t actual_K = ActualK(temp_input, index);
-        // int8_t initial_excitation_level = std::min<int8_t>(Globals::kMaxMultiWordSize, actual_K);
-        int8_t initial_excitation_level = actual_K;
+        int8_t start_pos = GetStartPosition(temp_input, index);
+        // int8_t initial_excitation_level = std::min<int8_t>(Globals::kMaxMultiWordSize, start_pos);
+        // int8_t initial_excitation_level = start_pos;
+        int8_t initial_excitation_level = 1;
         std::vector<std::string> initial_result;
 
         do {
@@ -139,8 +140,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         if (!expectation) {
             float word_excitation;
             float phrase_excitation;
-            std::string next_word = modules_[index]->ElementaryConfabulation(actual_K, &word_excitation);
-            std::string next_phrase =  modules_[num_word_modules_ + index]->ElementaryConfabulation(actual_K, &phrase_excitation);
+            std::string next_word = modules_[index]->ElementaryConfabulation(start_pos, &word_excitation);
+            std::string next_phrase =  modules_[num_word_modules_ + index]->ElementaryConfabulation(start_pos, &phrase_excitation);
 
             result.push_back("{");
             if (word_excitation > phrase_excitation) {
