@@ -48,17 +48,19 @@ Possible Extensions
 
 In decreasing order of importance:
 
-1. Capability to persist knowledge bases in files, most probably in their dictionary form. Learning and language generation currently happen only in-memory.
+1. Actually make language generation parallel. Right now it is single-threaded.
 
-2. Capability to perform incremental knowledge learning, i.e., add the knowledge from a single new source directly to an already persisted set of knowledge bases. This would require storage of both co-occurrence counts and total occurrences for each symbol (i.e., both numerator and denominator in conditional probability terms).
+2. Capability to persist knowledge bases in files, most probably in their dictionary form. Learning and language generation currently happen only in-memory.
 
-3. Capability to have soft representation of symbols vs the hard representation as it stands now. Symbols are currently represented as strings and matching of the symbols on input sentences must be exact. A soft representation would allow more than one related symbols from a given input to be excited proportionally to a distance metric. Possible soft representations could be the feature vectors learned from a Deep Neural Network (also known as word vectors). 
+3. Capability to perform incremental knowledge learning, i.e., add the knowledge from a single new source directly to an already persisted set of knowledge bases. This would require storage of both co-occurrence counts and total occurrences for each symbol (i.e., both numerator and denominator in conditional probability terms).
 
-4. Capability to perform matrix multiplications on the GPU, i.e., using CUDA. This will speed up language generation (but not knowledge learning).
+4. Capability to have soft representation of symbols vs the hard representation as it stands now. Symbols are currently represented as strings and matching of the symbols on input sentences must be exact. A soft representation would allow more than one related symbols from a given input to be excited proportionally to a distance metric. Possible soft representations could be the feature vectors learned from a Deep Neural Network (also known as word vectors). 
 
-5. Capability to generate punctuation marks and especially fullstops. The goal is to move on to generation of multiple sentences.
+5. Capability to perform matrix multiplications on the GPU, i.e., using CUDA or OPENCL. This will speed up language generation.
 
-6. Capability to incorporate excitations for partially known symbols, e.g., parts of words.
+6. Capability to generate punctuation marks and especially fullstops. The goal is to move on to generation of multiple sentences.
+
+7. Capability to incorporate excitations for partially known symbols, e.g., parts of words. This is also related to 3.
 
 Installation
 ------------
