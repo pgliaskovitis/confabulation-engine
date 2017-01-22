@@ -60,7 +60,7 @@ In decreasing order of importance:
 
 6. Capability to generate punctuation marks and especially fullstops. The goal is to move on to generation of multiple sentences.
 
-7. Capability to incorporate excitations for partially known symbols, e.g., parts of words. This is also related to 3.
+7. Capability to incorporate excitations for partially known symbols, e.g., parts of words. This is also related to 4.
 
 Installation
 ------------
