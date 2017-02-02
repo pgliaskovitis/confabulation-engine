@@ -60,8 +60,8 @@ std::vector<std::string> OneLevelMultiConfabulation::Confabulation(const std::ve
     for (; index < end_completion;) {
         int8_t start_pos = GetStartPosition(temp_input, index);
         // int8_t initial_excitation_level = std::min<int8_t>(Globals::kMaxMultiWordSize, start_pos);
-        // int8_t initial_excitation_level = start_pos;
-        int8_t initial_excitation_level = 1;
+        int8_t initial_excitation_level = start_pos;
+        // int8_t initial_excitation_level = 1;
         std::vector<std::string> initial_result;
 
         do {
