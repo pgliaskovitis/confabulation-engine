@@ -634,8 +634,8 @@ int main()
     // test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
     // test1->TestOneLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
 
-    // test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
-    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
+    test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+    // test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
     // test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
 
 	return 0;
