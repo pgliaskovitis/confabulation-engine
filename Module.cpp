@@ -33,11 +33,13 @@ Module::Module(const SymbolMapping &symbol_mapping) :
 
 void Module::Reset()
 {
+    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     ExcitationsToZero();
 }
 
 void Module::ActivateSymbol(const std::string &word, int8_t K)
 {
+    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     if (K < 0) {
         throw std::logic_error("ActivateSymbol called with negative K");
     }
@@ -53,6 +55,7 @@ void Module::ActivateSymbol(const std::string &word, int8_t K)
 
 void Module::AddExcitationVector(const IExcitationVector<float> &input)
 {
+    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     excitations_->Add(input);
     for (const std::pair<uint16_t, float>& e : input.GetNzElements()) {
         uint16_t i = e.first;
@@ -62,6 +65,7 @@ void Module::AddExcitationVector(const IExcitationVector<float> &input)
 
 void Module::NormalizeExcitations()
 {
+    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     excitations_->Normalize();
 }
 
@@ -100,11 +104,13 @@ std::vector<std::string> Module::GetExpectation()
 
 std::string Module::ElementaryConfabulation(float *max_excitation)
 {
+    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     return ElementaryConfabulation(1, max_excitation);
 }
 
 std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 {
+    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
 
     uint16_t max_index = 0;
@@ -141,6 +147,7 @@ std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 
 std::vector<std::string> Module::PartialConfabulation(int8_t K)
 {
+    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     std::vector<std::string> result;
     std::unique_ptr<std::vector<std::pair<uint16_t, float>>> expectations;
 
@@ -175,6 +182,7 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
 
 std::vector<std::string> Module::AdditivePartialConfabulation(int8_t K)
 {
+    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     current_excitation_level_ += K;
     return PartialConfabulation(current_excitation_level_);
 }

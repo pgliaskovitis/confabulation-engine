@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <mutex>
 #include <sparse_structures/IExcitationVector.hpp>
 #include <SymbolMapping.h>
 
@@ -55,7 +56,7 @@ public:
 
 private:
     const SymbolMapping& symbol_mapping_;
-
+    std::recursive_mutex mutex_;
     std::unique_ptr<IExcitationVector<float>> excitations_;
     std::unique_ptr<IExcitationVector<uint8_t>> kb_inputs_;
 
