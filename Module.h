@@ -36,7 +36,6 @@ public:
     Module&& operator=(Module&& rhs) = delete;
 
     void Reset();
-    void ExcitationsToZero();
 
     void ActivateSymbol(const std::string& word, int8_t K);
     void AddExcitationVector(const IExcitationVector<float>& input);
@@ -60,6 +59,7 @@ private:
     std::unique_ptr<IExcitationVector<float>> excitations_;
     std::unique_ptr<IExcitationVector<uint8_t>> kb_inputs_;
 
+    void ExcitationsToZero();
     std::unique_ptr<std::pair<uint16_t, float>> MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations);
     std::set<std::pair<uint16_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float>>& nz_excitations);
 

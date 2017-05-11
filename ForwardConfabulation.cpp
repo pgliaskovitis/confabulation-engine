@@ -43,7 +43,7 @@ std::vector<std::string> ForwardConfabulation::Confabulation(const std::vector<s
 
     int8_t start_pos = GetStartPosition(symbols, index);
     const std::unique_ptr<Module>& target_module = modules_[index];
-    target_module->ExcitationsToZero();
+    target_module->Reset();
 
     // core algorithm
     Activate(symbols);
