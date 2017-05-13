@@ -257,9 +257,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultiple
     std::vector<std::string> result;
 
     for (int cursor = 0; cursor < span; ++cursor) {
-        if (cursor == 0) {
-            result = BasicTransitionAtIndex(index + cursor);
-        } else if (cursor == span - 1) {
+        if (cursor == span - 1) {
             BasicSwirlAtIndex(index + cursor);
         } else {
             BasicTransitionAtIndex(index + cursor);
