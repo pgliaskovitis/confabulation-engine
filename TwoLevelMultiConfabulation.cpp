@@ -119,8 +119,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                 }
             } else {
                 if (index + context_span < num_word_modules_) {
-                    FullTransitionAtIndex(index + context_span - 1);
-                    FullSwirlOverMultipleIndices(index, context_span);
+                    FullTransitionAtMultipleIndices(index, context_span);
                 }
             }
         }
@@ -280,4 +279,10 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullTransitionAtIndex(int i
     modules_[num_word_modules_ + index + 1]->AdditivePartialConfabulation(1);
 
     return result;
+}
+
+std::vector<std::string> TwoLevelMultiConfabulation::FullTransitionAtMultipleIndices(int index, int span)
+{
+    FullTransitionAtIndex(index + span - 1);
+    return FullSwirlOverMultipleIndices(index, span);
 }
