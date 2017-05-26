@@ -143,7 +143,8 @@ release/TextReader.o: text_processing/TextReader.cpp text_processing/TextReader.
 release/SentenceTokenizer.o: text_processing/SentenceTokenizer.cpp text_processing/SentenceTokenizer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\SentenceTokenizer.o text_processing\SentenceTokenizer.cpp
 
-release/NGramHandler.o: text_processing/NGramHandler.cpp text_processing/NGramHandler.h \
+release/NGramHandler.o: text_processing/NGramHandler.cpp Globals.h \
+		text_processing/NGramHandler.h \
 		SymbolMapping.h \
 		utils/Utils.h \
 		Dbg.h
@@ -176,7 +177,8 @@ release/ConfabulationTest.o: ConfabulationTest.cpp Globals.h \
 		google/sparsetable \
 		google/type_traits.h \
 		TwoLevelSimpleConfabulation.h \
-		TwoLevelMultiConfabulation.h
+		TwoLevelMultiConfabulation.h \
+		OneLevelMultiConfabulation.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ConfabulationTest.o ConfabulationTest.cpp
 
 release/Globals.o: Globals.cpp Globals.h \
@@ -329,6 +331,29 @@ release/TwoLevelMultiConfabulation.o: TwoLevelMultiConfabulation.cpp TwoLevelMul
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\TwoLevelMultiConfabulation.o TwoLevelMultiConfabulation.cpp
 
 release/OneLevelMulticonfabulation.o: OneLevelMulticonfabulation.cpp OneLevelMultiConfabulation.h \
+		ForwardConfabulation.h \
+		ConfabulationBase.h \
+		text_processing/TextReader.h \
+		text_processing/NGramHandler.h \
+		SymbolMapping.h \
+		MultiLevelOrganizer.h \
+		utils/HashTrie.hpp \
+		utils/HashTrieNode.hpp \
+		utils/Utils.h \
+		Module.h \
+		sparse_structures/IExcitationVector.hpp \
+		KnowledgeBase.h \
+		sparse_structures/DOKLinksMatrix.hpp \
+		sparse_structures/DOKExcitationVector.hpp \
+		sparse_structures/IKnowledgeLinks.hpp \
+		sparse_structures/SparseHashLinksMatrix.hpp \
+		google/sparse_hash_map \
+		google/sparsehash/config.h \
+		google/sparsehash/hash_fun.h \
+		google/sparsehash/sparsehashtable.h \
+		google/sparsetable \
+		google/type_traits.h \
+		sparse_structures/CSRLinksMatrix.hpp \
 		Globals.h \
 		Dbg.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\OneLevelMulticonfabulation.o OneLevelMulticonfabulation.cpp

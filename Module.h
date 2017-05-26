@@ -36,11 +36,12 @@ public:
     Module(Module&& rhs) = delete;
     Module&& operator=(Module&& rhs) = delete;
 
-    void Reset();
-
     void ActivateSymbol(const std::string& word, int8_t K);
     void AddExcitationVector(const IExcitationVector<float>& input);
-    void NormalizeExcitations();
+    void ExcitationsToZero();
+    void ExcitationLevelToZero();
+    void Lock();
+    void UnLock();
 
     const std::unique_ptr<IExcitationVector<float>>& GetExcitations();
     std::unique_ptr<IExcitationVector<float>> GetNormalizedExcitations();
@@ -56,11 +57,10 @@ public:
 
 private:
     const SymbolMapping& symbol_mapping_;
-    std::recursive_mutex mutex_;
+    std::mutex mutex_;
     std::unique_ptr<IExcitationVector<float>> excitations_;
     std::unique_ptr<IExcitationVector<uint8_t>> kb_inputs_;
 
-    void ExcitationsToZero();
     std::unique_ptr<std::pair<uint16_t, float>> MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations);
     std::set<std::pair<uint16_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float>>& nz_excitations);
 

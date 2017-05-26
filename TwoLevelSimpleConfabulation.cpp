@@ -81,7 +81,7 @@ std::vector<std::string> TwoLevelSimpleConfabulation::Confabulation(const std::v
 
         int8_t actual_K = GetStartPosition(temp_input, index);
         const std::unique_ptr<Module>& target_module = modules_[index];
-        target_module->Reset();
+        target_module->ExcitationsToZero();
 
         // activate known symbols from input
         Activate(temp_input);

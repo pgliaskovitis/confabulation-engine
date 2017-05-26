@@ -28,22 +28,11 @@ Module::Module(const SymbolMapping &symbol_mapping) :
     kb_inputs_(new DOKExcitationVector<uint8_t>(symbol_mapping.Size())),
     current_excitation_level_(0)
 {
-    Reset();
-}
-
-void Module::Reset()
-{
-    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     ExcitationsToZero();
 }
 
 void Module::ActivateSymbol(const std::string &word, int8_t K)
 {
-    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
-    if (K < 0) {
-        throw std::logic_error("ActivateSymbol called with negative K");
-    }
-
     try {
         uint16_t index = symbol_mapping_.IndexOf(word);
         excitations_->SetElement(index, K * Globals::kBandGap);
@@ -55,18 +44,11 @@ void Module::ActivateSymbol(const std::string &word, int8_t K)
 
 void Module::AddExcitationVector(const IExcitationVector<float> &input)
 {
-    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     excitations_->Add(input);
     for (const std::pair<uint16_t, float>& e : input.GetNzElements()) {
         uint16_t i = e.first;
         kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
     }
-}
-
-void Module::NormalizeExcitations()
-{
-    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
-    excitations_->Normalize();
 }
 
 const std::unique_ptr<IExcitationVector<float> > &Module::GetExcitations()
@@ -104,13 +86,12 @@ std::vector<std::string> Module::GetExpectation()
 
 std::string Module::ElementaryConfabulation(float *max_excitation)
 {
-    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
+    std::unique_lock<std::mutex> module_lock(mutex_);
     return ElementaryConfabulation(1, max_excitation);
 }
 
 std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 {
-    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
 
     uint16_t max_index = 0;
@@ -147,7 +128,6 @@ std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 
 std::vector<std::string> Module::PartialConfabulation(int8_t K)
 {
-    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
     std::vector<std::string> result;
     std::unique_ptr<std::vector<std::pair<uint16_t, float>>> expectations;
 
@@ -163,12 +143,12 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
     DOKExcitationVector<uint8_t> kb_inputs_temp(*kb_inputs_);
 
     // cleanup intermediate state
-    Reset();
+    ExcitationsToZero();
 
     result.resize(expectations->size());
-    uint16_t res_index = 0;
 
     // activate only symbols with excitations above threshold
+    uint16_t res_index = 0;
     for (const std::pair<uint16_t, float>& e : *expectations) {
         uint16_t index = e.first;
         excitations_->SetElement(index, e.second);
@@ -182,7 +162,7 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
 
 std::vector<std::string> Module::AdditivePartialConfabulation(int8_t K)
 {
-    std::unique_lock<std::recursive_mutex> module_lock(mutex_);
+    std::unique_lock<std::mutex> module_lock(mutex_);
     current_excitation_level_ += K;
     return PartialConfabulation(current_excitation_level_);
 }
@@ -191,7 +171,21 @@ void Module::ExcitationsToZero()
 {
     excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
     kb_inputs_.reset(new DOKExcitationVector<uint8_t>(symbol_mapping_.Size()));
+}
+
+void Module::ExcitationLevelToZero()
+{
     current_excitation_level_ = 0;
+}
+
+void Module::Lock()
+{
+    mutex_.lock();
+}
+
+void Module::UnLock()
+{
+    mutex_.unlock();
 }
 
 std::unique_ptr<std::pair<uint16_t, float> > Module::MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations)

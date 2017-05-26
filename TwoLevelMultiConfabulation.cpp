@@ -1,6 +1,7 @@
 #include "TwoLevelMultiConfabulation.h"
 #include "Globals.h"
 #include "Dbg.h"
+#include <chrono>
 
 TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
                                                        const std::string &symbol_file,
@@ -115,14 +116,20 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
             if (context_span == 1) {
                 if (index + context_span < num_word_modules_) {
+                    // threads_.push_back(std::thread(&FullTransitionAtIndex, this, index));
                     FullTransitionAtIndex(index);
                 }
             } else {
                 if (index + context_span < num_word_modules_) {
+                    // threads_.push_back(std::thread(&FullTransitionAtMultipleIndices, this, index, context_span));
                     FullTransitionAtMultipleIndices(index, context_span);
                 }
             }
         }
+
+        // for (std::thread& th: threads_) {
+        //    th.join();
+        // }
 
         // one final excitation boost
         for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
@@ -157,8 +164,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             }
             result.push_back("}");
         }
-
-        Clean();
     }
 
     return result;
@@ -169,7 +174,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index
 {
     std::vector<std::string> result_word;
 
-    std::vector<std::string> current_result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
+    const std::vector<std::string>& current_result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
     int8_t phrase_word_transition = current_result_phrase.size() ? 1 : 0;
     TransferExcitation(modules_[num_word_modules_ + index],
                        knowledge_bases_[num_word_modules_ + index][index],

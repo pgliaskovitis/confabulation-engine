@@ -30,7 +30,7 @@ const std::string Globals::kDummy = "DummySymbol";
 const std::vector<std::string> Globals::kPersistenceDelimiters = {":::", "{--->", "|||", "}--->"};
 
 const float Globals::kBaseProb = 0.0001f;
-const float Globals::kBandGap = 2.0f;
+const float Globals::kBandGap = 5.0f;
 const float Globals::kSynapseAmplifier = 1.0f;
 const uint8_t Globals::kMaxMultiWordSize = 4;
 const uint8_t Globals::kReferenceFrameSize = 15 - 1;
@@ -39,4 +39,5 @@ const size_t Globals::kMaxSingleWordSymbols = 65535;
 const size_t Globals::kMaxMultiWordSymbols = 65535;
 const bool Globals::kDelimitersAsSymbols = false;
 const bool Globals::kFavorLargerPhrases = false;
-const bool Globals::kNormalizeInputs = true;
+const bool Globals::kNormalizeInputs = false;
+const bool Globals::kNormalizeTransfers = true;

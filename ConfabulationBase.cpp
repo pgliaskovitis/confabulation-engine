@@ -197,7 +197,8 @@ void ConfabulationBase::Clean()
 {
     for (const std::unique_ptr<Module>& module : modules_) {
         if (module != nullptr) {
-            module->Reset();
+            module->ExcitationsToZero();
+            module->ExcitationLevelToZero();
         }
     }
 }
@@ -229,16 +230,33 @@ void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
 
 void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source_module, const std::unique_ptr<KnowledgeBase> &kb, const std::unique_ptr<Module> &target_module)
 {
-    if (Globals::kNormalizeInputs) {
+    source_module->Lock();
+    target_module->Lock();
+
+    if (Globals::kNormalizeInputs && Globals::kNormalizeTransfers) {
+        std::unique_ptr<IExcitationVector<float>> source_excitation = source_module->GetNormalizedExcitations();
+        const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
+        transmitted_excitation->Normalize();
+        target_module->AddExcitationVector(*transmitted_excitation);
+        source_excitation.reset(nullptr);
+    } else if (Globals::kNormalizeInputs){
         std::unique_ptr<IExcitationVector<float>> source_excitation = source_module->GetNormalizedExcitations();
         const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
         target_module->AddExcitationVector(*transmitted_excitation);
         source_excitation.reset(nullptr);
+    } else if (Globals::kNormalizeTransfers){
+        const std::unique_ptr<IExcitationVector<float>>& source_excitation = source_module->GetExcitations();
+        const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
+        transmitted_excitation->Normalize();
+        target_module->AddExcitationVector(*transmitted_excitation);
     } else {
         const std::unique_ptr<IExcitationVector<float>>& source_excitation = source_module->GetExcitations();
         const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
         target_module->AddExcitationVector(*transmitted_excitation);
     }
+
+    target_module->UnLock();
+    source_module->UnLock();
 }
 
 void ConfabulationBase::TransferAllExcitations(int8_t target_index, const std::unique_ptr<Module>& target_module)

@@ -1,6 +1,7 @@
 #ifndef TWOLEVELMULTICONFABULATION_H
 #define TWOLEVELMULTICONFABULATION_H
 
+#include <thread>
 #include "ForwardConfabulation.h"
 
 class TwoLevelMultiConfabulation : public ForwardConfabulation
@@ -20,6 +21,7 @@ public:
 
 private:
     size_t num_word_modules_;
+    std::vector<std::thread> threads_;
 
     std::vector<std::string> BasicSwirlAtIndex(int index);
     std::vector<std::string> FullSwirlAtIndex(int index);
