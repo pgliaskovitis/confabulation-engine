@@ -65,7 +65,7 @@ std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations()
         normalized_excitations->SetElement(e.first, e.second);
     }
 
-    normalized_excitations->Normalize();
+    normalized_excitations->Normalize(1);
 
     return normalized_excitations;
 }

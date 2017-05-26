@@ -47,6 +47,8 @@ public:
     std::unique_ptr<IExcitationVector<float>> GetNormalizedExcitations();
     std::vector<std::string> GetExpectation();
 
+    size_t get_current_excitation_level() const { return current_excitation_level_ ; }
+
     std::string ElementaryConfabulation(float *max_excitation);
     std::string ElementaryConfabulation(int8_t K, float *max_excitation);
 

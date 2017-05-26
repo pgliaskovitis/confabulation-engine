@@ -89,7 +89,7 @@ void ConfabulationTest::TestDOKExcitationVector() const
 
      std::cout << "Vector after addition:" << std::endl << my_vec_ptr1->ToString();
 
-     my_vec_ptr1->Normalize();
+     my_vec_ptr1->Normalize(1);
 
      std::cout << "Vector after normalization:" << std::endl << my_vec_ptr1->ToString();
 }
