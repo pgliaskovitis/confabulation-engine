@@ -50,7 +50,7 @@ public:
 
     virtual void Add(const IExcitationVector& other) = 0;
 
-    virtual void Normalize(const int level) = 0;
+    virtual void Normalize() = 0;
 
     virtual std::set<std::pair<uint16_t, T>> GetNzElements() const = 0;
 

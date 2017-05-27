@@ -51,7 +51,7 @@ public:
     virtual uint16_t GetNnz() const { return map_.size(); }
 
     virtual void Add(const IExcitationVector<T>& other);
-    virtual void Normalize(const int level);
+    virtual void Normalize();
     virtual std::set<std::pair<uint16_t, T>> GetNzElements() const;
 
 private:
@@ -127,7 +127,7 @@ void DOKExcitationVector<T>::Add(const IExcitationVector<T>& other) {
 }
 
 template <typename T>
-void DOKExcitationVector<T>::Normalize(const int level)
+void DOKExcitationVector<T>::Normalize()
 {
     double sum = 0.0;
 
@@ -137,7 +137,7 @@ void DOKExcitationVector<T>::Normalize(const int level)
 
     if (sum > 0.0) {
         for (typename std::unordered_map<uint16_t, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
-            it->second /= sum / (double)level;
+            it->second /= sum;
         }
     }
 }
