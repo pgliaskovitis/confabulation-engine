@@ -40,4 +40,4 @@ const size_t Globals::kMaxMultiWordSymbols = 65535;
 const bool Globals::kDelimitersAsSymbols = false;
 const bool Globals::kFavorLargerPhrases = false;
 const bool Globals::kNormalizeInputs = true;
-const bool Globals::kNormalizeTransfers = true;
+const bool Globals::kNormalizeTransfers = false;
