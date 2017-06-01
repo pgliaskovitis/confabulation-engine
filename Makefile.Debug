@@ -17,7 +17,7 @@ CXXFLAGS      = -pipe -fno-keep-inline-dllexport -std=c++11 -g -frtti -Wall -Wex
 INCPATH       = -I. -I"C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\mkspecs\win32-g++"
 LINKER      =        g++
 LFLAGS        =        -Wl,-subsystem,console -mthreads
-LIBS        =         
+LIBS        =        -pthread 
 QMAKE         = C:\Qt\qt-5.3.2-x64-mingw491r1-sjlj\qt-5.3.2-x64-mingw491r1-sjlj\bin\qmake.exe
 IDC           = idc
 IDL           = midl
@@ -103,7 +103,7 @@ $(DESTDIR_TARGET):  $(OBJECTS)
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) object_script.ConfabulationEngine.Debug  $(LIBS)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ CONFIG+=release -o Makefile.Debug ConfabulationEngine.pro
+	@$(QMAKE) -spec win32-g++ CONFIG+=debug -o Makefile.Debug ConfabulationEngine.pro
 
 qmake_all: FORCE
 

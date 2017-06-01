@@ -8,11 +8,9 @@ QMAKE_CXXFLAGS_RELEASE -= -O1
 QMAKE_CXXFLAGS_RELEASE -= -O2
 QMAKE_CXXFLAGS_RELEASE *= -O3
 
-QMAKE_CXXFLAGS_APP -= -fPIE
-
 QMAKE_CXXFLAGS += -std=c++11
 
-#QMAKE_LFLAGS_WINDOWS += -Wl,--heap,8000000000
+LIBS += -pthread
 
 SOURCES += \
     text_processing/TextReader.cpp \
