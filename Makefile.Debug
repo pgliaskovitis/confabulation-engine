@@ -103,7 +103,7 @@ $(DESTDIR_TARGET):  $(OBJECTS)
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) object_script.ConfabulationEngine.Debug  $(LIBS)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ CONFIG+=debug -o Makefile.Debug ConfabulationEngine.pro
+	@$(QMAKE) -spec win32-g++ CONFIG+=release -o Makefile.Debug ConfabulationEngine.pro
 
 qmake_all: FORCE
 

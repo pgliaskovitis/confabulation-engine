@@ -230,7 +230,6 @@ void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
 
 void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source_module, const std::unique_ptr<KnowledgeBase> &kb, const std::unique_ptr<Module> &target_module)
 {
-    source_module->Lock();
     target_module->Lock();
 
     if (Globals::kNormalizeInputs && Globals::kNormalizeTransfers) {
@@ -256,7 +255,6 @@ void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source
     }
 
     target_module->UnLock();
-    source_module->UnLock();
 }
 
 void ConfabulationBase::TransferAllExcitations(int8_t target_index, const std::unique_ptr<Module>& target_module)

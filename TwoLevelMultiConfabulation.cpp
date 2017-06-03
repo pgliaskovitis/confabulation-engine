@@ -92,19 +92,14 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         // int8_t initial_excitation_level = 1;
         std::vector<std::string> initial_result;
 
+        log_info("Initializing module at index %d", (int)index);
         do {
             Clean();
 
             // activate known symbols from input
             Activate(temp_input);
 
-            // find initial expectation on phrase module above word module at index
-            TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index]);
-            modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
-
-            // find initial expectation on word module at index (including phrase module above)
-            TransferAllExcitations(index, modules_[index]);
-            initial_result = modules_[index]->AdditivePartialConfabulation(initial_excitation_level);
+            initial_result = InitializationAtIndex(index, 1, initial_excitation_level);
             initial_excitation_level--;
         } while (initial_result.size() == 0 && initial_excitation_level > 0);
 
@@ -113,23 +108,33 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             return result;
         }
 
+        log_info("Parallel initialization of further modules");
+        threads_.clear();
+        for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
+            if (index + context_span < num_word_modules_) {
+                threads_.push_back(std::thread(&TwoLevelMultiConfabulation::InitializationAtIndex, this, index + context_span, 0, 0));
+            }
+        }
+        for (std::thread& th: threads_) {
+            th.join();
+        }
+
+        log_info("Parallel confabulation");
+        threads_.clear();
         for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
             if (context_span == 1) {
                 if (index + context_span < num_word_modules_) {
-                    // threads_.push_back(std::thread(&FullTransitionAtIndex, this, index));
-                    FullTransitionAtIndex(index);
+                    threads_.push_back(std::thread(&TwoLevelMultiConfabulation::FullTransitionAtIndex, this, index));
                 }
             } else {
                 if (index + context_span < num_word_modules_) {
-                    // threads_.push_back(std::thread(&FullTransitionAtMultipleIndices, this, index, context_span));
-                    FullTransitionAtMultipleIndices(index, context_span);
+                    threads_.push_back(std::thread(&TwoLevelMultiConfabulation::FullTransitionAtMultipleIndices, this, index, context_span));
                 }
             }
         }
-
-        // for (std::thread& th: threads_) {
-        //    th.join();
-        // }
+        for (std::thread& th: threads_) {
+            th.join();
+        }
 
         // one final excitation boost
         for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
@@ -167,6 +172,20 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
     }
 
     return result;
+}
+
+// Initialize expectation on target (phrase and) word modules once
+std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int index,
+                                                                           int phrase_excit_level,
+                                                                           int word_excit_level)
+{
+    // find initial expectation on phrase module above word module at index
+    TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index]);
+    modules_[num_word_modules_ + index]->AdditivePartialConfabulation(phrase_excit_level);
+
+    // find initial expectation on word module at index (including phrase module above)
+    TransferAllExcitations(index, modules_[index]);
+    return modules_[index]->AdditivePartialConfabulation(word_excit_level);
 }
 
 // tighten expectation on target (phrase and) word modules once
