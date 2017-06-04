@@ -92,7 +92,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         // int8_t initial_excitation_level = 1;
         std::vector<std::string> initial_result;
 
-        log_info("Initializing module at index %d", (int)index);
         do {
             Clean();
 
@@ -108,32 +107,16 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             return result;
         }
 
-        log_info("Parallel initialization of further modules");
-        threads_.clear();
-        for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
-            if (index + context_span < num_word_modules_) {
-                threads_.push_back(std::thread(&TwoLevelMultiConfabulation::InitializationAtIndex, this, index + context_span, 0, 0));
-            }
-        }
-        for (std::thread& th: threads_) {
-            th.join();
-        }
-
-        log_info("Parallel confabulation");
-        threads_.clear();
         for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
             if (context_span == 1) {
                 if (index + context_span < num_word_modules_) {
-                    threads_.push_back(std::thread(&TwoLevelMultiConfabulation::FullTransitionAtIndex, this, index));
+                    FullTransitionAtIndex(index);
                 }
             } else {
                 if (index + context_span < num_word_modules_) {
-                    threads_.push_back(std::thread(&TwoLevelMultiConfabulation::FullTransitionAtMultipleIndices, this, index, context_span));
+                    FullTransitionAtMultipleIndices(index, context_span);
                 }
             }
-        }
-        for (std::thread& th: threads_) {
-            th.join();
         }
 
         // one final excitation boost
