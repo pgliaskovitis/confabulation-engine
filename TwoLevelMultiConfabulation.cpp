@@ -107,17 +107,25 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             return result;
         }
 
-        for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
-            if (context_span == 1) {
-                if (index + context_span < num_word_modules_) {
-                    FullTransitionAtIndex(index);
-                }
-            } else {
-                if (index + context_span < num_word_modules_) {
-                    FullTransitionAtMultipleIndices(index, context_span);
+        std::cout << "Initialization at index " << (int)index << ", activated " << initial_result.size() << " symbols" << std::endl;
+
+        if(Globals::kUseMultithreading) {
+            int max_span = std::min((int)Globals::kMaxMultiWordSize, (int)(num_word_modules_ - index - 1));
+            FullSwirlOverMultipleIndices(index, max_span);
+        } else {
+            for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
+                if (context_span == 1) {
+                    if (index + context_span < num_word_modules_) {
+                        FullTransitionAtIndex(index);
+                    }
+                } else {
+                    if (index + context_span < num_word_modules_) {
+                        FullRetroTransitionAtIndex(index, context_span);
+                    }
                 }
             }
         }
+
 
         // one final excitation boost
         for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
@@ -201,6 +209,35 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index
     return result_word;
 }
 
+// tighten expectation on target (phrase and) word modules once and move on to the next index phrase
+std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionAtIndex(int index)
+{
+    const std::vector<std::string>& result = BasicSwirlAtIndex(index);
+
+    TransferExcitation(modules_[index],
+                       knowledge_bases_[index][num_word_modules_ + index + 1],
+                       modules_[num_word_modules_ + index + 1]);
+    modules_[num_word_modules_ + index + 1]->AdditivePartialConfabulation(1);
+
+    return result;
+}
+
+// tighten expectation on target (phrase and) word modules once and all modules up to index + span
+std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultipleIndices(int index, int span)
+{
+    std::vector<std::string> result;
+
+    for (int cursor = 0; cursor < span; ++cursor) {
+        if (cursor == span - 1) {
+            BasicSwirlAtIndex(index + cursor);
+        } else {
+            BasicTransitionAtIndex(index + cursor);
+        }
+    }
+
+    return result;
+}
+
 // tighten expectation on target (phrase and) word modules continuously
 std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlAtIndex(int index)
 {
@@ -217,7 +254,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlAtIndex(int index)
     return result;
 }
 
-// tighten expectation from index + span towards index
+// tighten expectation on target (phrase and) word modules and all modules up to index + span continuously
 std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices(int index, int span)
 {
     std::vector<std::string> result = modules_[index]->AdditivePartialConfabulation(0);
@@ -226,7 +263,33 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 
     do {
         previous_result_size = current_result_size;
+        result = BasicTransitionOverMultipleIndices(index, span);
+        for (size_t cursor = 2; cursor < span + 1; cursor++) {
+            TransferExcitation(modules_[index + cursor],
+                               knowledge_bases_[index + cursor][num_word_modules_ + index],
+                               modules_[num_word_modules_ + index]);
+            modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
+            TransferExcitation(modules_[index + cursor],
+                               knowledge_bases_[index + cursor][index],
+                               modules_[index]);
+            result = modules_[index]->AdditivePartialConfabulation(1);
+        }
+        current_result_size = result.size();
+    } while (current_result_size < previous_result_size);
 
+    std::cout << "Tightening at index " << index << ", yielded " << current_result_size << " symbols" << std::endl;
+    return result;
+}
+
+// tighten expectation from index + span towards index
+std::vector<std::string> TwoLevelMultiConfabulation::RetroSwirlOverMultipleIndices(int index, int span)
+{
+    std::vector<std::string> result = modules_[index]->AdditivePartialConfabulation(0);
+    size_t current_result_size = result.size();
+    size_t previous_result_size = 0;
+
+    do {
+        previous_result_size = current_result_size;
         TransferExcitation(modules_[index + span],
                            knowledge_bases_[index + span][num_word_modules_ + index],
                            modules_[num_word_modules_ + index]);
@@ -236,40 +299,11 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
                            modules_[index]);
         result = modules_[index]->AdditivePartialConfabulation(1);
         current_result_size = result.size();
-
         if (current_result_size == previous_result_size) {
             break;
         }
-
         BasicTransitionOverMultipleIndices(index, span);
     } while (current_result_size < previous_result_size);
-
-    return result;
-}
-
-std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionAtIndex(int index)
-{
-    const std::vector<std::string>& result = BasicSwirlAtIndex(index);
-
-    TransferExcitation(modules_[index],
-                       knowledge_bases_[index][num_word_modules_ + index + 1],
-                       modules_[num_word_modules_ + index + 1]);
-    modules_[num_word_modules_ + index + 1]->AdditivePartialConfabulation(1);
-
-    return result;
-}
-
-std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultipleIndices(int index, int span)
-{
-    std::vector<std::string> result;
-
-    for (int cursor = 0; cursor < span; ++cursor) {
-        if (cursor == span - 1) {
-            BasicSwirlAtIndex(index + cursor);
-        } else {
-            BasicTransitionAtIndex(index + cursor);
-        }
-    }
 
     return result;
 }
@@ -286,8 +320,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullTransitionAtIndex(int i
     return result;
 }
 
-std::vector<std::string> TwoLevelMultiConfabulation::FullTransitionAtMultipleIndices(int index, int span)
+std::vector<std::string> TwoLevelMultiConfabulation::FullRetroTransitionAtIndex(int index, int span)
 {
     FullTransitionAtIndex(index + span - 1);
-    return FullSwirlOverMultipleIndices(index, span);
+    return RetroSwirlOverMultipleIndices(index, span);
 }

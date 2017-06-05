@@ -41,3 +41,4 @@ const bool Globals::kDelimitersAsSymbols = false;
 const bool Globals::kFavorLargerPhrases = false;
 const bool Globals::kNormalizeInputs = true;
 const bool Globals::kNormalizeTransfers = false;
+const bool Globals::kUseMultithreading = true;

@@ -26,12 +26,15 @@ private:
     std::vector<std::string> InitializationAtIndex(int index, int phrase_excit_level, int word_excit_level);
 
     std::vector<std::string> BasicSwirlAtIndex(int index);
-    std::vector<std::string> FullSwirlAtIndex(int index);
     std::vector<std::string> BasicTransitionAtIndex(int index);
-    std::vector<std::string> FullTransitionAtIndex(int index);
     std::vector<std::string> BasicTransitionOverMultipleIndices(int index, int span);
+
+    std::vector<std::string> FullSwirlAtIndex(int index);
     std::vector<std::string> FullSwirlOverMultipleIndices(int index, int span);
-    std::vector<std::string> FullTransitionAtMultipleIndices(int index, int span);
+    std::vector<std::string> RetroSwirlOverMultipleIndices(int index, int span);
+
+    std::vector<std::string> FullTransitionAtIndex(int index);
+    std::vector<std::string> FullRetroTransitionAtIndex(int index, int span);
 };
 
 #endif // TWOLEVELMULTICONFABULATION_H
