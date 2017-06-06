@@ -23,6 +23,9 @@
 // Sentence delimiters are considered to enclose some full meaning
 // Token delimiters are noise in the raw documents
 
+// kMaxMultiWordSize * kBandGap >= kSynapseAmplifier * log2(1 / kBaseProb) + kBandGap
+// kBandGap >= -log2(kBaseProb) * kSynapseAmplifier / (kMaxMultiWordSize - 1)
+
 const std::string Globals::kSentenceDelimiters = "\",.!?;:";
 const std::string Globals::kTokenDelimiters = " `\",.!?;:@#$%^&*()-/\\_=+~[]{}<>0123456789";
 const std::vector<std::string> Globals::kCommonAbbreviations = {"Mr.", "Mrs.", "Dr.", "etc.", "Jr.", "Sr.", "Co.", "Ltd.", "A.D.", "B.C.", "ch.", "Ch.", "CH."};
