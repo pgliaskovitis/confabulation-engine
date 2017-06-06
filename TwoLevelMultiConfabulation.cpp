@@ -54,7 +54,7 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
         }
     }
 
-    // phrase-to-word knowledge bases (only directly below and directly next to below)
+    // phrase-to-word knowledge bases (only directly below)
     for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
         kb_specs[i][i - num_word_modules] = true;
     }
@@ -112,7 +112,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         if(Globals::kUseMultithreading) {
             int max_span = std::min((int)Globals::kMaxMultiWordSize, (int)(num_word_modules_ - index - 1));
             threads_.clear();
-            for (int8_t context_span = 1; context_span < max_span; ++context_span) {
+            for (int8_t context_span = 0; context_span < max_span; ++context_span) {
                 threads_.push_back(std::thread(&TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices, this, index, max_span));
             }
             for (std::thread& th: threads_) {
