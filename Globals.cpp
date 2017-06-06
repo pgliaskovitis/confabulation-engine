@@ -23,14 +23,6 @@
 // Sentence delimiters are considered to enclose some full meaning
 // Token delimiters are noise in the raw documents
 
-// N_max * kBandGap >= (N_max - 1) * (kSynapseAmplifier * log2(1 / kBaseProb) + kBandGap)
-// kBandGap >= -log2(kBaseProb) * kSynapseAmplifier * (N_max - 1)
-
-// N_max is the maximum number of incoming knowledge links for a particular module
-// In our TwoLevelMulticonfabulation architecture (slightly different from RHN):
-// N_max on word modules = kReferenceFrameSize + kMaxMultiWordSize + 1
-// N_max on phrase modules = kMaxMultiWordSize + kMaxMultiWordSize + kReferenceFrameSize - 1
-
 const std::string Globals::kSentenceDelimiters = "\",.!?;:";
 const std::string Globals::kTokenDelimiters = " `\",.!?;:@#$%^&*()-/\\_=+~[]{}<>0123456789";
 const std::vector<std::string> Globals::kCommonAbbreviations = {"Mr.", "Mrs.", "Dr.", "etc.", "Jr.", "Sr.", "Co.", "Ltd.", "A.D.", "B.C.", "ch.", "Ch.", "CH."};
