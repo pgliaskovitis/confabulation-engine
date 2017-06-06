@@ -30,7 +30,7 @@
 class Module
 {
 public:
-    Module(const SymbolMapping& symbol_mapping);
+    Module(const SymbolMapping& symbol_mapping, size_t id);
     Module(const Module& rhs) = delete;
     Module& operator=(const Module& rhs) = delete;
     Module(Module&& rhs) = delete;
@@ -47,6 +47,7 @@ public:
     std::unique_ptr<IExcitationVector<float>> GetNormalizedExcitations();
     std::vector<std::string> GetExpectation();
 
+    size_t get_id() const { return id_; }
     size_t get_current_excitation_level() const { return current_excitation_level_ ; }
 
     std::string ElementaryConfabulation(float *max_excitation);
@@ -59,6 +60,7 @@ public:
 
 private:
     const SymbolMapping& symbol_mapping_;
+    size_t id_;
     std::mutex mutex_;
     std::unique_ptr<IExcitationVector<float>> excitations_;
     std::unique_ptr<IExcitationVector<uint8_t>> kb_inputs_;

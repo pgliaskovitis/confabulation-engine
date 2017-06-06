@@ -111,7 +111,13 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
         if(Globals::kUseMultithreading) {
             int max_span = std::min((int)Globals::kMaxMultiWordSize, (int)(num_word_modules_ - index - 1));
-            FullSwirlOverMultipleIndices(index, max_span);
+            threads_.clear();
+            for (int8_t context_span = 1; context_span < max_span; ++context_span) {
+                threads_.push_back(std::thread(&TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices, this, index, max_span));
+            }
+            for (std::thread& th: threads_) {
+                th.join();
+            }
         } else {
             for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
                 if (context_span == 1) {

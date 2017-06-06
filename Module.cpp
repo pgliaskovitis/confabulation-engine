@@ -22,8 +22,9 @@
 #include "utils/Utils.h"
 #include <sparse_structures/DOKExcitationVector.hpp>
 
-Module::Module(const SymbolMapping &symbol_mapping) :
+Module::Module(const SymbolMapping &symbol_mapping, size_t id) :
     symbol_mapping_(symbol_mapping),
+    id_(id),
     excitations_(new DOKExcitationVector<float>(symbol_mapping.Size())),
     kb_inputs_(new DOKExcitationVector<uint8_t>(symbol_mapping.Size())),
     current_excitation_level_(0)

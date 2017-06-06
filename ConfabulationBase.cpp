@@ -76,7 +76,7 @@ void ConfabulationBase::Build()
         }
 
         const std::unique_ptr<SymbolMapping>& symbols_at_level = organizer_->get_mappings_for_level(level);
-        modules_.emplace_back(new Module(*symbols_at_level));
+        modules_.emplace_back(new Module(*symbols_at_level, i));
     }
 
     // create the knowledge bases according to specifications matrix
@@ -230,8 +230,17 @@ void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
 
 void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source_module, const std::unique_ptr<KnowledgeBase> &kb, const std::unique_ptr<Module> &target_module)
 {
-    source_module->Lock();
-    target_module->Lock();
+    if (source_module->get_id() == target_module->get_id()) {
+        return;
+    }
+
+    if (source_module->get_id() < target_module->get_id()) {
+        source_module->Lock();
+        target_module->Lock();
+    } else {
+        target_module->Lock();
+        source_module->Lock();
+    }
 
     if (Globals::kNormalizeInputs && Globals::kNormalizeTransfers) {
         std::unique_ptr<IExcitationVector<float>> source_excitation = source_module->GetNormalizedExcitations();
@@ -255,8 +264,13 @@ void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source
         target_module->AddExcitationVector(*transmitted_excitation);
     }
 
-    target_module->UnLock();
-    source_module->UnLock();
+    if (source_module->get_id() < target_module->get_id()) {
+        target_module->UnLock();
+        source_module->UnLock();
+    } else {
+        source_module->UnLock();
+        target_module->UnLock();
+    }
 }
 
 void ConfabulationBase::TransferAllExcitations(int8_t target_index, const std::unique_ptr<Module>& target_module)
