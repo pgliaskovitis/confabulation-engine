@@ -107,8 +107,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             return result;
         }
 
-        std::cout << "Initialization at index " << (int)index << ", activated " << initial_result.size() << " symbols" << std::endl;
-
         if(Globals::kUseMultithreading) {
             int max_span = std::min((int)Globals::kMaxMultiWordSize, (int)(num_word_modules_ - index - 1));
             threads_.clear();
@@ -283,7 +281,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
         current_result_size = result.size();
     } while (current_result_size < previous_result_size);
 
-    std::cout << "Tightening at index " << index << ", yielded " << current_result_size << " symbols" << std::endl;
     return result;
 }
 
