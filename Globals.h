@@ -45,7 +45,8 @@ public:
     static const bool kFavorLargerPhrases;
     static const bool kNormalizeInputs;
     static const bool kNormalizeTransfers;
-    static const bool kUseMultithreading;
+    static const bool kUseSingleThreadedVariation;
+    static const bool kUseMultiThreading;
 
     Globals() = delete;
     Globals(const Globals& rhs) = delete;

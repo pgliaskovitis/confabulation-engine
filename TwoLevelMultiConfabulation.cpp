@@ -107,7 +107,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
             return result;
         }
 
-        if(Globals::kUseMultithreading) {
+        if(Globals::kUseMultiThreading) {
             int max_span = std::min((int)Globals::kMaxMultiWordSize, (int)(num_word_modules_ - index - 1));
             threads_.clear();
             for (int8_t context_span = 0; context_span < max_span; ++context_span) {
@@ -117,15 +117,22 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                 th.join();
             }
         } else {
-            for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
-                if (context_span == 1) {
-                    if (index + context_span < num_word_modules_) {
-                        FullTransitionAtIndex(index);
+            if (Globals::kUseSingleThreadedVariation) {
+                for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
+                    if (context_span == 1) {
+                        if (index + context_span < num_word_modules_) {
+                            FullTransitionAtIndex(index);
+                        }
+                    } else {
+                        if (index + context_span < num_word_modules_) {
+                            FullRetroTransitionAtIndex(index, context_span);
+                        }
                     }
-                } else {
-                    if (index + context_span < num_word_modules_) {
-                        FullRetroTransitionAtIndex(index, context_span);
-                    }
+                }
+            } else {
+                int max_span = std::min((int)Globals::kMaxMultiWordSize, (int)(num_word_modules_ - index - 1));
+                for (int8_t context_span = 0; context_span < max_span; ++context_span) {
+                    FullSwirlOverMultipleIndices(index, max_span);
                 }
             }
         }
