@@ -108,7 +108,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
         }
 
         if(Globals::kUseMultiThreading) {
-            int max_span = std::min((int)Globals::kMaxMultiWordSize, (int)(num_word_modules_ - index - 1));
+            int max_span = std::min((int)Globals::kMaxMultiWordSize, (int)(num_word_modules_ - index));
             threads_.clear();
             for (int8_t context_span = 0; context_span < max_span; ++context_span) {
                 threads_.push_back(std::thread(&TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices, this, index, max_span));
@@ -130,10 +130,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
                     }
                 }
             } else {
-                int max_span = std::min((int)Globals::kMaxMultiWordSize, (int)(num_word_modules_ - index - 1));
-                for (int8_t context_span = 0; context_span < max_span; ++context_span) {
-                    FullSwirlOverMultipleIndices(index, max_span);
-                }
+                int max_span = std::min((int)Globals::kMaxMultiWordSize, (int)(num_word_modules_ - index));
+                FullSwirlOverMultipleIndices(index, max_span);
             }
         }
 
@@ -275,7 +273,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
     do {
         previous_result_size = current_result_size;
         result = BasicTransitionOverMultipleIndices(index, span);
-        for (size_t cursor = 2; cursor < span + 1; cursor++) {
+        for (size_t cursor = 2; cursor < span; cursor++) {
             TransferExcitation(modules_[index + cursor],
                                knowledge_bases_[index + cursor][num_word_modules_ + index],
                                modules_[num_word_modules_ + index]);
