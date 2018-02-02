@@ -1,7 +1,0 @@
-*.o
-*.user
-object_script.ConfabulationEngine.Debug
-object_script.ConfabulationEngine.Release
-text_data/*
-debug/*
-release/*
