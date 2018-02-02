@@ -32,6 +32,7 @@ HEADERS += \
     sparse_structures/IExcitationVector.hpp \
     sparse_structures/IKnowledgeLinks.hpp \
     sparse_structures/DOKLinksMatrix.hpp \
+    sparse_structures/SparseHashLinksMatrix.hpp \
     text_processing/TextReader.h \
     text_processing/SentenceTokenizer.h \
     text_processing/NGramHandler.h \
@@ -48,6 +49,3 @@ HEADERS += \
     ForwardConfabulation.h \
     Dbg.h \
     TwoLevelMultiConfabulation.h \
-    sparse_structures/SparseHashLinksMatrix.hpp \
-
-
