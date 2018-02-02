@@ -48,7 +48,7 @@ Possible Extensions
 
 In decreasing order of importance:
 
-1. Actually make language generation parallel. Right now it is single-threaded.
+1. Actually make language generation parallel. Right now it is single-threaded. --largely finished
 
 2. Capability to persist knowledge bases in files, most probably in their dictionary form. Learning and language generation currently happen only in-memory.
 
@@ -91,3 +91,18 @@ document should be added under text_data/ and its filename appended to the above
 The main() function lies in ConfabulationTest.cpp. Test sentence beginnings can also be found and altered there.
 
 A high level schematic of the particular confabulation architectures implemented in this project can be found in Confabulation_Rationale.pdf
+
+Sample Results
+--------------
+
+These are cherry-picked after training with 15 word modules, 15 phrase modules and 300 MB of text data:
+
+His quest was one of *{ the battles of the heart }*
+
+He suddenly collapsed and started crying like a *{ child left alone }*
+
+A dark winter was eating through the *{ plains of the north }*
+
+Hosts of archers stood ready along the *{ bridge road }*
+
+Enlightenment goes well with a *{ bucket of cold water }*
