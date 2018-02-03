@@ -44,7 +44,6 @@ public:
     static const bool kDelimitersAsSymbols;
     static const bool kFavorLargerPhrases;
     static const bool kNormalizeInputs;
-    static const bool kWhitenInputs;
     static const bool kUseSingleThreadedVariation;
     static const bool kUseMultiThreading;
 

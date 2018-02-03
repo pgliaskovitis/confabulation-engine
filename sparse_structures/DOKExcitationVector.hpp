@@ -56,8 +56,6 @@ public:
     virtual std::set<std::pair<uint16_t, T>> GetNzElements() const;
 
 private:
-    const double PI_ = 3.14159265358979323846;
-
     const uint16_t num_rows_;
 
     std::unordered_map<uint16_t, T> map_;
@@ -152,7 +150,7 @@ void DOKExcitationVector<T>::Whiten()
     double squared_sum = 0.0;
     double mean = 0.0;
     double variance = 0.0;
-    double coeff = 1 / sqrt(2 * PI_);
+    double coeff = 1 / sqrt(2 * 3.14159265358979323846);
 
     for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
         sum += it->second;

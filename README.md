@@ -95,7 +95,7 @@ A high level schematic of the particular confabulation architectures implemented
 Sample Results
 --------------
 
-These are cherry-picked after training with 15 word modules, 15 phrase modules and 300 MB of text data:
+These are cherry-picked after training with default settings and 300 MB of text data:
 
 His quest was one of *{ the battles of the heart }*
 

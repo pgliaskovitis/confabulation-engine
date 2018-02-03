@@ -40,6 +40,5 @@ const size_t Globals::kMaxMultiWordSymbols = 65535;
 const bool Globals::kDelimitersAsSymbols = false;
 const bool Globals::kFavorLargerPhrases = false;
 const bool Globals::kNormalizeInputs = false; // normalization of excitation vectors before being given as input to a knowledge base
-const bool Globals::kWhitenInputs = true; // whitening of excitation vectors before being given as input to a knowledge base
 const bool Globals::kUseSingleThreadedVariation = false; // full swirl per single index, instead of over multiple indices
 const bool Globals::kUseMultiThreading = false; // full swirl over multiple indices, with one thread per advanced position
