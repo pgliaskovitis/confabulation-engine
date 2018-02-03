@@ -52,6 +52,8 @@ public:
 
     virtual void Normalize() = 0;
 
+    virtual void Whiten() = 0;
+
     virtual std::set<std::pair<uint16_t, T>> GetNzElements() const = 0;
 
     std::string ToString() const

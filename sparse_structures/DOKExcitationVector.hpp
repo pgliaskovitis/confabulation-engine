@@ -52,9 +52,12 @@ public:
 
     virtual void Add(const IExcitationVector<T>& other);
     virtual void Normalize();
+    virtual void Whiten();
     virtual std::set<std::pair<uint16_t, T>> GetNzElements() const;
 
 private:
+    const double PI_ = 3.14159265358979323846;
+
     const uint16_t num_rows_;
 
     std::unordered_map<uint16_t, T> map_;
@@ -139,6 +142,30 @@ void DOKExcitationVector<T>::Normalize()
         for (typename std::unordered_map<uint16_t, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
             it->second /= sum;
         }
+    }
+}
+
+template <typename T>
+void DOKExcitationVector<T>::Whiten()
+{
+    double sum = 0.0;
+    double squared_sum = 0.0;
+    double mean = 0.0;
+    double variance = 0.0;
+    double coeff = 1 / sqrt(2 * PI_);
+
+    for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+        sum += it->second;
+        squared_sum += it->second * it->second;
+    }
+
+    mean = sum / map_.size();
+    variance = squared_sum / map_.size() - mean * mean + 0.000001;
+
+    for (typename std::unordered_map<uint16_t, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
+        double temp = it->second - mean;
+        it->second = std::exp(-(temp * temp) / (2 * variance));
+        it->second *= coeff * 1 / sqrt(variance);
     }
 }
 

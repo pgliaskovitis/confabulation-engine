@@ -242,22 +242,16 @@ void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source
         source_module->Lock();
     }
 
-    if (Globals::kNormalizeInputs && Globals::kNormalizeTransfers) {
-        std::unique_ptr<IExcitationVector<float>> source_excitation = source_module->GetNormalizedExcitations();
-        const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
-        transmitted_excitation->Normalize();
-        target_module->AddExcitationVector(*transmitted_excitation);
-        source_excitation.reset(nullptr);
-    } else if (Globals::kNormalizeInputs){
+   if (Globals::kNormalizeInputs){
         std::unique_ptr<IExcitationVector<float>> source_excitation = source_module->GetNormalizedExcitations();
         const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
         target_module->AddExcitationVector(*transmitted_excitation);
         source_excitation.reset(nullptr);
-    } else if (Globals::kNormalizeTransfers){
-        const std::unique_ptr<IExcitationVector<float>>& source_excitation = source_module->GetExcitations();
+    } else if (Globals::kWhitenInputs){
+        std::unique_ptr<IExcitationVector<float>> source_excitation = source_module->GetWhitenedExcitations();
         const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
-        transmitted_excitation->Normalize();
         target_module->AddExcitationVector(*transmitted_excitation);
+        source_excitation.reset(nullptr);
     } else {
         const std::unique_ptr<IExcitationVector<float>>& source_excitation = source_module->GetExcitations();
         const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);

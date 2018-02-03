@@ -45,6 +45,7 @@ public:
 
     const std::unique_ptr<IExcitationVector<float>>& GetExcitations();
     std::unique_ptr<IExcitationVector<float>> GetNormalizedExcitations();
+    std::unique_ptr<IExcitationVector<float>> GetWhitenedExcitations();
     std::vector<std::string> GetExpectation();
 
     size_t get_id() const { return id_; }

@@ -71,6 +71,20 @@ std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations()
     return normalized_excitations;
 }
 
+std::unique_ptr<IExcitationVector<float>> Module::GetWhitenedExcitations()
+{
+    std::unique_ptr<IExcitationVector<float>> whitened_excitations;
+    whitened_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
+
+    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
+        whitened_excitations->SetElement(e.first, e.second);
+    }
+
+    whitened_excitations->Whiten();
+
+    return whitened_excitations;
+}
+
 std::vector<std::string> Module::GetExpectation()
 {
     std::vector<std::string> result(excitations_->GetNnz());
