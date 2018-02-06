@@ -42,7 +42,7 @@ public:
 
     std::vector<std::list<T>> FindAll(const std::list<T>& sequence) const;
 
-    size_t Size() { return size_; }
+    size_t Size() const { return size_; }
 
 private:
     HashTrieNode<T> root_;

@@ -30,7 +30,7 @@ SentenceTokenizer::SentenceTokenizer(const SentenceTokenizer& stok) : source_(st
 
 bool SentenceTokenizer::IsCharNotAlphaNumeric(char input)
 {
-    return (!std::isalpha(input));
+    return (!std::isalpha(input, std::locale::global(std::locale(""))));
 }
 
 bool SentenceTokenizer::IsSymbolAlphanumeric(const std::string& input)
@@ -40,7 +40,7 @@ bool SentenceTokenizer::IsSymbolAlphanumeric(const std::string& input)
     }
 
     for (std::string::const_iterator it = input.begin(); it != input.end(); ++it) {
-        if (!std::isalpha(*it)) {
+        if (!std::isalpha(*it, std::locale::global(std::locale("")))) {
             return false;
         }
     }

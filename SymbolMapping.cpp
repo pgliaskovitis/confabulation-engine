@@ -68,7 +68,7 @@ std::set<std::string> SymbolMapping::GetAllSymbols() const
     return result;
 }
 
-std::string SymbolMapping::ToString()
+std::string SymbolMapping::ToString() const
 {
     std::unordered_map<std::string*, uint16_t>::const_iterator it = symbol_to_index_->begin();
     std::string result;

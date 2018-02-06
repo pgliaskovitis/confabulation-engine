@@ -44,7 +44,7 @@ public:
 
     std::set<std::string> GetAllSymbols() const;
 
-    std::string ToString();
+    std::string ToString() const;
 
 private:
     std::unique_ptr<std::unordered_map<std::string, std::unique_ptr<std::string>>> all_symbols_;

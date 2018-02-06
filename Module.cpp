@@ -52,12 +52,12 @@ void Module::AddExcitationVector(const IExcitationVector<float> &input)
     }
 }
 
-const std::unique_ptr<IExcitationVector<float> > &Module::GetExcitations()
+const std::unique_ptr<IExcitationVector<float> > &Module::GetExcitations() const
 {
     return excitations_;
 }
 
-std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations()
+std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations() const
 {
     std::unique_ptr<IExcitationVector<float>> normalized_excitations;
     normalized_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
@@ -71,7 +71,7 @@ std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations()
     return normalized_excitations;
 }
 
-std::unique_ptr<IExcitationVector<float>> Module::GetWhitenedExcitations()
+std::unique_ptr<IExcitationVector<float>> Module::GetWhitenedExcitations() const
 {
     std::unique_ptr<IExcitationVector<float>> whitened_excitations;
     whitened_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
@@ -85,7 +85,7 @@ std::unique_ptr<IExcitationVector<float>> Module::GetWhitenedExcitations()
     return whitened_excitations;
 }
 
-std::vector<std::string> Module::GetExpectation()
+std::vector<std::string> Module::GetExpectation() const
 {
     std::vector<std::string> result(excitations_->GetNnz());
 
