@@ -10,23 +10,32 @@ if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU")
 	set (CMAKE_CXX_FLAGS "-Wall -Wextra")
 	set (CMAKE_CXX_FLAGS_DEBUG "-g")
 	set (CMAKE_CXX_FLAGS_RELEASE "-O3")
+elseif (${CMAKE_C_COMPILER_ID} STREQUAL "MSVC")
+	set (CMAKE_CXX_FLAGS_RELEASE "/Ox")
 endif ()
 
-add_subdirectory (sparse_structures)
-add_subdirectory (utils)
-
-include_directories (${CMAKE_SOURCE_DIR})
 include_directories (${CMAKE_SOURCE_DIR}/google ${CMAKE_SOURCE_DIR}/google/sparsehash)
-include_directories (${sparse_structures_SOURCE_DIR} ${utils_SOURCE_DIR} text_processing)
+include_directories (${CMAKE_SOURCE_DIR}/utils)
+include_directories (${CMAKE_SOURCE_DIR}/sparse_structures)
+include_directories (${CMAKE_SOURCE_DIR}/text_processing)
+include_directories (${CMAKE_SOURCE_DIR})
 
-file (GLOB confabulation_engine_SRC
-	"*.cpp"
+file (GLOB utils_SRC
+	"utils/*.h"
+    "utils/*.hpp"
+)
+
+file (GLOB sparse_structures_SRC
+    "sparse_structures/*.hpp"
 )
 
 file (GLOB text_processing_SRC
 	"text_processing/*.cpp"
 )
 
-add_executable (confabulation_engine ${confabulation_engine_SRC} ${text_processing_SRC})
-target_link_libraries (confabulation_engine sparse_structures utils)
+file (GLOB confabulation_engine_SRC
+	"*.cpp"
+)
+
+add_executable (confabulation_engine ${confabulation_engine_SRC} ${text_processing_SRC} ${sparse_structures_SRC} ${utils_SRC})
 
