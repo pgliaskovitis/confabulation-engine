@@ -33,9 +33,10 @@ public:
     static const std::string kDummy;
     static const std::vector<std::string> kPersistenceDelimiters;
 
-    static const float kBaseProb;
-    static const float kBandGap;
-    static const float kSynapseAmplifier;
+    static const double kBaseProb;
+    static const double kBaseLogProb;
+    static const double kBandGap;
+    static const double kSynapseAmplifier;
     static const uint8_t kMaxMultiWordSize;
     static const uint8_t kReferenceFrameSize;
     static const uint8_t kMaxCompletionSize;

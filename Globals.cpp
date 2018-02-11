@@ -17,6 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <math.h>
 #include "Globals.h"
 #include "text_processing/NGramHandler.h"
 
@@ -29,9 +30,10 @@ const std::vector<std::string> Globals::kCommonAbbreviations = {"Mr.", "Mrs.", "
 const std::string Globals::kDummy = "DummySymbol";
 const std::vector<std::string> Globals::kPersistenceDelimiters = {":::", "{--->", "|||", "}--->"};
 
-const float Globals::kBaseProb = 0.0001f;
-const float Globals::kBandGap = 1.0f;
-const float Globals::kSynapseAmplifier = 1.0f;
+const double Globals::kBaseProb = 0.0001;
+const double Globals::kBaseLogProb = log2(Globals::kBaseProb);
+const double Globals::kBandGap = 1.0;
+const double Globals::kSynapseAmplifier = 1.0;
 const uint8_t Globals::kMaxMultiWordSize = 4;
 const uint8_t Globals::kReferenceFrameSize = 15 - 1;
 const uint8_t Globals::kMaxCompletionSize = 7;
