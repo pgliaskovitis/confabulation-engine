@@ -82,7 +82,7 @@ std::vector<std::vector<std::vector<std::string>>> MultiLevelOrganizer::Organize
                 std::list<std::string> match;
                 if (j == 0) {
                     // always find longest match for level 0 (words)
-                    match = std::move(trie.FindLongest(temp_symbols_list));
+                    match = trie.FindLongest(temp_symbols_list);
                 } else {
                     // find all matches for next combinations
                     const std::vector<std::list<std::string>>& all_matches = trie.FindAll(temp_symbols_list);
@@ -118,7 +118,7 @@ std::vector<std::vector<std::vector<std::string>>> MultiLevelOrganizer::Organize
                 }
 
                 // store found multisymbol
-                level[k] = std::move(ListSymbolToSymbol(match, ' '));
+                level[k] = ListSymbolToSymbol(match, ' ');
 
                 // if (j > 0) {
                 //    std::cout << "Searched for match for combination " << i << " at level " << j << ": " << ListSymbolToSymbol(temp_symbols_list, ' ') << "\n" << std::flush;

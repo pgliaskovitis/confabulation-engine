@@ -110,7 +110,7 @@ void ConfabulationTest::TestDOKLinksMatrix() const
 
     std::cout << "Vector before multiplication:" << std::endl << my_vec_ptr->ToString();
 
-    std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = std::move(my_matrix_ptr->Multiply(*my_vec_ptr));
+    std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = my_matrix_ptr->Multiply(*my_vec_ptr);
 
     std::cout << "Vector after multiplication:" << std::endl << my_result_vec_ptr->ToString();
 }
@@ -135,7 +135,7 @@ void ConfabulationTest::TestCSRLinksMatrix() const
 
     std::cout << "Vector before multiplication:" << std::endl << my_vec_ptr->ToString();
 
-    std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = std::move(my_csr_matrix_ptr->Multiply(*my_vec_ptr));
+    std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = my_csr_matrix_ptr->Multiply(*my_vec_ptr);
 
     std::cout << "Vector after multiplication:" << std::endl << my_result_vec_ptr->ToString();
 }
