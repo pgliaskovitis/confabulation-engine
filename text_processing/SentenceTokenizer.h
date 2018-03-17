@@ -29,22 +29,21 @@
 class SentenceTokenizer
 {
 public:
-
     explicit SentenceTokenizer(const std::string& source);
-	SentenceTokenizer(const SentenceTokenizer& stok);
+    SentenceTokenizer(const SentenceTokenizer& stok);
 
-	//Extract the next token.
-	//Returns whether or not it was successful.
+    //Extract the next token.
+    //Returns whether or not it was successful.
     bool Tokenize(const std::string& delimiters);
-	
-	//Extract the next token of a (structured) persisted knowledgebase file
-	// Returns whether or not it was successful
+
+    //Extract the next token of a (structured) persisted knowledgebase file
+    // Returns whether or not it was successful
     const std::vector<std::string> KnowledgeTokenize(const std::vector<std::string>& persistence_delimiters);
 
-	//Get the last-read token
+    //Get the last-read token
     const std::string& Str() const;
 
-	//Get the delimiter following the last-read token
+    //Get the delimiter following the last-read token
     const std::string& Delim() const;
 
     static bool IsCharNotAlphaNumeric(char input);

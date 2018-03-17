@@ -93,7 +93,6 @@ public:
         }
         return str;
     }
-
 };
 
 #endif // IKNOWLEDGELINKS_H

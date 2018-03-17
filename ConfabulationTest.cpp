@@ -158,7 +158,7 @@ void ConfabulationTest::TestSymbolMapping() const
 void ConfabulationTest::TestTokenizePersistedKnowledge() const
 {
     std::string knowledgeFragment = "New:::York{1765|||2308}---->Haven{7|||201}---->Year{1111|||6538}";
-	SentenceTokenizer tok(knowledgeFragment);
+    SentenceTokenizer tok(knowledgeFragment);
     tok.KnowledgeTokenize(Globals::kPersistenceDelimiters);
 }
 
@@ -592,5 +592,5 @@ int main()
     // test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
     // test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
 
-	return 0;
+    return 0;
 }

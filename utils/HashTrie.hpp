@@ -47,7 +47,6 @@ public:
 private:
     HashTrieNode<T> root_;
     size_t size_;
-
 };
 
 template <typename T>

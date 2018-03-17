@@ -40,24 +40,24 @@ void TextReader::Initialize()
 
 const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_reading)
 {
-	std::string sentence;
+    std::string sentence;
     std::stringstream l_string;
 
     std::string::size_type end_of_sentence = std::string::npos;
     std::string::size_type end_of_delimiter = std::string::npos;
     std::string::size_type end_of_phase = std::string::npos;
 
-	// before reading a new line from the file, we must cover the case of
-	// the left_over_sentence buffer containing one or more full sentences
-	if (left_over_sentence_ != nullptr) {
-		l_string << *left_over_sentence_;
-		
-		end_of_sentence = l_string.str().find_first_of(Globals::kSentenceDelimiters, 0);
-		
+    // before reading a new line from the file, we must cover the case of
+    // the left_over_sentence buffer containing one or more full sentences
+    if (left_over_sentence_ != nullptr) {
+        l_string << *left_over_sentence_;
+
+        end_of_sentence = l_string.str().find_first_of(Globals::kSentenceDelimiters, 0);
+
         if (end_of_sentence != std::string::npos) {
-			
-			end_of_delimiter = l_string.str().find_first_not_of(Globals::kSentenceDelimiters, end_of_sentence);
-			
+
+            end_of_delimiter = l_string.str().find_first_not_of(Globals::kSentenceDelimiters, end_of_sentence);
+
             if (end_of_delimiter != std::string::npos) {
                 //delimiter finishes in the current left_over_sentence_
                 end_of_phase = end_of_delimiter;
@@ -65,25 +65,25 @@ const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_
                 //delimiter does not finish in the current left_over_sentence_
                 end_of_phase = end_of_sentence + 1;
             }
-			
-			// remove the newly found sentence from the sentence buffer
+
+            // remove the newly found sentence from the sentence buffer
             left_over_sentence_.reset(new std::string(left_over_sentence_->substr(end_of_phase)));
-			
-			const std::vector<std::string>& current_sentence_tokens = ExtractTokens(l_string.str().substr(0, end_of_phase));
+
+            const std::vector<std::string>& current_sentence_tokens = ExtractTokens(l_string.str().substr(0, end_of_phase));
 
             // std::cout << "Sentence from left_over : " << VectorSymbolToSymbol(current_sentence_tokens, ' ') << "\n" << std::flush;
 
             return current_sentence_tokens;
-		}
+        }
     }
-	
+
     if (current_text_file_ != nullptr) {
 
         if (current_text_file_->good()) {
 
             finished_reading = false;
 
-			// read as many lines as necessary to find the end of the sentence
+            // read as many lines as necessary to find the end of the sentence
             while (std::getline(*current_text_file_, sentence)) {
                 RemoveCommonAbbreviations(sentence);
                 l_string << " " << sentence;

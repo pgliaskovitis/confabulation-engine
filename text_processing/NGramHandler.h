@@ -82,7 +82,6 @@ private:
     const uint8_t min_multi_occurences_;
 
     std::vector<std::map<std::vector<std::string>, size_t, StringVector_Cmp>> occurrence_counts_;
-
 };
 
 #endif // NGRAMHANDLER_H

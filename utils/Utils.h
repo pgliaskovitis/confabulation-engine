@@ -236,7 +236,6 @@ namespace
 
         return results;
     }
-
 }
 
 #endif // UTILS_H
