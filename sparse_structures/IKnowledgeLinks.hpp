@@ -28,71 +28,71 @@
 
 struct PairHash {
 public:
-    std::size_t operator()(const std::pair<uint16_t, uint16_t> &x) const
-    {
-      return x.first * std::numeric_limits<uint16_t>::max() + x.second;
-    }
-    template <typename T, typename U>
-    std::size_t operator()(const std::pair<T, U> &x) const
-    {
-        return std::hash<T>()(x.first) ^ std::hash<U>()(x.second);
-    }
+	std::size_t operator()(const std::pair<uint16_t, uint16_t> &x) const
+	{
+	  return x.first * std::numeric_limits<uint16_t>::max() + x.second;
+	}
+	template <typename T, typename U>
+	std::size_t operator()(const std::pair<T, U> &x) const
+	{
+		return std::hash<T>()(x.first) ^ std::hash<U>()(x.second);
+	}
 };
 
 struct PairEquals {
 public:
-    template <typename T>
-    bool operator()(const std::pair<T, T> &x, const std::pair<T, T> &y) const
-    {
-        return x == y;
-    }
+	template <typename T>
+	bool operator()(const std::pair<T, T> &x, const std::pair<T, T> &y) const
+	{
+		return x == y;
+	}
 };
 
 template <typename T>
 class IKnowledgeLinks
 {
 public:
-    virtual ~IKnowledgeLinks() {}
+	virtual ~IKnowledgeLinks() {}
 
-    virtual void SetElement(const uint16_t r, const uint16_t c, const T& value) = 0;
-    virtual void SetElementQuick(const uint16_t r, uint16_t c, const T& value) = 0;
+	virtual void SetElement(const uint16_t r, const uint16_t c, const T& value) = 0;
+	virtual void SetElementQuick(const uint16_t r, uint16_t c, const T& value) = 0;
 
-    virtual T GetElement(const uint16_t r, const uint16_t c) const = 0;
-    virtual T GetElementQuick(const uint16_t r, const uint16_t c) const = 0;
+	virtual T GetElement(const uint16_t r, const uint16_t c) const = 0;
+	virtual T GetElementQuick(const uint16_t r, const uint16_t c) const = 0;
 
-    virtual uint16_t get_num_rows() const = 0;
-    virtual uint16_t get_num_cols() const = 0;
+	virtual uint16_t get_num_rows() const = 0;
+	virtual uint16_t get_num_cols() const = 0;
 
-    virtual uint32_t GetNnz() const = 0;
+	virtual uint32_t GetNnz() const = 0;
 
-    void CheckBounds(const uint16_t r, const uint16_t c) const
-    {
-        if (r >= get_num_rows() || c >= get_num_cols()) {
-            throw std::out_of_range(std::string("2D Out of Range, for row ") +
-                                    std::to_string(r) +
-                                    " and column " +
-                                    std::to_string(c));
-        }
-    }
+	void CheckBounds(const uint16_t r, const uint16_t c) const
+	{
+		if (r >= get_num_rows() || c >= get_num_cols()) {
+			throw std::out_of_range(std::string("2D Out of Range, for row ") +
+									std::to_string(r) +
+									" and column " +
+									std::to_string(c));
+		}
+	}
 
-    virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const = 0;
-    virtual std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> GetNzElements() const = 0;
+	virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const = 0;
+	virtual std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> GetNzElements() const = 0;
 
-    std::string ToString() const
-    {
-        const uint32_t num_rows = get_num_rows();
-        const uint32_t num_cols = get_num_cols();
+	std::string ToString() const
+	{
+		const uint32_t num_rows = get_num_rows();
+		const uint32_t num_cols = get_num_cols();
 
-        std::string str = std::string("LinksMatrix [num_lines=") + std::to_string(num_rows) + ", num_cols=" + std::to_string(num_cols) + "]\n";
-        for (uint32_t r = 0; r < num_rows; ++r) {
-            for (uint32_t c = 0; c < num_cols; ++c) {
-                str += std::to_string(GetElement(r, c)) + " ";
-            }
+		std::string str = std::string("LinksMatrix [num_lines=") + std::to_string(num_rows) + ", num_cols=" + std::to_string(num_cols) + "]\n";
+		for (uint32_t r = 0; r < num_rows; ++r) {
+			for (uint32_t c = 0; c < num_cols; ++c) {
+				str += std::to_string(GetElement(r, c)) + " ";
+			}
 
-            str += "\n";
-        }
-        return str;
-    }
+			str += "\n";
+		}
+		return str;
+	}
 };
 
 #endif // IKNOWLEDGELINKS_H

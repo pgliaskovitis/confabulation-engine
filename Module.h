@@ -30,46 +30,46 @@
 class Module
 {
 public:
-    Module(const SymbolMapping& symbol_mapping, size_t id);
-    Module(const Module& rhs) = delete;
-    Module& operator=(const Module& rhs) = delete;
-    Module(Module&& rhs) = delete;
-    Module&& operator=(Module&& rhs) = delete;
+	Module(const SymbolMapping& symbol_mapping, size_t id);
+	Module(const Module& rhs) = delete;
+	Module& operator=(const Module& rhs) = delete;
+	Module(Module&& rhs) = delete;
+	Module&& operator=(Module&& rhs) = delete;
 
-    void ActivateSymbol(const std::string& word, int8_t K);
-    void AddExcitationVector(const IExcitationVector<float>& input);
-    void ExcitationsToZero();
-    void ExcitationLevelToZero();
-    void Lock();
-    void UnLock();
+	void ActivateSymbol(const std::string& word, int8_t K);
+	void AddExcitationVector(const IExcitationVector<float>& input);
+	void ExcitationsToZero();
+	void ExcitationLevelToZero();
+	void Lock();
+	void UnLock();
 
-    const std::unique_ptr<IExcitationVector<float>>& GetExcitations() const;
-    std::unique_ptr<IExcitationVector<float>> GetNormalizedExcitations() const;
-    std::unique_ptr<IExcitationVector<float>> GetWhitenedExcitations() const;
-    std::vector<std::string> GetExpectation() const;
+	const std::unique_ptr<IExcitationVector<float>>& GetExcitations() const;
+	std::unique_ptr<IExcitationVector<float>> GetNormalizedExcitations() const;
+	std::unique_ptr<IExcitationVector<float>> GetWhitenedExcitations() const;
+	std::vector<std::string> GetExpectation() const;
 
-    size_t get_id() const { return id_; }
-    size_t get_current_excitation_level() const { return current_excitation_level_ ; }
+	size_t get_id() const { return id_; }
+	size_t get_current_excitation_level() const { return current_excitation_level_ ; }
 
-    std::string ElementaryConfabulation(float *max_excitation);
-    std::string ElementaryConfabulation(int8_t K, float *max_excitation);
+	std::string ElementaryConfabulation(float *max_excitation);
+	std::string ElementaryConfabulation(int8_t K, float *max_excitation);
 
-    std::vector<std::string> PartialConfabulation(int8_t K);
-    std::vector<std::string> AdditivePartialConfabulation(int8_t K);
+	std::vector<std::string> PartialConfabulation(int8_t K);
+	std::vector<std::string> AdditivePartialConfabulation(int8_t K);
 
-    const SymbolMapping& get_symbol_mapping() const { return symbol_mapping_; }
+	const SymbolMapping& get_symbol_mapping() const { return symbol_mapping_; }
 
 private:
-    const SymbolMapping& symbol_mapping_;
-    size_t id_;
-    std::mutex mutex_;
-    std::unique_ptr<IExcitationVector<float>> excitations_;
-    std::unique_ptr<IExcitationVector<uint8_t>> kb_inputs_;
+	const SymbolMapping& symbol_mapping_;
+	size_t id_;
+	std::mutex mutex_;
+	std::unique_ptr<IExcitationVector<float>> excitations_;
+	std::unique_ptr<IExcitationVector<uint8_t>> kb_inputs_;
 
-    std::unique_ptr<std::pair<uint16_t, float>> MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations);
-    std::set<std::pair<uint16_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float>>& nz_excitations);
+	std::unique_ptr<std::pair<uint16_t, float>> MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations);
+	std::set<std::pair<uint16_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float>>& nz_excitations);
 
-    size_t current_excitation_level_;
+	size_t current_excitation_level_;
 };
 
 #endif // MODULE_H

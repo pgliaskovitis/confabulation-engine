@@ -28,21 +28,21 @@
 class MultiLevelOrganizer
 {
 public:
-    MultiLevelOrganizer(const std::vector<uint8_t>& level_sizes_, std::vector<std::unique_ptr<SymbolMapping>>&& level_mappings);
-    MultiLevelOrganizer(const MultiLevelOrganizer& rhs) = delete;
-    MultiLevelOrganizer& operator=(const MultiLevelOrganizer& rhs) = delete;
-    MultiLevelOrganizer(MultiLevelOrganizer&& rhs) = delete;
-    MultiLevelOrganizer&& operator=(MultiLevelOrganizer&& rhs) = delete;
+	MultiLevelOrganizer(const std::vector<uint8_t>& level_sizes_, std::vector<std::unique_ptr<SymbolMapping>>&& level_mappings);
+	MultiLevelOrganizer(const MultiLevelOrganizer& rhs) = delete;
+	MultiLevelOrganizer& operator=(const MultiLevelOrganizer& rhs) = delete;
+	MultiLevelOrganizer(MultiLevelOrganizer&& rhs) = delete;
+	MultiLevelOrganizer&& operator=(MultiLevelOrganizer&& rhs) = delete;
 
-    std::vector<std::vector<std::vector<std::string>>> Organize(const std::vector<std::string>& symbols);
+	std::vector<std::vector<std::vector<std::string>>> Organize(const std::vector<std::string>& symbols);
 
-    const std::unique_ptr<SymbolMapping>& get_mappings_for_level(uint8_t level) const { return level_mappings_.at(level); }
-    const std::unique_ptr<HashTrie<std::string>>& get_trie_for_level(uint8_t level) const { return tries_.at(level); }
+	const std::unique_ptr<SymbolMapping>& get_mappings_for_level(uint8_t level) const { return level_mappings_.at(level); }
+	const std::unique_ptr<HashTrie<std::string>>& get_trie_for_level(uint8_t level) const { return tries_.at(level); }
 
 private:
-    std::vector<uint8_t> level_sizes_;
-    std::vector<std::unique_ptr<SymbolMapping>> level_mappings_;
-    std::vector<std::unique_ptr<HashTrie<std::string>>> tries_;
+	std::vector<uint8_t> level_sizes_;
+	std::vector<std::unique_ptr<SymbolMapping>> level_mappings_;
+	std::vector<std::unique_ptr<HashTrie<std::string>>> tries_;
 };
 
 #endif // MULTILEVELORGANIZER_H

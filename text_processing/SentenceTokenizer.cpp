@@ -30,204 +30,204 @@ SentenceTokenizer::SentenceTokenizer(const SentenceTokenizer& stok) : source_(st
 
 bool SentenceTokenizer::IsCharNotAlphaNumeric(char input)
 {
-    return (!std::isalpha(input, std::locale::global(std::locale(""))));
+	return (!std::isalpha(input, std::locale::global(std::locale(""))));
 }
 
 bool SentenceTokenizer::IsSymbolAlphanumeric(const std::string& input)
 {
-    if (input.size() == 0) {
-      return false;
-    }
+	if (input.size() == 0) {
+	  return false;
+	}
 
-    for (std::string::const_iterator it = input.begin(); it != input.end(); ++it) {
-        if (!std::isalpha(*it, std::locale::global(std::locale("")))) {
-            return false;
-        }
-    }
+	for (std::string::const_iterator it = input.begin(); it != input.end(); ++it) {
+		if (!std::isalpha(*it, std::locale::global(std::locale("")))) {
+			return false;
+		}
+	}
 
-    return true;
+	return true;
 }
 
 void SentenceTokenizer::ConvertSymbolToAlphanumeric(std::string& input)
 {
-    input.erase(std::remove_if(input.begin(), input.end(), IsCharNotAlphaNumeric), input.end());
+	input.erase(std::remove_if(input.begin(), input.end(), IsCharNotAlphaNumeric), input.end());
 }
 
 const std::string& SentenceTokenizer::Str() const
 {
-    return token_;
+	return token_;
 }
 
 const std::string& SentenceTokenizer::Delim() const
 {
-    return delimiter_;
+	return delimiter_;
 }
 
 bool SentenceTokenizer::Tokenize(const std::string& delimiters)
 {
-    size_t index0 = 0;
+	size_t index0 = 0;
 
-    /* _DEBUG
-     *
-     *
-    size_t n = 0;
-    std::cout << "Delimiter list for tokenizer: " << "\n";
-    for (vector<std::string>::const_iterator it = delimiterSymbols.begin(); it != delimiterSymbols.end(); ++it) {
-        std::cout << (*it) << " or " << delimiterSymbols.at(n++) << "\n";
-    }
-           *
-           *
-    _DEBUG */
+	/* _DEBUG
+	 *
+	 *
+	size_t n = 0;
+	std::cout << "Delimiter list for tokenizer: " << "\n";
+	for (vector<std::string>::const_iterator it = delimiterSymbols.begin(); it != delimiterSymbols.end(); ++it) {
+		std::cout << (*it) << " or " << delimiterSymbols.at(n++) << "\n";
+	}
+		   *
+		   *
+	_DEBUG */
 
-    // Find the beginning of the next token, if any
-    if (index_ == std::string::npos) return false;
+	// Find the beginning of the next token, if any
+	if (index_ == std::string::npos) return false;
 
-    /* _DEBUG
-     *
-     *
-    if (m_source.at(m_index) != ' ') {
-        std::cout << "Current cursor shows " << m_source.at(m_index) << " at " << m_index << "\n";
-    }
-          *
-          *
-    _DEBUG*/
+	/* _DEBUG
+	 *
+	 *
+	if (m_source.at(m_index) != ' ') {
+		std::cout << "Current cursor shows " << m_source.at(m_index) << " at " << m_index << "\n";
+	}
+		  *
+		  *
+	_DEBUG*/
 
-    index0 = source_.find_first_not_of(delimiters, index_);
+	index0 = source_.find_first_not_of(delimiters, index_);
 
-    // Find the end of the token, if any
-    if (index0 == std::string::npos) return false;
+	// Find the end of the token, if any
+	if (index0 == std::string::npos) return false;
 
-    /* _DEBUG
-     *
-     *
-    if (m_source.at(m_index) != ' ') {
-        std::cout << "Next cursor shows " << m_source.at(index0) << " at " << index0 << "\n";
-    }
-          *
-          *
-    _DEBUG*/
+	/* _DEBUG
+	 *
+	 *
+	if (m_source.at(m_index) != ' ') {
+		std::cout << "Next cursor shows " << m_source.at(index0) << " at " << index0 << "\n";
+	}
+		  *
+		  *
+	_DEBUG*/
 
-    //Save the result on the delimiter
-    delimiter_ = ExtractDelimiterToken(index_, index0);
+	//Save the result on the delimiter
+	delimiter_ = ExtractDelimiterToken(index_, index0);
 
-    /* _DEBUG
-     *
-     *
-    if (m_delimiter != " ") {
-        std::cout << "Non-alphanumeric token = " << m_delimiter << "\n";
-    }
-          *
-          *
-    _DEBUG*/
+	/* _DEBUG
+	 *
+	 *
+	if (m_delimiter != " ") {
+		std::cout << "Non-alphanumeric token = " << m_delimiter << "\n";
+	}
+		  *
+		  *
+	_DEBUG*/
 
-    index_ = source_.find_first_of(delimiters, index0);
+	index_ = source_.find_first_of(delimiters, index0);
 
-    /* _DEBUG
-     *
-     *
-    std::cout << "m_index = " << m_index << " index0 = " << index0 << "\n";
-          *
-          *
-    _DEBUG*/
+	/* _DEBUG
+	 *
+	 *
+	std::cout << "m_index = " << m_index << " index0 = " << index0 << "\n";
+		  *
+		  *
+	_DEBUG*/
 
-    // Save the result on the token
-    if (index_ == std::string::npos) {
-        token_ = source_.substr(index0);
-        //std::cout << "m_token infinite is " << m_token << "\n";
-    } else {
-        size_t length_token = index_ - index0;
-        token_ = source_.substr(index0, length_token);
-        //std::cout << "m_token finite is " << m_token << "\n";
-    }
+	// Save the result on the token
+	if (index_ == std::string::npos) {
+		token_ = source_.substr(index0);
+		//std::cout << "m_token infinite is " << m_token << "\n";
+	} else {
+		size_t length_token = index_ - index0;
+		token_ = source_.substr(index0, length_token);
+		//std::cout << "m_token finite is " << m_token << "\n";
+	}
 
-    return true;
+	return true;
 }
 
 const std::vector<std::string> SentenceTokenizer::KnowledgeTokenize(const std::vector<std::string>& persistence_delimiters)
 {
-    size_t index0 = 0;
-    int8_t knowledge_extraction_phase = -1;
-    std::vector<std::string> extracted_tokens;
+	size_t index0 = 0;
+	int8_t knowledge_extraction_phase = -1;
+	std::vector<std::string> extracted_tokens;
 
-    std::string current_delimiter;
-    std::string next_delimiter;
+	std::string current_delimiter;
+	std::string next_delimiter;
 
-    while (true) {
-        // Find the beginning of the next token, if any
-        if (index_ == std::string::npos) break;
+	while (true) {
+		// Find the beginning of the next token, if any
+		if (index_ == std::string::npos) break;
 
-        //this is the bulk of the logic, for selecting the correct structured delimiters
-        //structured knowledge format is
-        //source_std::string:::target_std::string_1(link_count|||total_target_count)___target_std::string_2
-        switch (knowledge_extraction_phase) {
-            case -1: { //source_std::string
-                current_delimiter = "";
-                next_delimiter = persistence_delimiters[knowledge_extraction_phase + 1];
-                knowledge_extraction_phase++;
-                break;
-            }
-            case 0: { //":::"
-                current_delimiter = persistence_delimiters[knowledge_extraction_phase];
-                next_delimiter = persistence_delimiters[knowledge_extraction_phase + 1];
-                knowledge_extraction_phase++;
-                break;
-            }
-            case 1: { //"{"
-                current_delimiter = persistence_delimiters[knowledge_extraction_phase];
-                next_delimiter = persistence_delimiters[knowledge_extraction_phase + 1];
-                knowledge_extraction_phase++;
-                break;
-            }
-            case 2: { //"|||"
-                current_delimiter = persistence_delimiters[knowledge_extraction_phase];
-                next_delimiter = persistence_delimiters[knowledge_extraction_phase + 1];
-                knowledge_extraction_phase++;
-                break;
-            }
-            case 3: { //}---->"
-                current_delimiter = persistence_delimiters[knowledge_extraction_phase];
-                next_delimiter = persistence_delimiters[1];
-                knowledge_extraction_phase = 1;
-                break;
-            }
-        }
+		//this is the bulk of the logic, for selecting the correct structured delimiters
+		//structured knowledge format is
+		//source_std::string:::target_std::string_1(link_count|||total_target_count)___target_std::string_2
+		switch (knowledge_extraction_phase) {
+			case -1: { //source_std::string
+				current_delimiter = "";
+				next_delimiter = persistence_delimiters[knowledge_extraction_phase + 1];
+				knowledge_extraction_phase++;
+				break;
+			}
+			case 0: { //":::"
+				current_delimiter = persistence_delimiters[knowledge_extraction_phase];
+				next_delimiter = persistence_delimiters[knowledge_extraction_phase + 1];
+				knowledge_extraction_phase++;
+				break;
+			}
+			case 1: { //"{"
+				current_delimiter = persistence_delimiters[knowledge_extraction_phase];
+				next_delimiter = persistence_delimiters[knowledge_extraction_phase + 1];
+				knowledge_extraction_phase++;
+				break;
+			}
+			case 2: { //"|||"
+				current_delimiter = persistence_delimiters[knowledge_extraction_phase];
+				next_delimiter = persistence_delimiters[knowledge_extraction_phase + 1];
+				knowledge_extraction_phase++;
+				break;
+			}
+			case 3: { //}---->"
+				current_delimiter = persistence_delimiters[knowledge_extraction_phase];
+				next_delimiter = persistence_delimiters[1];
+				knowledge_extraction_phase = 1;
+				break;
+			}
+		}
 
-        index0 = source_.find_first_not_of(current_delimiter, index_);
+		index0 = source_.find_first_not_of(current_delimiter, index_);
 
-        // Find the end of the token, if any
-        if (index0 == std::string::npos) break;
-        index_ = source_.find_first_of(next_delimiter, index0);
+		// Find the end of the token, if any
+		if (index0 == std::string::npos) break;
+		index_ = source_.find_first_of(next_delimiter, index0);
 
-        // Save the result on the token
-        if (index_ == std::string::npos) {
-            token_ = source_.substr(index0);
-            extracted_tokens.push_back(token_);
-            //std::cout << "m_token infinite is " << m_token << std::endl;
-        } else {
-            size_t length_token = index_ - index0;
-            token_ = source_.substr(index0, length_token);
-            extracted_tokens.push_back(token_);
-            //std::cout << "m_token finite is " << m_token << std::endl;
-        }
-    }
+		// Save the result on the token
+		if (index_ == std::string::npos) {
+			token_ = source_.substr(index0);
+			extracted_tokens.push_back(token_);
+			//std::cout << "m_token infinite is " << m_token << std::endl;
+		} else {
+			size_t length_token = index_ - index0;
+			token_ = source_.substr(index0, length_token);
+			extracted_tokens.push_back(token_);
+			//std::cout << "m_token finite is " << m_token << std::endl;
+		}
+	}
 
-    return extracted_tokens;
+	return extracted_tokens;
 }
 
 std::string SentenceTokenizer::ExtractDelimiterToken(size_t begin, size_t end)
 {
-    std::string delimiter_partial;
+	std::string delimiter_partial;
 
-    std::string::size_type length_delim = (end == std::string::npos) ? std::string::npos : (end - begin);
-    delimiter_partial = source_.substr(begin, length_delim);
+	std::string::size_type length_delim = (end == std::string::npos) ? std::string::npos : (end - begin);
+	delimiter_partial = source_.substr(begin, length_delim);
 
-    size_t str_begin = delimiter_partial.find_first_not_of(' ');
-    if (str_begin == std::string::npos) {
-        return ""; // no content in the delimiter other than white space
-    }
+	size_t str_begin = delimiter_partial.find_first_not_of(' ');
+	if (str_begin == std::string::npos) {
+		return ""; // no content in the delimiter other than white space
+	}
 
-    size_t str_end = delimiter_partial.find_last_not_of(' ');
-    size_t str_range = str_end - str_begin + 1;
+	size_t str_end = delimiter_partial.find_last_not_of(' ');
+	size_t str_range = str_end - str_begin + 1;
 
-    return delimiter_partial.substr(str_begin, str_range);
+	return delimiter_partial.substr(str_begin, str_range);
 }

@@ -29,34 +29,34 @@
 class SentenceTokenizer
 {
 public:
-    explicit SentenceTokenizer(const std::string& source);
-    SentenceTokenizer(const SentenceTokenizer& stok);
+	explicit SentenceTokenizer(const std::string& source);
+	SentenceTokenizer(const SentenceTokenizer& stok);
 
-    //Extract the next token.
-    //Returns whether or not it was successful.
-    bool Tokenize(const std::string& delimiters);
+	//Extract the next token.
+	//Returns whether or not it was successful.
+	bool Tokenize(const std::string& delimiters);
 
-    //Extract the next token of a (structured) persisted knowledgebase file
-    // Returns whether or not it was successful
-    const std::vector<std::string> KnowledgeTokenize(const std::vector<std::string>& persistence_delimiters);
+	//Extract the next token of a (structured) persisted knowledgebase file
+	// Returns whether or not it was successful
+	const std::vector<std::string> KnowledgeTokenize(const std::vector<std::string>& persistence_delimiters);
 
-    //Get the last-read token
-    const std::string& Str() const;
+	//Get the last-read token
+	const std::string& Str() const;
 
-    //Get the delimiter following the last-read token
-    const std::string& Delim() const;
+	//Get the delimiter following the last-read token
+	const std::string& Delim() const;
 
-    static bool IsCharNotAlphaNumeric(char input);
-    static bool IsSymbolAlphanumeric(const std::string& input);
-    static void ConvertSymbolToAlphanumeric(std::string& input);
+	static bool IsCharNotAlphaNumeric(char input);
+	static bool IsSymbolAlphanumeric(const std::string& input);
+	static void ConvertSymbolToAlphanumeric(std::string& input);
 
 private:
-    std::string source_; //our copy of the source
-    std::string::size_type index_; //where we are at in our copy of the source
-    std::string token_; //a copy of the last token found in our copy of the source
-    std::string delimiter_; //a copy of the last delimiter std::string, i.e., the one following m_token
+	std::string source_; //our copy of the source
+	std::string::size_type index_; //where we are at in our copy of the source
+	std::string token_; //a copy of the last token found in our copy of the source
+	std::string delimiter_; //a copy of the last delimiter std::string, i.e., the one following m_token
 
-    std::string ExtractDelimiterToken(size_t begin, size_t end);
+	std::string ExtractDelimiterToken(size_t begin, size_t end);
 };
 
 #endif /* SENTENCETOKENIZER_H_ */

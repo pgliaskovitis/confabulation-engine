@@ -30,35 +30,35 @@ template <typename T>
 class DOKExcitationVector : public IExcitationVector<T>
 {
 public:
-    DOKExcitationVector(const uint16_t num_rows);
-    DOKExcitationVector(const IExcitationVector<T>& base);
+	DOKExcitationVector(const uint16_t num_rows);
+	DOKExcitationVector(const IExcitationVector<T>& base);
 
-    DOKExcitationVector(const DOKExcitationVector& rhs) = delete;
-    DOKExcitationVector& operator=(const DOKExcitationVector& rhs) = delete;
-    DOKExcitationVector(DOKExcitationVector&& rhs) = delete;
-    DOKExcitationVector&& operator=(DOKExcitationVector&& rhs) = delete;
+	DOKExcitationVector(const DOKExcitationVector& rhs) = delete;
+	DOKExcitationVector& operator=(const DOKExcitationVector& rhs) = delete;
+	DOKExcitationVector(DOKExcitationVector&& rhs) = delete;
+	DOKExcitationVector&& operator=(DOKExcitationVector&& rhs) = delete;
 
-    ~DOKExcitationVector();
+	~DOKExcitationVector();
 
-    virtual void SetElement(const uint16_t r, const T& value);
-    virtual void SetElementQuick(const uint16_t r, const T& value);
+	virtual void SetElement(const uint16_t r, const T& value);
+	virtual void SetElementQuick(const uint16_t r, const T& value);
 
-    virtual T GetElement(const uint16_t r) const;
-    virtual T GetElementQuick(const uint16_t r) const;
+	virtual T GetElement(const uint16_t r) const;
+	virtual T GetElementQuick(const uint16_t r) const;
 
-    virtual uint16_t get_num_rows() const { return num_rows_; }
+	virtual uint16_t get_num_rows() const { return num_rows_; }
 
-    virtual uint16_t GetNnz() const { return map_.size(); }
+	virtual uint16_t GetNnz() const { return map_.size(); }
 
-    virtual void Add(const IExcitationVector<T>& other);
-    virtual void Normalize();
-    virtual void Whiten();
-    virtual std::set<std::pair<uint16_t, T>> GetNzElements() const;
+	virtual void Add(const IExcitationVector<T>& other);
+	virtual void Normalize();
+	virtual void Whiten();
+	virtual std::set<std::pair<uint16_t, T>> GetNzElements() const;
 
 private:
-    const uint16_t num_rows_;
+	const uint16_t num_rows_;
 
-    std::unordered_map<uint16_t, T> map_;
+	std::unordered_map<uint16_t, T> map_;
 };
 
 template <typename T>
@@ -68,115 +68,115 @@ DOKExcitationVector<T>::DOKExcitationVector(const uint16_t num_rows) : num_rows_
 template <typename T>
 DOKExcitationVector<T>::DOKExcitationVector(const IExcitationVector<T> &base) : num_rows_(base.get_num_rows())
 {
-    for (const std::pair<uint16_t, T>& element : base.GetNzElements()) {
-        map_[element.first] = element.second;
-    }
+	for (const std::pair<uint16_t, T>& element : base.GetNzElements()) {
+		map_[element.first] = element.second;
+	}
 }
 
 template <typename T>
 DOKExcitationVector<T>::~DOKExcitationVector()
 {
-    map_.clear();
+	map_.clear();
 }
 
 template <typename T>
 void DOKExcitationVector<T>::SetElement(const uint16_t r, const T& value)
 {
-    IExcitationVector<T>::CheckBounds(r);
-    if (IsNearlyEqual(value, 0.0)) {
-        typename std::unordered_map<uint16_t, T>::iterator it = map_.find(r);
-        if (it != map_.end()) {
-            map_.erase(it);
-        }
-    } else {
-        SetElementQuick(r, value);
-    }
+	IExcitationVector<T>::CheckBounds(r);
+	if (IsNearlyEqual(value, 0.0)) {
+		typename std::unordered_map<uint16_t, T>::iterator it = map_.find(r);
+		if (it != map_.end()) {
+			map_.erase(it);
+		}
+	} else {
+		SetElementQuick(r, value);
+	}
 }
 
 template <typename T>
 void DOKExcitationVector<T>::SetElementQuick(const uint16_t r, const T &value)
 {
-    map_[r] = value;
+	map_[r] = value;
 }
 
 template <typename T>
 T DOKExcitationVector<T>::GetElement(const uint16_t r) const
 {
-    IExcitationVector<T>::CheckBounds(r);
-    return GetElementQuick(r);
+	IExcitationVector<T>::CheckBounds(r);
+	return GetElementQuick(r);
 }
 
 template <typename T>
 T DOKExcitationVector<T>::GetElementQuick(const uint16_t r) const
 {
-    T result;
+	T result;
 
-    try {
-        result = map_.at(r);
-    } catch (const std::out_of_range& oor) {
-        result = 0.0;
-    }
+	try {
+		result = map_.at(r);
+	} catch (const std::out_of_range& oor) {
+		result = 0.0;
+	}
 
-    return result;
+	return result;
 }
 
 template <typename T>
 void DOKExcitationVector<T>::Add(const IExcitationVector<T>& other) {
-    for (const std::pair<uint16_t, T>& element : other.GetNzElements()) {
-        SetElement(element.first, PositiveClip(element.second + GetElement(element.first)));
-    }
+	for (const std::pair<uint16_t, T>& element : other.GetNzElements()) {
+		SetElement(element.first, PositiveClip(element.second + GetElement(element.first)));
+	}
 }
 
 template <typename T>
 void DOKExcitationVector<T>::Normalize()
 {
-    double sum = 0.0;
+	double sum = 0.0;
 
-    for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
-        sum += it->second;
-    }
+	for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+		sum += it->second;
+	}
 
-    if (sum > 0.0) {
-        for (typename std::unordered_map<uint16_t, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
-            it->second /= sum;
-        }
-    }
+	if (sum > 0.0) {
+		for (typename std::unordered_map<uint16_t, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
+			it->second /= sum;
+		}
+	}
 }
 
 template <typename T>
 void DOKExcitationVector<T>::Whiten()
 {
-    double sum = 0.0;
-    double squared_sum = 0.0;
-    double mean = 0.0;
-    double variance = 0.0;
-    double coeff = 1 / sqrt(2 * 3.14159265358979323846);
+	double sum = 0.0;
+	double squared_sum = 0.0;
+	double mean = 0.0;
+	double variance = 0.0;
+	double coeff = 1 / sqrt(2 * 3.14159265358979323846);
 
-    for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
-        sum += it->second;
-        squared_sum += it->second * it->second;
-    }
+	for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+		sum += it->second;
+		squared_sum += it->second * it->second;
+	}
 
-    mean = sum / map_.size();
-    variance = squared_sum / map_.size() - mean * mean + 0.000001;
+	mean = sum / map_.size();
+	variance = squared_sum / map_.size() - mean * mean + 0.000001;
 
-    for (typename std::unordered_map<uint16_t, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
-        double temp = it->second - mean;
-        it->second = std::exp(-(temp * temp) / (2 * variance));
-        it->second *= coeff * 1 / sqrt(variance);
-    }
+	for (typename std::unordered_map<uint16_t, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
+		double temp = it->second - mean;
+		it->second = std::exp(-(temp * temp) / (2 * variance));
+		it->second *= coeff * 1 / sqrt(variance);
+	}
 }
 
 template <typename T>
 std::set<std::pair<uint16_t, T>> DOKExcitationVector<T>::GetNzElements() const
 {
-    typename std::set<std::pair<uint16_t, T>> result;
+	typename std::set<std::pair<uint16_t, T>> result;
 
-    for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
-        result.insert(*it);
-    }
+	for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+		result.insert(*it);
+	}
 
-    return result;
+	return result;
 }
 
 #endif // DOKEXCITATIONVECTOR_H

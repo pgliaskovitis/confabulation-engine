@@ -29,59 +29,59 @@
 
 struct StringVector_Cmp
 {
-    bool operator() (const std::vector<std::string>& a, const std::vector<std::string>& b) const
-    {
-        std::string a_string("");
-        for (const std::string& e: a) {
-            a_string += e;
-        }
+	bool operator() (const std::vector<std::string>& a, const std::vector<std::string>& b) const
+	{
+		std::string a_string("");
+		for (const std::string& e: a) {
+			a_string += e;
+		}
 
-        std::string b_string("");
-        for (const std::string& e: b) {
-            b_string += e;
-        }
+		std::string b_string("");
+		for (const std::string& e: b) {
+			b_string += e;
+		}
 
-        return strcmp(a_string.c_str(), b_string.c_str()) < 0;
-    }
+		return strcmp(a_string.c_str(), b_string.c_str()) < 0;
+	}
 };
 
 struct Occurrence_Cmp
 {
-    bool operator() (const std::pair<std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator, size_t>& a,
-                     const std::pair<std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator, size_t>& b) const
-    {
-        return (a.first->second < b.first->second);
-    }
+	bool operator() (const std::pair<std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator, size_t>& a,
+					 const std::pair<std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator, size_t>& b) const
+	{
+		return (a.first->second < b.first->second);
+	}
 };
 
 class NGramHandler
 {
 public:
-    NGramHandler(uint8_t max_multi_words, uint8_t min_single_occurences, uint8_t min_multi_occurences);
-    NGramHandler(const NGramHandler& rhs) = delete;
-    NGramHandler& operator=(const NGramHandler& rhs) = delete;
-    NGramHandler(NGramHandler&& rhs) = delete;
-    NGramHandler&& operator=(NGramHandler&& rhs) = delete;
+	NGramHandler(uint8_t max_multi_words, uint8_t min_single_occurences, uint8_t min_multi_occurences);
+	NGramHandler(const NGramHandler& rhs) = delete;
+	NGramHandler& operator=(const NGramHandler& rhs) = delete;
+	NGramHandler(NGramHandler&& rhs) = delete;
+	NGramHandler&& operator=(NGramHandler&& rhs) = delete;
 
-    // Counts occurences of n-grams from a given input sentence
-    void ExtractAndStoreNGrams(const std::vector<std::string>& sentence_tokens);
+	// Counts occurences of n-grams from a given input sentence
+	void ExtractAndStoreNGrams(const std::vector<std::string>& sentence_tokens);
 
-    // Erases n-grams with occurence count less than the accepted threshold
-    void CleanupNGrams();
+	// Erases n-grams with occurence count less than the accepted threshold
+	void CleanupNGrams();
 
-    size_t get_single_word_count();
-    size_t get_multi_word_count();
+	size_t get_single_word_count();
+	size_t get_multi_word_count();
 
-    std::unique_ptr<SymbolMapping> GetSingleWordSymbols();
-    std::unique_ptr<SymbolMapping> GetMultiWordSymbols();
-    std::unique_ptr<SymbolMapping> GetAllSymbols();
+	std::unique_ptr<SymbolMapping> GetSingleWordSymbols();
+	std::unique_ptr<SymbolMapping> GetMultiWordSymbols();
+	std::unique_ptr<SymbolMapping> GetAllSymbols();
 
 private:
-    const uint8_t max_multi_words_;
-    const uint8_t min_single_occurences_;
-    const uint8_t min_multi_occurences_;
+	const uint8_t max_multi_words_;
+	const uint8_t min_single_occurences_;
+	const uint8_t min_multi_occurences_;
 
-    std::vector<std::map<std::vector<std::string>, size_t, StringVector_Cmp>> occurrence_counts_;
+	std::vector<std::map<std::vector<std::string>, size_t, StringVector_Cmp>> occurrence_counts_;
 };
 
 #endif // NGRAMHANDLER_H

@@ -23,7 +23,7 @@
 class TemplateInstantiations
 {
 public:
-    TemplateInstantiations() = delete;
+	TemplateInstantiations() = delete;
 };
 
 #endif // TEMPLATEINSTANTIATIONS_H

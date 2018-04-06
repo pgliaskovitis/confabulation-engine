@@ -31,44 +31,44 @@
 class KnowledgeBase
 {
 public:
-    KnowledgeBase(const std::string& id, const SymbolMapping& src_map, const SymbolMapping& targ_map);
-    KnowledgeBase(const KnowledgeBase& rhs) = delete;
-    KnowledgeBase& operator=(const KnowledgeBase& rhs) = delete;
-    KnowledgeBase(KnowledgeBase&& rhs) = delete;
-    KnowledgeBase&& operator=(KnowledgeBase&& rhs) = delete;
+	KnowledgeBase(const std::string& id, const SymbolMapping& src_map, const SymbolMapping& targ_map);
+	KnowledgeBase(const KnowledgeBase& rhs) = delete;
+	KnowledgeBase& operator=(const KnowledgeBase& rhs) = delete;
+	KnowledgeBase(KnowledgeBase&& rhs) = delete;
+	KnowledgeBase&& operator=(KnowledgeBase&& rhs) = delete;
 
-    void Add(const std::string& src_symbol, const std::string& targ_symbol);
-    void Add(uint16_t targ_index, uint16_t src_index);
-    void ComputeLinkStrengths();
+	void Add(const std::string& src_symbol, const std::string& targ_symbol);
+	void Add(uint16_t targ_index, uint16_t src_index);
+	void ComputeLinkStrengths();
 
-    std::unique_ptr<IExcitationVector<float>> Transmit(const IExcitationVector<float>& normalized_excitations) const;
+	std::unique_ptr<IExcitationVector<float>> Transmit(const IExcitationVector<float>& normalized_excitations) const;
 
-    void ResetCooccurrenceCounts() { cooccurrence_counts_.reset(); }
-    void ResetTargetSymbolSums() { target_symbol_sums_.clear(); }
+	void ResetCooccurrenceCounts() { cooccurrence_counts_.reset(); }
+	void ResetTargetSymbolSums() { target_symbol_sums_.clear(); }
 
-    std::string get_id() const { return id_; }
+	std::string get_id() const { return id_; }
 
-    std::string GetStats() { return std::string("number of knowledge links: ") + std::to_string(GetNumKnowledgeLinks()); }
-    uint16_t GetSizeSrc() { return cooccurrence_counts_->get_num_rows(); }
-    uint16_t GetSizeTarg() { return cooccurrence_counts_->get_num_cols(); }
-    uint32_t GetNumKnowledgeLinks() { return kbase_->GetNnz(); }
+	std::string GetStats() { return std::string("number of knowledge links: ") + std::to_string(GetNumKnowledgeLinks()); }
+	uint16_t GetSizeSrc() { return cooccurrence_counts_->get_num_rows(); }
+	uint16_t GetSizeTarg() { return cooccurrence_counts_->get_num_cols(); }
+	uint32_t GetNumKnowledgeLinks() { return kbase_->GetNnz(); }
 
 private:
-    // The knowledge base is essentially a matrix of conditional probabilities P(s | t)
-    // Symbols s are providing the input excitations that pass through the knowledge base
-    // In order to be able to transmit excitations with regular matrix multiplication
-    // the source symbols must correspond to the COLUMNS of the matrix
-    // and the target symbols to the ROWS of the matrix
-    // (hence target_symbol_sums_ are essentially the row sums)
+	// The knowledge base is essentially a matrix of conditional probabilities P(s | t)
+	// Symbols s are providing the input excitations that pass through the knowledge base
+	// In order to be able to transmit excitations with regular matrix multiplication
+	// the source symbols must correspond to the COLUMNS of the matrix
+	// and the target symbols to the ROWS of the matrix
+	// (hence target_symbol_sums_ are essentially the row sums)
 
-    const std::string id_;
-    const SymbolMapping& src_map_;
-    const SymbolMapping& targ_map_;
-    std::unique_ptr<IKnowledgeLinks<uint32_t>> cooccurrence_counts_;
-    std::unique_ptr<IKnowledgeLinks<float>> kbase_;
-    std::vector<uint32_t> target_symbol_sums_;
+	const std::string id_;
+	const SymbolMapping& src_map_;
+	const SymbolMapping& targ_map_;
+	std::unique_ptr<IKnowledgeLinks<uint32_t>> cooccurrence_counts_;
+	std::unique_ptr<IKnowledgeLinks<float>> kbase_;
+	std::vector<uint32_t> target_symbol_sums_;
 
-    static float ComputeLinkStrength(double antecedent_support_probability);
+	static float ComputeLinkStrength(double antecedent_support_probability);
 };
 
 #endif // KNOWLEDGEBASEN_H

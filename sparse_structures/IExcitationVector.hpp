@@ -28,45 +28,45 @@ template <typename T>
 class IExcitationVector
 {
 public:
-    virtual ~IExcitationVector() {}
+	virtual ~IExcitationVector() {}
 
-    virtual void SetElement(const uint16_t r, const T& value) = 0;
-    virtual void SetElementQuick(const uint16_t r, const T& value) = 0;
+	virtual void SetElement(const uint16_t r, const T& value) = 0;
+	virtual void SetElementQuick(const uint16_t r, const T& value) = 0;
 
-    virtual T GetElement(const uint16_t r) const = 0;
-    virtual T GetElementQuick(const uint16_t r) const = 0;
+	virtual T GetElement(const uint16_t r) const = 0;
+	virtual T GetElementQuick(const uint16_t r) const = 0;
 
-    virtual uint16_t get_num_rows() const = 0;
+	virtual uint16_t get_num_rows() const = 0;
 
-    virtual uint16_t GetNnz() const = 0;
+	virtual uint16_t GetNnz() const = 0;
 
-    void CheckBounds(const uint16_t r) const
-    {
-        if (r >= get_num_rows()) {
-            throw std::out_of_range(std::string("1D Out of Range, for row ") +
-                                    std::to_string(r));
-        }
-    }
+	void CheckBounds(const uint16_t r) const
+	{
+		if (r >= get_num_rows()) {
+			throw std::out_of_range(std::string("1D Out of Range, for row ") +
+									std::to_string(r));
+		}
+	}
 
-    virtual void Add(const IExcitationVector& other) = 0;
+	virtual void Add(const IExcitationVector& other) = 0;
 
-    virtual void Normalize() = 0;
+	virtual void Normalize() = 0;
 
-    virtual void Whiten() = 0;
+	virtual void Whiten() = 0;
 
-    virtual std::set<std::pair<uint16_t, T>> GetNzElements() const = 0;
+	virtual std::set<std::pair<uint16_t, T>> GetNzElements() const = 0;
 
-    std::string ToString() const
-    {
-        const uint16_t num_rows = get_num_rows();
+	std::string ToString() const
+	{
+		const uint16_t num_rows = get_num_rows();
 
-        std::string str = std::string("ExcitationVector [num_lines=") + std::to_string(num_rows) + "]\n";
-        for (uint16_t r = 0; r < num_rows; ++r) {
-            str += std::to_string(GetElement(r)) + " ";
-            str += "\n";
-        }
-        return str;
-    }
+		std::string str = std::string("ExcitationVector [num_lines=") + std::to_string(num_rows) + "]\n";
+		for (uint16_t r = 0; r < num_rows; ++r) {
+			str += std::to_string(GetElement(r)) + " ";
+			str += "\n";
+		}
+		return str;
+	}
 };
 
 #endif // IEXCITATIONVECTORINTERFACE_H

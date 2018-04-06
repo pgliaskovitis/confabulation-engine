@@ -22,11 +22,11 @@ include_directories (${CMAKE_SOURCE_DIR})
 
 file (GLOB utils_SRC
 	"utils/*.h"
-    "utils/*.hpp"
+	"utils/*.hpp"
 )
 
 file (GLOB sparse_structures_SRC
-    "sparse_structures/*.hpp"
+	"sparse_structures/*.hpp"
 )
 
 file (GLOB text_processing_SRC

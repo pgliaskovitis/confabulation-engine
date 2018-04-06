@@ -32,210 +32,210 @@
 
 namespace
 {
-    bool IsNearlyEqual(float x, float y)
-    {
-        const double epsilon = 1e-6;
-        return std::abs(x - y) <= epsilon * std::abs(x);
-        // see Knuth section 4.2.2 pages 217-218
-    }
+	bool IsNearlyEqual(float x, float y)
+	{
+		const double epsilon = 1e-6;
+		return std::abs(x - y) <= epsilon * std::abs(x);
+		// see Knuth section 4.2.2 pages 217-218
+	}
 
-    uint32_t BinarySearch(const std::vector<uint32_t>::const_iterator& begin_it, const std::vector<uint32_t>::const_iterator& end_it,
-                        uint32_t key, bool& found)
-    {
-        std::vector<uint32_t>::const_iterator lower = begin_it;
-        std::vector<uint32_t>::const_iterator upper = end_it - 1;
-        while (lower < upper) {
-            std::vector<uint32_t>::const_iterator mid = lower + (upper - lower) / 2;
+	uint32_t BinarySearch(const std::vector<uint32_t>::const_iterator& begin_it, const std::vector<uint32_t>::const_iterator& end_it,
+						uint32_t key, bool& found)
+	{
+		std::vector<uint32_t>::const_iterator lower = begin_it;
+		std::vector<uint32_t>::const_iterator upper = end_it - 1;
+		while (lower < upper) {
+			std::vector<uint32_t>::const_iterator mid = lower + (upper - lower) / 2;
 
-            if (key == *mid) {
-                found = true;
-                return (mid - begin_it);
-            }
+			if (key == *mid) {
+				found = true;
+				return (mid - begin_it);
+			}
 
-            if (key < *mid) {
-                upper = mid - 1;
-            } else {
-                lower = mid + 1;
-            }
-        }
+			if (key < *mid) {
+				upper = mid - 1;
+			} else {
+				lower = mid + 1;
+			}
+		}
 
-        uint32_t result = lower - begin_it;
+		uint32_t result = lower - begin_it;
 
-        if (key == *(lower + result)) {
-            found = true;
-        }
+		if (key == *(lower + result)) {
+			found = true;
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    template <typename T>
-    T PositiveClip(T x) {
-        return x > 0 ? x : 0;
-    }
+	template <typename T>
+	T PositiveClip(T x) {
+		return x > 0 ? x : 0;
+	}
 
-    std::string VectorSymbolToSymbol(const std::vector<std::string>& vector_symbol, char delim)
-    {
-        std::string result("");
+	std::string VectorSymbolToSymbol(const std::vector<std::string>& vector_symbol, char delim)
+	{
+		std::string result("");
 
-        size_t symbol_count = vector_symbol.size();
-        size_t i = 0;
-        for (const std::string& e: vector_symbol) {
-            result += e;
-            if (i < symbol_count - 1) {
-                result += delim;
-            }
-            ++i;
-        }
+		size_t symbol_count = vector_symbol.size();
+		size_t i = 0;
+		for (const std::string& e: vector_symbol) {
+			result += e;
+			if (i < symbol_count - 1) {
+				result += delim;
+			}
+			++i;
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    std::string ListSymbolToSymbol(const std::list<std::string>& list_symbol, char delim)
-    {
-        std::string result("");
+	std::string ListSymbolToSymbol(const std::list<std::string>& list_symbol, char delim)
+	{
+		std::string result("");
 
-        size_t symbol_count = list_symbol.size();
-        size_t i = 0;
-        for (const std::string& e: list_symbol) {
-            result += e;
-            if (i < symbol_count - 1) {
-                result += delim;
-            }
-            ++i;
-        }
+		size_t symbol_count = list_symbol.size();
+		size_t i = 0;
+		for (const std::string& e: list_symbol) {
+			result += e;
+			if (i < symbol_count - 1) {
+				result += delim;
+			}
+			++i;
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    std::string SetSymbolToSymbol(const std::set<std::string>& set_symbol, char delim)
-    {
-        std::string result("");
+	std::string SetSymbolToSymbol(const std::set<std::string>& set_symbol, char delim)
+	{
+		std::string result("");
 
-        size_t symbol_count = set_symbol.size();
-        size_t i = 0;
-        for (const std::string& e: set_symbol) {
-            result += e;
-            if (i < symbol_count - 1) {
-                result += delim;
-            }
-            ++i;
-        }
+		size_t symbol_count = set_symbol.size();
+		size_t i = 0;
+		for (const std::string& e: set_symbol) {
+			result += e;
+			if (i < symbol_count - 1) {
+				result += delim;
+			}
+			++i;
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    std::vector<std::string> SymbolToVectorSymbol(const std::string& symbol, char delim)
-    {
-        std::vector<std::string> result;
+	std::vector<std::string> SymbolToVectorSymbol(const std::string& symbol, char delim)
+	{
+		std::vector<std::string> result;
 
-        std::stringstream ss(symbol);
-        std::string item;
-        while (std::getline(ss, item, delim)) {
-            result.push_back(item);
-        }
+		std::stringstream ss(symbol);
+		std::string item;
+		while (std::getline(ss, item, delim)) {
+			result.push_back(item);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    int32_t ConvertToSigned(uint32_t x)
-    {
-        if (x <= std::numeric_limits<int32_t>::max()) {
-            return static_cast<int32_t>(x);
-        }
+	int32_t ConvertToSigned(uint32_t x)
+	{
+		if (x <= std::numeric_limits<int32_t>::max()) {
+			return static_cast<int32_t>(x);
+		}
 
-        if (x >= std::numeric_limits<int32_t>::min()) {
-            return static_cast<int32_t>(x - std::numeric_limits<int32_t>::min()) + std::numeric_limits<int32_t>::min();
-        }
+		if (x >= std::numeric_limits<int32_t>::min()) {
+			return static_cast<int32_t>(x - std::numeric_limits<int32_t>::min()) + std::numeric_limits<int32_t>::min();
+		}
 
-        throw x;
-    }
+		throw x;
+	}
 
-    std::vector<std::string> FillWithEmptyStrings(const std::vector<std::string>& input, size_t max_size)
-    {
-        std::vector<std::string> result(input);
-        if (input.size() < max_size) {
-            for (size_t i = result.size(); i < max_size; ++i) {
-                result.push_back("");
-            }
-        }
+	std::vector<std::string> FillWithEmptyStrings(const std::vector<std::string>& input, size_t max_size)
+	{
+		std::vector<std::string> result(input);
+		if (input.size() < max_size) {
+			for (size_t i = result.size(); i < max_size; ++i) {
+				result.push_back("");
+			}
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    size_t FindNumberOfEmptyStringsBeforeIndex(const std::vector<std::string>& symbols, int index)
-    {
-        size_t result = 0;
-        for (int i = 0; i < index; ++i) {
-            if (symbols[i].empty()) {
-                ++result;
-            }
-        }
+	size_t FindNumberOfEmptyStringsBeforeIndex(const std::vector<std::string>& symbols, int index)
+	{
+		size_t result = 0;
+		for (int i = 0; i < index; ++i) {
+			if (symbols[i].empty()) {
+				++result;
+			}
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    int FindFirstIndexOfSymbol(const std::vector<std::string>& symbols, const std::string& target_string)
-    {
-        for (size_t i = 0; i < symbols.size(); ++i) {
-            if (symbols[i] == target_string) {
-                return ConvertToSigned(i);
-            }
-        }
+	int FindFirstIndexOfSymbol(const std::vector<std::string>& symbols, const std::string& target_string)
+	{
+		for (size_t i = 0; i < symbols.size(); ++i) {
+			if (symbols[i] == target_string) {
+				return ConvertToSigned(i);
+			}
+		}
 
-        return -1;
-    }
+		return -1;
+	}
 
-    int FindFirstIndexNotOfSymbol(const std::vector<std::string>& symbols, const std::string& target_string)
-    {
-        for (size_t i = 0; i < symbols.size(); ++i) {
-            if (symbols[i] != target_string) {
-                return ConvertToSigned(i);
-            }
-        }
+	int FindFirstIndexNotOfSymbol(const std::vector<std::string>& symbols, const std::string& target_string)
+	{
+		for (size_t i = 0; i < symbols.size(); ++i) {
+			if (symbols[i] != target_string) {
+				return ConvertToSigned(i);
+			}
+		}
 
-        return -1;
-    }
+		return -1;
+	}
 
-    // The purpose of this function is to produce all possible combinations of symbol activations for the given
-    // initial symbol activation within a given multi-level architecture
-    std::vector<std::vector<std::string>> ProduceKnowledgeLinkCombinations(const std::vector<std::vector<std::string>>& excited_symbols, uint8_t num_modules)
-    {
-        std::vector<std::vector<std::string>> results;
+	// The purpose of this function is to produce all possible combinations of symbol activations for the given
+	// initial symbol activation within a given multi-level architecture
+	std::vector<std::vector<std::string>> ProduceKnowledgeLinkCombinations(const std::vector<std::vector<std::string>>& excited_symbols, uint8_t num_modules)
+	{
+		std::vector<std::vector<std::string>> results;
 
-        int8_t total_size = 0;
+		int8_t total_size = 0;
 
-        for (size_t i = 0; i < excited_symbols.size(); ++i) {
-            // each row of the argument vector should have as many elements as
-            // exist in the corresponding level of the architecture
-            total_size += ConvertToSigned(excited_symbols[i].size());
-        }
+		for (size_t i = 0; i < excited_symbols.size(); ++i) {
+			// each row of the argument vector should have as many elements as
+			// exist in the corresponding level of the architecture
+			total_size += ConvertToSigned(excited_symbols[i].size());
+		}
 
-        // total size should be equal to the total number of modules in the architecture
-        assert(total_size == num_modules);
+		// total size should be equal to the total number of modules in the architecture
+		assert(total_size == num_modules);
 
-        int8_t convolution_half_size = ConvertToSigned(excited_symbols[0].size() - 1);
-        results.resize(2 * convolution_half_size - 2);
-        for (int8_t k = -convolution_half_size + 2; k < convolution_half_size; ++k) {
-            // each result vector addresses all modules
-            results[k + convolution_half_size - 2].resize(total_size, "");
+		int8_t convolution_half_size = ConvertToSigned(excited_symbols[0].size() - 1);
+		results.resize(2 * convolution_half_size - 2);
+		for (int8_t k = -convolution_half_size + 2; k < convolution_half_size; ++k) {
+			// each result vector addresses all modules
+			results[k + convolution_half_size - 2].resize(total_size, "");
 
-            // the given sentence tokens are "convolved" with the modules of the architecture
-            // as they are shifted from the far left to the far right
-            // special care must be taken, since the different levels of the architecture need not be of the same size
-            int8_t level_size = 0;
-            for (size_t i = 0; i < excited_symbols.size(); ++i) {
-                for (size_t j = 0; j < excited_symbols[i].size(); ++j) {
-                    if ((ConvertToSigned(j) + k >= 0) &&
-                        (ConvertToSigned(j) + k < ConvertToSigned(excited_symbols[i].size()))) {
-                        results[k + convolution_half_size - 2][level_size + ConvertToSigned(j) + k] = excited_symbols[i][j];
-                    }
-                }
-                level_size += ConvertToSigned(excited_symbols[i].size());
-            }
-        }
+			// the given sentence tokens are "convolved" with the modules of the architecture
+			// as they are shifted from the far left to the far right
+			// special care must be taken, since the different levels of the architecture need not be of the same size
+			int8_t level_size = 0;
+			for (size_t i = 0; i < excited_symbols.size(); ++i) {
+				for (size_t j = 0; j < excited_symbols[i].size(); ++j) {
+					if ((ConvertToSigned(j) + k >= 0) &&
+						(ConvertToSigned(j) + k < ConvertToSigned(excited_symbols[i].size()))) {
+						results[k + convolution_half_size - 2][level_size + ConvertToSigned(j) + k] = excited_symbols[i][j];
+					}
+				}
+				level_size += ConvertToSigned(excited_symbols[i].size());
+			}
+		}
 
-        return results;
-    }
+		return results;
+	}
 }
 
 #endif // UTILS_H

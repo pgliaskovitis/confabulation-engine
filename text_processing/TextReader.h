@@ -31,31 +31,31 @@
 class TextReader
 {
 public:
-    TextReader(const std::string& symbol_file, const std::string& master_file);
+	TextReader(const std::string& symbol_file, const std::string& master_file);
 
-    void Initialize();
+	void Initialize();
 
-    const std::vector<std::string> GetNextSentenceTokens(bool& finished_reading);
-    const std::vector<std::string> ExtractTokens(const std::string& input);
+	const std::vector<std::string> GetNextSentenceTokens(bool& finished_reading);
+	const std::vector<std::string> ExtractTokens(const std::string& input);
 
 private:
-    void HandleSymbolFile();
-    void HandleMasterFile();
+	void HandleSymbolFile();
+	void HandleMasterFile();
 
-    void CleanToken(std::string& input);
-    void RemoveCommonAbbreviations(std::string& input);
+	void CleanToken(std::string& input);
+	void RemoveCommonAbbreviations(std::string& input);
 
-    std::string symbol_file_name_;
-    std::string master_file_name_;
+	std::string symbol_file_name_;
+	std::string master_file_name_;
 
-    std::string all_delimiter_symbols_;
-    std::vector<std::string> delimiter_symbols_;
+	std::string all_delimiter_symbols_;
+	std::vector<std::string> delimiter_symbols_;
 
-    std::vector<std::string> text_file_names_;
-    std::vector<std::string>::iterator current_text_file_it_;
-    std::unique_ptr<std::ifstream> current_text_file_;
+	std::vector<std::string> text_file_names_;
+	std::vector<std::string>::iterator current_text_file_it_;
+	std::unique_ptr<std::ifstream> current_text_file_;
 
-    std::shared_ptr<std::string> left_over_sentence_;
+	std::shared_ptr<std::string> left_over_sentence_;
 };
 
 #endif // TEXTREADERN_H

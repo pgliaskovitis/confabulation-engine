@@ -27,49 +27,49 @@
 template<typename T>
 class HashTrieNode {
 public:
-    HashTrieNode(T value, bool final_node) :
-        value_(value),
-        leaf_node_(final_node) {}
+	HashTrieNode(T value, bool final_node) :
+		value_(value),
+		leaf_node_(final_node) {}
 
-    bool is_leaf() const {
-        return leaf_node_;
-    }
+	bool is_leaf() const {
+		return leaf_node_;
+	}
 
-    void set_leaf(bool final_node) {
-        leaf_node_ = final_node;
-    }
+	void set_leaf(bool final_node) {
+		leaf_node_ = final_node;
+	}
 
-    HashTrieNode& Get(const T& child) const {
-        return *(map_.at(child));
-    }
+	HashTrieNode& Get(const T& child) const {
+		return *(map_.at(child));
+	}
 
-    HashTrieNode& Put(const T& child, bool final_node);
+	HashTrieNode& Put(const T& child, bool final_node);
 
-    const T& get_value() const { return value_; }
+	const T& get_value() const { return value_; }
 
 private:
-    std::unordered_map<T, std::shared_ptr<HashTrieNode<T>>> map_;
+	std::unordered_map<T, std::shared_ptr<HashTrieNode<T>>> map_;
 
-    T value_;
-    bool leaf_node_; // leaf node is a separate extra node
+	T value_;
+	bool leaf_node_; // leaf node is a separate extra node
 };
 
 template <typename T>
 HashTrieNode<T>& HashTrieNode<T>::Put(const T& child, bool final_node) {
 
-    try {
-        HashTrieNode<T>& child_node = *(map_.at(child));
-        if (final_node) {
-            child_node.set_leaf(final_node);
-        }
-        return child_node;
-    } catch (std::out_of_range& oor) {
-    }
+	try {
+		HashTrieNode<T>& child_node = *(map_.at(child));
+		if (final_node) {
+			child_node.set_leaf(final_node);
+		}
+		return child_node;
+	} catch (std::out_of_range& oor) {
+	}
 
-    std::shared_ptr<HashTrieNode<T>> new_child(new HashTrieNode<T>(child, final_node));
-    map_.insert(std::make_pair(child, std::move(new_child)));
+	std::shared_ptr<HashTrieNode<T>> new_child(new HashTrieNode<T>(child, final_node));
+	map_.insert(std::make_pair(child, std::move(new_child)));
 
-    return *(map_.at(child));
+	return *(map_.at(child));
 }
 
 #endif // HASHTRIENODE_H

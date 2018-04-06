@@ -23,213 +23,213 @@
 #include <sparse_structures/DOKExcitationVector.hpp>
 
 Module::Module(const SymbolMapping &symbol_mapping, size_t id) :
-    symbol_mapping_(symbol_mapping),
-    id_(id),
-    excitations_(new DOKExcitationVector<float>(symbol_mapping.Size())),
-    kb_inputs_(new DOKExcitationVector<uint8_t>(symbol_mapping.Size())),
-    current_excitation_level_(0)
+	symbol_mapping_(symbol_mapping),
+	id_(id),
+	excitations_(new DOKExcitationVector<float>(symbol_mapping.Size())),
+	kb_inputs_(new DOKExcitationVector<uint8_t>(symbol_mapping.Size())),
+	current_excitation_level_(0)
 {
-    ExcitationsToZero();
+	ExcitationsToZero();
 }
 
 void Module::ActivateSymbol(const std::string &word, int8_t K)
 {
-    try {
-        uint16_t index = symbol_mapping_.IndexOf(word);
-        excitations_->SetElement(index, K * Globals::kBandGap);
-        kb_inputs_->SetElement(index, K);
-    } catch (std::out_of_range&) {
-        std::cout << "Word \"" << word << "\" could not be found in symbol mapping of module during activation" << "\n" << std::flush;
-    }
+	try {
+		uint16_t index = symbol_mapping_.IndexOf(word);
+		excitations_->SetElement(index, K * Globals::kBandGap);
+		kb_inputs_->SetElement(index, K);
+	} catch (std::out_of_range&) {
+		std::cout << "Word \"" << word << "\" could not be found in symbol mapping of module during activation" << "\n" << std::flush;
+	}
 }
 
 void Module::AddExcitationVector(const IExcitationVector<float> &input)
 {
-    excitations_->Add(input);
-    for (const std::pair<uint16_t, float>& e : input.GetNzElements()) {
-        uint16_t i = e.first;
-        kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
-    }
+	excitations_->Add(input);
+	for (const std::pair<uint16_t, float>& e : input.GetNzElements()) {
+		uint16_t i = e.first;
+		kb_inputs_->SetElement(i, kb_inputs_->GetElement(i) + 1);
+	}
 }
 
 const std::unique_ptr<IExcitationVector<float> > &Module::GetExcitations() const
 {
-    return excitations_;
+	return excitations_;
 }
 
 std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations() const
 {
-    std::unique_ptr<IExcitationVector<float>> normalized_excitations;
-    normalized_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
+	std::unique_ptr<IExcitationVector<float>> normalized_excitations;
+	normalized_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
 
-    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
-        normalized_excitations->SetElement(e.first, e.second);
-    }
+	for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
+		normalized_excitations->SetElement(e.first, e.second);
+	}
 
-    normalized_excitations->Normalize();
+	normalized_excitations->Normalize();
 
-    return normalized_excitations;
+	return normalized_excitations;
 }
 
 std::unique_ptr<IExcitationVector<float>> Module::GetWhitenedExcitations() const
 {
-    std::unique_ptr<IExcitationVector<float>> whitened_excitations;
-    whitened_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
+	std::unique_ptr<IExcitationVector<float>> whitened_excitations;
+	whitened_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
 
-    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
-        whitened_excitations->SetElement(e.first, e.second);
-    }
+	for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
+		whitened_excitations->SetElement(e.first, e.second);
+	}
 
-    whitened_excitations->Whiten();
+	whitened_excitations->Whiten();
 
-    return whitened_excitations;
+	return whitened_excitations;
 }
 
 std::vector<std::string> Module::GetExpectation() const
 {
-    std::vector<std::string> result(excitations_->GetNnz());
+	std::vector<std::string> result(excitations_->GetNnz());
 
-    uint16_t res_index = 0;
-    for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
-        uint16_t index = e.first;
-        result[res_index] = symbol_mapping_.GetSymbol(index);
-        ++res_index;
-    }
+	uint16_t res_index = 0;
+	for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
+		uint16_t index = e.first;
+		result[res_index] = symbol_mapping_.GetSymbol(index);
+		++res_index;
+	}
 
-    return result;
+	return result;
 }
 
 std::string Module::ElementaryConfabulation(float *max_excitation)
 {
-    std::unique_lock<std::mutex> module_lock(mutex_);
-    return ElementaryConfabulation(1, max_excitation);
+	std::unique_lock<std::mutex> module_lock(mutex_);
+	return ElementaryConfabulation(1, max_excitation);
 }
 
 std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 {
-    const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
+	const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
 
-    uint16_t max_index = 0;
-    uint16_t n_inputs_max = 0;
+	uint16_t max_index = 0;
+	uint16_t n_inputs_max = 0;
 
-    // try with all possible K, starting from the maximum one, until a solution is found
-    std::unique_ptr<std::pair<uint16_t, float>> max_excit;
-    do {
-        const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
-        max_excit = MaxExcitation(min_K_excit);
+	// try with all possible K, starting from the maximum one, until a solution is found
+	std::unique_ptr<std::pair<uint16_t, float>> max_excit;
+	do {
+		const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+		max_excit = MaxExcitation(min_K_excit);
 
-        if (max_excit != nullptr) {
-            max_index = max_excit->first;
-            n_inputs_max = kb_inputs_->GetElement(max_index);
-        } else {
-            --K;
-            continue;
-        }
-    } while ((max_excit == nullptr) && (K > 0));
+		if (max_excit != nullptr) {
+			max_index = max_excit->first;
+			n_inputs_max = kb_inputs_->GetElement(max_index);
+		} else {
+			--K;
+			continue;
+		}
+	} while ((max_excit == nullptr) && (K > 0));
 
-    ExcitationsToZero();
+	ExcitationsToZero();
 
-    if (max_excit == nullptr) {
-        return Globals::kDummy;
-    }
+	if (max_excit == nullptr) {
+		return Globals::kDummy;
+	}
 
-    // activate only the best word found
-    excitations_->SetElement(max_index, max_excit->second);
-    kb_inputs_->SetElement(max_index, n_inputs_max);
-    *max_excitation = max_excit->second;
+	// activate only the best word found
+	excitations_->SetElement(max_index, max_excit->second);
+	kb_inputs_->SetElement(max_index, n_inputs_max);
+	*max_excitation = max_excit->second;
 
-    return symbol_mapping_.GetSymbol(max_index);
+	return symbol_mapping_.GetSymbol(max_index);
 }
 
 std::vector<std::string> Module::PartialConfabulation(int8_t K)
 {
-    std::vector<std::string> result;
-    std::unique_ptr<std::vector<std::pair<uint16_t, float>>> expectations;
+	std::vector<std::string> result;
+	std::unique_ptr<std::vector<std::pair<uint16_t, float>>> expectations;
 
-    if (K < 0) {
-        throw std::logic_error("PartialConfabulation called with negative K");
-    }
+	if (K < 0) {
+		throw std::logic_error("PartialConfabulation called with negative K");
+	}
 
-    const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
-    const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
-    expectations.reset(new std::vector<std::pair<uint16_t, float>>(min_K_excit.begin(), min_K_excit.end()));
+	const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
+	const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+	expectations.reset(new std::vector<std::pair<uint16_t, float>>(min_K_excit.begin(), min_K_excit.end()));
 
-    // saving needed info from intermediate state
-    DOKExcitationVector<uint8_t> kb_inputs_temp(*kb_inputs_);
+	// saving needed info from intermediate state
+	DOKExcitationVector<uint8_t> kb_inputs_temp(*kb_inputs_);
 
-    // cleanup intermediate state
-    ExcitationsToZero();
+	// cleanup intermediate state
+	ExcitationsToZero();
 
-    result.resize(expectations->size());
+	result.resize(expectations->size());
 
-    // activate only symbols with excitations above threshold
-    uint16_t res_index = 0;
-    for (const std::pair<uint16_t, float>& e : *expectations) {
-        uint16_t index = e.first;
-        excitations_->SetElement(index, e.second);
-        kb_inputs_->SetElement(index, kb_inputs_temp.GetElement(index));
-        result[res_index] = symbol_mapping_.GetSymbol(index);
-        ++res_index;
-    }
+	// activate only symbols with excitations above threshold
+	uint16_t res_index = 0;
+	for (const std::pair<uint16_t, float>& e : *expectations) {
+		uint16_t index = e.first;
+		excitations_->SetElement(index, e.second);
+		kb_inputs_->SetElement(index, kb_inputs_temp.GetElement(index));
+		result[res_index] = symbol_mapping_.GetSymbol(index);
+		++res_index;
+	}
 
-    return result;
+	return result;
 }
 
 std::vector<std::string> Module::AdditivePartialConfabulation(int8_t K)
 {
-    std::unique_lock<std::mutex> module_lock(mutex_);
-    current_excitation_level_ += K;
-    return PartialConfabulation(current_excitation_level_);
+	std::unique_lock<std::mutex> module_lock(mutex_);
+	current_excitation_level_ += K;
+	return PartialConfabulation(current_excitation_level_);
 }
 
 void Module::ExcitationsToZero()
 {
-    excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
-    kb_inputs_.reset(new DOKExcitationVector<uint8_t>(symbol_mapping_.Size()));
+	excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
+	kb_inputs_.reset(new DOKExcitationVector<uint8_t>(symbol_mapping_.Size()));
 }
 
 void Module::ExcitationLevelToZero()
 {
-    current_excitation_level_ = 0;
+	current_excitation_level_ = 0;
 }
 
 void Module::Lock()
 {
-    mutex_.lock();
+	mutex_.lock();
 }
 
 void Module::UnLock()
 {
-    mutex_.unlock();
+	mutex_.unlock();
 }
 
 std::unique_ptr<std::pair<uint16_t, float> > Module::MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations)
 {
-    std::unique_ptr<std::pair<uint16_t, float>> result(nullptr);
-    float max_value = 0;
+	std::unique_ptr<std::pair<uint16_t, float>> result(nullptr);
+	float max_value = 0;
 
-    for (const std::pair<uint16_t, float>& e : nz_excitations) {
-        if (result == nullptr) {
-            result.reset(new std::pair<uint16_t, float>(e.first, e.second));
-        } else if (e.second > max_value) {
-            result->first = e.first;
-            result->second = e.second;
-            max_value = e.second;
-        }
-    }
+	for (const std::pair<uint16_t, float>& e : nz_excitations) {
+		if (result == nullptr) {
+			result.reset(new std::pair<uint16_t, float>(e.first, e.second));
+		} else if (e.second > max_value) {
+			result->first = e.first;
+			result->second = e.second;
+			max_value = e.second;
+		}
+	}
 
-    return result;
+	return result;
 }
 
 std::set<std::pair<uint16_t, float> > Module::ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float> > &nz_excitations)
 {
-    std::set<std::pair<uint16_t, float>> result;
+	std::set<std::pair<uint16_t, float>> result;
 
-    for (const std::pair<uint16_t, float>& e : nz_excitations) {
-        if (kb_inputs_->GetElement(e.first) >= K) {
-            result.insert(e);
-        }
-    }
+	for (const std::pair<uint16_t, float>& e : nz_excitations) {
+		if (kb_inputs_->GetElement(e.first) >= K) {
+			result.insert(e);
+		}
+	}
 
-    return result;
+	return result;
 }

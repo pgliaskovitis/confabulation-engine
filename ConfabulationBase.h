@@ -31,63 +31,63 @@
 class ConfabulationBase
 {
 public:
-    ConfabulationBase();
-    ConfabulationBase(const ConfabulationBase& rhs) = delete;
-    ConfabulationBase& operator=(const ConfabulationBase& rhs) = delete;
-    ConfabulationBase(ConfabulationBase&& rhs) = delete;
-    ConfabulationBase&& operator=(ConfabulationBase&& rhs) = delete;
+	ConfabulationBase();
+	ConfabulationBase(const ConfabulationBase& rhs) = delete;
+	ConfabulationBase& operator=(const ConfabulationBase& rhs) = delete;
+	ConfabulationBase(ConfabulationBase&& rhs) = delete;
+	ConfabulationBase&& operator=(ConfabulationBase&& rhs) = delete;
 
-    ~ConfabulationBase();
+	~ConfabulationBase();
 
-    int8_t GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete);
+	int8_t GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete);
 
-    void Initialize(const std::vector<std::vector<bool>>& kb_specs,
-                    const std::vector<uint8_t> level_specs,
-                    const std::string& symbol_file,
-                    const std::string& master_file,
-                    uint8_t min_single_occurrences,
-                    uint8_t min_multi_occurrences);
-    void Build();
-    void Learn(size_t num_word_modules);
-    void Clean();
+	void Initialize(const std::vector<std::vector<bool>>& kb_specs,
+					const std::vector<uint8_t> level_specs,
+					const std::string& symbol_file,
+					const std::string& master_file,
+					uint8_t min_single_occurrences,
+					uint8_t min_multi_occurrences);
+	void Build();
+	void Learn(size_t num_word_modules);
+	void Clean();
 
-    virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation) = 0;
+	virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation) = 0;
 
-    // public methods for tests
-    void Activate(const std::vector<std::string>& symbols);
-    void TransferExcitation(const std::unique_ptr<Module>& source_module, const std::unique_ptr<KnowledgeBase>& kb, const std::unique_ptr<Module>& target_module);
-    void TransferAllExcitations(int8_t target_index, const std::unique_ptr<Module> &target_module);
+	// public methods for tests
+	void Activate(const std::vector<std::string>& symbols);
+	void TransferExcitation(const std::unique_ptr<Module>& source_module, const std::unique_ptr<KnowledgeBase>& kb, const std::unique_ptr<Module>& target_module);
+	void TransferAllExcitations(int8_t target_index, const std::unique_ptr<Module> &target_module);
 
-    const std::unique_ptr<Module>& get_module(size_t index) { return modules_[index]; }
-    const std::unique_ptr<KnowledgeBase>& get_knowledge_base(size_t source, size_t target) { return knowledge_bases_[source][target]; }
-    const std::unique_ptr<MultiLevelOrganizer>& get_organizer() { return organizer_; }
+	const std::unique_ptr<Module>& get_module(size_t index) { return modules_[index]; }
+	const std::unique_ptr<KnowledgeBase>& get_knowledge_base(size_t source, size_t target) { return knowledge_bases_[source][target]; }
+	const std::unique_ptr<MultiLevelOrganizer>& get_organizer() { return organizer_; }
 
 protected:
-    uint8_t num_modules_;
-    int8_t start_position_;
-    std::string symbol_file_;
-    std::string master_file_;
-    uint8_t min_single_occurrences_;
-    uint8_t min_multi_occurrences_;
+	uint8_t num_modules_;
+	int8_t start_position_;
+	std::string symbol_file_;
+	std::string master_file_;
+	uint8_t min_single_occurrences_;
+	uint8_t min_multi_occurrences_;
 
-    std::unique_ptr<MultiLevelOrganizer> organizer_;
-    std::vector<std::vector<bool>> kb_specs_;
-    std::vector<uint8_t> level_specs_;
+	std::unique_ptr<MultiLevelOrganizer> organizer_;
+	std::vector<std::vector<bool>> kb_specs_;
+	std::vector<uint8_t> level_specs_;
 
-    std::vector<std::unique_ptr<Module>> modules_;
-    std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> knowledge_bases_;
+	std::vector<std::unique_ptr<Module>> modules_;
+	std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> knowledge_bases_;
 
-    bool CheckVocabulary(const std::vector<std::string>& symbols);
-    std::vector<std::unique_ptr<SymbolMapping>> ProduceSymbolMappings(const std::string &symbol_file, const std::string &master_file);
+	bool CheckVocabulary(const std::vector<std::string>& symbols);
+	std::vector<std::unique_ptr<SymbolMapping>> ProduceSymbolMappings(const std::string &symbol_file, const std::string &master_file);
 
-    // compute index to complete with confabulation
-    virtual int8_t AutoIndexToComplete(const std::vector<std::string>& symbols) = 0;
+	// compute index to complete with confabulation
+	virtual int8_t AutoIndexToComplete(const std::vector<std::string>& symbols) = 0;
 
-    // check if provided index is valid in the current setup
-    virtual bool CheckIndex(const std::vector<std::string>& symbols, int8_t index_to_complete) = 0;
+	// check if provided index is valid in the current setup
+	virtual bool CheckIndex(const std::vector<std::string>& symbols, int8_t index_to_complete) = 0;
 
-    // check arguments against current setup
-    virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete) = 0;
+	// check arguments against current setup
+	virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete) = 0;
 };
 
 #endif // CONFABULATIONBASE_H

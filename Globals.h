@@ -27,32 +27,32 @@
 class Globals
 {
 public:
-    static const std::string kSentenceDelimiters;
-    static const std::string kTokenDelimiters;
-    static const std::vector<std::string> kCommonAbbreviations;
-    static const std::string kDummy;
-    static const std::vector<std::string> kPersistenceDelimiters;
+	static const std::string kSentenceDelimiters;
+	static const std::string kTokenDelimiters;
+	static const std::vector<std::string> kCommonAbbreviations;
+	static const std::string kDummy;
+	static const std::vector<std::string> kPersistenceDelimiters;
 
-    static const double kBaseProb;
-    static const double kBaseLogProb;
-    static const double kBandGap;
-    static const double kSynapseAmplifier;
-    static const uint8_t kMaxMultiWordSize;
-    static const uint8_t kReferenceFrameSize;
-    static const uint8_t kMaxCompletionSize;
-    static const size_t kMaxSingleWordSymbols;
-    static const size_t kMaxMultiWordSymbols;
-    static const bool kDelimitersAsSymbols;
-    static const bool kFavorLargerPhrases;
-    static const bool kNormalizeInputs;
-    static const bool kUseSingleThreadedVariation;
-    static const bool kUseMultiThreading;
+	static const double kBaseProb;
+	static const double kBaseLogProb;
+	static const double kBandGap;
+	static const double kSynapseAmplifier;
+	static const uint8_t kMaxMultiWordSize;
+	static const uint8_t kReferenceFrameSize;
+	static const uint8_t kMaxCompletionSize;
+	static const size_t kMaxSingleWordSymbols;
+	static const size_t kMaxMultiWordSymbols;
+	static const bool kDelimitersAsSymbols;
+	static const bool kFavorLargerPhrases;
+	static const bool kNormalizeInputs;
+	static const bool kUseSingleThreadedVariation;
+	static const bool kUseMultiThreading;
 
-    Globals() = delete;
-    Globals(const Globals& rhs) = delete;
-    Globals& operator=(const Globals& rhs) = delete;
-    Globals(Globals&& rhs) = delete;
-    Globals&& operator=(Globals&& rhs) = delete;
+	Globals() = delete;
+	Globals(const Globals& rhs) = delete;
+	Globals& operator=(const Globals& rhs) = delete;
+	Globals(Globals&& rhs) = delete;
+	Globals&& operator=(Globals&& rhs) = delete;
 };
 
 #endif /* GLOBALS_H_ */

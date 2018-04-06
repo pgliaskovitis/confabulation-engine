@@ -26,35 +26,35 @@
 class ConfabulationTest
 {
 public:
-    void TestTokenizeSentences(const std::string& input) const;
-    void TestTokenizeWithinSentences(const std::string& input) const;
+	void TestTokenizeSentences(const std::string& input) const;
+	void TestTokenizeWithinSentences(const std::string& input) const;
 
-    void TestDOKExcitationVector() const;
-    void TestDOKLinksMatrix() const;
-    void TestCSRLinksMatrix() const;
+	void TestDOKExcitationVector() const;
+	void TestDOKLinksMatrix() const;
+	void TestCSRLinksMatrix() const;
 
-    void TestSymbolMapping() const;
+	void TestSymbolMapping() const;
 
-    void TestTokenizePersistedKnowledge() const;
+	void TestTokenizePersistedKnowledge() const;
 
-    void TestProduceNGrams(const std::string& symbolfile, const std::string& masterfile) const;
+	void TestProduceNGrams(const std::string& symbolfile, const std::string& masterfile) const;
 
-    void TestHashTrie(const std::string& symbolfile, const std::string& masterfile) const;
+	void TestHashTrie(const std::string& symbolfile, const std::string& masterfile) const;
 
-    void TestProduceKnowledgeLinkCombinations() const;
+	void TestProduceKnowledgeLinkCombinations() const;
 
-    void TestTransferExcitations(const std::string& symbolfile, const std::string& masterfile) const;
+	void TestTransferExcitations(const std::string& symbolfile, const std::string& masterfile) const;
 
-    void TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
+	void TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
 
-    void TestTwoLevelSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
+	void TestTwoLevelSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
 
-    void TestTwoLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
+	void TestTwoLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
 
-    void TestOneLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
+	void TestOneLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
 
 private:
-    void PerformConfabulation(Globals& globals, const std::vector<std::string>& sentences) const;
+	void PerformConfabulation(Globals& globals, const std::vector<std::string>& sentences) const;
 };
 
 #endif /* CONFABULATIONTEST_H_ */
