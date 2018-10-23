@@ -20,15 +20,13 @@ Imagine a graph node that can take on any one of multiple values/features. These
 
 - Nodes in the graph are connected to each other with directed edges. Edges are *knowledge links*. An edge passes energy (excitation) from a source node to a target node, multiplied by its weight. However, the weight must encompass all pairs of possible values (symbols) of the source and target nodes, i.e., the edge weight is a matrix (or tensor) itself. The weight represents the conditional probability of the source symbol occurring given the target symbol has occurred, i.e., it is a likelihood value.
 
-- *Confabulation* is contraction of the values professed by a node. Partial contraction (partial confabulation) can happen by silencing those symbols that are excited below a threshold. Extreme contraction (elementary confabulation) keeps only the module symbol with the maximum excitation and silences all others.
+- *Confabulation* is contraction of the values professed by a node. Partial contraction (partial confabulation) can happen by silencing those symbols that are excited below a threshold. Extreme contraction (elementary confabulation) keeps only the module symbol with the maximum excitation and silences all others. Confabulation of a node is the basic means of performing _**maximum likelihood estimation locally**_ on the graph. 
 
-- A *thought process* is a highly concurrent program passing around energy in the graph and contracting the nodes (confabulating), so that, in the end, every node in the architecture professes a single value, i.e., a single symbol.
+- A *thought process* is a highly concurrent program passing around excitations in the graph and contracting the nodes (confabulating), so that, in the end, every node in the architecture professes a single value, i.e., a single symbol. The thought process is essentially thus a parallelizable algorithm to perform _**maximum likelihood estimation globally**_ on the graph.
 
-- The symbols and knowledge links can be learned _**by any appropriate workable means**_, i.e., _**any mathematical model that learns features or likelihoods**_ (e.g., standard neural nets).
+- The symbols and knowledge links can be learned _**by any appropriate workable means**_, i.e., _**any mathematical model that learns features or likelihoods**_ (e.g., standard deep neural nets).
 
 - Thought processes are themselves confabulation architectures. The confabulation _swirl_ is such a thought process.
-
-- The confabulation swirl is a massively parallelizable algorithm to perform _**maximum likelihood estimation**_ on the graph.
 
 A frequently overlooked implicit assumption of the theory is that the modules must have many, thousands or tens of thousands of, highly specialized symbols so that only a small percentage of them is ever excited in any given module. Consequently the edges (knowledge links) and resulting maximum likelihood transfers are also highly specialized. Otherwise all module symbols would always be excited and huge graphs would be required to incorporate long term dependencies and context meaningfully. For example, a confabulation language model with modules based on characters (very few symbols per module) would probably not work easily.
 
