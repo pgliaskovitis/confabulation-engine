@@ -28,6 +28,8 @@ Imagine a graph node that can take on any one of multiple values/features. These
 
 - Thought processes are themselves confabulation architectures. The confabulation _swirl_ is such a thought process.
 
+- The confabulation swirl is a massively parallelizable algorithm to perform _**maximum likelihood estimation**_ on the graph.
+
 A frequently overlooked implicit assumption of the theory is that the modules must have many, thousands or tens of thousands of, highly specialized symbols so that only a small percentage of them is ever excited in any given module. Consequently the edges (knowledge links) and resulting maximum likelihood transfers are also highly specialized. Otherwise all module symbols would always be excited and huge graphs would be required to incorporate long term dependencies and context meaningfully. For example, a confabulation language model with modules based on characters (very few symbols per module) would probably not work easily.
 
 The principles of the theory are very general and can be applied to all aspects of human sensory perception. To test the point in hand the theory is used as a cognitive and generative model for text data. The goal is, given a sequence of starting words, with or without an abstract theme known, for the system to "understand" these words and continue the sentence on its own. This is where the fun starts! Confabulation systems, depending on what you provide as reading material can produce any nymber of interesting results. 
