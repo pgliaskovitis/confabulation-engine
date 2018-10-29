@@ -20,7 +20,7 @@ Imagine a graph node that can take on any one of multiple values/features. These
 
 - Nodes in the graph are connected to each other with directed edges. Edges are *knowledge links*. An edge passes energy (excitation) from a source node to a target node, multiplied by its weight. However, the weight must encompass all pairs of possible values (symbols) of the source and target nodes, i.e., the edge weight is a matrix (or tensor) itself. 
 
-- The weight of the knowledge link represents the likelihood of the _target_ symbol occurring, given that the _source_ symbol has already occurred. Hence it is the value of a likelihood function regarding the target symbol as the _**argument of the function**_.
+- The weight of the knowledge link represents the likelihood of the _target_ symbol occurring, given that the _source_ symbol has already occurred. Hence it is the value of a _**likelihood function**_ regarding the target symbol as the _**argument of the function**_.
 
 - *Confabulation* is contraction of the values professed by a node. Partial contraction (partial confabulation) can happen by silencing those symbols that are excited below a threshold. Extreme contraction (elementary confabulation) keeps only the module symbol with the maximum excitation and silences all others. Confabulation of a node is the basic means of performing _**maximum likelihood estimation locally**_ on the graph. 
 
@@ -45,7 +45,7 @@ Relation to other models
   
   These are starkly different optimization objectives, i.e., in confabulation each successive symbol is considered as a 
   _parameter_ in the model for the already observed symbols. Afterwards it becomes itself one of the observed symbols. The 
-  likelihood is essentially used to estimate parameters of the model which in this case are also the data.
+  likelihood is essentially used to estimate parameters of the model which in this case are also data values.
 
 - At the neuronal level, confabulation theory allows for modules to be neural attractor networks having the symbols as stable states and for knowledge links to also be neural networks. However, until the simulation of massive separate neural sub-networks is possible in hardware, handling things at the neuronal level to get results initially proves unwieldy. 
 
