@@ -35,8 +35,7 @@ namespace
 	bool IsNearlyEqual(float x, float y)
 	{
 		const double epsilon = 1e-6;
-		return std::abs(x - y) <= epsilon * std::abs(x);
-		// see Knuth section 4.2.2 pages 217-218
+		return std::abs(x - y) <= epsilon * std::max(std::abs(x), std::abs(y));
 	}
 
 	uint32_t BinarySearch(const std::vector<uint32_t>::const_iterator& begin_it, const std::vector<uint32_t>::const_iterator& end_it,

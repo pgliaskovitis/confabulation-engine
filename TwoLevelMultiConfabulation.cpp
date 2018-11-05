@@ -117,7 +117,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 				th.join();
 			}
 		} else {
-			if (Globals::kUseSingleThreadedVariation) {
+			if (Globals::kSingleIndexFullSwirl) {
 				for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
 					if (context_span == 1) {
 						if (index + context_span < num_word_modules_) {

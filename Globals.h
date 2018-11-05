@@ -45,7 +45,7 @@ public:
 	static const bool kDelimitersAsSymbols;
 	static const bool kFavorLargerPhrases;
 	static const bool kNormalizeInputs;
-	static const bool kUseSingleThreadedVariation;
+	static const bool kSingleIndexFullSwirl;
 	static const bool kUseMultiThreading;
 
 	Globals() = delete;

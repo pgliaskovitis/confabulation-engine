@@ -39,3 +39,5 @@ file (GLOB confabulation_engine_SRC
 
 add_executable (confabulation_engine ${confabulation_engine_SRC} ${text_processing_SRC} ${sparse_structures_SRC} ${utils_SRC})
 
+find_package(GSL REQUIRED)
+TARGET_LINK_LIBRARIES(confabulation_engine pthread)
