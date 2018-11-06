@@ -113,7 +113,7 @@ std::vector<std::list<T>> HashTrie<T>::FindAll(const std::list<T>& sequence) con
 
 	std::vector<std::list<T>> result;
 	std::list<T> partial;
-	bool partial_is_symbol;
+	bool partial_is_symbol = false;
 
 	const HashTrieNode<T>* current_node_ptr = &root_;
 

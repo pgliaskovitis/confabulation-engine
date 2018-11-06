@@ -85,7 +85,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
 	std::vector<std::string> temp_input(symbols.begin(), symbols.end());
 
-	for (; index < end_completion && index < num_word_modules_;) {
+	for (; index < end_completion && (uint8_t)index < num_word_modules_;) {
 		int8_t start_pos = GetStartPosition(temp_input, index);
 		// int8_t initial_excitation_level = std::min<int8_t>(Globals::kMaxMultiWordSize, start_pos);
 		int8_t initial_excitation_level = start_pos;
@@ -120,11 +120,11 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 			if (Globals::kSingleIndexFullSwirl) {
 				for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
 					if (context_span == 1) {
-						if (index + context_span < num_word_modules_) {
+						if ((uint8_t)(index + context_span) < num_word_modules_) {
 							FullTransitionAtIndex(index);
 						}
 					} else {
-						if (index + context_span < num_word_modules_) {
+						if ((uint8_t)(index + context_span) < num_word_modules_) {
 							FullRetroTransitionAtIndex(index, context_span);
 						}
 					}
@@ -138,7 +138,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
 		// one final excitation boost
 		for (int8_t context_span = 1; context_span < Globals::kMaxMultiWordSize; ++context_span) {
-			if (index + context_span < num_word_modules_) {
+			if ((uint8_t)(index + context_span) < num_word_modules_) {
 				TransferExcitation(modules_[index + context_span],
 								   knowledge_bases_[index + context_span][num_word_modules_ + index],
 								   modules_[num_word_modules_ + index]);
@@ -162,7 +162,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 			} else {
 				result.push_back(next_phrase);
 				const std::vector<std::string>& result_tokens = SymbolToVectorSymbol(next_phrase, ' ');
-				for (int m; m < result_tokens.size(); ++m) {
+				for (size_t m = 0; m < result_tokens.size(); ++m) {
 					temp_input.push_back(result_tokens.at(m));
 				}
 				index += result_tokens.size();
@@ -273,7 +273,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 	do {
 		previous_result_size = current_result_size;
 		result = BasicTransitionOverMultipleIndices(index, span - 1);
-		for (size_t cursor = 2; cursor < span; cursor++) {
+		for (size_t cursor = 2; cursor < (size_t)span; cursor++) {
 			if (index + cursor < num_word_modules_) {
 				TransferExcitation(modules_[index + cursor],
 								   knowledge_bases_[index + cursor][num_word_modules_ + index],

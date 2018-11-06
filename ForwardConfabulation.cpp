@@ -89,7 +89,7 @@ bool ForwardConfabulation::CheckIndex(const std::vector<std::string> &symbols, i
 		return false;
 	}
 
-	if ((index_to_complete < symbols.size()) && (!symbols[index_to_complete].empty())) {
+	if (((size_t)index_to_complete < symbols.size()) && (!symbols[index_to_complete].empty())) {
 		std::cout << "There is already symbol \"" << symbols[index_to_complete] << "\") at index " << index_to_complete << "\n" << std::flush;
 		return false;
 	}

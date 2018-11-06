@@ -137,13 +137,16 @@ namespace
 
 	int32_t ConvertToSigned(uint32_t x)
 	{
-		if (x <= std::numeric_limits<int32_t>::max()) {
+		if (x <= static_cast<uint32_t>(std::numeric_limits<int32_t>::max())) {
 			return static_cast<int32_t>(x);
 		}
 
-		if (x >= std::numeric_limits<int32_t>::min()) {
+		/*
+		 * this encodes a large unsigned into a signed, not useful for our purposes
+		if (x >= static_cast<uint32_t>(std::numeric_limits<int32_t>::min())) {
 			return static_cast<int32_t>(x - std::numeric_limits<int32_t>::min()) + std::numeric_limits<int32_t>::min();
 		}
+		*/
 
 		throw x;
 	}

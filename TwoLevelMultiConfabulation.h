@@ -19,7 +19,7 @@ public:
 	virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation);
 
 private:
-	size_t num_word_modules_;
+	uint8_t num_word_modules_;
 	std::vector<std::thread> threads_;
 
 	std::vector<std::string> InitializationAtIndex(int index, int phrase_excit_level, int word_excit_level);

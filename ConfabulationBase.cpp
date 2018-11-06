@@ -35,7 +35,7 @@ ConfabulationBase::~ConfabulationBase()
 
 int8_t ConfabulationBase::GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete)
 {
-	int8_t index = std::min(static_cast<int8_t>(ConvertToSigned(symbols.size())), static_cast<int8_t>(index_to_complete));
+	int8_t index = std::min((int8_t)ConvertToSigned(symbols.size()), (int8_t)index_to_complete);
 	int8_t max_nonempty_pos = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
 	if (start_position_ >= 0) {
 	   return std::min(start_position_, max_nonempty_pos);
