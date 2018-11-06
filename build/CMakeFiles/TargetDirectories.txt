@@ -1,3 +1,0 @@
-/home/periklis/Documents/C++/confabulation-engine/build/CMakeFiles/rebuild_cache.dir
-/home/periklis/Documents/C++/confabulation-engine/build/CMakeFiles/confabulation_engine.dir
-/home/periklis/Documents/C++/confabulation-engine/build/CMakeFiles/edit_cache.dir
