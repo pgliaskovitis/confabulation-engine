@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NGRAMHANDLER_H
-#define NGRAMHANDLER_H
+#pragma once
 
 #include <cstring>
 #include <string>
@@ -83,5 +82,3 @@ private:
 
 	std::vector<std::map<std::vector<std::string>, size_t, StringVector_Cmp>> occurrence_counts_;
 };
-
-#endif // NGRAMHANDLER_H

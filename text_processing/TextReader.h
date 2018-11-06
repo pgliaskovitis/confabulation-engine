@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTREADERN_H
-#define TEXTREADERN_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -57,5 +56,3 @@ private:
 
 	std::shared_ptr<std::string> left_over_sentence_;
 };
-
-#endif // TEXTREADERN_H

@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GLOBALS_H_
-#define GLOBALS_H_
+#pragma once
 
 #include <string>
 #include <memory>
@@ -54,5 +53,3 @@ public:
 	Globals(Globals&& rhs) = delete;
 	Globals&& operator=(Globals&& rhs) = delete;
 };
-
-#endif /* GLOBALS_H_ */

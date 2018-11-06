@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONFABULATIONTEST_H_
-#define CONFABULATIONTEST_H_
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -56,5 +55,3 @@ public:
 private:
 	void PerformConfabulation(Globals& globals, const std::vector<std::string>& sentences) const;
 };
-
-#endif /* CONFABULATIONTEST_H_ */

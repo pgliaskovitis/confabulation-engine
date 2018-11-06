@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UTILS_H
-#define UTILS_H
+#pragma once
 
 #include <assert.h>
 #include <cmath>
@@ -236,5 +235,3 @@ namespace
 		return results;
 	}
 }
-
-#endif // UTILS_H

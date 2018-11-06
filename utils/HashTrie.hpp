@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HASHTRIE_H
-#define HASHTRIE_H
+#pragma once
 
 #include <vector>
 #include <list>
@@ -138,7 +137,3 @@ std::vector<std::list<T>> HashTrie<T>::FindAll(const std::list<T>& sequence) con
 
 	return result;
 }
-
-#endif // HASHTRIE_H
-
-

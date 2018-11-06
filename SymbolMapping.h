@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SYMBOLMAPPING_H
-#define SYMBOLMAPPING_H
+#pragma once
 
 #include <string>
 #include <set>
@@ -51,5 +50,3 @@ private:
 	std::unique_ptr<std::unordered_map<std::string*, uint16_t>> symbol_to_index_;
 	std::unique_ptr<std::unordered_map<uint16_t, std::string*>> index_to_symbol_;
 };
-
-#endif // SYMBOLMAPPING_H

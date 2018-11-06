@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DOKEXCITATIONVECTOR_H
-#define DOKEXCITATIONVECTOR_H
+#pragma once
 
 #include <unordered_map>
 #include <iostream>
@@ -178,5 +177,3 @@ std::set<std::pair<uint16_t, T>> DOKExcitationVector<T>::GetNzElements() const
 
 	return result;
 }
-
-#endif // DOKEXCITATIONVECTOR_H

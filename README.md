@@ -39,7 +39,7 @@ Relation to other models
 
 - The primary difference compared to vanilla language models is that confabulation uses the likelihood function and not the conditional probability function. For example:
 
-  Simple trigram probabilistic language model: Select w_3 that maximizes P(W_3 | W_1 = w_1, W_2 = w_2)
+  Common trigram language model: Select w_3 that maximizes P(W_3 | W_1 = w_1, W_2 = w_2)
 
   Confabulation language model: Select w_3 that maximizes P(W_1 = w_1, W_2 = w_2 | W_3)
 

@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KNOWLEDGEBASEN_H
-#define KNOWLEDGEBASEN_H
+#pragma once
 
 #include <string>
 #include <memory>
@@ -70,5 +69,3 @@ private:
 
 	static float ComputeLinkStrength(double antecedent_support_probability);
 };
-
-#endif // KNOWLEDGEBASEN_H

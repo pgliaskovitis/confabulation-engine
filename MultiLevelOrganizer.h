@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MULTILEVELORGANIZER_H
-#define MULTILEVELORGANIZER_H
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -44,5 +43,3 @@ private:
 	std::vector<std::unique_ptr<SymbolMapping>> level_mappings_;
 	std::vector<std::unique_ptr<HashTrie<std::string>>> tries_;
 };
-
-#endif // MULTILEVELORGANIZER_H

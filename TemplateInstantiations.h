@@ -17,13 +17,10 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEMPLATEINSTANTIATIONS_H
-#define TEMPLATEINSTANTIATIONS_H
+#pragma once
 
 class TemplateInstantiations
 {
 public:
 	TemplateInstantiations() = delete;
 };
-
-#endif // TEMPLATEINSTANTIATIONS_H

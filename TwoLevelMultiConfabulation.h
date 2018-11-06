@@ -1,5 +1,4 @@
-#ifndef TWOLEVELMULTICONFABULATION_H
-#define TWOLEVELMULTICONFABULATION_H
+#pragma once
 
 #include <thread>
 #include "ForwardConfabulation.h"
@@ -36,5 +35,3 @@ private:
 	std::vector<std::string> FullTransitionAtIndex(int index);
 	std::vector<std::string> FullRetroTransitionAtIndex(int index, int span);
 };
-
-#endif // TWOLEVELMULTICONFABULATION_H

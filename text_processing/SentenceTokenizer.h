@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SENTENCETOKENIZER_H_
-#define SENTENCETOKENIZER_H_
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -58,5 +57,3 @@ private:
 
 	std::string ExtractDelimiterToken(size_t begin, size_t end);
 };
-
-#endif /* SENTENCETOKENIZER_H_ */

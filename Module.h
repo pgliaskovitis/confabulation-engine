@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MODULE_H
-#define MODULE_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -71,5 +70,3 @@ private:
 
 	size_t current_excitation_level_;
 };
-
-#endif // MODULE_H

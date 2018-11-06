@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CSRLINKSMATRIX_H
-#define CSRLINKSMATRIX_H
+#pragma once
 
 #include <vector>
 
@@ -158,5 +157,3 @@ std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> CSRLinksMatrix<T>::GetNzEl
 
 	return result;
 }
-
-#endif // CSRLINKSMATRIX_H

@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IEXCITATIONVECTOR_H
-#define IEXCITATIONVECTOR_H
+#pragma once
 
 #include <stdexcept>
 #include <string>
@@ -68,5 +67,3 @@ public:
 		return str;
 	}
 };
-
-#endif // IEXCITATIONVECTORINTERFACE_H

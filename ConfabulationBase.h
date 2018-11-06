@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONFABULATIONBASE_H
-#define CONFABULATIONBASE_H
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -89,5 +88,3 @@ protected:
 	// check arguments against current setup
 	virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete) = 0;
 };
-
-#endif // CONFABULATIONBASE_H

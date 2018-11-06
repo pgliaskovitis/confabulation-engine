@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IKNOWLEDGELINKS_H
-#define IKNOWLEDGELINKS_H
+#pragma once
 
 #include <string>
 #include <set>
@@ -94,5 +93,3 @@ public:
 		return str;
 	}
 };
-
-#endif // IKNOWLEDGELINKS_H

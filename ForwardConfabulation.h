@@ -1,5 +1,4 @@
-#ifndef FORWARDCONFABULATION_H
-#define FORWARDCONFABULATION_H
+#pragma once
 
 #include "ConfabulationBase.h"
 
@@ -24,5 +23,3 @@ protected:
 	virtual bool CheckIndex(const std::vector<std::string>& symbols, int8_t index_to_complete);
 	virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete);
 };
-
-#endif // FORWARDCONFABULATION_H

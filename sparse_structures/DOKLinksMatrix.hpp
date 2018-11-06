@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DOKLINKSMATRIX_H
-#define DOKLINKSMATRIX_H
+#pragma once
 
 #include <unordered_map>
 #include "DOKExcitationVector.hpp"
@@ -150,5 +149,3 @@ std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> DOKLinksMatrix<T>::GetNzEl
 
 	return result;
 }
-
-#endif // DOKLINKSMATRIX_H

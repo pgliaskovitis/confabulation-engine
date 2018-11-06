@@ -17,8 +17,7 @@
  * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HASHTRIENODE_H
-#define HASHTRIENODE_H
+#pragma once
 
 #include <stdexcept>
 #include <memory>
@@ -71,5 +70,3 @@ HashTrieNode<T>& HashTrieNode<T>::Put(const T& child, bool final_node) {
 
 	return *(map_.at(child));
 }
-
-#endif // HASHTRIENODE_H
