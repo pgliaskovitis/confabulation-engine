@@ -332,7 +332,11 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullRetroTransitionAtIndex(
 	std::vector<std::string> result;
 
 	for (int8_t context_span = 0; context_span < span; ++context_span) {
-		FullTransitionAtIndex(index + context_span);
+		if (context_span == span - 1) {
+			FullSwirlAtIndex(index + context_span);
+		} else {
+			FullTransitionAtIndex(index + context_span);
+		}
 		result = RetroSwirlOverMultipleIndices(index, context_span);
 	}
 
