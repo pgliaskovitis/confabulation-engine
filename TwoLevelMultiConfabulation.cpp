@@ -238,9 +238,9 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultiple
 
 	for (int cursor = 0; cursor < span; ++cursor) {
 		if (cursor == span - 1) {
-			BasicSwirlAtIndex(index + cursor);
+			result = BasicSwirlAtIndex(index + cursor);
 		} else {
-			BasicTransitionAtIndex(index + cursor);
+			result = BasicTransitionAtIndex(index + cursor);
 		}
 	}
 
@@ -309,9 +309,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::RetroSwirlOverMultipleIndic
 						   modules_[index]);
 		result = modules_[index]->AdditivePartialConfabulation(1);
 		current_result_size = result.size();
-		if (current_result_size == previous_result_size) {
-			break;
-		}
 		BasicTransitionOverMultipleIndices(index, span);
 	} while (current_result_size < previous_result_size);
 

@@ -260,7 +260,7 @@ const std::vector<std::pair<float, Symbol>> KnowledgeManager::GetConfabulatedSym
             Symbol current_source_symbol;
             if (large_sentence)
                current_source_symbol = sentence[sentence.size() - Globals::kLevelSize + 1 + i];
-			else if (i < static_cast<unsigned short>(sentence.size()))
+			else if (i < (unsigned short)sentence.size())
                 current_source_symbol = sentence[i];
 			else
 				continue;
