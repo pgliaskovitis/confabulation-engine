@@ -268,8 +268,10 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlAtIndex(int index)
 // tighten expectation on target (phrase and) word modules and all modules up to index + span continuously
 std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices(int index, int span)
 {
-	std::vector<std::string> result = modules_[index]->AdditivePartialConfabulation(0);
-	size_t current_result_size = result.size();
+	std::vector<std::string> result;
+	const std::vector<std::string>& result_word = modules_[index]->AdditivePartialConfabulation(0);
+	const std::vector<std::string>& result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
+	size_t current_result_size = result_word.size() + result_phrase.size();
 	size_t previous_result_size = 0;
 
 	do {
@@ -284,7 +286,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 				TransferExcitation(modules_[index + cursor],
 								   knowledge_bases_[index + cursor][index],
 								   modules_[index]);
-				result = modules_[index]->AdditivePartialConfabulation(1);
+				modules_[index]->AdditivePartialConfabulation(1);
 			}
 		}
 		current_result_size = result.size();
