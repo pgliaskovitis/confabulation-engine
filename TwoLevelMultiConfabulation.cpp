@@ -274,7 +274,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 
 	do {
 		previous_result_size = current_result_size;
-		result = BasicTransitionOverMultipleIndices(index, span);
+		BasicTransitionOverMultipleIndices(index, span);
 		for (size_t cursor = 2; cursor < (size_t)span; cursor++) {
 			if (index + cursor < num_word_modules_) {
 				TransferExcitation(modules_[index + cursor],
@@ -287,6 +287,11 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 				modules_[index]->AdditivePartialConfabulation(1);
 			}
 		}
+		result.clear();
+		const std::vector<std::string>& result_word = modules_[index]->AdditivePartialConfabulation(0);
+		const std::vector<std::string>& result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
+		result.insert(result.end(), result_word.begin(), result_word.end());
+		result.insert(result.end(), result_phrase.begin(), result_phrase.end());
 		current_result_size = result.size();
 	} while (current_result_size < previous_result_size);
 
