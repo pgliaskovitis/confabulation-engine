@@ -151,7 +151,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 	return result;
 }
 
-// Initialize expectation on target (phrase and) word modules once
+// initialize expectation on target (phrase and) word modules once
 std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int index,
 																		   int phrase_excit_level,
 																		   int word_excit_level)
@@ -165,34 +165,33 @@ std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int i
 	return modules_[index]->AdditivePartialConfabulation(word_excit_level);
 }
 
+// tighten expectation on target (phrase and) word modules only if source module actually has excited symbols
+std::vector<std::string> TwoLevelMultiConfabulation::TransferAndTightenAtIndex(int source_index,
+																			   int target_index)
+{
+	const std::vector<std::string>& result_source = modules_[source_index]->AdditivePartialConfabulation(0);
+
+	int8_t tighten = result_source.size() > 0 ? 1 : 0;
+	if (tighten) {
+		TransferExcitation(modules_[source_index],
+						   knowledge_bases_[source_index][target_index],
+						   modules_[target_index]);
+	}
+
+	return modules_[target_index]->AdditivePartialConfabulation(tighten);
+}
+
 // tighten expectation on target (phrase and) word modules once
 std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
 {
 	std::vector<std::string> result;
-	std::vector<std::string> result_word;
 	std::vector<std::string> result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
-	int8_t phrase_word_transition = result_phrase.size() ? 1 : 0;
-
-	TransferExcitation(modules_[num_word_modules_ + index],
-					   knowledge_bases_[num_word_modules_ + index][index],
-					   modules_[index]);
-	result_word = modules_[index]->AdditivePartialConfabulation(phrase_word_transition);
+	std::vector<std::string> result_word = TransferAndTightenAtIndex(num_word_modules_ + index, index);
 
 	if (index + 1 < num_word_modules_) {
-		TransferExcitation(modules_[index],
-						   knowledge_bases_[index][index + 1],
-						   modules_[index + 1]);
-		modules_[index + 1]->AdditivePartialConfabulation(1);
-
-		TransferExcitation(modules_[index + 1],
-						   knowledge_bases_[index + 1][num_word_modules_ + index],
-						   modules_[num_word_modules_ + index]);
-		result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
-
-		TransferExcitation(modules_[index + 1],
-						   knowledge_bases_[index + 1][index],
-						   modules_[index]);
-		result_word = modules_[index]->AdditivePartialConfabulation(1);
+		TransferAndTightenAtIndex(index, index + 1);
+		result_phrase = TransferAndTightenAtIndex(index + 1, num_word_modules_ + index);
+		result_word = TransferAndTightenAtIndex(index + 1, index);
 	}
 
 	result.insert(result.end(), result_word.begin(), result_word.end());
@@ -264,16 +263,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 		previous_result_size = current_result_size;
 		BasicTransitionOverMultipleIndices(index, span);
 		for (size_t cursor = 2; cursor < (size_t)span; cursor++) {
-			if (index + cursor < num_word_modules_) {
-				TransferExcitation(modules_[index + cursor],
-								   knowledge_bases_[index + cursor][num_word_modules_ + index],
-								   modules_[num_word_modules_ + index]);
-				modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
-				TransferExcitation(modules_[index + cursor],
-								   knowledge_bases_[index + cursor][index],
-								   modules_[index]);
-				modules_[index]->AdditivePartialConfabulation(1);
-			}
+			TransferAndTightenAtIndex(index + cursor, num_word_modules_ + index);
+			TransferAndTightenAtIndex(index + cursor, index);
 		}
 		result.clear();
 		const std::vector<std::string>& result_word = modules_[index]->AdditivePartialConfabulation(0);
@@ -286,8 +277,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 	return result;
 }
 
-// tighten expectation from index + span towards index
-std::vector<std::string> TwoLevelMultiConfabulation::RetroSwirlOverMultipleIndices(int index, int span)
+// tighten expectation from index + cursor towards index
+std::vector<std::string> TwoLevelMultiConfabulation::RetroSwirlOverMultipleIndices(int index, int cursor)
 {
 	std::vector<std::string> result;
 	const std::vector<std::string>& initial_result_word = modules_[index]->AdditivePartialConfabulation(0);
@@ -295,18 +286,12 @@ std::vector<std::string> TwoLevelMultiConfabulation::RetroSwirlOverMultipleIndic
 	size_t current_result_size = initial_result_word.size() + initial_result_phrase.size();
 	size_t previous_result_size = 0;
 
-	if (span >= 2) {
+	if (cursor >= 2) {
 		do {
 			previous_result_size = current_result_size;
-			TransferExcitation(modules_[index + span],
-							   knowledge_bases_[index + span][num_word_modules_ + index],
-							   modules_[num_word_modules_ + index]);
-			modules_[num_word_modules_ + index]->AdditivePartialConfabulation(1);
-			TransferExcitation(modules_[index + span],
-							   knowledge_bases_[index + span][index],
-							   modules_[index]);
-			modules_[index]->AdditivePartialConfabulation(1);
-			result = BasicTransitionOverMultipleIndices(index, span);
+			TransferAndTightenAtIndex(index + cursor, num_word_modules_ + index);
+			TransferAndTightenAtIndex(index + cursor, index);
+			result = BasicTransitionOverMultipleIndices(index, cursor);
 			current_result_size = result.size();
 		} while (current_result_size < previous_result_size);
 	}
@@ -322,12 +307,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::RetroSwirlOverMultipleIndic
 std::vector<std::string> TwoLevelMultiConfabulation::FullTransitionAtIndex(int index)
 {
 	const std::vector<std::string>& result = FullSwirlAtIndex(index);
-
-	TransferExcitation(modules_[index],
-					   knowledge_bases_[index][num_word_modules_ + index + 1],
-					   modules_[num_word_modules_ + index + 1]);
-	modules_[num_word_modules_ + index + 1]->AdditivePartialConfabulation(1);
-
+	TransferAndTightenAtIndex(index, num_word_modules_ + index + 1);
 	return result;
 }
 

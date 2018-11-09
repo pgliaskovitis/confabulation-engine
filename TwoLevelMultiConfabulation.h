@@ -23,6 +23,7 @@ private:
 	std::vector<std::thread> threads_;
 
 	std::vector<std::string> InitializationAtIndex(int index, int phrase_excit_level, int word_excit_level);
+	std::vector<std::string> TransferAndTightenAtIndex(int source_index, int target_index);
 
 	std::vector<std::string> BasicSwirlAtIndex(int index);
 	std::vector<std::string> BasicTransitionAtIndex(int index);
