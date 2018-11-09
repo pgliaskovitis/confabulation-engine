@@ -165,6 +165,17 @@ std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int i
 	return modules_[index]->AdditivePartialConfabulation(word_excit_level);
 }
 
+// get excited symbols on target (phrase and) word modules
+std::vector<std::string> TwoLevelMultiConfabulation::ExcitedSymbolsAtIndex(int index)
+{
+	std::vector<std::string> result;
+	const std::vector<std::string>& result_word = modules_[index]->AdditivePartialConfabulation(0);
+	const std::vector<std::string>& result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
+	result.insert(result.end(), result_word.begin(), result_word.end());
+	result.insert(result.end(), result_phrase.begin(), result_phrase.end());
+	return result;
+}
+
 // tighten expectation on target (phrase and) word modules only if source module actually has excited symbols
 std::vector<std::string> TwoLevelMultiConfabulation::TransferAndTightenAtIndex(int source_index,
 																			   int target_index)
@@ -184,20 +195,15 @@ std::vector<std::string> TwoLevelMultiConfabulation::TransferAndTightenAtIndex(i
 // tighten expectation on target (phrase and) word modules once
 std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
 {
-	std::vector<std::string> result;
-	std::vector<std::string> result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
-	std::vector<std::string> result_word = TransferAndTightenAtIndex(num_word_modules_ + index, index);
+	TransferAndTightenAtIndex(num_word_modules_ + index, index);
 
 	if (index + 1 < num_word_modules_) {
 		TransferAndTightenAtIndex(index, index + 1);
-		result_phrase = TransferAndTightenAtIndex(index + 1, num_word_modules_ + index);
-		result_word = TransferAndTightenAtIndex(index + 1, index);
+		TransferAndTightenAtIndex(index + 1, num_word_modules_ + index);
+		TransferAndTightenAtIndex(index + 1, index);
 	}
 
-	result.insert(result.end(), result_word.begin(), result_word.end());
-	result.insert(result.end(), result_phrase.begin(), result_phrase.end());
-
-	return result;
+	return ExcitedSymbolsAtIndex(index);
 }
 
 // tighten expectation on target (phrase and) word modules once and move on to the next index phrase
@@ -226,12 +232,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultiple
 		}
 	}
 
-	const std::vector<std::string>& result_word = modules_[index]->AdditivePartialConfabulation(0);
-	const std::vector<std::string>& result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
-	result.insert(result.end(), result_word.begin(), result_word.end());
-	result.insert(result.end(), result_phrase.begin(), result_phrase.end());
-
-	return result;
+	return ExcitedSymbolsAtIndex(index);
 }
 
 // tighten expectation on target (phrase and) word modules continuously
@@ -266,11 +267,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 			TransferAndTightenAtIndex(index + cursor, num_word_modules_ + index);
 			TransferAndTightenAtIndex(index + cursor, index);
 		}
-		result.clear();
-		const std::vector<std::string>& result_word = modules_[index]->AdditivePartialConfabulation(0);
-		const std::vector<std::string>& result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
-		result.insert(result.end(), result_word.begin(), result_word.end());
-		result.insert(result.end(), result_phrase.begin(), result_phrase.end());
+		result = ExcitedSymbolsAtIndex(index);
 		current_result_size = result.size();
 	} while (current_result_size < previous_result_size);
 
@@ -296,12 +293,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::RetroSwirlOverMultipleIndic
 		} while (current_result_size < previous_result_size);
 	}
 
-	const std::vector<std::string>& result_word = modules_[index]->AdditivePartialConfabulation(0);
-	const std::vector<std::string>& result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
-	result.insert(result.end(), result_word.begin(), result_word.end());
-	result.insert(result.end(), result_phrase.begin(), result_phrase.end());
-
-	return result;
+	return ExcitedSymbolsAtIndex(index);
 }
 
 std::vector<std::string> TwoLevelMultiConfabulation::FullTransitionAtIndex(int index)
