@@ -87,23 +87,13 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
 	for (; index < end_completion && (uint8_t)index < num_word_modules_;) {
 		int8_t start_pos = GetStartPosition(temp_input, index);
-		// int8_t initial_excitation_level = std::min<int8_t>(Globals::kMaxMultiWordSize, start_pos);
-		int8_t initial_excitation_level = start_pos;
-		// int8_t initial_excitation_level = 1;
-		std::vector<std::string> initial_result;
 
-		do {
-			Clean();
-
-			// activate known symbols from input
-			Activate(temp_input);
-
-			initial_result = InitializationAtIndex(index, 1, 1);
-			initial_excitation_level--;
-		} while (initial_result.size() == 0 && initial_excitation_level > 0);
+		Clean();
+		Activate(temp_input);
+		const std::vector<std::string>& initial_result = InitializationAtIndex(index, 0, 0);
 
 		if (initial_result.size() == 0) {
-			std::cout << "Failed to initialize at initial excitation level: " << (int)initial_excitation_level + 1 << std::endl;
+			std::cout << "Failed to initialize symbols" << std::endl;
 			return result;
 		}
 
@@ -254,10 +244,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlAtIndex(int index)
 // tighten expectation on target (phrase and) word modules and all modules up to index + span continuously
 std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices(int index, int span)
 {
-	std::vector<std::string> result;
-	const std::vector<std::string>& result_word = modules_[index]->AdditivePartialConfabulation(0);
-	const std::vector<std::string>& result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
-	size_t current_result_size = result_word.size() + result_phrase.size();
+	std::vector<std::string> result = ExcitedSymbolsAtIndex(index);
+	size_t current_result_size = result.size();
 	size_t previous_result_size = 0;
 
 	do {
