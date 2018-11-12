@@ -24,7 +24,6 @@ KnowledgeBase::KnowledgeBase(const std::string& id, const SymbolMapping& src_map
 	id_(id),
 	src_map_(src_map),
 	targ_map_(targ_map),
-	// cooccurrence_counts_(new DOKLinksMatrix<uint32_t>(targ_map.Size(), src_map.Size())),
 	cooccurrence_counts_(new SparseHashLinksMatrix<uint32_t>(targ_map.Size(), src_map.Size())),
 	target_symbol_sums_(targ_map.Size())
 {}
@@ -49,7 +48,7 @@ void KnowledgeBase::Add(uint16_t targ_index, uint16_t src_index)
 
 void KnowledgeBase::ComputeLinkStrengths()
 {
-	std::unique_ptr<DOKLinksMatrix<float>> link_strengths(new DOKLinksMatrix<float>(cooccurrence_counts_->get_num_rows(), cooccurrence_counts_->get_num_cols()));
+	std::unique_ptr<IKnowledgeLinks<float>> link_strengths(new SparseHashLinksMatrix<float>(cooccurrence_counts_->get_num_rows(), cooccurrence_counts_->get_num_cols()));
 
 	for (const std::pair<std::pair<uint16_t, uint16_t>, float>& e: cooccurrence_counts_->GetNzElements()) {
 		uint16_t row = e.first.first;
