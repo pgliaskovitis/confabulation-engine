@@ -63,7 +63,7 @@ private:
 	size_t id_;
 	std::mutex mutex_;
 	std::unique_ptr<IExcitationVector<float>> excitations_;
-	std::unique_ptr<IExcitationVector<uint8_t>> kb_inputs_;
+	std::unique_ptr<IExcitationVector<uint16_t>> kb_inputs_;
 
 	std::unique_ptr<std::pair<uint16_t, float>> MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations);
 	std::set<std::pair<uint16_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float>>& nz_excitations);

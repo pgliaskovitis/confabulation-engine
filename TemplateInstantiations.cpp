@@ -27,6 +27,7 @@
 #include "utils/HashTrie.hpp"
 
 template class DOKExcitationVector<float>;
+template class DOKExcitationVector<uint16_t>;
 template class KHashExcitationVector<float>;
 template class DOKLinksMatrix<uint32_t>;
 template class SparseHashLinksMatrix<uint32_t>;

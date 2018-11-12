@@ -26,7 +26,7 @@ Module::Module(const SymbolMapping &symbol_mapping, size_t id) :
 	symbol_mapping_(symbol_mapping),
 	id_(id),
 	excitations_(new DOKExcitationVector<float>(symbol_mapping.Size())),
-	kb_inputs_(new DOKExcitationVector<uint8_t>(symbol_mapping.Size())),
+	kb_inputs_(new DOKExcitationVector<uint16_t>(symbol_mapping.Size())),
 	current_excitation_level_(0)
 {
 	ExcitationsToZero();
@@ -155,7 +155,7 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
 	expectations.reset(new std::vector<std::pair<uint16_t, float>>(min_K_excit.begin(), min_K_excit.end()));
 
 	// saving needed info from intermediate state
-	DOKExcitationVector<uint8_t> kb_inputs_temp(*kb_inputs_);
+	DOKExcitationVector<uint16_t> kb_inputs_temp(*kb_inputs_);
 
 	// cleanup intermediate state
 	ExcitationsToZero();
@@ -185,7 +185,7 @@ std::vector<std::string> Module::AdditivePartialConfabulation(int8_t K)
 void Module::ExcitationsToZero()
 {
 	excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
-	kb_inputs_.reset(new DOKExcitationVector<uint8_t>(symbol_mapping_.Size()));
+	kb_inputs_.reset(new DOKExcitationVector<uint16_t>(symbol_mapping_.Size()));
 }
 
 void Module::ExcitationLevelToZero()
