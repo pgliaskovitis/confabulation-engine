@@ -19,6 +19,7 @@
 
 #include "TemplateInstantiations.h"
 #include "sparse_structures/DOKExcitationVector.hpp"
+#include "sparse_structures/KHashExcitationVector.hpp"
 #include "sparse_structures/DOKLinksMatrix.hpp"
 #include "sparse_structures/SparseHashLinksMatrix.hpp"
 #include "sparse_structures/CSRLinksMatrix.hpp"
@@ -26,6 +27,7 @@
 #include "utils/HashTrie.hpp"
 
 template class DOKExcitationVector<float>;
+template class KHashExcitationVector<float>;
 template class DOKLinksMatrix<uint32_t>;
 template class SparseHashLinksMatrix<uint32_t>;
 template class CSRLinksMatrix<float>;

@@ -56,7 +56,6 @@ public:
 
 private:
 	const uint16_t num_rows_;
-
 	std::unordered_map<uint16_t, T> map_;
 };
 
@@ -113,14 +112,15 @@ T DOKExcitationVector<T>::GetElementQuick(const uint16_t r) const
 	try {
 		result = map_.at(r);
 	} catch (const std::out_of_range& oor) {
-		result = 0.0;
+		result = 0.0f;
 	}
 
 	return result;
 }
 
 template <typename T>
-void DOKExcitationVector<T>::Add(const IExcitationVector<T>& other) {
+void DOKExcitationVector<T>::Add(const IExcitationVector<T>& other)
+{
 	for (const std::pair<uint16_t, T>& element : other.GetNzElements()) {
 		SetElement(element.first, PositiveClip(element.second + GetElement(element.first)));
 	}
@@ -149,7 +149,7 @@ void DOKExcitationVector<T>::Whiten()
 	double squared_sum = 0.0;
 	double mean = 0.0;
 	double variance = 0.0;
-	double coeff = 1 / sqrt(2 * 3.14159265358979323846);
+	double std = 0.0;
 
 	for (typename std::unordered_map<uint16_t, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
 		sum += it->second;
@@ -157,12 +157,11 @@ void DOKExcitationVector<T>::Whiten()
 	}
 
 	mean = sum / map_.size();
-	variance = squared_sum / map_.size() - mean * mean + 0.000001;
+	variance = squared_sum / map_.size() - mean * mean;
+	std = sqrt(variance) + 0.000001;
 
 	for (typename std::unordered_map<uint16_t, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
-		double temp = it->second - mean;
-		it->second = std::exp(-(temp * temp) / (2 * variance));
-		it->second *= coeff * 1 / sqrt(variance);
+		it->second = (it->second - mean) / std;
 	}
 }
 
