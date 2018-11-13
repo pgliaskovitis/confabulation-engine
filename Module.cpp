@@ -20,13 +20,13 @@
 #include "Module.h"
 #include "Globals.h"
 #include "utils/Utils.h"
-#include <sparse_structures/DOKExcitationVector.hpp>
+#include <sparse_structures/KHashExcitationVector.hpp>
 
 Module::Module(const SymbolMapping &symbol_mapping, size_t id) :
 	symbol_mapping_(symbol_mapping),
 	id_(id),
-	excitations_(new DOKExcitationVector<float>(symbol_mapping.Size())),
-	kb_inputs_(new DOKExcitationVector<uint16_t>(symbol_mapping.Size())),
+	excitations_(new KHashExcitationVector<float>(symbol_mapping.Size())),
+	kb_inputs_(new KHashExcitationVector<uint16_t>(symbol_mapping.Size())),
 	current_excitation_level_(0)
 {
 	ExcitationsToZero();
@@ -60,7 +60,7 @@ const std::unique_ptr<IExcitationVector<float> > &Module::GetExcitations() const
 std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations() const
 {
 	std::unique_ptr<IExcitationVector<float>> normalized_excitations;
-	normalized_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
+	normalized_excitations.reset(new KHashExcitationVector<float>(symbol_mapping_.Size()));
 
 	for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
 		normalized_excitations->SetElement(e.first, e.second);
@@ -74,7 +74,7 @@ std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations() con
 std::unique_ptr<IExcitationVector<float>> Module::GetWhitenedExcitations() const
 {
 	std::unique_ptr<IExcitationVector<float>> whitened_excitations;
-	whitened_excitations.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
+	whitened_excitations.reset(new KHashExcitationVector<float>(symbol_mapping_.Size()));
 
 	for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
 		whitened_excitations->SetElement(e.first, e.second);
@@ -155,7 +155,7 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
 	expectations.reset(new std::vector<std::pair<uint16_t, float>>(min_K_excit.begin(), min_K_excit.end()));
 
 	// saving needed info from intermediate state
-	DOKExcitationVector<uint16_t> kb_inputs_temp(*kb_inputs_);
+	KHashExcitationVector<uint16_t> kb_inputs_temp(*kb_inputs_);
 
 	// cleanup intermediate state
 	ExcitationsToZero();
@@ -184,8 +184,8 @@ std::vector<std::string> Module::AdditivePartialConfabulation(int8_t K)
 
 void Module::ExcitationsToZero()
 {
-	excitations_.reset(new DOKExcitationVector<float>(symbol_mapping_.Size()));
-	kb_inputs_.reset(new DOKExcitationVector<uint16_t>(symbol_mapping_.Size()));
+	excitations_.reset(new KHashExcitationVector<float>(symbol_mapping_.Size()));
+	kb_inputs_.reset(new KHashExcitationVector<uint16_t>(symbol_mapping_.Size()));
 }
 
 void Module::ExcitationLevelToZero()
