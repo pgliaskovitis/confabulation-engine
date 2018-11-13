@@ -26,12 +26,17 @@
 #include "utils/HashTrieNode.hpp"
 #include "utils/HashTrie.hpp"
 
+// vector classes
 template class DOKExcitationVector<float>;
 template class DOKExcitationVector<uint16_t>;
 template class KHashExcitationVector<float>;
+template class KHashExcitationVector<uint16_t>;
+
+// matrix classes
 template class DOKLinksMatrix<uint32_t>;
 template class SparseHashLinksMatrix<uint32_t>;
 template class CSRLinksMatrix<float>;
 
+// NLP classes
 template class HashTrieNode<std::string>;
 template class HashTrie<std::string>;
