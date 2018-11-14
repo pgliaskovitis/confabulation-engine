@@ -72,7 +72,7 @@ void ConfabulationTest::TestDOKExcitationVector() const
 	my_vec_ptr1->SetElement(9, 9.0);
 
 	try {
-	my_vec_ptr1->SetElement(10, 10.0);
+		my_vec_ptr1->SetElement(10, 10.0);
 	} catch (const std::out_of_range& oor) {
 	}
 
@@ -80,9 +80,11 @@ void ConfabulationTest::TestDOKExcitationVector() const
 
 	std::unique_ptr<IExcitationVector<float>> my_vec_ptr2(new DOKExcitationVector<float>(10));
 
-	my_vec_ptr2->SetElement(1, 1.0);
-	my_vec_ptr2->SetElement(2, 2.0);
-	my_vec_ptr2->SetElement(9, 9.0);
+	my_vec_ptr2->SetElement(1, 1.5);
+	my_vec_ptr2->SetElement(2, 2.5);
+	my_vec_ptr2->SetElement(9, 9.5);
+
+	std::cout << "Vector to add:" << std::endl << my_vec_ptr2->ToString();
 
 	my_vec_ptr1->Add(*my_vec_ptr2);
 
@@ -102,7 +104,7 @@ void ConfabulationTest::TestKHashExcitationVector() const
 	my_vec_ptr1->SetElement(9, 9.0);
 
 	try {
-	my_vec_ptr1->SetElement(10, 10.0);
+		my_vec_ptr1->SetElement(10, 10.0);
 	} catch (const std::out_of_range& oor) {
 	}
 
@@ -110,9 +112,11 @@ void ConfabulationTest::TestKHashExcitationVector() const
 
 	std::unique_ptr<IExcitationVector<float>> my_vec_ptr2(new KHashExcitationVector<float>(10));
 
-	my_vec_ptr2->SetElement(1, 1.0);
-	my_vec_ptr2->SetElement(2, 2.0);
-	my_vec_ptr2->SetElement(9, 9.0);
+	my_vec_ptr2->SetElement(1, 1.5);
+	my_vec_ptr2->SetElement(2, 2.5);
+	my_vec_ptr2->SetElement(9, 9.5);
+
+	std::cout << "Vector to add:" << std::endl << my_vec_ptr2->ToString();
 
 	my_vec_ptr1->Add(*my_vec_ptr2);
 
@@ -477,7 +481,7 @@ int main()
 
 	// test1->TestTokenizeWithinSentences("This is,  alas , the primal knowledge. The magic exists  ,but is not for everyone. \"My fumblings will be your quickening  ,   minion.\"");
 
-	// test1->TestDOKExcitationVector();
+	test1->TestDOKExcitationVector();
 
 	test1->TestKHashExcitationVector();
 

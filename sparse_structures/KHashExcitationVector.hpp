@@ -21,12 +21,13 @@
 
 #include <iostream>
 
+#include "Dbg.h"
 #include "klib/khash.h"
 #include "utils/Utils.h"
 #include "IExcitationVector.hpp"
 
-KHASH_INIT(vector_float, uint16_t, float, 0, kh_int_hash_func, kh_int_hash_equal)
-KHASH_INIT(vector_uint16, uint16_t, uint16_t, 0, kh_int_hash_func, kh_int_hash_equal)
+KHASH_INIT(vector_float, uint16_t, float, 1, kh_int_hash_func, kh_int_hash_equal)
+KHASH_INIT(vector_uint16, uint16_t, uint16_t, 1, kh_int_hash_func, kh_int_hash_equal)
 
 template <typename T>
 class KHashExcitationVector : public IExcitationVector<T>
@@ -59,8 +60,8 @@ public:
 
 private:
 	const uint16_t num_rows_;
-	khash_t(vector_float) *map_float_ = kh_init(vector_float);
-	khash_t(vector_uint16) *map_uint16_ = kh_init(vector_uint16);
+	khash_t(vector_float) *map_float_;
+	khash_t(vector_uint16) *map_uint16_;
 };
 
 template <typename T>
@@ -71,6 +72,12 @@ KHashExcitationVector<T>::KHashExcitationVector(const uint16_t num_rows) : num_r
 
 	if (!is_uint16 && !is_float) {
 		throw std::runtime_error( "KHashExcitationVector is not supported for value types other than float and uint16_t" );
+	}
+
+	if (is_float) {
+		map_float_ = kh_init(vector_float);
+	} else if (is_uint16) {
+		map_uint16_ = kh_init(vector_uint16);
 	}
 }
 
@@ -83,7 +90,7 @@ KHashExcitationVector<T>::KHashExcitationVector(const IExcitationVector<T> &base
 	khint_t k = 0;
 
 	if (!is_uint16 && !is_float) {
-		throw std::runtime_error( "KHashExcitationVector is not supported for value types other than float and uint16_t" );
+		debug("KHashExcitationVector is not supported for value types other than float and uint16_t");
 	}
 
 	if (is_float) {
@@ -106,7 +113,7 @@ KHashExcitationVector<T>::~KHashExcitationVector()
 	bool is_float = std::is_same<T, float>::value;
 
 	if (!is_uint16 && !is_float) {
-		throw std::runtime_error( "KHashExcitationVector is not supported for value types other than float and uint16_t" );
+		debug("KHashExcitationVector is not supported for value types other than float and uint16_t");
 	}
 
 	if (is_float) {
@@ -121,30 +128,22 @@ void KHashExcitationVector<T>::SetElement(const uint16_t r, const T& value)
 {
 	bool is_uint16 = std::is_same<T, uint16_t>::value;
 	bool is_float = std::is_same<T, float>::value;
-	int absent = 0;
 	khint_t k = 0;
 
 	if (!is_uint16 && !is_float) {
-		throw std::runtime_error( "KHashExcitationVector is not supported for value types other than float and uint16_t" );
+		throw std::runtime_error("KHashExcitationVector is not supported for value types other than float and uint16_t");
 	}
 
 	IExcitationVector<T>::CheckBounds(r);
 
-	if (IsNearlyEqual(value, 0.0)) {
-		if (is_float) {
+	if (is_float) {
+		if (IsNearlyEqual(value, 0.0f)) {
 			k = kh_get(vector_float, map_float_, r);
-			absent = (k == kh_end(map_float_));
-			if (!absent) {
-				kh_del(vector_float, map_float_, k);
-			}
-		} else if (is_uint16) {
-			k = kh_get(vector_uint16, map_uint16_, r);
-			absent = (k == kh_end(map_uint16_));
-			if (!absent) {
-				kh_del(vector_uint16, map_uint16_, k);
-			}
+			kh_value(map_float_, k) = 0.0f;
+		} else {
+			SetElementQuick(r, value);
 		}
-	} else {
+	} else if (is_uint16) {
 		SetElementQuick(r, value);
 	}
 }
@@ -159,15 +158,9 @@ void KHashExcitationVector<T>::SetElementQuick(const uint16_t r, const T &value)
 
 	if (is_float) {
 		k = kh_put(vector_float, map_float_, r, &absent);
-		if (!absent) {
-			kh_del(vector_float, map_float_, k);
-		}
 		kh_value(map_float_, k) = value;
 	} else if (is_uint16) {
 		k = kh_put(vector_uint16, map_uint16_, r, &absent);
-		if (!absent) {
-			kh_del(vector_uint16, map_uint16_, k);
-		}
 		kh_value(map_uint16_, k) = value;
 	}
 }
@@ -179,10 +172,11 @@ T KHashExcitationVector<T>::GetElement(const uint16_t r) const
 	bool is_float = std::is_same<T, float>::value;
 
 	if (!is_uint16 && !is_float) {
-		throw std::runtime_error( "KHashExcitationVector is not supported for value types other than float and uint16_t" );
+		throw std::runtime_error("KHashExcitationVector is not supported for value types other than float and uint16_t");
 	}
 
 	IExcitationVector<T>::CheckBounds(r);
+
 	return GetElementQuick(r);
 }
 
@@ -197,7 +191,7 @@ T KHashExcitationVector<T>::GetElementQuick(const uint16_t r) const
 
 	if (is_float) {
 		k = kh_get(vector_float, map_float_, r);
-		present = (k == kh_end(map_float_));
+		present = !(k == kh_end(map_float_));
 		if (present) {
 			result = kh_value(map_float_, k);
 		} else {
@@ -205,7 +199,7 @@ T KHashExcitationVector<T>::GetElementQuick(const uint16_t r) const
 		}
 	} else if (is_uint16) {
 		k = kh_get(vector_uint16, map_uint16_, r);
-		present = (k == kh_end(map_uint16_));
+		present = !(k == kh_end(map_uint16_));
 		if (present) {
 			result = kh_value(map_uint16_, k);
 		} else {
@@ -224,13 +218,13 @@ uint16_t KHashExcitationVector<T>::GetNnz() const
 	bool is_float = std::is_same<T, float>::value;
 
 	if (!is_uint16 && !is_float) {
-		throw std::runtime_error( "KHashExcitationVector is not supported for value types other than float and uint16_t" );
+		throw std::runtime_error("KHashExcitationVector is not supported for value types other than float and uint16_t");
 	}
 
 	if (is_float) {
-		result = map_float_->size;
+		result = kh_size(map_float_);
 	} else if (is_uint16) {
-		result = map_uint16_->size;
+		result = kh_size(map_uint16_);
 	}
 
 	return result;
@@ -243,7 +237,7 @@ void KHashExcitationVector<T>::Add(const IExcitationVector<T>& other)
 	bool is_float = std::is_same<T, float>::value;
 
 	if (!is_uint16 && !is_float) {
-		throw std::runtime_error( "KHashExcitationVector is not supported for value types other than float and uint16_t" );
+		throw std::runtime_error("KHashExcitationVector is not supported for value types other than float and uint16_t");
 	}
 
 	for (const std::pair<uint16_t, T>& element : other.GetNzElements()) {
@@ -259,7 +253,7 @@ void KHashExcitationVector<T>::Normalize()
 	khint_t k = 0;
 
 	if (!is_float) {
-		throw std::runtime_error( "KHashExcitationVector normalize is not supported for value types other than float" );
+		throw std::runtime_error("KHashExcitationVector is not supported for value types other than float and uint16_t");
 	}
 
 	for (k = kh_begin(map_float_); k != kh_end(map_float_); ++k) {
@@ -271,7 +265,7 @@ void KHashExcitationVector<T>::Normalize()
 	if (sum > 0.0) {
 		for (k = kh_begin(map_float_); k != kh_end(map_float_); ++k) {
 			if (kh_exist(map_float_, k)) {
-				kh_value(map_float_, k) /= sum;
+				kh_value(map_float_, k) = kh_value(map_float_, k) / sum;
 			}
 		}
 	}
@@ -289,7 +283,7 @@ void KHashExcitationVector<T>::Whiten()
 	khint_t k = 0;
 
 	if (!is_float) {
-		throw std::runtime_error( "KHashExcitationVector is not supported for value types other than float" );
+		throw std::runtime_error("KHashExcitationVector is not supported for value types other than float and uint16_t");
 	}
 
 	for (k = kh_begin(map_float_); k != kh_end(map_float_); ++k) {
@@ -299,8 +293,8 @@ void KHashExcitationVector<T>::Whiten()
 		}
 	}
 
-	mean = sum / map_float_->size;
-	variance = squared_sum / map_float_->size - mean * mean;
+	mean = sum / kh_size(map_float_);
+	variance = squared_sum / kh_size(map_float_) - mean * mean;
 	std = sqrt(variance) + 1e-6;
 
 	if (sum > 0.0) {
@@ -321,7 +315,7 @@ std::set<std::pair<uint16_t, T>> KHashExcitationVector<T>::GetNzElements() const
 	khint_t k = 0;
 
 	if (!is_uint16 && !is_float) {
-		throw std::runtime_error( "KHashExcitationVector is not supported for value types other than float and uint16_t" );
+		throw std::runtime_error("KHashExcitationVector is not supported for value types other than float and uint16_t");
 	}
 
 	if (is_float) {
