@@ -25,6 +25,7 @@
 #include "SymbolMapping.h"
 #include "text_processing/NGramHandler.h"
 #include "text_processing/TextReader.h"
+#include "sparse_structures/KHashExcitationVector.hpp"
 #include "sparse_structures/DOKExcitationVector.hpp"
 #include "sparse_structures/DOKLinksMatrix.hpp"
 #include "sparse_structures/CSRLinksMatrix.hpp"
@@ -64,32 +65,62 @@ void ConfabulationTest::TestTokenizeWithinSentences(const std::string& input) co
 
 void ConfabulationTest::TestDOKExcitationVector() const
 {
-	 std::unique_ptr<IExcitationVector<float>> my_vec_ptr1(new DOKExcitationVector<float>(10));
+	std::unique_ptr<IExcitationVector<float>> my_vec_ptr1(new DOKExcitationVector<float>(10));
 
-	 my_vec_ptr1->SetElement(1, 1.0);
-	 my_vec_ptr1->SetElement(2, 2.0);
-	 my_vec_ptr1->SetElement(9, 9.0);
+	my_vec_ptr1->SetElement(1, 1.0);
+	my_vec_ptr1->SetElement(2, 2.0);
+	my_vec_ptr1->SetElement(9, 9.0);
 
-	 try {
-		my_vec_ptr1->SetElement(10, 10.0);
-	 } catch (const std::out_of_range& oor) {
-	 }
+	try {
+	my_vec_ptr1->SetElement(10, 10.0);
+	} catch (const std::out_of_range& oor) {
+	}
 
-	 std::cout << "Vector before addition:" << std::endl << my_vec_ptr1->ToString();
+	std::cout << "Vector before addition:" << std::endl << my_vec_ptr1->ToString();
 
-	 std::unique_ptr<IExcitationVector<float>> my_vec_ptr2(new DOKExcitationVector<float>(10));
+	std::unique_ptr<IExcitationVector<float>> my_vec_ptr2(new DOKExcitationVector<float>(10));
 
-	 my_vec_ptr2->SetElement(1, 1.0);
-	 my_vec_ptr2->SetElement(2, 2.0);
-	 my_vec_ptr2->SetElement(9, 9.0);
+	my_vec_ptr2->SetElement(1, 1.0);
+	my_vec_ptr2->SetElement(2, 2.0);
+	my_vec_ptr2->SetElement(9, 9.0);
 
-	 my_vec_ptr1->Add(*my_vec_ptr2);
+	my_vec_ptr1->Add(*my_vec_ptr2);
 
-	 std::cout << "Vector after addition:" << std::endl << my_vec_ptr1->ToString();
+	std::cout << "Vector after addition:" << std::endl << my_vec_ptr1->ToString();
 
-	 my_vec_ptr1->Normalize();
+	my_vec_ptr1->Normalize();
 
-	 std::cout << "Vector after normalization:" << std::endl << my_vec_ptr1->ToString();
+	std::cout << "Vector after normalization:" << std::endl << my_vec_ptr1->ToString();
+}
+
+void ConfabulationTest::TestKHashExcitationVector() const
+{
+	std::unique_ptr<IExcitationVector<float>> my_vec_ptr1(new KHashExcitationVector<float>(10));
+
+	my_vec_ptr1->SetElement(1, 1.0);
+	my_vec_ptr1->SetElement(2, 2.0);
+	my_vec_ptr1->SetElement(9, 9.0);
+
+	try {
+	my_vec_ptr1->SetElement(10, 10.0);
+	} catch (const std::out_of_range& oor) {
+	}
+
+	std::cout << "Vector before addition:" << std::endl << my_vec_ptr1->ToString();
+
+	std::unique_ptr<IExcitationVector<float>> my_vec_ptr2(new KHashExcitationVector<float>(10));
+
+	my_vec_ptr2->SetElement(1, 1.0);
+	my_vec_ptr2->SetElement(2, 2.0);
+	my_vec_ptr2->SetElement(9, 9.0);
+
+	my_vec_ptr1->Add(*my_vec_ptr2);
+
+	std::cout << "Vector after addition:" << std::endl << my_vec_ptr1->ToString();
+
+	my_vec_ptr1->Normalize();
+
+	std::cout << "Vector after normalization:" << std::endl << my_vec_ptr1->ToString();
 }
 
 void ConfabulationTest::TestDOKLinksMatrix() const
@@ -447,6 +478,8 @@ int main()
 	// test1->TestTokenizeWithinSentences("This is,  alas , the primal knowledge. The magic exists  ,but is not for everyone. \"My fumblings will be your quickening  ,   minion.\"");
 
 	// test1->TestDOKExcitationVector();
+
+	test1->TestKHashExcitationVector();
 
 	// test1->TestDOKLinksMatrix();
 

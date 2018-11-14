@@ -28,6 +28,7 @@ public:
 	void TestTokenizeSentences(const std::string& input) const;
 	void TestTokenizeWithinSentences(const std::string& input) const;
 
+	void TestKHashExcitationVector() const;
 	void TestDOKExcitationVector() const;
 	void TestDOKLinksMatrix() const;
 	void TestCSRLinksMatrix() const;

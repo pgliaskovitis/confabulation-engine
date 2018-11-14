@@ -219,6 +219,7 @@ T KHashExcitationVector<T>::GetElementQuick(const uint16_t r) const
 template <typename T>
 uint16_t KHashExcitationVector<T>::GetNnz() const
 {
+	uint16_t result = 0;
 	bool is_uint16 = std::is_same<T, uint16_t>::value;
 	bool is_float = std::is_same<T, float>::value;
 
@@ -227,10 +228,12 @@ uint16_t KHashExcitationVector<T>::GetNnz() const
 	}
 
 	if (is_float) {
-		return map_float_->size;
+		result = map_float_->size;
 	} else if (is_uint16) {
-		return map_uint16_->size;
+		result = map_uint16_->size;
 	}
+
+	return result;
 }
 
 template <typename T>
