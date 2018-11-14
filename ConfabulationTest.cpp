@@ -481,9 +481,9 @@ int main()
 
 	// test1->TestTokenizeWithinSentences("This is,  alas , the primal knowledge. The magic exists  ,but is not for everyone. \"My fumblings will be your quickening  ,   minion.\"");
 
-	test1->TestDOKExcitationVector();
+	// test1->TestDOKExcitationVector();
 
-	test1->TestKHashExcitationVector();
+	// test1->TestKHashExcitationVector();
 
 	// test1->TestDOKLinksMatrix();
 

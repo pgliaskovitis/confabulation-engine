@@ -94,11 +94,13 @@ KHashExcitationVector<T>::KHashExcitationVector(const IExcitationVector<T> &base
 	}
 
 	if (is_float) {
+		map_float_ = kh_init(vector_float);
 		for (const std::pair<uint16_t, T>& element : base.GetNzElements()) {
 			k = kh_put(vector_float, map_float_, element.first, &absent);
 			kh_value(map_float_, k) = element.second;
 		}
 	} else if (is_uint16) {
+		map_uint16_ = kh_init(vector_uint16);
 		for (const std::pair<uint16_t, T>& element : base.GetNzElements()) {
 			k = kh_put(vector_uint16, map_uint16_, element.first, &absent);
 			kh_value(map_uint16_, k) = element.second;
