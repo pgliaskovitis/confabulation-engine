@@ -27,6 +27,7 @@
 #include "text_processing/TextReader.h"
 #include "sparse_structures/KHashExcitationVector.hpp"
 #include "sparse_structures/DOKExcitationVector.hpp"
+#include "sparse_structures/SparseHashLinksMatrix.hpp"
 #include "sparse_structures/DOKLinksMatrix.hpp"
 #include "sparse_structures/CSRLinksMatrix.hpp"
 #include "utils/HashTrie.hpp"
@@ -139,9 +140,32 @@ void ConfabulationTest::TestDOKLinksMatrix() const
 
 	std::unique_ptr<IExcitationVector<float>> my_vec_ptr(new DOKExcitationVector<float>(4));
 
-	my_vec_ptr->SetElement(0, 1.0);
-	my_vec_ptr->SetElement(1, 2.0);
-	my_vec_ptr->SetElement(3, 4.0);
+	my_vec_ptr->SetElement(0, 1.5);
+	my_vec_ptr->SetElement(1, 2.5);
+	my_vec_ptr->SetElement(3, 4.5);
+
+	std::cout << "Vector before multiplication:" << std::endl << my_vec_ptr->ToString();
+
+	std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = my_matrix_ptr->Multiply(*my_vec_ptr);
+
+	std::cout << "Vector after multiplication:" << std::endl << my_result_vec_ptr->ToString();
+}
+
+void ConfabulationTest::TestSparseHashLinksMatrix() const
+{
+	std::unique_ptr<IKnowledgeLinks<float>> my_matrix_ptr(new SparseHashLinksMatrix<float>(3, 4));
+
+	my_matrix_ptr->SetElement(0, 1, 1.0);
+	my_matrix_ptr->SetElement(1, 3, 1.0);
+	my_matrix_ptr->SetElement(2, 2, 1.0);
+
+	std::cout << "Matrix before multiplication:" << std::endl << my_matrix_ptr->ToString();
+
+	std::unique_ptr<IExcitationVector<float>> my_vec_ptr(new KHashExcitationVector<float>(4));
+
+	my_vec_ptr->SetElement(0, 1.5);
+	my_vec_ptr->SetElement(1, 2.5);
+	my_vec_ptr->SetElement(3, 4.5);
 
 	std::cout << "Vector before multiplication:" << std::endl << my_vec_ptr->ToString();
 
@@ -487,6 +511,8 @@ int main()
 
 	// test1->TestDOKLinksMatrix();
 
+	// test1->TestSparseHashLinksMatrix();
+
 	// test1->TestCSRLinksMatrix();
 
 	// test1->TestSymbolMapping();
@@ -546,7 +572,7 @@ int main()
 	allCopyFeeds->push_back(copy_feed19);
 	allCopyFeeds->push_back(copy_feed20);
 
-	test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
+	// test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
 	std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 
@@ -625,7 +651,7 @@ int main()
 	// test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
 	// test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
 
-	// test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+	test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
 	// test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 	// test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
 

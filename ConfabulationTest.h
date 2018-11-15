@@ -30,7 +30,9 @@ public:
 
 	void TestKHashExcitationVector() const;
 	void TestDOKExcitationVector() const;
+
 	void TestDOKLinksMatrix() const;
+	void TestSparseHashLinksMatrix() const;
 	void TestCSRLinksMatrix() const;
 
 	void TestSymbolMapping() const;
