@@ -38,3 +38,16 @@ text_data/Hemingway_1.txt
 text_data/Hemingway_2.txt
 text_data/Hemingway_3.txt
 text_data/Hemingway_4.txt
+text_data/Hemingway_4.txt
+text_data/Hemingway_4.txt
+text_data/Stevenson_1.txt
+text_data/Stevenson_2.txt
+text_data/Stevenson_3.txt
+text_data/Stevenson_4.txt
+text_data/Stevenson_5.txt
+text_data/Stevenson_6.txt
+text_data/Stevenson_7.txt
+text_data/Stevenson_8.txt
+text_data/Stevenson_9.txt
+text_data/Stevenson_10.txt
+text_data/Stevenson_11.txt
