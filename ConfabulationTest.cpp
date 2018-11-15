@@ -581,13 +581,13 @@ int main()
 	std::string feed3 = "The girl smiled and caressed ";
 	std::string feed4 = "A dark winter was eating through the ";
 	std::string feed5 = "The dragon circled above the valley, hungry for ";
-	std::string feed6 = "Our initial assessment of the situation had been ";
+	std::string feed6 = "Our initial understanding of the situation had been ";
 	std::string feed7 = "At the slightest hint of movement, he was ready to ";
 	std::string feed8 = "A strong scent of cinnamon was coming from her ";
 	std::string feed9 = "She stumbled over her dress and ";
 	std::string feed10 = "She had her husband poisoned and her lover ";
 
-	std::string feed11 = "In the end, only dancing could ";
+	std::string feed11 = "In the end, only dancing could save ";
 	std::string feed12 = "He leaned into her, the love of his life, and ";
 	std::string feed13 = "He suddenly collapsed, crying like a ";
 	std::string feed14 = "The cave was too high up for him to ";
