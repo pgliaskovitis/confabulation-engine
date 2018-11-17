@@ -33,6 +33,8 @@ public:
 	SymbolMapping(SymbolMapping&& rhs) = delete;
 	SymbolMapping&& operator=(SymbolMapping&& rhs) = delete;
 
+	~SymbolMapping();
+
 	void AddSymbol(const std::string& symbol);
 	bool Contains(const std::string& symbol) const;
 
@@ -46,7 +48,7 @@ public:
 	std::string ToString() const;
 
 private:
-	std::unique_ptr<std::unordered_map<std::string, std::unique_ptr<std::string>>> all_symbols_;
-	std::unique_ptr<std::unordered_map<std::string*, uint16_t>> symbol_to_index_;
-	std::unique_ptr<std::unordered_map<uint16_t, std::string*>> index_to_symbol_;
+	std::unique_ptr<std::unordered_map<std::string, std::string*>> all_symbols_;
+	std::unique_ptr<std::unordered_map<const std::string*, uint16_t>> symbol_to_index_;
+	std::unique_ptr<std::unordered_map<uint16_t, const std::string*>> index_to_symbol_;
 };
