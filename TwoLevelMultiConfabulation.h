@@ -32,8 +32,4 @@ private:
 
 	std::vector<std::string> FullSwirlAtIndex(int index);
 	std::vector<std::string> FullSwirlOverMultipleIndices(int index, int span);
-	std::vector<std::string> RetroSwirlOverMultipleIndices(int index, int span);
-
-	std::vector<std::string> FullTransitionAtIndex(int index);
-	std::vector<std::string> FullRetroTransitionAtIndex(int index, int span);
 };
