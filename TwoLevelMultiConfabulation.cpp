@@ -198,12 +198,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index
 std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionAtIndex(int index)
 {
 	const std::vector<std::string>& result = BasicSwirlAtIndex(index);
-
-	TransferExcitation(modules_[index],
-					   knowledge_bases_[index][num_word_modules_ + index + 1],
-					   modules_[num_word_modules_ + index + 1]);
-	modules_[num_word_modules_ + index + 1]->AdditivePartialConfabulation(1);
-
+	TransferAndTightenAtIndex(index, num_word_modules_ + index + 1);
 	return result;
 }
 
