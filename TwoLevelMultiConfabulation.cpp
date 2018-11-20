@@ -54,11 +54,9 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 		}
 	}
 
-	// phrase-to-word knowledge bases (max phrase length ahead)
+	// phrase-to-word knowledge bases (only directly below)
 	for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
-		for (size_t j = i; j < 2 * num_word_modules && j < i + Globals::kMaxMultiWordSize; ++j) {
-			kb_specs[i][j - num_word_modules] = true;
-		}
+		kb_specs[i][i - num_word_modules] = true;
 	}
 
 	std::vector<uint8_t> level_sizes;
