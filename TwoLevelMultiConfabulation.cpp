@@ -99,7 +99,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
 		int8_t max_span = std::min((int)Globals::kMaxMultiWordSize, (int)(num_word_modules_ - index));
 
-		if(Globals::kUseMultiThreading) {
+		if (Globals::kUseMultiThreading) {
 			threads_.clear();
 			for (int8_t context_span = 0; context_span < max_span; ++context_span) {
 				threads_.push_back(std::thread(&TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices, this, index, max_span));
