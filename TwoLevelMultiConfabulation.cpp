@@ -33,7 +33,7 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 		}
 	}
 
-	// word-to-future-phrase knowledge bases (max phrase length ahead - affects initialization)
+	// word-to-future-phrase knowledge bases (reference frame length ahead - affects initialization)
 	for (size_t i = 0; i < num_word_modules; ++i) {
 		for (size_t j = num_word_modules + i + 1; j < 2 * num_word_modules && j < num_word_modules + i + 1 + Globals::kReferenceFrameSize; ++j) {
 			kb_specs[i][j] = true;
@@ -42,7 +42,7 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 
 	// word-to-past-phrase knowledge bases (max phrase length ago)
 	for (size_t i = 0; i < num_word_modules; ++i) {
-		for (size_t j = num_word_modules + i; j >= num_word_modules && j >= num_word_modules + (i - Globals::kMaxMultiWordSize); --j) {
+		for (size_t j = num_word_modules + i; j >= num_word_modules && j >= num_word_modules + 1 + (i - Globals::kMaxMultiWordSize); --j) {
 			kb_specs[i][j] = true;
 		}
 	}
@@ -54,9 +54,11 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 		}
 	}
 
-	// phrase-to-word knowledge bases (only directly below)
+	// phrase-to-word knowledge bases (max phrase length ahead)
 	for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
-		kb_specs[i][i - num_word_modules] = true;
+		for (size_t j = i; j < 2 * num_word_modules && j < i + Globals::kMaxMultiWordSize; ++j) {
+			kb_specs[i][j - num_word_modules] = true;
+		}
 	}
 
 	std::vector<uint8_t> level_sizes;
