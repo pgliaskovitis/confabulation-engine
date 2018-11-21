@@ -19,42 +19,42 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 		kb_specs[i].resize(num_modules_);
 	}
 
-	// word-to-future-word knowledge bases (reference frame length ahead - affects initialization)
+	// word-to-future-word knowledge bases (reference frame length ahead -- affects initialization)
 	for (size_t i = 0; i < num_word_modules; ++i) {
-		for (size_t j = i + 1; j < num_word_modules && j < i + 1 + Globals::kReferenceFrameSize; ++j) {
+		for (size_t j = i + 1; j < num_word_modules && j < i + 1 + Globals::kMaxMultiWordSize; ++j) {
 			kb_specs[i][j] = true;
 		}
 	}
 
-	// word-to-past-word knowledge bases (max phrase length ago)
+	// word-to-past-word knowledge bases (max phrase length ago -- affects swirl)
 	for (size_t i = 1; i < num_word_modules; ++i) {
 		for (int j = i - 1; j >= 0 && j >= ConvertToSigned(i) - ConvertToSigned(Globals::kMaxMultiWordSize); --j) {
 			kb_specs[i][j] = true;
 		}
 	}
 
-	// word-to-future-phrase knowledge bases (reference frame length ahead - affects initialization)
+	// word-to-future-phrase knowledge bases (max phrase length ahead -- affects initialization)
 	for (size_t i = 0; i < num_word_modules; ++i) {
-		for (size_t j = num_word_modules + i + 1; j < 2 * num_word_modules && j < num_word_modules + i + 1 + Globals::kReferenceFrameSize; ++j) {
+		for (size_t j = num_word_modules + i + 1; j < 2 * num_word_modules && j < num_word_modules + i + 1 + Globals::kMaxMultiWordSize; ++j) {
 			kb_specs[i][j] = true;
 		}
 	}
 
-	// word-to-past-phrase knowledge bases (max phrase length ago)
+	// word-to-past-phrase knowledge bases (max phrase length ago -- affects swirl)
 	for (size_t i = 0; i < num_word_modules; ++i) {
-		for (size_t j = num_word_modules + i; j >= num_word_modules && j >= num_word_modules + 1 + (i - Globals::kMaxMultiWordSize); --j) {
+		for (size_t j = num_word_modules + i; j >= num_word_modules && j >= num_word_modules + i + 1 - Globals::kMaxMultiWordSize; --j) {
 			kb_specs[i][j] = true;
 		}
 	}
 
-	// phrase-to-phrase knowledge bases (reference frame length ahead - no single word phrases here)
+	// phrase-to-phrase knowledge bases (max phrase length ahead -- no single word phrases here -- affects initialization)
 	for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
-		for (size_t j = i + 2; j < 2 * num_word_modules && j < i + 1 + Globals::kReferenceFrameSize; ++j) {
+		for (size_t j = i + 2; j < 2 * num_word_modules && j < i + 1 + Globals::kMaxMultiWordSize; ++j) {
 			kb_specs[i][j] = true;
 		}
 	}
 
-	// phrase-to-word knowledge bases (only directly below)
+	// phrase-to-word knowledge bases (only directly below -- affects swirl)
 	for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
 		kb_specs[i][i - num_word_modules] = true;
 	}
