@@ -189,6 +189,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index
 		TransferAndTightenAtIndex(index + 1, index);
 	}
 
+	TransferAndTightenAtIndex(index, num_word_modules_ + index);
+
 	return ExcitedSymbolsAtIndex(index);
 }
 
