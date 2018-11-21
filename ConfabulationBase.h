@@ -51,9 +51,8 @@ public:
 	void Clean();
 
 	virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation) = 0;
+	virtual void Activate(const std::vector<std::string>& symbols);
 
-	// public methods for tests
-	void Activate(const std::vector<std::string>& symbols);
 	void TransferExcitation(const std::unique_ptr<Module>& source_module, const std::unique_ptr<KnowledgeBase>& kb, const std::unique_ptr<Module>& target_module);
 	void TransferAllExcitations(int8_t target_index, const std::unique_ptr<Module> &target_module);
 

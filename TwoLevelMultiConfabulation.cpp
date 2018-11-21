@@ -1,3 +1,22 @@
+/*
+ * Copyright 2018 Periklis G. Liaskovitis
+ *
+ * This file is part of confab-engine.
+ *
+ * confab-engine is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * confab-engine is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with confab-engine.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "TwoLevelMultiConfabulation.h"
 #include "Globals.h"
 #include "Dbg.h"
@@ -64,6 +83,37 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 	level_sizes.push_back(num_word_modules);
 
 	Initialize(kb_specs, level_sizes, symbol_file, master_file, min_single_occurrences, min_multi_occurrences);
+}
+
+void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbols)
+{
+	const std::vector<std::vector<std::vector<std::string>>>& activated_module_layouts = organizer_->Organize(symbols);
+
+	const std::vector<std::vector<std::string>>& activated_multiwords = activated_module_layouts[0];
+
+	for (size_t i = 0; i < activated_multiwords.size(); ++i) {
+		std::cout << "Examining multiword symbol: " << VectorSymbolToSymbol(activated_multiwords[i], '#') << "\n" << std::flush;
+		// if (!activated_multiwords[i].empty()) {
+		// 	const std::string& multiword = VectorSymbolToSymbol(activated_multiwords[i], ' ');
+		//	modules_[num_word_modules_ + i]->ActivateSymbol(multiword, 1);
+		//	std::cout << "Activated multiword symbol: " << multiword << "\n" << std::flush;
+		// }
+	}
+
+	for (size_t i = 0, j = 0; i < activated_multiwords.size(); ++i) {
+		if (!activated_multiwords[i].empty()) {
+			j += activated_multiwords[i].size();
+			continue;
+		}
+		/*
+		if (i == j) {
+			const std::string& word = VectorSymbolToSymbol(activated_words[i], ' ');
+			modules_[j]->ActivateSymbol(word, 1);
+			std::cout << "Activated word symbol: " << word << "\n" << std::flush;
+			j++;
+		}
+		*/
+	}
 }
 
 std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::vector<std::string> &symbols, int8_t index_to_complete, bool expectation)
