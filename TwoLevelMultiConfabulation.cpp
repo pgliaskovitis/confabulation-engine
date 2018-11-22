@@ -132,7 +132,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 
 		Clean();
 		Activate(temp_input);
-		const std::vector<std::string>& initial_result = InitializationAtIndex(index, 0, 0);
+		const std::vector<std::string>& initial_result = InitializationAtIndex(index);
 
 		if (initial_result.size() == 0) {
 			std::cout << "Failed to initialize symbols" << std::endl;
@@ -180,18 +180,10 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 }
 
 // initialize expectation on target (phrase and) word modules once
-std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int index,
-																		   int phrase_excit_level,
-																		   int word_excit_level)
+std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int index)
 {
-	// find initial expectation on phrase module above word module at index
 	TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index]);
-	modules_[num_word_modules_ + index]->AdditivePartialConfabulation(phrase_excit_level);
-
-	// find initial expectation on word module at index (including phrase module above)
 	TransferAllExcitations(index, modules_[index]);
-	modules_[index]->AdditivePartialConfabulation(word_excit_level);
-
 	return ExcitedSymbolsAtIndex(index);
 }
 
