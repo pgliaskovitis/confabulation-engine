@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Periklis G. Liaskovitis
+ * Copyright 2014 Periklis G. Liaskovitis
  *
  * This file is part of confab-engine.
  *
@@ -38,42 +38,42 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 		kb_specs[i].resize(num_modules_);
 	}
 
-	// word-to-future-word knowledge bases (reference frame length ahead -- affects initialization)
+	// word-to-future-word knowledge bases (affects initialization)
 	for (size_t i = 0; i < num_word_modules; ++i) {
-		for (size_t j = i + 1; j < num_word_modules && j < i + 1 + Globals::kMaxMultiWordSize; ++j) {
+		for (size_t j = i + 1; j < num_word_modules && j < i + 1 + Globals::kReferenceFrameSize; ++j) {
 			kb_specs[i][j] = true;
 		}
 	}
 
-	// word-to-past-word knowledge bases (max phrase length ago -- affects swirl)
+	// word-to-past-word knowledge bases (affects swirl)
 	for (size_t i = 1; i < num_word_modules; ++i) {
 		for (int j = i - 1; j >= 0 && j >= ConvertToSigned(i) - ConvertToSigned(Globals::kMaxMultiWordSize); --j) {
 			kb_specs[i][j] = true;
 		}
 	}
 
-	// word-to-future-phrase knowledge bases (max phrase length ahead -- affects initialization)
+	// word-to-future-phrase knowledge bases (affects initialization)
 	for (size_t i = 0; i < num_word_modules; ++i) {
-		for (size_t j = num_word_modules + i + 1; j < 2 * num_word_modules && j < num_word_modules + i + 1 + Globals::kMaxMultiWordSize; ++j) {
+		for (size_t j = num_word_modules + i + 1; j < 2 * num_word_modules && j < num_word_modules + i + 1 + Globals::kReferenceFrameSize; ++j) {
 			kb_specs[i][j] = true;
 		}
 	}
 
-	// word-to-past-phrase knowledge bases (max phrase length ago -- affects swirl)
+	// word-to-past-phrase knowledge bases (affects swirl)
 	for (size_t i = 0; i < num_word_modules; ++i) {
 		for (size_t j = num_word_modules + i; j >= num_word_modules && j >= num_word_modules + i + 1 - Globals::kMaxMultiWordSize; --j) {
 			kb_specs[i][j] = true;
 		}
 	}
 
-	// phrase-to-phrase knowledge bases (max phrase length ahead -- no single word phrases here -- affects initialization)
+	// phrase-to-phrase knowledge bases (affects initialization)
 	for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
-		for (size_t j = i + 2; j < 2 * num_word_modules && j < i + 1 + Globals::kMaxMultiWordSize; ++j) {
+		for (size_t j = i + 2; j < 2 * num_word_modules && j < i + 1 + Globals::kReferenceFrameSize; ++j) {
 			kb_specs[i][j] = true;
 		}
 	}
 
-	// phrase-to-word knowledge bases (only directly below -- affects swirl)
+	// phrase-to-word knowledge bases (affects swirl)
 	for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
 		kb_specs[i][i - num_word_modules] = true;
 	}
@@ -97,12 +97,14 @@ void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbol
 		return;
 	}
 
+	// activate phrases
 	for (size_t i = 0; i < activated_multiwords.size(); ++i) {
 		if (!activated_multiwords[i].empty()) {
 			modules_[num_word_modules_ + i]->ActivateSymbol(activated_multiwords[i], 1);
 		}
 	}
 
+	// activate words
 	ConfabulationBase::Activate(symbols);
 }
 
@@ -230,8 +232,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index
 		TransferAndTightenAtIndex(index + 1, num_word_modules_ + index);
 		TransferAndTightenAtIndex(index + 1, index);
 	}
-
-	TransferAndTightenAtIndex(index, num_word_modules_ + index);
 
 	return ExcitedSymbolsAtIndex(index);
 }

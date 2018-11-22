@@ -55,7 +55,8 @@ MultiLevelOrganizer::MultiLevelOrganizer(const std::vector<uint8_t>& level_sizes
 // n_combinations tries to predict different possible combinations of multiwords
 std::vector<std::vector<std::vector<std::string>>> MultiLevelOrganizer::Organize(const std::vector<std::string>& symbols)
 {
-	size_t n_combinations = Globals::kMaxMultiWordSize - 1;
+	// size_t n_combinations = Globals::kMaxMultiWordSize - 1;
+	size_t n_combinations = 1;
 	size_t n_levels = level_sizes_.size();
 
 	std::vector<std::vector<std::vector<std::string>>> possible_level_combinations;

@@ -47,7 +47,7 @@ public:
 	const T& get_value() const { return value_; }
 
 private:
-	std::unordered_map<T, std::shared_ptr<HashTrieNode<T>>> map_;
+	std::unordered_map<T, std::unique_ptr<HashTrieNode<T>>> map_;
 
 	T value_;
 	bool leaf_node_; // leaf node is a separate extra node
@@ -65,7 +65,7 @@ HashTrieNode<T>& HashTrieNode<T>::Put(const T& child, bool final_node) {
 	} catch (std::out_of_range& oor) {
 	}
 
-	std::shared_ptr<HashTrieNode<T>> new_child(new HashTrieNode<T>(child, final_node));
+	std::unique_ptr<HashTrieNode<T>> new_child(new HashTrieNode<T>(child, final_node));
 	map_.insert(std::make_pair(child, std::move(new_child)));
 
 	return *(map_.at(child));
