@@ -88,32 +88,22 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbols)
 {
 	const std::vector<std::vector<std::vector<std::string>>>& activated_module_layouts = organizer_->Organize(symbols);
+	const std::vector<std::vector<std::string>>& primary_layout = activated_module_layouts[0];
+	const std::vector<std::string>& activated_words = primary_layout[0];
+	const std::vector<std::string>& activated_multiwords = primary_layout[1];
 
-	const std::vector<std::vector<std::string>>& activated_multiwords = activated_module_layouts[0];
+	if (activated_words.size() != activated_multiwords.size()) {
+		std::cout << "Organizer did not produce layouts with correct sizes for activation, aborting" << "\n" << std::flush;
+		return;
+	}
 
 	for (size_t i = 0; i < activated_multiwords.size(); ++i) {
-		std::cout << "Examining multiword symbol: " << VectorSymbolToSymbol(activated_multiwords[i], '#') << "\n" << std::flush;
-		// if (!activated_multiwords[i].empty()) {
-		// 	const std::string& multiword = VectorSymbolToSymbol(activated_multiwords[i], ' ');
-		//	modules_[num_word_modules_ + i]->ActivateSymbol(multiword, 1);
-		//	std::cout << "Activated multiword symbol: " << multiword << "\n" << std::flush;
-		// }
+		if (!activated_multiwords[i].empty()) {
+			modules_[num_word_modules_ + i]->ActivateSymbol(activated_multiwords[i], 1);
+		}
 	}
 
-	for (size_t i = 0, j = 0; i < activated_multiwords.size(); ++i) {
-		if (!activated_multiwords[i].empty()) {
-			j += activated_multiwords[i].size();
-			continue;
-		}
-		/*
-		if (i == j) {
-			const std::string& word = VectorSymbolToSymbol(activated_words[i], ' ');
-			modules_[j]->ActivateSymbol(word, 1);
-			std::cout << "Activated word symbol: " << word << "\n" << std::flush;
-			j++;
-		}
-		*/
-	}
+	ConfabulationBase::Activate(symbols);
 }
 
 std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::vector<std::string> &symbols, int8_t index_to_complete, bool expectation)
@@ -198,7 +188,9 @@ std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int i
 
 	// find initial expectation on word module at index (including phrase module above)
 	TransferAllExcitations(index, modules_[index]);
-	return modules_[index]->AdditivePartialConfabulation(word_excit_level);
+	modules_[index]->AdditivePartialConfabulation(word_excit_level);
+
+	return ExcitedSymbolsAtIndex(index);
 }
 
 // get excited symbols on target (phrase and) word modules
