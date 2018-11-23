@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Periklis Liaskovitis
+ * Copyright 2014 Periklis G. Liaskovitis
  *
  * This file is part of confab-engine.
  *
