@@ -499,7 +499,7 @@ void ConfabulationTest::TestTwoLevelMultiConfabulation(const std::string& symbol
 
 int main()
 {
-	std::shared_ptr<ConfabulationTest> test1(new ConfabulationTest());
+	std::unique_ptr<ConfabulationTest> test1(new ConfabulationTest());
 
 	// test1->TestTokenizeSentences("This is, alas, the primal knowledge. The magic exists, but is not for everyone. \"My fumblings will be your quickening, minion.\"");
 
@@ -549,7 +549,7 @@ int main()
 	std::string copy_feed19 = "While the author and the victims alike treated "; // the whole matter as a silly public charade
 	std::string copy_feed20 = "The difficulty is therefore that the actual raising of "; // the standard of athletics has probably been
 
-	std::shared_ptr<std::vector<std::string>> allCopyFeeds(new std::vector<std::string>());
+	std::unique_ptr<std::vector<std::string>> allCopyFeeds(new std::vector<std::string>());
 
 	allCopyFeeds->push_back(copy_feed1);
 	allCopyFeeds->push_back(copy_feed2);
@@ -574,7 +574,7 @@ int main()
 
 	test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
-	std::shared_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
+	std::unique_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 
 	std::string feed1 = "The hooded men were chanting beneath the ";
 	std::string feed2 = "An army of little insects had gathered on top of ";
