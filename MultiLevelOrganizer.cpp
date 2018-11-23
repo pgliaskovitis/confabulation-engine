@@ -85,43 +85,11 @@ std::vector<std::vector<std::vector<std::string>>> MultiLevelOrganizer::Organize
 				std::list<std::string> match;
 				match = trie.FindLongest(temp_symbols_list);
 
-				/*
-				if (j == 0) {
-					// always find longest match for level 0 (words)
-					match = trie.FindLongest(temp_symbols_list);
-				} else {
-					// find all matches for next combinations
-					const std::vector<std::list<std::string>>& all_matches = trie.FindAll(temp_symbols_list);
-
-					// first try to match exact size multiwords
-					for (const std::list<std::string>& e: all_matches) {
-						if (e.size() == n_combinations - i) {
-							match = std::move(e);
-						}
-					}
-
-					// then try to match shorter multiwords
-					if (match.empty()) {
-						for (const std::list<std::string>& e: all_matches) {
-							if (e.size() < n_combinations - i) {
-								match = std::move(e);
-							}
-						}
-					}
-
-					// then try to match longer multiwords
-					if (match.empty()) {
-						for (const std::list<std::string>& e: all_matches) {
-							if (e.size() > n_combinations - i) {
-								match = std::move(e);
-							}
-						}
-					}
-				}
-				*/
-
+				// if unsuccesful, try with next position in sentence
 				if (match.empty()) {
-					break;
+					temp_symbols_list.pop_front();
+					++k;
+					continue;
 				}
 
 				// store found multisymbol

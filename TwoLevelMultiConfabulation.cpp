@@ -101,6 +101,7 @@ void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbol
 	for (size_t i = 0; i < activated_multiwords.size(); ++i) {
 		if (!activated_multiwords[i].empty()) {
 			modules_[num_word_modules_ + i]->ActivateSymbol(activated_multiwords[i], 1);
+			// std::cout << "Activated multiword " << activated_multiwords[i] << "\n" << std::flush;
 		}
 	}
 
