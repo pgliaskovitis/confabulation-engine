@@ -23,23 +23,23 @@
 #include <string>
 #include <set>
 
-template <typename T>
+template <typename TRow, typename T>
 class IExcitationVector
 {
 public:
 	virtual ~IExcitationVector() {}
 
-	virtual void SetElement(const uint16_t r, const T& value) = 0;
-	virtual void SetElementQuick(const uint16_t r, const T& value) = 0;
+	virtual void SetElement(const TRow r, const T& value) = 0;
+	virtual void SetElementQuick(const TRow r, const T& value) = 0;
 
-	virtual T GetElement(const uint16_t r) const = 0;
-	virtual T GetElementQuick(const uint16_t r) const = 0;
+	virtual T GetElement(const TRow r) const = 0;
+	virtual T GetElementQuick(const TRow r) const = 0;
 
-	virtual uint16_t get_num_rows() const = 0;
+	virtual TRow get_num_rows() const = 0;
 
-	virtual uint16_t GetNnz() const = 0;
+	virtual TRow GetNnz() const = 0;
 
-	void CheckBounds(const uint16_t r) const
+	void CheckBounds(const TRow r) const
 	{
 		if (r >= get_num_rows()) {
 			throw std::out_of_range(std::string("1D Out of Range, for row ") +
@@ -53,14 +53,14 @@ public:
 
 	virtual void Whiten() = 0;
 
-	virtual std::set<std::pair<uint16_t, T>> GetNzElements() const = 0;
+	virtual std::set<std::pair<TRow, T>> GetNzElements() const = 0;
 
 	std::string ToString() const
 	{
-		const uint16_t num_rows = get_num_rows();
+		const TRow num_rows = get_num_rows();
 
 		std::string str = std::string("ExcitationVector [num_lines=") + std::to_string(num_rows) + "]\n";
-		for (uint16_t r = 0; r < num_rows; ++r) {
+		for (TRow r = 0; r < num_rows; ++r) {
 			str += std::to_string(GetElement(r)) + " ";
 			str += "\n";
 		}

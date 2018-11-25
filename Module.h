@@ -36,15 +36,15 @@ public:
 	Module&& operator=(Module&& rhs) = delete;
 
 	void ActivateSymbol(const std::string& word, int8_t K);
-	void AddExcitationVector(const IExcitationVector<float>& input);
+	void AddExcitationVector(const IExcitationVector<uint16_t, float>& input);
 	void ExcitationsToZero();
 	void ExcitationLevelToZero();
 	void Lock();
 	void UnLock();
 
-	const std::unique_ptr<IExcitationVector<float>>& GetExcitations() const;
-	std::unique_ptr<IExcitationVector<float>> GetNormalizedExcitations() const;
-	std::unique_ptr<IExcitationVector<float>> GetWhitenedExcitations() const;
+	const std::unique_ptr<IExcitationVector<uint16_t, float>>& GetExcitations() const;
+	std::unique_ptr<IExcitationVector<uint16_t, float>> GetNormalizedExcitations() const;
+	std::unique_ptr<IExcitationVector<uint16_t, float>> GetWhitenedExcitations() const;
 	std::vector<std::string> GetExpectation() const;
 
 	size_t get_id() const { return id_; }
@@ -62,8 +62,8 @@ private:
 	const SymbolMapping& symbol_mapping_;
 	size_t id_;
 	std::mutex mutex_;
-	std::unique_ptr<IExcitationVector<float>> excitations_;
-	std::unique_ptr<IExcitationVector<uint16_t>> kb_inputs_;
+	std::unique_ptr<IExcitationVector<uint16_t, float>> excitations_;
+	std::unique_ptr<IExcitationVector<uint16_t, uint16_t>> kb_inputs_;
 
 	std::unique_ptr<std::pair<uint16_t, float>> MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations);
 	std::set<std::pair<uint16_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float>>& nz_excitations);

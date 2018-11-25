@@ -148,7 +148,7 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 
 				for (const std::vector<std::vector<std::string>>& activated_modules: activated_module_layouts) {
 
-					// convolve over the whole architecture so as to make sentence position-neutral
+					// convolve 2D phrases-words over the whole architecture so as to make the sentence position-neutral
 					const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
 
 					// wire up the knowledge links
@@ -221,6 +221,18 @@ bool ConfabulationBase::CheckVocabulary(const std::vector<std::string> &symbols)
 
 void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
 {
+	const std::vector<std::vector<std::vector<std::string>>>& activated_module_layouts = organizer_->Organize(symbols);
+
+	/*
+	for (const std::vector<std::vector<std::string>>& activated_outer_module: activated_module_layouts) {
+		for (const std::vector<std::string>& activated_inner_module: activated_outer_module) {
+			std::cout << "Finding module activations for "
+					  << "(size = " << activated_inner_module.size() << "): "
+					  << VectorSymbolToSymbol(activated_inner_module, '#') << "\n" << std::flush;
+		}
+	}
+	*/
+
 	for (size_t i = 0; i < std::min(symbols.size(), modules_.size()); ++i) {
 		if ((!symbols[i].empty()) && (modules_[i] != nullptr)) {
 			modules_[i]->ActivateSymbol(symbols[i], 1);
@@ -242,8 +254,8 @@ void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source
 		source_module->Lock();
 	}
 
-	std::unique_ptr<IExcitationVector<float>> source_excitation = source_module->GetNormalizedExcitations();
-	const std::unique_ptr<IExcitationVector<float>>& transmitted_excitation = kb->Transmit(*source_excitation);
+	std::unique_ptr<IExcitationVector<uint16_t, float>> source_excitation = source_module->GetNormalizedExcitations();
+	const std::unique_ptr<IExcitationVector<uint16_t, float>>& transmitted_excitation = kb->Transmit(*source_excitation);
 	target_module->AddExcitationVector(*transmitted_excitation);
 	source_excitation.reset(nullptr);
 

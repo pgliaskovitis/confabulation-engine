@@ -25,8 +25,8 @@
 Module::Module(const SymbolMapping &symbol_mapping, size_t id) :
 	symbol_mapping_(symbol_mapping),
 	id_(id),
-	excitations_(new KHashExcitationVector<float>(symbol_mapping.Size())),
-	kb_inputs_(new KHashExcitationVector<uint16_t>(symbol_mapping.Size())),
+	excitations_(new KHashExcitationVector<uint16_t, float>(symbol_mapping.Size())),
+	kb_inputs_(new KHashExcitationVector<uint16_t, uint16_t>(symbol_mapping.Size())),
 	current_excitation_level_(0)
 {
 	ExcitationsToZero();
@@ -43,7 +43,7 @@ void Module::ActivateSymbol(const std::string &word, int8_t K)
 	}
 }
 
-void Module::AddExcitationVector(const IExcitationVector<float> &input)
+void Module::AddExcitationVector(const IExcitationVector<uint16_t, float> &input)
 {
 	excitations_->Add(input);
 	for (const std::pair<uint16_t, float>& e : input.GetNzElements()) {
@@ -52,15 +52,15 @@ void Module::AddExcitationVector(const IExcitationVector<float> &input)
 	}
 }
 
-const std::unique_ptr<IExcitationVector<float> > &Module::GetExcitations() const
+const std::unique_ptr<IExcitationVector<uint16_t, float> > &Module::GetExcitations() const
 {
 	return excitations_;
 }
 
-std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations() const
+std::unique_ptr<IExcitationVector<uint16_t, float>> Module::GetNormalizedExcitations() const
 {
-	std::unique_ptr<IExcitationVector<float>> normalized_excitations;
-	normalized_excitations.reset(new KHashExcitationVector<float>(symbol_mapping_.Size()));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> normalized_excitations;
+	normalized_excitations.reset(new KHashExcitationVector<uint16_t, float>(symbol_mapping_.Size()));
 
 	for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
 		normalized_excitations->SetElement(e.first, e.second);
@@ -71,10 +71,10 @@ std::unique_ptr<IExcitationVector<float>> Module::GetNormalizedExcitations() con
 	return normalized_excitations;
 }
 
-std::unique_ptr<IExcitationVector<float>> Module::GetWhitenedExcitations() const
+std::unique_ptr<IExcitationVector<uint16_t, float>> Module::GetWhitenedExcitations() const
 {
-	std::unique_ptr<IExcitationVector<float>> whitened_excitations;
-	whitened_excitations.reset(new KHashExcitationVector<float>(symbol_mapping_.Size()));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> whitened_excitations;
+	whitened_excitations.reset(new KHashExcitationVector<uint16_t, float>(symbol_mapping_.Size()));
 
 	for (const std::pair<uint16_t, float>& e : excitations_->GetNzElements()) {
 		whitened_excitations->SetElement(e.first, e.second);
@@ -155,7 +155,7 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
 	expectations.reset(new std::vector<std::pair<uint16_t, float>>(min_K_excit.begin(), min_K_excit.end()));
 
 	// saving needed info from intermediate state
-	KHashExcitationVector<uint16_t> kb_inputs_temp(*kb_inputs_);
+	KHashExcitationVector<uint16_t, uint16_t> kb_inputs_temp(*kb_inputs_);
 
 	// cleanup intermediate state
 	ExcitationsToZero();
@@ -184,8 +184,8 @@ std::vector<std::string> Module::AdditivePartialConfabulation(int8_t K)
 
 void Module::ExcitationsToZero()
 {
-	excitations_.reset(new KHashExcitationVector<float>(symbol_mapping_.Size()));
-	kb_inputs_.reset(new KHashExcitationVector<uint16_t>(symbol_mapping_.Size()));
+	excitations_.reset(new KHashExcitationVector<uint16_t, float>(symbol_mapping_.Size()));
+	kb_inputs_.reset(new KHashExcitationVector<uint16_t, uint16_t>(symbol_mapping_.Size()));
 }
 
 void Module::ExcitationLevelToZero()

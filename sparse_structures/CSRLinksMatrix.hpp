@@ -24,12 +24,12 @@
 #include "DOKExcitationVector.hpp"
 #include "IKnowledgeLinks.hpp"
 
-template <typename T>
-class CSRLinksMatrix : public IKnowledgeLinks<T>
+template <typename TRow, typename TCol, typename T>
+class CSRLinksMatrix : public IKnowledgeLinks<TRow, TCol, T>
 {
 public:
-	CSRLinksMatrix(uint16_t num_rows, uint16_t num_cols);
-	CSRLinksMatrix(IKnowledgeLinks<T>& base);
+	CSRLinksMatrix(TRow num_rows, TCol num_cols);
+	CSRLinksMatrix(IKnowledgeLinks<TRow, TCol, T>& base);
 
 	CSRLinksMatrix(const CSRLinksMatrix& rhs) = delete;
 	CSRLinksMatrix& operator=(const CSRLinksMatrix& rhs) = delete;
@@ -38,43 +38,43 @@ public:
 
 	~CSRLinksMatrix();
 
-	virtual void SetElement(uint16_t r, uint16_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
-	virtual void SetElementQuick(uint16_t r, uint16_t c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
+	virtual void SetElement(TRow r, TCol c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
+	virtual void SetElementQuick(TRow r, TCol c, const T& value) { (void)r; (void)c; (void)value; /*not supported*/ }
 
-	virtual T GetElement(uint16_t r, uint16_t c) const;
-	virtual T GetElementQuick(uint16_t r, uint16_t c) const;
+	virtual T GetElement(TRow r, TCol c) const;
+	virtual T GetElementQuick(TRow r, TCol c) const;
 
-	virtual uint16_t get_num_rows() const { return num_rows_; }
-	virtual uint16_t get_num_cols() const { return num_cols_; }
+	virtual TRow get_num_rows() const { return num_rows_; }
+	virtual TCol get_num_cols() const { return num_cols_; }
 
 	virtual uint32_t GetNnz() const { return a_.size(); }
 
-	virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const;
-	virtual std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> GetNzElements() const;
+	virtual std::unique_ptr<IExcitationVector<TRow, T>> Multiply(const IExcitationVector<TCol, T>& vec) const;
+	virtual std::set<std::pair<std::pair<TRow, TCol>, T>> GetNzElements() const;
 
 private:
-	const uint16_t num_rows_;
-	const uint16_t num_cols_;
+	const TRow num_rows_;
+	const TCol num_cols_;
 
 	std::vector<T> a_;
 	std::vector<uint32_t> ia_;
 	std::vector<uint32_t> ja_;
 };
 
-template <typename T>
-CSRLinksMatrix<T>::CSRLinksMatrix(uint16_t num_rows, uint16_t num_cols) : num_rows_(num_rows), num_cols_(num_cols)
+template <typename TRow, typename TCol, typename T>
+CSRLinksMatrix<TRow, TCol, T>::CSRLinksMatrix(TRow num_rows, TCol num_cols) : num_rows_(num_rows), num_cols_(num_cols)
 {}
 
-template <typename T>
-CSRLinksMatrix<T>::~CSRLinksMatrix()
+template <typename TRow, typename TCol, typename T>
+CSRLinksMatrix<TRow, TCol, T>::~CSRLinksMatrix()
 {
 	a_.clear();
 	ia_.clear();
 	ja_.clear();
 }
 
-template <typename T>
-CSRLinksMatrix<T>::CSRLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get_num_rows()), num_cols_(base.get_num_cols())
+template <typename TRow, typename TCol, typename T>
+CSRLinksMatrix<TRow, TCol, T>::CSRLinksMatrix(IKnowledgeLinks<TRow, TCol, T> &base) : num_rows_(base.get_num_rows()), num_cols_(base.get_num_cols())
 {
 	a_.resize(base.GetNnz());
 	ja_.resize(base.GetNnz());
@@ -85,7 +85,7 @@ CSRLinksMatrix<T>::CSRLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get
 	ia_.push_back(index_a);
 	uint32_t row = 0;
 
-	for (const std::pair<std::pair<uint16_t, uint16_t>, T>& element : base.GetNzElements()) {
+	for (const std::pair<std::pair<TRow, TCol>, T>& element : base.GetNzElements()) {
 		// advance in lines until the row of element
 		while (row != element.first.first) {
 			ia_.push_back(index_a);
@@ -104,15 +104,15 @@ CSRLinksMatrix<T>::CSRLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get
 	}
 }
 
-template <typename T>
-T CSRLinksMatrix<T>::GetElement(uint16_t r, uint16_t c) const
+template <typename TRow, typename TCol, typename T>
+T CSRLinksMatrix<TRow, TCol, T>::GetElement(TRow r, TCol c) const
 {
-	IKnowledgeLinks<T>::CheckBounds(r, c);
+	IKnowledgeLinks<TRow, TCol, T>::CheckBounds(r, c);
 	return GetElementQuick(r, c);
 }
 
-template <typename T>
-T CSRLinksMatrix<T>::GetElementQuick(uint16_t r, uint16_t c) const
+template <typename TRow, typename TCol, typename T>
+T CSRLinksMatrix<TRow, TCol, T>::GetElementQuick(TRow r, TCol c) const
 {
 	std::vector<uint32_t>::const_iterator begin_it = ja_.begin() + ia_[r];
 	std::vector<uint32_t>::const_iterator end_it = ja_.begin() + ia_[r + 1];
@@ -127,13 +127,13 @@ T CSRLinksMatrix<T>::GetElementQuick(uint16_t r, uint16_t c) const
 	}
 }
 
-template <typename T>
-std::unique_ptr<IExcitationVector<T>> CSRLinksMatrix<T>::Multiply(const IExcitationVector<T>& vec) const
+template <typename TRow, typename TCol, typename T>
+std::unique_ptr<IExcitationVector<TRow, T>> CSRLinksMatrix<TRow, TCol, T>::Multiply(const IExcitationVector<TCol, T>& vec) const
 {
-	std::unique_ptr<IExcitationVector<T>> result(new DOKExcitationVector<T>(num_rows_));
+	std::unique_ptr<IExcitationVector<TRow, T>> result(new DOKExcitationVector<TRow, T>(num_rows_));
 	T row_sum;
 
-	for (uint16_t r = 0; r < num_rows_; ++r) {
+	for (TRow r = 0; r < num_rows_; ++r) {
 		row_sum = 0;
 		for (uint32_t i = ia_[r]; i < ia_[r + 1]; ++i) {
 			row_sum += a_[i] * vec.GetElement(ja_[i]);
@@ -144,12 +144,12 @@ std::unique_ptr<IExcitationVector<T>> CSRLinksMatrix<T>::Multiply(const IExcitat
 	return result;
 }
 
-template <typename T>
-std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> CSRLinksMatrix<T>::GetNzElements() const
+template <typename TRow, typename TCol, typename T>
+std::set<std::pair<std::pair<TRow, TCol>, T>> CSRLinksMatrix<TRow, TCol, T>::GetNzElements() const
 {
-	typename std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> result;
+	typename std::set<std::pair<std::pair<TRow, TCol>, T>> result;
 
-	for (uint16_t r = 0; r < num_rows_; ++r) {
+	for (TRow r = 0; r < num_rows_; ++r) {
 		for (uint32_t i = ia_[r]; i < ia_[r + 1]; ++i) {
 			result.insert(std::make_pair(std::make_pair(r, ja_[i]), a_[i]));
 		}

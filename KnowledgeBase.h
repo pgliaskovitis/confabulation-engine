@@ -40,7 +40,7 @@ public:
 	void Add(uint16_t targ_index, uint16_t src_index);
 	void ComputeLinkStrengths();
 
-	std::unique_ptr<IExcitationVector<float>> Transmit(const IExcitationVector<float>& normalized_excitations) const;
+	std::unique_ptr<IExcitationVector<uint16_t, float>> Transmit(const IExcitationVector<uint16_t, float>& normalized_excitations) const;
 
 	void ResetCooccurrenceCounts() { cooccurrence_counts_.reset(); }
 	void ResetTargetSymbolSums() { target_symbol_sums_.clear(); }
@@ -63,8 +63,8 @@ private:
 	const std::string id_;
 	const SymbolMapping& src_map_;
 	const SymbolMapping& targ_map_;
-	std::unique_ptr<IKnowledgeLinks<uint32_t>> cooccurrence_counts_;
-	std::unique_ptr<IKnowledgeLinks<float>> kbase_;
+	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, uint32_t>> cooccurrence_counts_;
+	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> kbase_;
 	std::vector<uint32_t> target_symbol_sums_;
 
 	static float ComputeLinkStrength(double antecedent_support_probability);

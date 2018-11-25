@@ -66,7 +66,7 @@ void ConfabulationTest::TestTokenizeWithinSentences(const std::string& input) co
 
 void ConfabulationTest::TestDOKExcitationVector() const
 {
-	std::unique_ptr<IExcitationVector<float>> my_vec_ptr1(new DOKExcitationVector<float>(10));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr1(new DOKExcitationVector<uint16_t, float>(10));
 
 	my_vec_ptr1->SetElement(1, 1.0);
 	my_vec_ptr1->SetElement(2, 2.0);
@@ -79,7 +79,7 @@ void ConfabulationTest::TestDOKExcitationVector() const
 
 	std::cout << "Vector before addition:" << std::endl << my_vec_ptr1->ToString();
 
-	std::unique_ptr<IExcitationVector<float>> my_vec_ptr2(new DOKExcitationVector<float>(10));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr2(new DOKExcitationVector<uint16_t, float>(10));
 
 	my_vec_ptr2->SetElement(1, 1.5);
 	my_vec_ptr2->SetElement(2, 2.5);
@@ -98,7 +98,7 @@ void ConfabulationTest::TestDOKExcitationVector() const
 
 void ConfabulationTest::TestKHashExcitationVector() const
 {
-	std::unique_ptr<IExcitationVector<float>> my_vec_ptr1(new KHashExcitationVector<float>(10));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr1(new KHashExcitationVector<uint16_t, float>(10));
 
 	my_vec_ptr1->SetElement(1, 1.0);
 	my_vec_ptr1->SetElement(2, 2.0);
@@ -111,7 +111,7 @@ void ConfabulationTest::TestKHashExcitationVector() const
 
 	std::cout << "Vector before addition:" << std::endl << my_vec_ptr1->ToString();
 
-	std::unique_ptr<IExcitationVector<float>> my_vec_ptr2(new KHashExcitationVector<float>(10));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr2(new KHashExcitationVector<uint16_t, float>(10));
 
 	my_vec_ptr2->SetElement(1, 1.5);
 	my_vec_ptr2->SetElement(2, 2.5);
@@ -130,7 +130,7 @@ void ConfabulationTest::TestKHashExcitationVector() const
 
 void ConfabulationTest::TestDOKLinksMatrix() const
 {
-	std::unique_ptr<IKnowledgeLinks<float>> my_matrix_ptr(new DOKLinksMatrix<float>(3, 4));
+	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_matrix_ptr(new DOKLinksMatrix<uint16_t, uint16_t, float>(3, 4));
 
 	my_matrix_ptr->SetElement(0, 1, 1.0);
 	my_matrix_ptr->SetElement(1, 3, 1.0);
@@ -138,7 +138,7 @@ void ConfabulationTest::TestDOKLinksMatrix() const
 
 	std::cout << "Matrix before multiplication:" << std::endl << my_matrix_ptr->ToString();
 
-	std::unique_ptr<IExcitationVector<float>> my_vec_ptr(new DOKExcitationVector<float>(4));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr(new DOKExcitationVector<uint16_t, float>(4));
 
 	my_vec_ptr->SetElement(0, 1.5);
 	my_vec_ptr->SetElement(1, 2.5);
@@ -146,14 +146,14 @@ void ConfabulationTest::TestDOKLinksMatrix() const
 
 	std::cout << "Vector before multiplication:" << std::endl << my_vec_ptr->ToString();
 
-	std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = my_matrix_ptr->Multiply(*my_vec_ptr);
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_result_vec_ptr = my_matrix_ptr->Multiply(*my_vec_ptr);
 
 	std::cout << "Vector after multiplication:" << std::endl << my_result_vec_ptr->ToString();
 }
 
 void ConfabulationTest::TestSparseHashLinksMatrix() const
 {
-	std::unique_ptr<IKnowledgeLinks<float>> my_matrix_ptr(new SparseHashLinksMatrix<float>(3, 4));
+	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_matrix_ptr(new SparseHashLinksMatrix<uint16_t, uint16_t, float>(3, 4));
 
 	my_matrix_ptr->SetElement(0, 1, 1.0);
 	my_matrix_ptr->SetElement(1, 3, 1.0);
@@ -161,7 +161,7 @@ void ConfabulationTest::TestSparseHashLinksMatrix() const
 
 	std::cout << "Matrix before multiplication:" << std::endl << my_matrix_ptr->ToString();
 
-	std::unique_ptr<IExcitationVector<float>> my_vec_ptr(new KHashExcitationVector<float>(4));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr(new KHashExcitationVector<uint16_t, float>(4));
 
 	my_vec_ptr->SetElement(0, 1.5);
 	my_vec_ptr->SetElement(1, 2.5);
@@ -169,24 +169,24 @@ void ConfabulationTest::TestSparseHashLinksMatrix() const
 
 	std::cout << "Vector before multiplication:" << std::endl << my_vec_ptr->ToString();
 
-	std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = my_matrix_ptr->Multiply(*my_vec_ptr);
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_result_vec_ptr = my_matrix_ptr->Multiply(*my_vec_ptr);
 
 	std::cout << "Vector after multiplication:" << std::endl << my_result_vec_ptr->ToString();
 }
 
 void ConfabulationTest::TestCSRLinksMatrix() const
 {
-	std::unique_ptr<IKnowledgeLinks<float>> my_dok_matrix_ptr(new DOKLinksMatrix<float>(3, 4));
+	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_dok_matrix_ptr(new DOKLinksMatrix<uint16_t, uint16_t, float>(3, 4));
 
 	my_dok_matrix_ptr->SetElement(0, 1 , 1.0);
 	my_dok_matrix_ptr->SetElement(1, 3, 1.0);
 	my_dok_matrix_ptr->SetElement(2, 2, 1.0);
 
-	std::unique_ptr<IKnowledgeLinks<float>> my_csr_matrix_ptr(new CSRLinksMatrix<float>(*my_dok_matrix_ptr));
+	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_csr_matrix_ptr(new CSRLinksMatrix<uint16_t, uint16_t, float>(*my_dok_matrix_ptr));
 
 	std::cout << "Matrix before multiplication:" << std::endl << my_csr_matrix_ptr->ToString();
 
-	std::unique_ptr<IExcitationVector<float>> my_vec_ptr(new DOKExcitationVector<float>(4));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr(new DOKExcitationVector<uint16_t, float>(4));
 
 	my_vec_ptr->SetElement(0, 1.0);
 	my_vec_ptr->SetElement(1, 2.0);
@@ -194,7 +194,7 @@ void ConfabulationTest::TestCSRLinksMatrix() const
 
 	std::cout << "Vector before multiplication:" << std::endl << my_vec_ptr->ToString();
 
-	std::unique_ptr<IExcitationVector<float>> my_result_vec_ptr = my_csr_matrix_ptr->Multiply(*my_vec_ptr);
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_result_vec_ptr = my_csr_matrix_ptr->Multiply(*my_vec_ptr);
 
 	std::cout << "Vector after multiplication:" << std::endl << my_result_vec_ptr->ToString();
 }

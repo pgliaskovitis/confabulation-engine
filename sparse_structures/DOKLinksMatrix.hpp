@@ -23,12 +23,12 @@
 #include "DOKExcitationVector.hpp"
 #include "IKnowledgeLinks.hpp"
 
-template <typename T>
-class DOKLinksMatrix : public IKnowledgeLinks<T>
+template <typename TRow, typename TCol, typename T>
+class DOKLinksMatrix : public IKnowledgeLinks<TRow, TCol, T>
 {
 public:
-	DOKLinksMatrix(uint16_t num_rows, uint16_t num_cols);
-	DOKLinksMatrix(IKnowledgeLinks<T>& base);
+	DOKLinksMatrix(TRow num_rows, TCol num_cols);
+	DOKLinksMatrix(IKnowledgeLinks<TRow, TCol, T>& base);
 
 	DOKLinksMatrix(const DOKLinksMatrix& rhs) = delete;
 	DOKLinksMatrix& operator=(const DOKLinksMatrix& rhs) = delete;
@@ -37,54 +37,54 @@ public:
 
 	~DOKLinksMatrix();
 
-	virtual void SetElement(uint16_t r, uint16_t c, const T& value);
-	virtual void SetElementQuick(uint16_t r, uint16_t c, const T& value);
+	virtual void SetElement(TRow r, TCol c, const T& value);
+	virtual void SetElementQuick(TRow r, TCol c, const T& value);
 
-	virtual T GetElement(uint16_t r, uint16_t c) const;
-	virtual T GetElementQuick(uint16_t r, uint16_t c) const;
+	virtual T GetElement(TRow r, TCol c) const;
+	virtual T GetElementQuick(TRow r, TCol c) const;
 
-	virtual uint16_t get_num_rows() const { return num_rows_; }
-	virtual uint16_t get_num_cols() const { return num_cols_; }
+	virtual TRow get_num_rows() const { return num_rows_; }
+	virtual TCol get_num_cols() const { return num_cols_; }
 
 	virtual uint32_t GetNnz() const { return map_.size(); }
 
-	virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const;
-	virtual std::set<std::pair<std::pair<uint16_t, uint16_t>, T> > GetNzElements() const;
+	virtual std::unique_ptr<IExcitationVector<TRow, T>> Multiply(const IExcitationVector<TCol, T>& vec) const;
+	virtual std::set<std::pair<std::pair<TRow, TCol>, T> > GetNzElements() const;
 
 private:
-	const uint16_t num_rows_;
-	const uint16_t num_cols_;
+	const TRow num_rows_;
+	const TCol num_cols_;
 
-	std::unordered_map<std::pair<uint16_t, uint16_t>, T, PairHash, PairEquals> map_;
+	std::unordered_map<std::pair<TRow, TCol>, T, PairHash, PairEquals> map_;
 };
 
-template <typename T>
-DOKLinksMatrix<T>::DOKLinksMatrix(uint16_t num_rows, uint16_t num_cols) : num_rows_(num_rows), num_cols_(num_cols)
+template <typename TRow, typename TCol, typename T>
+DOKLinksMatrix<TRow, TCol, T>::DOKLinksMatrix(TRow num_rows, TCol num_cols) : num_rows_(num_rows), num_cols_(num_cols)
 {}
 
-template <typename T>
-DOKLinksMatrix<T>::DOKLinksMatrix(IKnowledgeLinks<T> &base) : num_rows_(base.get_num_rows()), num_cols_(base.get_num_cols())
+template <typename TRow, typename TCol, typename T>
+DOKLinksMatrix<TRow, TCol, T>::DOKLinksMatrix(IKnowledgeLinks<TRow, TCol, T> &base) : num_rows_(base.get_num_rows()), num_cols_(base.get_num_cols())
 {
-	for (const std::pair<std::pair<uint16_t, uint16_t>, T>& element : base.GetNzElements()) {
+	for (const std::pair<std::pair<TRow, TCol>, T>& element : base.GetNzElements()) {
 		map_.insert(element);
 	}
 }
 
-template <typename T>
-DOKLinksMatrix<T>::~DOKLinksMatrix()
+template <typename TRow, typename TCol, typename T>
+DOKLinksMatrix<TRow, TCol, T>::~DOKLinksMatrix()
 {
 	map_.clear();
 }
 
-template <typename T>
-T DOKLinksMatrix<T>::GetElement(uint16_t r, uint16_t c) const
+template <typename TRow, typename TCol, typename T>
+T DOKLinksMatrix<TRow, TCol, T>::GetElement(TRow r, TCol c) const
 {
-	IKnowledgeLinks<T>::CheckBounds(r, c);
+	IKnowledgeLinks<TRow, TCol, T>::CheckBounds(r, c);
 	return GetElementQuick(r, c);
 }
 
-template <typename T>
-T DOKLinksMatrix<T>::GetElementQuick(uint16_t r, uint16_t c) const
+template <typename TRow, typename TCol, typename T>
+T DOKLinksMatrix<TRow, TCol, T>::GetElementQuick(TRow r, TCol c) const
 {
 	T result;
 
@@ -97,12 +97,12 @@ T DOKLinksMatrix<T>::GetElementQuick(uint16_t r, uint16_t c) const
 	return result;
 }
 
-template <typename T>
-void DOKLinksMatrix<T>::SetElement(uint16_t r, uint16_t c, const T &value)
+template <typename TRow, typename TCol, typename T>
+void DOKLinksMatrix<TRow, TCol, T>::SetElement(TRow r, TCol c, const T &value)
 {
-	IKnowledgeLinks<T>::CheckBounds(r, c);
+	IKnowledgeLinks<TRow, TCol, T>::CheckBounds(r, c);
 	if (IsNearlyEqual(value, 0.0)) {
-		typename std::unordered_map<std::pair<uint16_t, uint16_t>, T, PairHash, PairEquals>::iterator it = map_.find(std::make_pair(r, c));
+		typename std::unordered_map<std::pair<TRow, TCol>, T, PairHash, PairEquals>::iterator it = map_.find(std::make_pair(r, c));
 		if (it != map_.end()) {
 			map_.erase(it);
 		}
@@ -111,23 +111,23 @@ void DOKLinksMatrix<T>::SetElement(uint16_t r, uint16_t c, const T &value)
 	}
 }
 
-template <typename T>
-void DOKLinksMatrix<T>::SetElementQuick(uint16_t r, uint16_t c, const T& value)
+template <typename TRow, typename TCol, typename T>
+void DOKLinksMatrix<TRow, TCol, T>::SetElementQuick(TRow r, TCol c, const T& value)
 {
 	map_[std::make_pair(r, c)] = value;
 }
 
-template <typename T>
-std::unique_ptr<IExcitationVector<T>> DOKLinksMatrix<T>::Multiply(const IExcitationVector<T>& vec) const
+template <typename TRow, typename TCol, typename T>
+std::unique_ptr<IExcitationVector<TRow, T>> DOKLinksMatrix<TRow, TCol, T>::Multiply(const IExcitationVector<TCol, T>& vec) const
 {
-	std::set<std::pair<uint16_t, T>> vec_elements = vec.GetNzElements();
+	std::set<std::pair<TCol, T>> vec_elements = vec.GetNzElements();
 
 	T link_strength = 0.0;
-	std::unique_ptr<IExcitationVector<T>> result(new DOKExcitationVector<T>(num_rows_));
+	std::unique_ptr<IExcitationVector<TRow, T>> result(new DOKExcitationVector<TRow, T>(num_rows_));
 
-	for (const std::pair<uint32_t, T>& element : vec_elements) {
+	for (const std::pair<TCol, T>& element : vec_elements) {
 		uint32_t c = element.first;
-		for (uint16_t r = 0; r < num_rows_; ++r) {
+		for (TRow r = 0; r < num_rows_; ++r) {
 			link_strength = GetElementQuick(r, c);
 			if (!IsNearlyEqual(link_strength, 0.0)) {
 				result->SetElement(r, result->GetElementQuick(r) + link_strength * element.second);
@@ -138,12 +138,12 @@ std::unique_ptr<IExcitationVector<T>> DOKLinksMatrix<T>::Multiply(const IExcitat
 	return result;
 }
 
-template <typename T>
-std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> DOKLinksMatrix<T>::GetNzElements() const
+template <typename TRow, typename TCol, typename T>
+std::set<std::pair<std::pair<TRow, TCol>, T>> DOKLinksMatrix<TRow, TCol, T>::GetNzElements() const
 {
-	typename std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> result;
+	typename std::set<std::pair<std::pair<TRow, TCol>, T>> result;
 
-	for (typename std::unordered_map<std::pair<uint16_t, uint16_t>, T, PairHash, PairEquals>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+	for (typename std::unordered_map<std::pair<TRow, TCol>, T, PairHash, PairEquals>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
 		result.insert(*it);
 	}
 

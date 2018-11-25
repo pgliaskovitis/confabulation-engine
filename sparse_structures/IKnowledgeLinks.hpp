@@ -27,11 +27,19 @@
 
 struct PairHash {
 public:
-	template <typename T, typename U>
-	std::size_t operator()(const std::pair<T, U> &x) const
+	template <typename TRow, typename TCol>
+	std::size_t operator()(const std::pair<TRow, TCol> &x) const
 	{
-		return std::hash<T>()(x.first) ^ std::hash<U>()(x.second);
+		return x.first * std::numeric_limits<TCol>::max() + x.second;
 	}
+
+	/*
+	template <typename TRow, typename TCol>
+	std::size_t operator()(const std::pair<TRow, TCol> &x) const
+	{
+		return std::hash<TRow>()(x.first) ^ std::hash<TCol>()(x.second);
+	}
+	*/
 };
 
 struct PairEquals {
@@ -43,24 +51,24 @@ public:
 	}
 };
 
-template <typename T>
+template <typename TRow, typename TCol, typename T>
 class IKnowledgeLinks
 {
 public:
 	virtual ~IKnowledgeLinks() {}
 
-	virtual void SetElement(const uint16_t r, const uint16_t c, const T& value) = 0;
-	virtual void SetElementQuick(const uint16_t r, uint16_t c, const T& value) = 0;
+	virtual void SetElement(const TRow r, const TCol c, const T& value) = 0;
+	virtual void SetElementQuick(const TRow r, TCol c, const T& value) = 0;
 
-	virtual T GetElement(const uint16_t r, const uint16_t c) const = 0;
-	virtual T GetElementQuick(const uint16_t r, const uint16_t c) const = 0;
+	virtual T GetElement(const TRow r, const TCol c) const = 0;
+	virtual T GetElementQuick(const TRow r, const TCol c) const = 0;
 
-	virtual uint16_t get_num_rows() const = 0;
-	virtual uint16_t get_num_cols() const = 0;
+	virtual TRow get_num_rows() const = 0;
+	virtual TCol get_num_cols() const = 0;
 
 	virtual uint32_t GetNnz() const = 0;
 
-	void CheckBounds(const uint16_t r, const uint16_t c) const
+	void CheckBounds(const TRow r, const TCol c) const
 	{
 		if (r >= get_num_rows() || c >= get_num_cols()) {
 			throw std::out_of_range(std::string("2D Out of Range, for row ") +
@@ -70,17 +78,17 @@ public:
 		}
 	}
 
-	virtual std::unique_ptr<IExcitationVector<T>> Multiply(const IExcitationVector<T>& vec) const = 0;
-	virtual std::set<std::pair<std::pair<uint16_t, uint16_t>, T>> GetNzElements() const = 0;
+	virtual std::unique_ptr<IExcitationVector<TRow, T>> Multiply(const IExcitationVector<TCol, T>& vec) const = 0;
+	virtual std::set<std::pair<std::pair<TRow, TCol>, T>> GetNzElements() const = 0;
 
 	std::string ToString() const
 	{
-		const uint32_t num_rows = get_num_rows();
-		const uint32_t num_cols = get_num_cols();
+		const TRow num_rows = get_num_rows();
+		const TCol num_cols = get_num_cols();
 
 		std::string str = std::string("LinksMatrix [num_lines=") + std::to_string(num_rows) + ", num_cols=" + std::to_string(num_cols) + "]\n";
-		for (uint32_t r = 0; r < num_rows; ++r) {
-			for (uint32_t c = 0; c < num_cols; ++c) {
+		for (TRow r = 0; r < num_rows; ++r) {
+			for (TCol c = 0; c < num_cols; ++c) {
 				str += std::to_string(GetElement(r, c)) + " ";
 			}
 
