@@ -27,10 +27,6 @@
 
 struct PairHash {
 public:
-	std::size_t operator()(const std::pair<uint16_t, uint16_t> &x) const
-	{
-	  return x.first * std::numeric_limits<uint16_t>::max() + x.second;
-	}
 	template <typename T, typename U>
 	std::size_t operator()(const std::pair<T, U> &x) const
 	{
