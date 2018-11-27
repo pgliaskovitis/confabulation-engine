@@ -15,6 +15,16 @@ text_data/Chesterton_2.txt
 text_data/Chesterton_3.txt
 text_data/Chesterton_4.txt
 text_data/Chesterton_5.txt
+text_data/Chesterton_6.txt
+text_data/Chesterton_7.txt
+text_data/Chesterton_8.txt
+text_data/Chesterton_9.txt
+text_data/Chesterton_10.txt
+text_data/Chesterton_11.txt
+text_data/Chesterton_12.txt
+text_data/Chesterton_13.txt
+text_data/Chesterton_14.txt
+text_data/Chesterton_15.txt
 text_data/Conrad_1.txt
 text_data/Conrad_2.txt
 text_data/Conrad_3.txt
