@@ -32,7 +32,6 @@
 #include "sparse_structures/CSRLinksMatrix.hpp"
 #include "utils/HashTrie.hpp"
 #include "utils/Utils.h"
-#include "ForwardConfabulation.h"
 #include "TwoLevelMultiConfabulation.h"
 
 void ConfabulationTest::TestTokenizeSentences(const std::string& input) const
@@ -465,21 +464,6 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 
 	const std::vector<std::string>& expectation_at_target_m = module_5->GetExpectation();
 	std::cout << "C1F confabulated symbols at module 5 are: \n" << VectorSymbolToSymbol(expectation_at_target_m, '\n') << "\n" << std::flush;
-}
-
-void ConfabulationTest::TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const
-{
-	size_t num_word_modules = Globals::kReferenceFrameSize + 1;
-	ForwardConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 2);
-	TextReader reader(symbolfile, masterfile);
-	reader.Initialize();
-
-	for (const std::string& e : sentences) {
-		const std::vector<std::string> current_feed_tokens(reader.ExtractTokens(e));
-		FillWithEmptyStrings(current_feed_tokens, num_word_modules);
-		const std::vector<std::string>& current_result_tokens = confab_engine.Confabulation(current_feed_tokens, -1, false);
-		std::cout << e << current_result_tokens[0] << "\n" << std::flush;
-	}
 }
 
 void ConfabulationTest::TestTwoLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const

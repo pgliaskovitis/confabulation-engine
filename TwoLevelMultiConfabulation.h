@@ -20,9 +20,9 @@
 #pragma once
 
 #include <thread>
-#include "ForwardConfabulation.h"
+#include "ConfabulationBase.h"
 
-class TwoLevelMultiConfabulation : public ForwardConfabulation
+class TwoLevelMultiConfabulation : public ConfabulationBase
 {
 public:
 	TwoLevelMultiConfabulation(size_t num_word_modules,
@@ -37,6 +37,11 @@ public:
 
 	virtual void Activate(const std::vector<std::string>& symbols);
 	virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation);
+
+protected:
+	virtual int8_t AutoIndexToComplete(const std::vector<std::string>& symbols);
+	virtual bool CheckIndex(const std::vector<std::string>& symbols, int8_t index_to_complete);
+	virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete);
 
 private:
 	uint8_t num_word_modules_;

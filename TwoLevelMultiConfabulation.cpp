@@ -85,6 +85,73 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 	Initialize(kb_specs, level_sizes, symbol_file, master_file, min_single_occurrences, min_multi_occurrences);
 }
 
+int8_t TwoLevelMultiConfabulation::AutoIndexToComplete(const std::vector<std::string> &symbols)
+{
+	if (symbols.empty() || symbols[0].empty()) {
+		return -1;
+	}
+
+	int8_t index = FindFirstIndexOfSymbol(symbols, "");
+
+	if (index >= 0) {
+		return index;
+	} else {
+		// array full of symbols
+		return ConvertToSigned(symbols.size());
+	}
+}
+
+bool TwoLevelMultiConfabulation::CheckIndex(const std::vector<std::string> &symbols, int8_t index_to_complete)
+{
+	if (index_to_complete < 0) {
+		std::cout << "Index to complete is negative" << "\n" << std::flush;
+		return false;
+	}
+
+	if (index_to_complete >= num_modules_) {
+		std::cout << "Support for completion only for indices in [0, " << (num_modules_ - 1) << "\n" << std::flush;
+		return false;
+	}
+
+	if (((size_t)index_to_complete < symbols.size()) && (!symbols[index_to_complete].empty())) {
+		std::cout << "There is already symbol \"" << symbols[index_to_complete] << "\") at index " << index_to_complete << "\n" << std::flush;
+		return false;
+	}
+
+	return true;
+}
+
+bool TwoLevelMultiConfabulation::CheckArguments(const std::vector<std::string> &symbols, int8_t index_to_complete)
+{
+	if (symbols.empty()) {
+		std::cout << "Symbols vector is empty" << "\n" << std::flush;
+		return false;
+	}
+
+	if (index_to_complete >= 0) {
+		// check there is at least one symbol before index_to_complete
+		if (FindFirstIndexNotOfSymbol(symbols, "") >= index_to_complete) {
+			std::cout << "Symbols vector does not contain any symbol before index_to_complete" << "\n" << std::flush;
+			return false;
+		}
+
+		if (CheckIndex(symbols, index_to_complete)) {
+			return CheckVocabulary(symbols);
+		} else {
+			return false;
+		}
+	}
+
+	// autodetect mode
+	int8_t index = AutoIndexToComplete(symbols);
+
+	if (CheckIndex(symbols, index)) {
+		return CheckVocabulary(symbols);
+	} else {
+		return false;
+	}
+}
+
 void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbols)
 {
 	const std::vector<std::vector<std::string>>& primary_layout = organizer_->Organize(symbols);

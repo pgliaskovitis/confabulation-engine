@@ -47,13 +47,7 @@ public:
 
 	void TestTransferExcitations(const std::string& symbolfile, const std::string& masterfile) const;
 
-	void TestSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
-
-	void TestTwoLevelSimpleConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
-
 	void TestTwoLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
-
-	void TestOneLevelMultiConfabulation(const std::string& symbolfile, const std::string& masterfile, const std::vector<std::string>& sentences) const;
 
 private:
 	void PerformConfabulation(Globals& globals, const std::vector<std::string>& sentences) const;
