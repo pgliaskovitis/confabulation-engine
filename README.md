@@ -77,9 +77,11 @@ In decreasing order of importance:
 Installation
 ------------
 
-- You will need to have Google SparseHash installed at the root source tree, in a "google" directory. A suitable version has been included in later versions of this repo.
+You will need to have Google SparseHash installed at the root source tree, in a "google" directory. A suitable version has been included in later versions of this repo.
 
-The currently preferred way to build however is through cmake:
+You will also need khash.h in a "klib" directory, obtainable from https://github.com/attractivechaos/klib (also check out the excellent blog). A suitable version has also been included in later versions of this repo.
+
+The currently preferred way to build is through cmake:
 
 - sudo apt install cmake
 
