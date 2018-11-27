@@ -53,57 +53,47 @@ MultiLevelOrganizer::MultiLevelOrganizer(const std::vector<uint8_t>& level_sizes
 //       multisymbol_21 = multisymbol_11 + multisymbol_12
 // Different combinations of activations are placed in different top-levels, i.e.,
 // n_combinations tries to predict different possible combinations of multiwords
-std::vector<std::vector<std::vector<std::string>>> MultiLevelOrganizer::Organize(const std::vector<std::string>& symbols)
+std::vector<std::vector<std::string>> MultiLevelOrganizer::Organize(const std::vector<std::string>& symbols)
 {
-	// size_t n_combinations = Globals::kMaxMultiWordSize - 1;
-	size_t n_combinations = 1;
 	size_t n_levels = level_sizes_.size();
 
-	std::vector<std::vector<std::vector<std::string>>> possible_level_combinations;
-	possible_level_combinations.resize(n_combinations);
-
-	for (size_t i = 0; i < n_combinations; ++i) {
-		std::vector<std::vector<std::string>>& level_combination = possible_level_combinations[i];
-		level_combination.resize(n_levels);
-		for (size_t j = 0; j < n_levels; ++j) {
-			std::vector<std::string>& level = level_combination[j];
-			level.resize(level_sizes_[j]);
-		}
+	std::vector<std::vector<std::string>> level_combination;
+	level_combination.resize(n_levels);
+	for (size_t j = 0; j < n_levels; ++j) {
+		std::vector<std::string>& level = level_combination[j];
+		level.resize(level_sizes_[j]);
 	}
 
-	for (size_t i = 0; i < n_combinations; i++) {
-		std::vector<std::vector<std::string>>& level_combination = possible_level_combinations[i];
-		for (size_t j = 0; j < n_levels; ++j) {
-			std::list<std::string> temp_symbols_list(symbols.begin(), symbols.end());
-			std::vector<std::string>& level = level_combination[j];
-			const HashTrie<std::string>& trie = *(tries_.at(j));
+	for (size_t j = 0; j < n_levels; ++j) {
+		std::list<std::string> temp_symbols_list(symbols.begin(), symbols.end());
+		std::vector<std::string>& level = level_combination[j];
+		const HashTrie<std::string>& trie = *(tries_.at(j));
 
-			// find longest match and remove matched symbols from beginning of sentence
-			size_t k = 0;
-			while (k < level.size() && !temp_symbols_list.empty()) {
+		// find longest match and remove matched symbols from beginning of sentence
+		size_t k = 0;
+		while (k < level.size() && !temp_symbols_list.empty()) {
 
-				std::list<std::string> match;
-				match = trie.FindLongest(temp_symbols_list);
+			std::list<std::string> match;
+			match = trie.FindLongest(temp_symbols_list);
 
-				// if unsuccesful, try with next position in sentence
-				if (match.empty()) {
-					temp_symbols_list.pop_front();
-					++k;
-					continue;
-				}
+			// if unsuccesful, try with next position in sentence
+			if (match.empty()) {
+				temp_symbols_list.pop_front();
+				++k;
+				continue;
+			}
 
-				// store found multisymbol
-				level[k] = ListSymbolToSymbol(match, ' ');
+			// store found multisymbol
+			level[k] = ListSymbolToSymbol(match, ' ');
 
-				// try with remaining sentence
-				size_t end = std::min(level.size(), k + match.size());
-				while (k < end) {
-					temp_symbols_list.pop_front();
-					++k;
-				}
+			// try with remaining sentence
+			size_t end = std::min(level.size(), k + match.size());
+			while (k < end) {
+				temp_symbols_list.pop_front();
+				++k;
 			}
 		}
 	}
 
-	return possible_level_combinations;
+	return level_combination;
 }

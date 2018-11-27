@@ -144,30 +144,28 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 
 			// make sure that sentence does not wholly consist of empty strings
 			if (!(FindFirstIndexNotOfSymbol(sentence, "") < 0)) {
-				const std::vector<std::vector<std::vector<std::string>>>& activated_module_layouts = organizer_->Organize(sentence);
+				const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence);
 
-				for (const std::vector<std::vector<std::string>>& activated_modules: activated_module_layouts) {
+				// convolve 2D phrases-words over the whole architecture so as to make the sentence position-neutral
+				const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
 
-					// convolve 2D phrases-words over the whole architecture so as to make the sentence position-neutral
-					const std::vector<std::vector<std::string>>& module_combinations = ProduceKnowledgeLinkCombinations(activated_modules, num_modules_);
+				// wire up the knowledge links
+				for (const std::vector<std::string>& module_combination : module_combinations) {
 
-					// wire up the knowledge links
-					for (const std::vector<std::string>& module_combination : module_combinations) {
-
-						// std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, '#') << "\n" << std::flush;
-
-						for (size_t src = 0; src < num_modules_; ++src) {
-							if (!module_combination[src].empty()) {
-								for (size_t targ = 0; targ < num_modules_; ++targ) {
-									if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
-										knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
-										// if (src == 1 && targ == 7) {
-										//    std::cout << "Enhancing link [" << src << "][" << targ <<
-										//              "] between \"" << module_combination[src] <<
-										//              "\" and \"" << module_combination[targ] <<
-										//              "\"\n" << std::flush;
-										// }
+					// std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, '#') << "\n" << std::flush;
+					for (size_t src = 0; src < num_modules_; ++src) {
+						if (!module_combination[src].empty()) {
+							for (size_t targ = 0; targ < num_modules_; ++targ) {
+								if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
+									knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
+									/*
+									if (src == 1 && targ == 7) {
+										std::cout << "Enhancing link [" << src << "][" << targ <<
+										"] between \"" << module_combination[src] <<
+										"\" and \"" << module_combination[targ] <<
+										"\"\n" << std::flush;
 									}
+									*/
 								}
 							}
 						}

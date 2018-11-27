@@ -87,8 +87,7 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 
 void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbols)
 {
-	const std::vector<std::vector<std::vector<std::string>>>& activated_module_layouts = organizer_->Organize(symbols);
-	const std::vector<std::vector<std::string>>& primary_layout = activated_module_layouts[0];
+	const std::vector<std::vector<std::string>>& primary_layout = organizer_->Organize(symbols);
 	const std::vector<std::string>& activated_words = primary_layout[0];
 	const std::vector<std::string>& activated_multiwords = primary_layout[1];
 
@@ -97,15 +96,8 @@ void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbol
 		return;
 	}
 
-	/*
-	for (const std::vector<std::vector<std::string>>& activated_outer_module: activated_module_layouts) {
-		for (const std::vector<std::string>& activated_inner_module: activated_outer_module) {
-			std::cout << "Finding module activations for "
-					  << "(size = " << activated_inner_module.size() << "): "
-					  << VectorSymbolToSymbol(activated_inner_module, '#') << "\n" << std::flush;
-		}
-	}
-	*/
+	std::cout << "Finding phrase activations for: " << VectorSymbolToSymbol(activated_multiwords, '#') << "\n" << std::flush;
+	std::cout << "Finding word activations for: " << VectorSymbolToSymbol(activated_words, '#') << "\n" << std::flush;
 
 	// activate phrases
 	for (size_t i = 0; i < activated_multiwords.size(); ++i) {
