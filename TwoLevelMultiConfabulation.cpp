@@ -97,11 +97,20 @@ void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbol
 		return;
 	}
 
+	/*
+	for (const std::vector<std::vector<std::string>>& activated_outer_module: activated_module_layouts) {
+		for (const std::vector<std::string>& activated_inner_module: activated_outer_module) {
+			std::cout << "Finding module activations for "
+					  << "(size = " << activated_inner_module.size() << "): "
+					  << VectorSymbolToSymbol(activated_inner_module, '#') << "\n" << std::flush;
+		}
+	}
+	*/
+
 	// activate phrases
 	for (size_t i = 0; i < activated_multiwords.size(); ++i) {
 		if (!activated_multiwords[i].empty()) {
 			modules_[num_word_modules_ + i]->ActivateSymbol(activated_multiwords[i], 1);
-			// std::cout << "Activated multiword " << activated_multiwords[i] << "\n" << std::flush;
 		}
 	}
 
