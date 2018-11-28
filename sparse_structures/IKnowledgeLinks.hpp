@@ -63,14 +63,14 @@ public:
 	virtual T GetElement(const TRow r, const TCol c) const = 0;
 	virtual T GetElementQuick(const TRow r, const TCol c) const = 0;
 
-	virtual TRow get_num_rows() const = 0;
-	virtual TCol get_num_cols() const = 0;
+	virtual TRow GetNumRows() const = 0;
+	virtual TCol GetNumCols() const = 0;
 
 	virtual uint32_t GetNnz() const = 0;
 
 	void CheckBounds(const TRow r, const TCol c) const
 	{
-		if (r >= get_num_rows() || c >= get_num_cols()) {
+		if (r >= GetNumRows() || c >= GetNumCols()) {
 			throw std::out_of_range(std::string("2D Out of Range, for row ") +
 									std::to_string(r) +
 									" and column " +
@@ -83,8 +83,8 @@ public:
 
 	std::string ToString() const
 	{
-		const TRow num_rows = get_num_rows();
-		const TCol num_cols = get_num_cols();
+		const TRow num_rows = GetNumRows();
+		const TCol num_cols = GetNumCols();
 
 		std::string str = std::string("LinksMatrix [num_lines=") + std::to_string(num_rows) + ", num_cols=" + std::to_string(num_cols) + "]\n";
 		for (TRow r = 0; r < num_rows; ++r) {

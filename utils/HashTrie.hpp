@@ -38,7 +38,6 @@ public:
 	void AddAll(const std::vector<std::vector<T>>& sequences);
 
 	std::list<T> FindLongest(const std::list<T>& sequence) const;
-
 	std::vector<std::list<T>> FindAll(const std::list<T>& sequence) const;
 
 	size_t Size() const { return size_; }
@@ -49,8 +48,8 @@ private:
 };
 
 template <typename T>
-void HashTrie<T>::Add(const std::vector<T> &sequence) {
-
+void HashTrie<T>::Add(const std::vector<T> &sequence)
+{
 	if (sequence.empty()) {
 		return;
 	}
@@ -61,14 +60,15 @@ void HashTrie<T>::Add(const std::vector<T> &sequence) {
 		current_node_ptr = &current_node;
 	}
 
-	if (!current_node_ptr->is_leaf()) {
-		current_node_ptr->set_leaf(true);
+	if (!current_node_ptr->IsLeaf()) {
+		current_node_ptr->SetLeaf(true);
 		++size_;
 	}
 }
 
 template <typename T>
-void HashTrie<T>::AddAll(const std::vector<std::vector<T>>& sequences) {
+void HashTrie<T>::AddAll(const std::vector<std::vector<T>>& sequences)
+{
 
 	if (sequences.empty()) {
 		return;
@@ -80,7 +80,8 @@ void HashTrie<T>::AddAll(const std::vector<std::vector<T>>& sequences) {
 }
 
 template <typename T>
-std::list<T> HashTrie<T>::FindLongest(const std::list<T>& sequence) const {
+std::list<T> HashTrie<T>::FindLongest(const std::list<T>& sequence) const
+{
 
 	std::list<T> result;
 	std::list<T> unconfirmed;
@@ -92,7 +93,7 @@ std::list<T> HashTrie<T>::FindLongest(const std::list<T>& sequence) const {
 			const HashTrieNode<T>& child = current_node_ptr->Get(e);
 
 			unconfirmed.push_back(e);
-			if (child.is_leaf()) {
+			if (child.IsLeaf()) {
 				for (T& u_e : unconfirmed) {
 					result.push_back(std::move(u_e));
 				}
@@ -109,7 +110,8 @@ std::list<T> HashTrie<T>::FindLongest(const std::list<T>& sequence) const {
 }
 
 template <typename T>
-std::vector<std::list<T>> HashTrie<T>::FindAll(const std::list<T>& sequence) const {
+std::vector<std::list<T>> HashTrie<T>::FindAll(const std::list<T>& sequence) const
+{
 
 	std::vector<std::list<T>> result;
 	std::list<T> partial;
@@ -121,7 +123,7 @@ std::vector<std::list<T>> HashTrie<T>::FindAll(const std::list<T>& sequence) con
 		try {
 			const HashTrieNode<T>& child = current_node_ptr->Get(e);
 			partial.push_back(e);
-			if (child.is_leaf()) {
+			if (child.IsLeaf()) {
 				partial_is_symbol = true;
 			}
 			current_node_ptr = &child;

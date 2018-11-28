@@ -235,7 +235,7 @@ void ConfabulationTest::TestProduceNGrams(const std::string& symbolfile, const s
 	} while (!finished_reading);
 
 	ngram_handler.CleanupNGrams();
-	std::cout << "Multi-word count after cleanup is: " << ngram_handler.get_multi_word_count() << "\n";
+	std::cout << "Multi-word count after cleanup is: " << ngram_handler.GetMultiWordCount() << "\n";
 }
 
 void ConfabulationTest::TestHashTrie(const std::string& symbolfile, const std::string& masterfile) const
@@ -253,7 +253,7 @@ void ConfabulationTest::TestHashTrie(const std::string& symbolfile, const std::s
 	} while (!finished_reading);
 
 	ngram_handler.CleanupNGrams();
-	std::cout << "Multi-word count after cleanup is: " << ngram_handler.get_multi_word_count() << "\n";
+	std::cout << "Multi-word count after cleanup is: " << ngram_handler.GetMultiWordCount() << "\n";
 
 	std::unique_ptr<SymbolMapping> all_symbols_mapping = ngram_handler.GetAllSymbols();
 
@@ -319,29 +319,29 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 	TextReader reader(symbolfile, masterfile);
 	reader.Initialize();
 
-	const std::unique_ptr<Module>& module_0 = confab_engine.get_module(0);
-	const std::unique_ptr<Module>& module_1 = confab_engine.get_module(1);
-	const std::unique_ptr<Module>& module_2 = confab_engine.get_module(2);
-	const std::unique_ptr<Module>& module_3 = confab_engine.get_module(3);
-	const std::unique_ptr<Module>& module_5 = confab_engine.get_module(5);
-	const std::unique_ptr<Module>& module_4 = confab_engine.get_module(4);
-	const std::unique_ptr<Module>& module_6 = confab_engine.get_module(num_word_modules);
-	const std::unique_ptr<Module>& module_7 = confab_engine.get_module(num_word_modules + 1);
+	Module* module_0 = confab_engine.GetModule(0);
+	Module* module_1 = confab_engine.GetModule(1);
+	Module* module_2 = confab_engine.GetModule(2);
+	Module* module_3 = confab_engine.GetModule(3);
+	Module* module_5 = confab_engine.GetModule(5);
+	Module* module_4 = confab_engine.GetModule(4);
+	Module* module_6 = confab_engine.GetModule(num_word_modules);
+	Module* module_7 = confab_engine.GetModule(num_word_modules + 1);
 
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_0_6 = confab_engine.get_knowledge_base(0, num_word_modules);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_1_6 = confab_engine.get_knowledge_base(1, num_word_modules);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_1_7 = confab_engine.get_knowledge_base(1, num_word_modules + 1);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_2_7 = confab_engine.get_knowledge_base(2, num_word_modules + 1);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_6_0 = confab_engine.get_knowledge_base(num_word_modules, 0);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_6_1 = confab_engine.get_knowledge_base(num_word_modules, 1);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_6_2 = confab_engine.get_knowledge_base(num_word_modules, 2);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_6_3 = confab_engine.get_knowledge_base(num_word_modules, 3);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_6_4 = confab_engine.get_knowledge_base(num_word_modules, 4);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_7_1 = confab_engine.get_knowledge_base(num_word_modules + 1, 1);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_7_2 = confab_engine.get_knowledge_base(num_word_modules + 1, 2);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_7_3 = confab_engine.get_knowledge_base(num_word_modules + 1, 3);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_7_4 = confab_engine.get_knowledge_base(num_word_modules + 1, 4);
-	const std::unique_ptr<KnowledgeBase>& knowledge_base_7_5 = confab_engine.get_knowledge_base(num_word_modules + 1, 5);
+	KnowledgeBase* knowledge_base_0_6 = confab_engine.GetKnowledgeBase(0, num_word_modules);
+	KnowledgeBase* knowledge_base_1_6 = confab_engine.GetKnowledgeBase(1, num_word_modules);
+	KnowledgeBase* knowledge_base_1_7 = confab_engine.GetKnowledgeBase(1, num_word_modules + 1);
+	KnowledgeBase* knowledge_base_2_7 = confab_engine.GetKnowledgeBase(2, num_word_modules + 1);
+	KnowledgeBase* knowledge_base_6_0 = confab_engine.GetKnowledgeBase(num_word_modules, 0);
+	KnowledgeBase* knowledge_base_6_1 = confab_engine.GetKnowledgeBase(num_word_modules, 1);
+	KnowledgeBase* knowledge_base_6_2 = confab_engine.GetKnowledgeBase(num_word_modules, 2);
+	KnowledgeBase* knowledge_base_6_3 = confab_engine.GetKnowledgeBase(num_word_modules, 3);
+	KnowledgeBase* knowledge_base_6_4 = confab_engine.GetKnowledgeBase(num_word_modules, 4);
+	KnowledgeBase* knowledge_base_7_1 = confab_engine.GetKnowledgeBase(num_word_modules + 1, 1);
+	KnowledgeBase* knowledge_base_7_2 = confab_engine.GetKnowledgeBase(num_word_modules + 1, 2);
+	KnowledgeBase* knowledge_base_7_3 = confab_engine.GetKnowledgeBase(num_word_modules + 1, 3);
+	KnowledgeBase* knowledge_base_7_4 = confab_engine.GetKnowledgeBase(num_word_modules + 1, 4);
+	KnowledgeBase* knowledge_base_7_5 = confab_engine.GetKnowledgeBase(num_word_modules + 1, 5);
 
 	std::cout << "Knowledge base 0-6: " << knowledge_base_0_6->GetNumKnowledgeLinks() << " links" << std::endl;
 	std::cout << "Knowledge base 1-6: " << knowledge_base_1_6->GetNumKnowledgeLinks() << " links" << std::endl;
@@ -349,17 +349,17 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 	std::cout << "Knowledge base 1-7: " << knowledge_base_1_7->GetNumKnowledgeLinks() << " links" << std::endl;
 
 	// preliminary checks on modules
-	const std::set<std::string>& all_module_0_symbols = module_0->get_symbol_mapping().GetAllSymbols();
-	const std::set<std::string>& all_module_1_symbols = module_1->get_symbol_mapping().GetAllSymbols();
+	const std::set<std::string>& all_module_0_symbols = module_0->GetSymbolMapping().GetAllSymbols();
+	const std::set<std::string>& all_module_1_symbols = module_1->GetSymbolMapping().GetAllSymbols();
 	assert(all_module_0_symbols.size() == all_module_1_symbols.size());
 
-	const std::set<std::string>& all_module_6_symbols = module_6->get_symbol_mapping().GetAllSymbols();
-	const std::set<std::string>& all_module_7_symbols = module_7->get_symbol_mapping().GetAllSymbols();
+	const std::set<std::string>& all_module_6_symbols = module_6->GetSymbolMapping().GetAllSymbols();
+	const std::set<std::string>& all_module_7_symbols = module_7->GetSymbolMapping().GetAllSymbols();
 	assert(all_module_6_symbols.size() == all_module_7_symbols.size());
 	std::cout << "Symbols at module " << num_word_modules << " are: \n" << SetSymbolToSymbol(all_module_6_symbols, '\n') << "\n" << std::flush;
 
 	// preliminary checks on tries
-	const std::unique_ptr<HashTrie<std::string>>& level_1_trie = confab_engine.get_organizer()->get_trie_for_level(1);
+	HashTrie<std::string>* level_1_trie = confab_engine.GetOrganizer()->GetTrieForLevel(1);
 	std::vector<std::list<std::string>> all_subsequences_1 = level_1_trie->FindAll({"the", "sense", "of", "duty"});
 	std::cout << "Trie results I: " << "\n" << std::flush;
 	for (const std::list<std::string>& e: all_subsequences_1) {
@@ -556,7 +556,7 @@ int main()
 	allCopyFeeds->push_back(copy_feed19);
 	allCopyFeeds->push_back(copy_feed20);
 
-	test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
+	// test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
 	std::unique_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
 
@@ -635,7 +635,7 @@ int main()
 	// test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_supplement.txt", *allOriginalFeeds);
 	// test1->TestConfabulationWithPersistedKnowledge("text_data/ascii_symbols.txt", "text_data/sample_master_empty.txt", *allOriginalFeeds);
 
-	// test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
+	test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allOriginalFeeds);
 	// test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_selection.txt", *allOriginalFeeds);
 	// test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master.txt", *allOriginalFeeds);
 

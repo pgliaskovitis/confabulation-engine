@@ -53,12 +53,11 @@ public:
 	virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation) = 0;
 	virtual void Activate(const std::vector<std::string>& symbols);
 
-	void TransferExcitation(const std::unique_ptr<Module>& source_module, const std::unique_ptr<KnowledgeBase>& kb, const std::unique_ptr<Module>& target_module);
-	void TransferAllExcitations(int8_t target_index, const std::unique_ptr<Module> &target_module);
-
-	const std::unique_ptr<Module>& get_module(size_t index) { return modules_[index]; }
-	const std::unique_ptr<KnowledgeBase>& get_knowledge_base(size_t source, size_t target) { return knowledge_bases_[source][target]; }
-	const std::unique_ptr<MultiLevelOrganizer>& get_organizer() { return organizer_; }
+	void TransferExcitation(Module* source_module, KnowledgeBase* kb, Module* target_module);
+	void TransferAllExcitations(int8_t target_index, Module* target_module);
+	Module* GetModule(size_t index) { return modules_[index].get(); }
+	KnowledgeBase* GetKnowledgeBase(size_t source, size_t target) { return knowledge_bases_[source][target].get(); }
+	MultiLevelOrganizer* GetOrganizer() { return organizer_.get(); }
 
 protected:
 	uint8_t num_modules_;

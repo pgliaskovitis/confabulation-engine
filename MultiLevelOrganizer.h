@@ -35,8 +35,8 @@ public:
 
 	std::vector<std::vector<std::string>> Organize(const std::vector<std::string>& symbols);
 
-	const std::unique_ptr<SymbolMapping>& get_mappings_for_level(uint8_t level) const { return level_mappings_.at(level); }
-	const std::unique_ptr<HashTrie<std::string>>& get_trie_for_level(uint8_t level) const { return tries_.at(level); }
+	SymbolMapping* GetMappingsForLevel(uint8_t level) const { return level_mappings_.at(level).get(); }
+	HashTrie<std::string>* GetTrieForLevel(uint8_t level) const { return tries_.at(level).get(); }
 
 private:
 	std::vector<uint8_t> level_sizes_;

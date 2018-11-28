@@ -44,8 +44,8 @@ public:
 	virtual T GetElement(TRow r, TCol c) const;
 	virtual T GetElementQuick(TRow r, TCol c) const;
 
-	virtual TRow get_num_rows() const { return num_rows_; }
-	virtual TCol get_num_cols() const { return num_cols_; }
+	virtual TRow GetNumRows() const { return num_rows_; }
+	virtual TCol GetNumCols() const { return num_cols_; }
 
 	virtual uint32_t GetNnz() const { return a_.size(); }
 
@@ -74,7 +74,7 @@ CSRLinksMatrix<TRow, TCol, T>::~CSRLinksMatrix()
 }
 
 template <typename TRow, typename TCol, typename T>
-CSRLinksMatrix<TRow, TCol, T>::CSRLinksMatrix(IKnowledgeLinks<TRow, TCol, T> &base) : num_rows_(base.get_num_rows()), num_cols_(base.get_num_cols())
+CSRLinksMatrix<TRow, TCol, T>::CSRLinksMatrix(IKnowledgeLinks<TRow, TCol, T> &base) : num_rows_(base.GetNumRows()), num_cols_(base.GetNumCols())
 {
 	a_.resize(base.GetNnz());
 	ja_.resize(base.GetNnz());

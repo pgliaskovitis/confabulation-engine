@@ -45,7 +45,7 @@ public:
 	virtual T GetElement(const TRow r) const;
 	virtual T GetElementQuick(const TRow r) const;
 
-	virtual TRow get_num_rows() const { return num_rows_; }
+	virtual TRow GetNumRows() const { return num_rows_; }
 
 	virtual TRow GetNnz() const { return map_.size(); }
 
@@ -64,7 +64,7 @@ DOKExcitationVector<TRow, T>::DOKExcitationVector(const TRow num_rows) : num_row
 {}
 
 template <typename TRow, typename T>
-DOKExcitationVector<TRow, T>::DOKExcitationVector(const IExcitationVector<TRow, T> &base) : num_rows_(base.get_num_rows())
+DOKExcitationVector<TRow, T>::DOKExcitationVector(const IExcitationVector<TRow, T> &base) : num_rows_(base.GetNumRows())
 {
 	for (const std::pair<TRow, T>& element : base.GetNzElements()) {
 		map_[element.first] = element.second;

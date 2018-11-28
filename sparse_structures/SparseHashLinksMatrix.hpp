@@ -42,8 +42,8 @@ public:
 	virtual T GetElement(TRow r, TCol c) const;
 	virtual T GetElementQuick(TRow r, TCol c) const;
 
-	virtual TRow get_num_rows() const { return num_rows_; }
-	virtual TCol get_num_cols() const { return num_cols_; }
+	virtual TRow GetNumRows() const { return num_rows_; }
+	virtual TCol GetNumCols() const { return num_cols_; }
 
 	virtual uint32_t GetNnz() const { return map_.size(); }
 
@@ -62,7 +62,7 @@ SparseHashLinksMatrix<TRow, TCol, T>::SparseHashLinksMatrix(TRow num_rows, TCol 
 {}
 
 template <typename TRow, typename TCol, typename T>
-SparseHashLinksMatrix<TRow, TCol, T>::SparseHashLinksMatrix(IKnowledgeLinks<TRow, TCol, T> &base) : num_rows_(base.get_num_rows()), num_cols_(base.get_num_cols())
+SparseHashLinksMatrix<TRow, TCol, T>::SparseHashLinksMatrix(IKnowledgeLinks<TRow, TCol, T> &base) : num_rows_(base.GetNumRows()), num_cols_(base.GetNumCols())
 {
 	for (const std::pair<std::pair<TRow, TCol>, T>& element : base.GetNzElements()) {
 		map_.insert(element);

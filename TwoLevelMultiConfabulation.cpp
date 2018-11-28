@@ -251,8 +251,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 // initialize expectation on target (phrase and) word modules once
 std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int index)
 {
-	TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index]);
-	TransferAllExcitations(index, modules_[index]);
+	TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index].get());
+	TransferAllExcitations(index, modules_[index].get());
 	return ExcitedSymbolsAtIndex(index);
 }
 
@@ -275,9 +275,9 @@ std::vector<std::string> TwoLevelMultiConfabulation::TransferAndTightenAtIndex(i
 
 	int8_t tighten = result_source.size() > 0 ? 1 : 0;
 	if (tighten) {
-		TransferExcitation(modules_[source_index],
-						   knowledge_bases_[source_index][target_index],
-						   modules_[target_index]);
+		TransferExcitation(modules_[source_index].get(),
+						   knowledge_bases_[source_index][target_index].get(),
+						   modules_[target_index].get());
 	}
 
 	return modules_[target_index]->AdditivePartialConfabulation(tighten);

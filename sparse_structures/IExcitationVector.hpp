@@ -35,13 +35,13 @@ public:
 	virtual T GetElement(const TRow r) const = 0;
 	virtual T GetElementQuick(const TRow r) const = 0;
 
-	virtual TRow get_num_rows() const = 0;
+	virtual TRow GetNumRows() const = 0;
 
 	virtual TRow GetNnz() const = 0;
 
 	void CheckBounds(const TRow r) const
 	{
-		if (r >= get_num_rows()) {
+		if (r >= GetNumRows()) {
 			throw std::out_of_range(std::string("1D Out of Range, for row ") +
 									std::to_string(r));
 		}
@@ -57,7 +57,7 @@ public:
 
 	std::string ToString() const
 	{
-		const TRow num_rows = get_num_rows();
+		const TRow num_rows = GetNumRows();
 
 		std::string str = std::string("ExcitationVector [num_lines=") + std::to_string(num_rows) + "]\n";
 		for (TRow r = 0; r < num_rows; ++r) {

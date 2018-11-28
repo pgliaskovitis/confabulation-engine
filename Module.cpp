@@ -52,11 +52,6 @@ void Module::AddExcitationVector(const IExcitationVector<uint16_t, float> &input
 	}
 }
 
-const std::unique_ptr<IExcitationVector<uint16_t, float> > &Module::GetExcitations() const
-{
-	return excitations_;
-}
-
 std::unique_ptr<IExcitationVector<uint16_t, float>> Module::GetNormalizedExcitations() const
 {
 	std::unique_ptr<IExcitationVector<uint16_t, float>> normalized_excitations;

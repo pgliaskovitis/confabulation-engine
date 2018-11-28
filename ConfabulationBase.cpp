@@ -75,7 +75,7 @@ void ConfabulationBase::Build()
 			++level;
 		}
 
-		const std::unique_ptr<SymbolMapping>& symbols_at_level = organizer_->get_mappings_for_level(level);
+		const SymbolMapping* symbols_at_level = organizer_->GetMappingsForLevel(level);
 		modules_.emplace_back(new Module(*symbols_at_level, i));
 	}
 
@@ -89,8 +89,8 @@ void ConfabulationBase::Build()
 				id += "-";
 				id += std::to_string(j);
 				knowledge_bases_[i][j].reset(new KnowledgeBase(id,
-															   modules_[i]->get_symbol_mapping(),
-															   modules_[j]->get_symbol_mapping()));
+															   modules_[i]->GetSymbolMapping(),
+															   modules_[j]->GetSymbolMapping()));
 			} else
 				knowledge_bases_[i][j].reset(nullptr);
 		}
@@ -183,7 +183,7 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 				kb->ComputeLinkStrengths();
 				kb->ResetCooccurrenceCounts();
 				kb->ResetTargetSymbolSums();
-				log_info("Finished computing knowledge link strengths for knowledge base %s", kb->get_id().c_str());
+				log_info("Finished computing knowledge link strengths for knowledge base %s", kb->GetId().c_str());
 			}
 		}
 	}
@@ -208,7 +208,7 @@ bool ConfabulationBase::CheckVocabulary(const std::vector<std::string> &symbols)
 			std::cout << "Input has activated symbol \"" << symbols[i] << "\" at position " << i
 					  << " and corresponding module is null" << "\n" << std::flush;
 			return false;
-		} else if ((!symbols[i].empty()) && (!modules_[i]->get_symbol_mapping().Contains(symbols[i]))) {
+		} else if ((!symbols[i].empty()) && (!modules_[i]->GetSymbolMapping().Contains(symbols[i]))) {
 			std::cout << "Input has activated symbol \"" << symbols[i] << "\" at position " << i
 					  << " not contained in corresponding module" << "\n" << std::flush;
 		}
@@ -226,13 +226,13 @@ void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
 	}
 }
 
-void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source_module, const std::unique_ptr<KnowledgeBase> &kb, const std::unique_ptr<Module> &target_module)
+void ConfabulationBase::TransferExcitation(Module* source_module, KnowledgeBase* kb, Module* target_module)
 {
-	if (source_module->get_id() == target_module->get_id()) {
+	if (source_module->GetId() == target_module->GetId()) {
 		return;
 	}
 
-	if (source_module->get_id() < target_module->get_id()) {
+	if (source_module->GetId() < target_module->GetId()) {
 		source_module->Lock();
 		target_module->Lock();
 	} else {
@@ -241,11 +241,11 @@ void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source
 	}
 
 	std::unique_ptr<IExcitationVector<uint16_t, float>> source_excitation = source_module->GetNormalizedExcitations();
-	const std::unique_ptr<IExcitationVector<uint16_t, float>>& transmitted_excitation = kb->Transmit(*source_excitation);
+	std::unique_ptr<IExcitationVector<uint16_t, float>> transmitted_excitation = kb->Transmit(*source_excitation);
 	target_module->AddExcitationVector(*transmitted_excitation);
 	source_excitation.reset(nullptr);
 
-	if (source_module->get_id() < target_module->get_id()) {
+	if (source_module->GetId() < target_module->GetId()) {
 		target_module->UnLock();
 		source_module->UnLock();
 	} else {
@@ -254,12 +254,12 @@ void ConfabulationBase::TransferExcitation(const std::unique_ptr<Module> &source
 	}
 }
 
-void ConfabulationBase::TransferAllExcitations(int8_t target_index, const std::unique_ptr<Module>& target_module)
+void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module* target_module)
 {
 	// use only modules that can contribute to the given index as possible source modules
 	for (size_t i = 0; i < knowledge_bases_.size(); ++i) {
 		if (knowledge_bases_[i][target_index] != nullptr) {
-			TransferExcitation(modules_[i], knowledge_bases_[i][target_index], target_module);
+			TransferExcitation(modules_[i].get(), knowledge_bases_[i][target_index].get(), target_module);
 		}
 	}
 }
@@ -282,8 +282,8 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
 
 	ngram_handler.CleanupNGrams();
 
-	log_info("NGramHandler has found %lu words", ngram_handler.get_single_word_count());
-	log_info("NGramHandler has found %lu multi-words", ngram_handler.get_multi_word_count());
+	log_info("NGramHandler has found %lu words", ngram_handler.GetSingleWordCount());
+	log_info("NGramHandler has found %lu multi-words", ngram_handler.GetMultiWordCount());
 
 	result.push_back(ngram_handler.GetSingleWordSymbols()); // single-word symbols at position [0]
 	result.push_back(ngram_handler.GetMultiWordSymbols()); // multi-word symbols (excluding single-word ones) at position [1]

@@ -42,13 +42,10 @@ public:
 	void Lock();
 	void UnLock();
 
-	const std::unique_ptr<IExcitationVector<uint16_t, float>>& GetExcitations() const;
+	IExcitationVector<uint16_t, float>* GetExcitations() const { return excitations_.get(); }
 	std::unique_ptr<IExcitationVector<uint16_t, float>> GetNormalizedExcitations() const;
 	std::unique_ptr<IExcitationVector<uint16_t, float>> GetWhitenedExcitations() const;
 	std::vector<std::string> GetExpectation() const;
-
-	size_t get_id() const { return id_; }
-	size_t get_current_excitation_level() const { return current_excitation_level_ ; }
 
 	std::string ElementaryConfabulation(float *max_excitation);
 	std::string ElementaryConfabulation(int8_t K, float *max_excitation);
@@ -56,7 +53,9 @@ public:
 	std::vector<std::string> PartialConfabulation(int8_t K);
 	std::vector<std::string> AdditivePartialConfabulation(int8_t K);
 
-	const SymbolMapping& get_symbol_mapping() const { return symbol_mapping_; }
+	size_t GetId() const { return id_; }
+	size_t GetCurrentExcitationLevel() const { return current_excitation_level_ ; }
+	const SymbolMapping& GetSymbolMapping() const { return symbol_mapping_; }
 
 private:
 	const SymbolMapping& symbol_mapping_;

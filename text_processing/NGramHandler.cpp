@@ -252,12 +252,12 @@ void NGramHandler::CleanupNGrams()
 	log_info("Finished stage VII of cleaning up multigrams");
 }
 
-size_t NGramHandler::get_single_word_count()
+size_t NGramHandler::GetSingleWordCount()
 {
 	return occurrence_counts_[0].size();
 }
 
-size_t NGramHandler::get_multi_word_count()
+size_t NGramHandler::GetMultiWordCount()
 {
 	size_t multi_word_symbols_count = 0;
 

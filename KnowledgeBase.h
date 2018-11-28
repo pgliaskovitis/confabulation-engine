@@ -44,13 +44,11 @@ public:
 
 	void ResetCooccurrenceCounts() { cooccurrence_counts_.reset(); }
 	void ResetTargetSymbolSums() { target_symbol_sums_.clear(); }
-
-	std::string get_id() const { return id_; }
-
-	std::string GetStats() { return std::string("number of knowledge links: ") + std::to_string(GetNumKnowledgeLinks()); }
-	uint16_t GetSizeSrc() { return cooccurrence_counts_->get_num_rows(); }
-	uint16_t GetSizeTarg() { return cooccurrence_counts_->get_num_cols(); }
-	uint32_t GetNumKnowledgeLinks() { return kbase_->GetNnz(); }
+	std::string GetId() const { return id_; }
+	std::string GetStats() const { return std::string("number of knowledge links: ") + std::to_string(GetNumKnowledgeLinks()); }
+	uint16_t GetSizeSrc() const { return cooccurrence_counts_->GetNumRows(); }
+	uint16_t GetSizeTarg() const { return cooccurrence_counts_->GetNumCols(); }
+	uint32_t GetNumKnowledgeLinks() const { return kbase_->GetNnz(); }
 
 private:
 	// The knowledge base is essentially a matrix of conditional probabilities P(s | t)

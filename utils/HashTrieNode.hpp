@@ -30,21 +30,12 @@ public:
 		value_(value),
 		leaf_node_(final_node) {}
 
-	bool is_leaf() const {
-		return leaf_node_;
-	}
+	bool IsLeaf() const { return leaf_node_; }
+	void SetLeaf(bool final_node) { leaf_node_ = final_node; }
 
-	void set_leaf(bool final_node) {
-		leaf_node_ = final_node;
-	}
-
-	HashTrieNode& Get(const T& child) const {
-		return *(map_.at(child));
-	}
-
+	HashTrieNode& Get(const T& child) const { return *(map_.at(child)); }
 	HashTrieNode& Put(const T& child, bool final_node);
-
-	const T& get_value() const { return value_; }
+	const T& GetValue() const { return value_; }
 
 private:
 	std::unordered_map<T, std::unique_ptr<HashTrieNode<T>>> map_;
@@ -54,12 +45,13 @@ private:
 };
 
 template <typename T>
-HashTrieNode<T>& HashTrieNode<T>::Put(const T& child, bool final_node) {
+HashTrieNode<T>& HashTrieNode<T>::Put(const T& child, bool final_node)
+{
 
 	try {
 		HashTrieNode<T>& child_node = *(map_.at(child));
 		if (final_node) {
-			child_node.set_leaf(final_node);
+			child_node.SetLeaf(final_node);
 		}
 		return child_node;
 	} catch (std::out_of_range& oor) {

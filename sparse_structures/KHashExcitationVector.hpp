@@ -58,7 +58,7 @@ public:
 	virtual T GetElement(const TRow r) const;
 	virtual T GetElementQuick(const TRow r) const;
 
-	virtual TRow get_num_rows() const { return num_rows_; }
+	virtual TRow GetNumRows() const { return num_rows_; }
 
 	virtual TRow GetNnz() const;
 
@@ -112,7 +112,7 @@ KHashExcitationVector<TRow, T>::KHashExcitationVector(const TRow num_rows) : num
 }
 
 template <typename TRow, typename T>
-KHashExcitationVector<TRow, T>::KHashExcitationVector(const IExcitationVector<TRow, T> &base) : num_rows_(base.get_num_rows())
+KHashExcitationVector<TRow, T>::KHashExcitationVector(const IExcitationVector<TRow, T> &base) : num_rows_(base.GetNumRows())
 {
 	int absent = 0;
 	khint_t k = 0;
