@@ -196,7 +196,7 @@ void ConfabulationBase::Clean()
 	for (const std::unique_ptr<Module>& module : modules_) {
 		if (module != nullptr) {
 			module->ExcitationsToZero();
-			module->ExcitationLevelToZero();
+			module->TighteningLevelToZero();
 		}
 	}
 }

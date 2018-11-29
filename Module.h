@@ -35,10 +35,10 @@ public:
 	Module(Module&& rhs) = delete;
 	Module&& operator=(Module&& rhs) = delete;
 
-	void ActivateSymbol(const std::string& word, int8_t K);
+	void ActivateSymbol(const std::string& word, int8_t band_add_level);
 	void AddExcitationVector(const IExcitationVector<uint16_t, float>& input);
 	void ExcitationsToZero();
-	void ExcitationLevelToZero();
+	void TighteningLevelToZero();
 	void Lock();
 	void UnLock();
 
@@ -50,11 +50,11 @@ public:
 	std::string ElementaryConfabulation(float *max_excitation);
 	std::string ElementaryConfabulation(int8_t K, float *max_excitation);
 
-	std::vector<std::string> PartialConfabulation(int8_t K);
-	std::vector<std::string> AdditivePartialConfabulation(int8_t K);
+	std::vector<std::string> PartialConfabulation(int8_t band_cut_level);
+	std::vector<std::string> AdditivePartialConfabulation(int8_t band_add_level);
 
 	size_t GetId() const { return id_; }
-	size_t GetCurrentExcitationLevel() const { return current_excitation_level_ ; }
+	size_t GetCurrentTighteningLevel() const { return current_tightening_level_ ; }
 	const SymbolMapping& GetSymbolMapping() const { return symbol_mapping_; }
 
 private:
@@ -67,5 +67,5 @@ private:
 	std::unique_ptr<std::pair<uint16_t, float>> MaxExcitation(const std::set<std::pair<uint16_t, float> > &nz_excitations);
 	std::set<std::pair<uint16_t, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<uint16_t, float>>& nz_excitations);
 
-	size_t current_excitation_level_;
+	size_t current_tightening_level_;
 };

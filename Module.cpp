@@ -27,17 +27,17 @@ Module::Module(const SymbolMapping &symbol_mapping, size_t id) :
 	id_(id),
 	excitations_(new KHashExcitationVector<uint16_t, float>(symbol_mapping.Size())),
 	kb_inputs_(new KHashExcitationVector<uint16_t, uint16_t>(symbol_mapping.Size())),
-	current_excitation_level_(0)
+	current_tightening_level_(0)
 {
 	ExcitationsToZero();
 }
 
-void Module::ActivateSymbol(const std::string &word, int8_t K)
+void Module::ActivateSymbol(const std::string &word, int8_t band_add_level)
 {
 	try {
 		uint16_t index = symbol_mapping_.IndexOf(word);
-		excitations_->SetElement(index, K * Globals::kBandGap);
-		kb_inputs_->SetElement(index, K);
+		excitations_->SetElement(index, band_add_level * Globals::kBandGap);
+		kb_inputs_->SetElement(index, band_add_level);
 	} catch (std::out_of_range&) {
 		std::cout << "Word \"" << word << "\" could not be found in symbol mapping of module during activation" << "\n" << std::flush;
 	}
@@ -136,19 +136,19 @@ std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 	return symbol_mapping_.GetSymbol(max_index);
 }
 
-std::vector<std::string> Module::PartialConfabulation(int8_t K)
+std::vector<std::string> Module::PartialConfabulation(int8_t band_cut_level)
 {
 	std::vector<std::string> result;
 	std::unique_ptr<std::vector<std::pair<uint16_t, float>>> expectations;
 
-	if (K < 0) {
-		std::cout << "PartialConfabulation called with K = " << K << "\n" << std::flush;
-		throw std::logic_error("PartialConfabulation called with negative K");
+	if (band_cut_level < 0) {
+		std::cout << "PartialConfabulation called with band_cut_level = " << band_cut_level << "\n" << std::flush;
+		throw std::logic_error("PartialConfabulation called with negative band_cut_level");
 	}
 
 	const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
-	const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
-	expectations.reset(new std::vector<std::pair<uint16_t, float>>(min_K_excit.begin(), min_K_excit.end()));
+	const std::set<std::pair<uint16_t, float>>& band_cut_excit = ExcitationsAbove(band_cut_level, nz_excit);
+	expectations.reset(new std::vector<std::pair<uint16_t, float>>(band_cut_excit.begin(), band_cut_excit.end()));
 
 	// saving needed info from intermediate state
 	KHashExcitationVector<uint16_t, uint16_t> kb_inputs_temp(*kb_inputs_);
@@ -171,16 +171,16 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
 	return result;
 }
 
-std::vector<std::string> Module::AdditivePartialConfabulation(int8_t K)
+std::vector<std::string> Module::AdditivePartialConfabulation(int8_t band_add_level)
 {
 	std::unique_lock<std::mutex> module_lock(mutex_);
-	if (K >= 0) {
-		current_excitation_level_ += K;
+	if (band_add_level >= 0) {
+		current_tightening_level_ += band_add_level;
 	} else {
-		std::cout << "AdditivePartialConfabulation called with K = " << K << "\n" << std::flush;
-		throw std::logic_error("AdditivePartialConfabulation called with negative K");
+		std::cout << "AdditivePartialConfabulation called with band_add_level = " << band_add_level << "\n" << std::flush;
+		throw std::logic_error("AdditivePartialConfabulation called with negative band_add_level");
 	}
-	return PartialConfabulation(current_excitation_level_);
+	return PartialConfabulation(current_tightening_level_);
 }
 
 void Module::ExcitationsToZero()
@@ -189,9 +189,9 @@ void Module::ExcitationsToZero()
 	kb_inputs_.reset(new KHashExcitationVector<uint16_t, uint16_t>(symbol_mapping_.Size()));
 }
 
-void Module::ExcitationLevelToZero()
+void Module::TighteningLevelToZero()
 {
-	current_excitation_level_ = 0;
+	current_tightening_level_ = 0;
 }
 
 void Module::Lock()
