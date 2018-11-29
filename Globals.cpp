@@ -40,6 +40,6 @@ const uint8_t Globals::kMaxCompletionSize = 7;
 const size_t Globals::kMaxSingleWordSymbols = 65536 - 1;
 const size_t Globals::kMaxMultiWordSymbols = 65536 - 1;
 const bool Globals::kDelimitersAsSymbols = false;
-const bool Globals::kFavorLargerPhrases = false;
+const bool Globals::kFavorLargerPhrases = true;
 const bool Globals::kNormalizeInputs = true; // normalization of excitation vectors before being given as input to a knowledge base
 const bool Globals::kUseMultiThreading = true; // multi-threaded full swirl over multiple indices

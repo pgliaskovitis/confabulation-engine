@@ -100,7 +100,7 @@ std::string Module::ElementaryConfabulation(float *max_excitation)
 	return ElementaryConfabulation(1, max_excitation);
 }
 
-std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
+std::string Module::ElementaryConfabulation(int8_t band_cut_level, float *max_excitation)
 {
 	const std::set<std::pair<uint16_t, float>>& nz_excit = excitations_->GetNzElements();
 
@@ -110,17 +110,17 @@ std::string Module::ElementaryConfabulation(int8_t K, float *max_excitation)
 	// try with all possible K, starting from the maximum one, until a solution is found
 	std::unique_ptr<std::pair<uint16_t, float>> max_excit;
 	do {
-		const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(K, nz_excit);
+		const std::set<std::pair<uint16_t, float>>& min_K_excit = ExcitationsAbove(band_cut_level, nz_excit);
 		max_excit = MaxExcitation(min_K_excit);
 
 		if (max_excit != nullptr) {
 			max_index = max_excit->first;
 			n_inputs_max = kb_inputs_->GetElement(max_index);
 		} else {
-			--K;
+			--band_cut_level;
 			continue;
 		}
-	} while ((max_excit == nullptr) && (K > 0));
+	} while ((max_excit == nullptr) && (band_cut_level > 0));
 
 	ExcitationsToZero();
 
@@ -171,14 +171,14 @@ std::vector<std::string> Module::PartialConfabulation(int8_t band_cut_level)
 	return result;
 }
 
-std::vector<std::string> Module::AdditivePartialConfabulation(int8_t band_add_level)
+std::vector<std::string> Module::TighteningPartialConfabulation(int8_t band_tighten_level)
 {
 	std::unique_lock<std::mutex> module_lock(mutex_);
-	if (band_add_level >= 0) {
-		current_tightening_level_ += band_add_level;
+	if (band_tighten_level >= 0) {
+		current_tightening_level_ += band_tighten_level;
 	} else {
-		std::cout << "AdditivePartialConfabulation called with band_add_level = " << band_add_level << "\n" << std::flush;
-		throw std::logic_error("AdditivePartialConfabulation called with negative band_add_level");
+		std::cout << "AdditivePartialConfabulation called with band_tighten_level = " << band_tighten_level << "\n" << std::flush;
+		throw std::logic_error("AdditivePartialConfabulation called with negative band_tighten_level");
 	}
 	return PartialConfabulation(current_tightening_level_);
 }

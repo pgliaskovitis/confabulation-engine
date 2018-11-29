@@ -48,10 +48,10 @@ public:
 	std::vector<std::string> GetExpectation() const;
 
 	std::string ElementaryConfabulation(float *max_excitation);
-	std::string ElementaryConfabulation(int8_t K, float *max_excitation);
+	std::string ElementaryConfabulation(int8_t band_cut_level, float *max_excitation);
 
 	std::vector<std::string> PartialConfabulation(int8_t band_cut_level);
-	std::vector<std::string> AdditivePartialConfabulation(int8_t band_add_level);
+	std::vector<std::string> TighteningPartialConfabulation(int8_t band_tighten_level);
 
 	size_t GetId() const { return id_; }
 	size_t GetCurrentTighteningLevel() const { return current_tightening_level_ ; }

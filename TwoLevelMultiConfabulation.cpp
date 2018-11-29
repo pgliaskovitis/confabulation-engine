@@ -163,8 +163,10 @@ void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbol
 		return;
 	}
 
+	/*
 	std::cout << "Finding phrase activations for: " << VectorSymbolToSymbol(activated_multiwords, '#') << "\n" << std::flush;
 	std::cout << "Finding word activations for: " << VectorSymbolToSymbol(activated_words, '#') << "\n" << std::flush;
+	*/
 
 	// activate phrases
 	for (size_t i = 0; i < activated_multiwords.size(); ++i) {
@@ -260,8 +262,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int i
 std::vector<std::string> TwoLevelMultiConfabulation::ExcitedSymbolsAtIndex(int index)
 {
 	std::vector<std::string> result;
-	const std::vector<std::string>& result_word = modules_[index]->AdditivePartialConfabulation(0);
-	const std::vector<std::string>& result_phrase = modules_[num_word_modules_ + index]->AdditivePartialConfabulation(0);
+	const std::vector<std::string>& result_word = modules_[index]->TighteningPartialConfabulation(0);
+	const std::vector<std::string>& result_phrase = modules_[num_word_modules_ + index]->TighteningPartialConfabulation(0);
 	result.insert(result.end(), result_word.begin(), result_word.end());
 	result.insert(result.end(), result_phrase.begin(), result_phrase.end());
 	return result;
@@ -271,7 +273,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::ExcitedSymbolsAtIndex(int i
 std::vector<std::string> TwoLevelMultiConfabulation::TransferAndTightenAtIndex(int source_index,
 																			   int target_index)
 {
-	const std::vector<std::string>& result_source = modules_[source_index]->AdditivePartialConfabulation(0);
+	const std::vector<std::string>& result_source = modules_[source_index]->TighteningPartialConfabulation(0);
 
 	int8_t tighten = result_source.size() > 0 ? 1 : 0;
 	if (tighten) {
@@ -280,7 +282,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::TransferAndTightenAtIndex(i
 						   modules_[target_index].get());
 	}
 
-	return modules_[target_index]->AdditivePartialConfabulation(tighten);
+	return modules_[target_index]->TighteningPartialConfabulation(tighten);
 }
 
 // tighten expectation on target (phrase and) word modules once
