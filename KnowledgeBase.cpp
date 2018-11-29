@@ -59,7 +59,7 @@ void KnowledgeBase::ComputeLinkStrengths()
 	kbase_.reset(new CSRLinksMatrix<uint16_t, uint16_t, float>(*link_strengths));
 }
 
-std::unique_ptr<IExcitationVector<uint16_t, float>> KnowledgeBase::Transmit(const IExcitationVector<uint16_t, float> &normalized_excitations) const
+std::unique_ptr<IExcitationVector<uint16_t, float>> KnowledgeBase::Transmit(const IExcitationVector<uint16_t, float>& normalized_excitations) const
 {
 	if (normalized_excitations.GetNumRows() != src_map_.Size()) {
 		throw std::out_of_range("Input excitations should match the size of the input wordsmapping");

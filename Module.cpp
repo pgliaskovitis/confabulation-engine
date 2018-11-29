@@ -142,6 +142,7 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
 	std::unique_ptr<std::vector<std::pair<uint16_t, float>>> expectations;
 
 	if (K < 0) {
+		std::cout << "PartialConfabulation called with K = " << K << "\n" << std::flush;
 		throw std::logic_error("PartialConfabulation called with negative K");
 	}
 
@@ -173,7 +174,12 @@ std::vector<std::string> Module::PartialConfabulation(int8_t K)
 std::vector<std::string> Module::AdditivePartialConfabulation(int8_t K)
 {
 	std::unique_lock<std::mutex> module_lock(mutex_);
-	current_excitation_level_ += K;
+	if (K >= 0) {
+		current_excitation_level_ += K;
+	} else {
+		std::cout << "AdditivePartialConfabulation called with K = " << K << "\n" << std::flush;
+		throw std::logic_error("AdditivePartialConfabulation called with negative K");
+	}
 	return PartialConfabulation(current_excitation_level_);
 }
 

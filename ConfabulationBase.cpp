@@ -243,7 +243,6 @@ void ConfabulationBase::TransferExcitation(Module* source_module, KnowledgeBase*
 	std::unique_ptr<IExcitationVector<uint16_t, float>> source_excitation = source_module->GetNormalizedExcitations();
 	std::unique_ptr<IExcitationVector<uint16_t, float>> transmitted_excitation = kb->Transmit(*source_excitation);
 	target_module->AddExcitationVector(*transmitted_excitation);
-	source_excitation.reset(nullptr);
 
 	if (source_module->GetId() < target_module->GetId()) {
 		target_module->UnLock();
