@@ -36,10 +36,10 @@ public:
 	void AddSymbol(const std::string& symbol);
 	bool Contains(const std::string& symbol) const;
 
-	uint16_t IndexOf(const std::string& symbol) const;
-	std::string GetSymbol(uint16_t index) const;
+	uint32_t IndexOf(const std::string& symbol) const;
+	std::string GetSymbol(uint32_t index) const;
 
-	uint16_t Size() const { return symbol_to_index_->size(); }
+	uint32_t Size() const { return symbol_to_index_->size(); }
 
 	std::set<std::string> GetAllSymbols() const;
 
@@ -47,6 +47,6 @@ public:
 
 private:
 	std::unique_ptr<std::unordered_map<std::string, std::unique_ptr<std::string>>> all_symbols_;
-	std::unique_ptr<std::unordered_map<std::string*, uint16_t>> symbol_to_index_;
-	std::unique_ptr<std::unordered_map<uint16_t, std::string*>> index_to_symbol_;
+	std::unique_ptr<std::unordered_map<std::string*, uint32_t>> symbol_to_index_;
+	std::unique_ptr<std::unordered_map<uint32_t, std::string*>> index_to_symbol_;
 };

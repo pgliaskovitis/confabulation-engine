@@ -23,9 +23,9 @@
 #include <vector>
 #include <set>
 #include <mutex>
-#include <sparse_structures/KHashExcitationVector.hpp>
-#include <SymbolMapping.h>
+#include "sparse_structures/KHashExcitationVector.hpp"
 #include "utils/Utils.h"
+#include "SymbolMapping.h"
 #include "Globals.h"
 
 template <typename TRow>

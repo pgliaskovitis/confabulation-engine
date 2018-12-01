@@ -21,15 +21,15 @@
 
 SymbolMapping::SymbolMapping() :
 	all_symbols_(new std::unordered_map<std::string, std::unique_ptr<std::string>>),
-	symbol_to_index_(new std::unordered_map<std::string*, uint16_t>),
-	index_to_symbol_(new std::unordered_map<uint16_t, std::string*>)
+	symbol_to_index_(new std::unordered_map<std::string*, uint32_t>),
+	index_to_symbol_(new std::unordered_map<uint32_t, std::string*>)
 {}
 
 void SymbolMapping::AddSymbol(const std::string &symbol)
 {
 	std::unordered_map<std::string, std::unique_ptr<std::string>>::const_iterator existence_it = all_symbols_->find(symbol);
 	if (existence_it == all_symbols_->end()) {
-		uint16_t index = all_symbols_->size();
+		uint32_t index = all_symbols_->size();
 		std::unique_ptr<std::string> symbol_ptr(new std::string(symbol));
 		all_symbols_->insert(std::make_pair(symbol, std::move(symbol_ptr)));
 		std::unique_ptr<std::string>& storage_ptr = all_symbols_->at(symbol);
@@ -44,13 +44,13 @@ bool SymbolMapping::Contains(const std::string &symbol) const
 	return (it != all_symbols_->end());
 }
 
-uint16_t SymbolMapping::IndexOf(const std::string &symbol) const
+uint32_t SymbolMapping::IndexOf(const std::string &symbol) const
 {
 	const std::unique_ptr<std::string>& existence_ptr = all_symbols_->at(symbol);
 	return symbol_to_index_->at(existence_ptr.get());
 }
 
-std::string SymbolMapping::GetSymbol(uint16_t index) const
+std::string SymbolMapping::GetSymbol(uint32_t index) const
 {
 	const std::string* existence_ptr = index_to_symbol_->at(index);
 	return *existence_ptr;
@@ -70,7 +70,7 @@ std::set<std::string> SymbolMapping::GetAllSymbols() const
 
 std::string SymbolMapping::ToString() const
 {
-	std::unordered_map<std::string*, uint16_t>::const_iterator it = symbol_to_index_->begin();
+	std::unordered_map<std::string*, uint32_t>::const_iterator it = symbol_to_index_->begin();
 	std::string result;
 	for(; it != symbol_to_index_->end(); ++it) {
 		result += *(it->first) + " ";
