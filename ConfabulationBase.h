@@ -53,10 +53,10 @@ public:
 	virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation) = 0;
 	virtual void Activate(const std::vector<std::string>& symbols);
 
-	void TransferExcitation(Module* source_module, KnowledgeBase* kb, Module* target_module);
-	void TransferAllExcitations(int8_t target_index, Module* target_module);
-	Module* GetModule(size_t index) { return modules_[index].get(); }
-	KnowledgeBase* GetKnowledgeBase(size_t source, size_t target) { return knowledge_bases_[source][target].get(); }
+	void TransferExcitation(Module<uint16_t>* source_module, KnowledgeBase<uint16_t, uint16_t>* kb, Module<uint16_t>* target_module);
+	void TransferAllExcitations(int8_t target_index, Module<uint16_t>* target_module);
+	Module<uint16_t>* GetModule(size_t index) { return modules_[index].get(); }
+	KnowledgeBase<uint16_t, uint16_t>* GetKnowledgeBase(size_t source, size_t target) { return knowledge_bases_[source][target].get(); }
 	MultiLevelOrganizer* GetOrganizer() { return organizer_.get(); }
 
 protected:
@@ -71,8 +71,8 @@ protected:
 	std::vector<std::vector<bool>> kb_specs_;
 	std::vector<uint8_t> level_specs_;
 
-	std::vector<std::unique_ptr<Module>> modules_;
-	std::vector<std::vector<std::unique_ptr<KnowledgeBase>>> knowledge_bases_;
+	std::vector<std::unique_ptr<Module<uint16_t>>> modules_;
+	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>>> knowledge_bases_;
 
 	bool CheckVocabulary(const std::vector<std::string>& symbols);
 	std::vector<std::unique_ptr<SymbolMapping>> ProduceSymbolMappings(const std::string &symbol_file, const std::string &master_file);

@@ -76,7 +76,7 @@ void ConfabulationBase::Build()
 		}
 
 		const SymbolMapping* symbols_at_level = organizer_->GetMappingsForLevel(level);
-		modules_.emplace_back(new Module(*symbols_at_level, i));
+		modules_.emplace_back(new Module<uint16_t>(*symbols_at_level, i));
 	}
 
 	// create the knowledge bases according to specifications matrix
@@ -88,7 +88,7 @@ void ConfabulationBase::Build()
 				std::string id(std::to_string(i));
 				id += "-";
 				id += std::to_string(j);
-				knowledge_bases_[i][j].reset(new KnowledgeBase(id,
+				knowledge_bases_[i][j].reset(new KnowledgeBase<uint16_t, uint16_t>(id,
 															   modules_[i]->GetSymbolMapping(),
 															   modules_[j]->GetSymbolMapping()));
 			} else
@@ -177,8 +177,8 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 	} while (!finished_reading);
 
 	// compute knowledge link strengths
-	for (const std::vector<std::unique_ptr<KnowledgeBase>>& kb_row : knowledge_bases_) {
-		for (const std::unique_ptr<KnowledgeBase>& kb : kb_row) {
+	for (const std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>>& kb_row : knowledge_bases_) {
+		for (const std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>& kb : kb_row) {
 			if (kb != nullptr) {
 				kb->ComputeLinkStrengths();
 				kb->ResetCooccurrenceCounts();
@@ -193,7 +193,7 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 
 void ConfabulationBase::Clean()
 {
-	for (const std::unique_ptr<Module>& module : modules_) {
+	for (const std::unique_ptr<Module<uint16_t>>& module : modules_) {
 		if (module != nullptr) {
 			module->ExcitationsToZero();
 			module->TighteningLevelToZero();
@@ -226,7 +226,7 @@ void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
 	}
 }
 
-void ConfabulationBase::TransferExcitation(Module* source_module, KnowledgeBase* kb, Module* target_module)
+void ConfabulationBase::TransferExcitation(Module<uint16_t>* source_module, KnowledgeBase<uint16_t, uint16_t>* kb, Module<uint16_t>* target_module)
 {
 	if (source_module->GetId() == target_module->GetId()) {
 		return;
@@ -253,7 +253,7 @@ void ConfabulationBase::TransferExcitation(Module* source_module, KnowledgeBase*
 	}
 }
 
-void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module* target_module)
+void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint16_t>* target_module)
 {
 	// use only modules that can contribute to the given index as possible source modules
 	for (size_t i = 0; i < knowledge_bases_.size(); ++i) {

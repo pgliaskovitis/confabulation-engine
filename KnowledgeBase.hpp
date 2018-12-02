@@ -28,7 +28,7 @@
 #include "SymbolMapping.h"
 #include "Globals.h"
 
-<typename TRow, typename TCol>
+template <typename TRow, typename TCol>
 class KnowledgeBase
 {
 public:
@@ -47,9 +47,6 @@ public:
 	void ResetCooccurrenceCounts() { cooccurrence_counts_.reset(); }
 	void ResetTargetSymbolSums() { target_symbol_sums_.clear(); }
 	std::string GetId() const { return id_; }
-	std::string GetStats() const { return std::string("number of knowledge links: ") + std::to_string(GetNumKnowledgeLinks()); }
-	TRow GetSizeTargs() const { return cooccurrence_counts_->GetNumRows(); }
-	TCol GetSizeSrcs() const { return cooccurrence_counts_->GetNumCols(); }
 	uint32_t GetNumKnowledgeLinks() const { return kbase_->GetNnz(); }
 
 private:
@@ -71,8 +68,8 @@ private:
 	static float ComputeLinkStrength(double antecedent_support_probability);
 };
 
-<typename TRow, typename TCol>
-KnowledgeBase<TRow, TCol::KnowledgeBase(const std::string& id, const SymbolMapping& src_map, const SymbolMapping& targ_map) :
+template <typename TRow, typename TCol>
+KnowledgeBase<TRow, TCol>::KnowledgeBase(const std::string& id, const SymbolMapping& src_map, const SymbolMapping& targ_map) :
 	id_(id),
 	src_map_(src_map),
 	targ_map_(targ_map),
@@ -80,7 +77,7 @@ KnowledgeBase<TRow, TCol::KnowledgeBase(const std::string& id, const SymbolMappi
 	target_symbol_sums_(targ_map.Size())
 {}
 
-<typename TRow, typename TCol>
+template <typename TRow, typename TCol>
 void KnowledgeBase<TRow, TCol>::Add(const std::string& src_symbol, const std::string& targ_symbol)
 {
 	try {
@@ -92,7 +89,7 @@ void KnowledgeBase<TRow, TCol>::Add(const std::string& src_symbol, const std::st
 	}
 }
 
-<typename TRow, typename TCol>
+template <typename TRow, typename TCol>
 void KnowledgeBase<TRow, TCol>::Add(TRow targ_index, TCol src_index)
 {
 	target_symbol_sums_[targ_index]++;
@@ -100,7 +97,7 @@ void KnowledgeBase<TRow, TCol>::Add(TRow targ_index, TCol src_index)
 	cooccurrence_counts_->SetElement(targ_index, src_index, previous_count + 1);
 }
 
-<typename TRow, typename TCol>
+template <typename TRow, typename TCol>
 void KnowledgeBase<TRow, TCol>::ComputeLinkStrengths()
 {
 	std::unique_ptr<IKnowledgeLinks<TRow, TCol, float>> link_strengths(new SparseHashLinksMatrix<uint16_t, uint16_t, float>(cooccurrence_counts_->GetNumRows(), cooccurrence_counts_->GetNumCols()));
@@ -114,7 +111,7 @@ void KnowledgeBase<TRow, TCol>::ComputeLinkStrengths()
 	kbase_.reset(new CSRLinksMatrix<TRow, TCol, float>(*link_strengths));
 }
 
-<typename TRow, typename TCol>
+template <typename TRow, typename TCol>
 std::unique_ptr<IExcitationVector<TRow, float>> KnowledgeBase<TRow, TCol>::Transmit(const IExcitationVector<TCol, float>& normalized_excitations) const
 {
 	if (normalized_excitations.GetNumRows() != src_map_.Size()) {
@@ -124,7 +121,7 @@ std::unique_ptr<IExcitationVector<TRow, float>> KnowledgeBase<TRow, TCol>::Trans
 	return kbase_->Multiply(normalized_excitations);
 }
 
-<typename TRow, typename TCol>
+template <typename TRow, typename TCol>
 float KnowledgeBase<TRow, TCol>::ComputeLinkStrength(double antecedent_support_probability)
 {
 	if (antecedent_support_probability > Globals::kBaseProb) {
