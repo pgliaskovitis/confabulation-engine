@@ -25,7 +25,7 @@
 #include "text_processing/NGramHandler.h"
 #include "MultiLevelOrganizer.h"
 #include "Module.hpp"
-#include "KnowledgeBase.h"
+#include "KnowledgeBase.hpp"
 
 class ConfabulationBase
 {
