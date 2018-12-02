@@ -100,7 +100,7 @@ void KnowledgeBase<TRow, TCol>::Add(TRow targ_index, TCol src_index)
 template <typename TRow, typename TCol>
 void KnowledgeBase<TRow, TCol>::ComputeLinkStrengths()
 {
-	std::unique_ptr<IKnowledgeLinks<TRow, TCol, float>> link_strengths(new SparseHashLinksMatrix<uint16_t, uint16_t, float>(cooccurrence_counts_->GetNumRows(), cooccurrence_counts_->GetNumCols()));
+	std::unique_ptr<IKnowledgeLinks<TRow, TCol, float>> link_strengths(new SparseHashLinksMatrix<TRow, TCol, float>(cooccurrence_counts_->GetNumRows(), cooccurrence_counts_->GetNumCols()));
 
 	for (const std::pair<std::pair<TRow, TCol>, float>& e: cooccurrence_counts_->GetNzElements()) {
 		TRow row = e.first.first;
