@@ -57,7 +57,7 @@ void ConfabulationBase::Initialize(const std::vector<std::vector<bool>>& kb_spec
 {
 	if (num_word_modules_ != kb_specs.size()) {
 		std::cout << "Initialize called with knowledge base specs size = "
-			<< kb_specs.size() << " and word modules size = " << num_word_modules <<"\n" << std::flush;
+			<< kb_specs.size() << " and word modules size = " << num_word_modules_ <<"\n" << std::flush;
 		throw std::logic_error("Initialize called with wrong knowledge base specs");
 	}
 	kb_specs_ = kb_specs;
@@ -77,30 +77,82 @@ void ConfabulationBase::Build()
 	organizer_.reset(new MultiLevelOrganizer(level_specs_, ProduceSymbolMappings(symbol_file_, master_file_)));
 
 	// create the modules
-	uint8_t level = 0;
-	for (size_t i = 0; i < num_modules_; ++i) {
-		if ((i != 0) && (i % level_specs_[level] == 0)) {
-			++level;
-		}
+	for (size_t i = 0; i < num_word_modules_; ++i) {
+		const SymbolMapping* symbols_at_level = organizer_->GetMappingsForLevel(0);
+		word_modules_.emplace_back(new Module<uint16_t>(*symbols_at_level, i));
+	}
 
-		const SymbolMapping* symbols_at_level = organizer_->GetMappingsForLevel(level);
-		modules_.emplace_back(new Module<uint16_t>(*symbols_at_level, i));
+	for (size_t i = 0; i < num_phrase_modules_; ++i) {
+		const SymbolMapping* symbols_at_level = organizer_->GetMappingsForLevel(1);
+		phrase_modules_.emplace_back(new Module<uint32_t>(*symbols_at_level, i));
 	}
 
 	// create the knowledge bases according to specifications matrix
-	knowledge_bases_.resize(num_modules_);
+	word_to_word_knowledge_bases_.resize(num_modules_);
 	for (size_t i = 0; i < num_modules_; ++i) {
-		knowledge_bases_[i].resize(num_modules_);
+		word_to_word_knowledge_bases_[i].resize(num_modules_);
 		for (size_t j = 0; j < num_modules_; ++j) {
 			if (kb_specs_[i][j]) {
 				std::string id(std::to_string(i));
 				id += "-";
 				id += std::to_string(j);
-				knowledge_bases_[i][j].reset(new KnowledgeBase<uint16_t, uint16_t>(id,
-															   modules_[i]->GetSymbolMapping(),
-															   modules_[j]->GetSymbolMapping()));
+				word_to_word_knowledge_bases_[i][j].reset(new KnowledgeBase<uint16_t, uint16_t>(id,
+															   word_modules_[i]->GetSymbolMapping(),
+															   word_modules_[j]->GetSymbolMapping()));
 			} else
-				knowledge_bases_[i][j].reset(nullptr);
+				word_to_word_knowledge_bases_[i][j].reset(nullptr);
+		}
+	}
+
+	phrase_to_phrase_knowledge_bases_.resize(num_modules_);
+	for (size_t i = 0; i < num_modules_; ++i) {
+		phrase_to_phrase_knowledge_bases_[i].resize(num_modules_);
+		for (size_t j = 0; j < num_modules_; ++j) {
+			if (kb_specs_[i][j]) {
+				std::string id(std::to_string(i));
+				id += "-";
+				id += std::to_string(j);
+				assert(i >= num_word_modules_);
+				assert(j >= num_word_modules_);
+				phrase_to_phrase_knowledge_bases_[i][j].reset(new KnowledgeBase<uint32_t, uint32_t>(id,
+															   phrase_modules_[i - num_word_modules_]->GetSymbolMapping(),
+															   phrase_modules_[j - num_word_modules_]->GetSymbolMapping()));
+			} else
+				phrase_to_phrase_knowledge_bases_[i][j].reset(nullptr);
+		}
+	}
+
+	word_to_phrase_knowledge_bases_.resize(num_modules_);
+	for (size_t i = 0; i < num_modules_; ++i) {
+		word_to_phrase_knowledge_bases_[i].resize(num_modules_);
+		for (size_t j = 0; j < num_modules_; ++j) {
+			if (kb_specs_[i][j]) {
+				std::string id(std::to_string(i));
+				id += "-";
+				id += std::to_string(j);
+				assert(j >= num_word_modules_);
+				word_to_phrase_knowledge_bases_[i][j].reset(new KnowledgeBase<uint32_t, uint16_t>(id,
+															   word_modules_[i]->GetSymbolMapping(),
+															   phrase_modules_[j - num_word_modules_]->GetSymbolMapping()));
+			} else
+				word_to_phrase_knowledge_bases_[i][j].reset(nullptr);
+		}
+	}
+
+	phrase_to_word_knowledge_bases_.resize(num_modules_);
+	for (size_t i = 0; i < num_modules_; ++i) {
+		phrase_to_word_knowledge_bases_[i].resize(num_modules_);
+		for (size_t j = 0; j < num_modules_; ++j) {
+			if (kb_specs_[i][j]) {
+				std::string id(std::to_string(i));
+				id += "-";
+				id += std::to_string(j);
+				assert(i >= num_word_modules_);
+				phrase_to_word_knowledge_bases_[i][j].reset(new KnowledgeBase<uint16_t, uint32_t>(id,
+															   phrase_modules_[i - num_word_modules_]->GetSymbolMapping(),
+															   word_modules_[j]->GetSymbolMapping()));
+			} else
+				phrase_to_word_knowledge_bases_[i][j].reset(nullptr);
 		}
 	}
 
@@ -232,7 +284,8 @@ bool ConfabulationBase::CheckVocabulary(const std::vector<std::string> &symbols)
 	return true;
 }
 
-void ConfabulationBase::TransferExcitation(Module<uint16_t>* source_module, KnowledgeBase<uint16_t, uint16_t>* kb, Module<uint16_t>* target_module)
+template <typename TRow, typename TCol>
+void ConfabulationBase::TransferExcitation(Module<TCol>* source_module, KnowledgeBase<TRow, TCol>* kb, Module<TRow>* target_module)
 {
 	if (source_module->GetId() == target_module->GetId()) {
 		return;
@@ -246,8 +299,8 @@ void ConfabulationBase::TransferExcitation(Module<uint16_t>* source_module, Know
 		source_module->Lock();
 	}
 
-	std::unique_ptr<IExcitationVector<uint16_t, float>> source_excitation = source_module->GetNormalizedExcitations();
-	std::unique_ptr<IExcitationVector<uint16_t, float>> transmitted_excitation = kb->Transmit(*source_excitation);
+	std::unique_ptr<IExcitationVector<TCol, float>> source_excitation = source_module->GetNormalizedExcitations();
+	std::unique_ptr<IExcitationVector<TRow, float>> transmitted_excitation = kb->Transmit(*source_excitation);
 	target_module->AddExcitationVector(*transmitted_excitation);
 
 	if (source_module->GetId() < target_module->GetId()) {
@@ -259,7 +312,8 @@ void ConfabulationBase::TransferExcitation(Module<uint16_t>* source_module, Know
 	}
 }
 
-void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint16_t>* target_module)
+template <typename TRow>
+void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<TRow>* target_module)
 {
 	// use only modules that can contribute to the given index as possible source modules
 	for (size_t i = 0; i < knowledge_bases_.size(); ++i) {

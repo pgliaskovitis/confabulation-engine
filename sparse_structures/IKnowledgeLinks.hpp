@@ -28,14 +28,14 @@
 struct PairHash {
 public:
 	template <typename TRow, typename TCol>
-	std::size_t operator()(const std::pair<TRow, TCol> &x) const
+	size_t operator()(const std::pair<TRow, TCol> &x) const
 	{
 		return x.first * std::numeric_limits<TCol>::max() + x.second;
 	}
 
 	/*
 	template <typename TRow, typename TCol>
-	std::size_t operator()(const std::pair<TRow, TCol> &x) const
+	size_t operator()(const std::pair<TRow, TCol> &x) const
 	{
 		return std::hash<TRow>()(x.first) ^ std::hash<TCol>()(x.second);
 	}
@@ -44,8 +44,8 @@ public:
 
 struct PairEquals {
 public:
-	template <typename T>
-	bool operator()(const std::pair<T, T> &x, const std::pair<T, T> &y) const
+	template <typename T, typename U>
+	bool operator()(const std::pair<T, U> &x, const std::pair<T, U> &y) const
 	{
 		return x == y;
 	}

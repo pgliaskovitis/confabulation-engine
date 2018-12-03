@@ -29,7 +29,8 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 													   uint8_t min_multi_occurrences)
 	: num_word_modules_(num_word_modules)
 {
-	num_modules_ = 2 * num_word_modules;
+	num_phrase_modules_ = num_word_modules_;
+	num_modules_ = num_word_modules_ + num_phrase_modules_;
 
 	// knowledge base specification
 	std::vector<std::vector<bool>> kb_specs;

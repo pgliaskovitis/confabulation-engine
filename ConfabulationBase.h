@@ -27,6 +27,18 @@
 #include "Module.hpp"
 #include "KnowledgeBase.hpp"
 
+enum class ModuleType {
+	word_t,
+	phrase_t
+};
+
+enum class KnowledgeBaseType {
+	word_to_word_t,
+	phrase_to_phrase_t,
+	word_to_phrase_t,
+	phrase_to_word_t
+};
+
 class ConfabulationBase
 {
 public:
@@ -49,15 +61,20 @@ public:
 	void Build();
 	void Learn(size_t num_word_modules);
 	void Clean();
+	void GetKnowledgeBaseType(size_t source_module_index, size_t target_module_index);
+	MultiLevelOrganizer* GetOrganizer() { return organizer_.get(); }
 
 	virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation) = 0;
 	virtual void Activate(const std::vector<std::string>& symbols) = 0;
 
-	void TransferExcitation(Module<uint16_t>* source_module, KnowledgeBase<uint16_t, uint16_t>* kb, Module<uint16_t>* target_module);
-	void TransferAllExcitations(int8_t target_index, Module<uint16_t>* target_module);
-	Module<uint16_t>* GetModule(size_t index) { return modules_[index].get(); }
-	KnowledgeBase<uint16_t, uint16_t>* GetKnowledgeBase(size_t source, size_t target) { return knowledge_bases_[source][target].get(); }
-	MultiLevelOrganizer* GetOrganizer() { return organizer_.get(); }
+	template <typename TRow, typename TCol>
+	void TransferExcitation(Module<TCol>* source_module, KnowledgeBase<TRow, TCol>* kb, Module<TRow>* target_module);
+
+	template <typename TRow>
+	void TransferAllExcitations(int8_t target_index, Module<TRow>* target_module);
+
+	// Module<uint16_t>* GetModule(size_t index) { return modules_[index].get(); }
+	// KnowledgeBase<uint16_t, uint16_t>* GetKnowledgeBase(size_t source, size_t target) { return knowledge_bases_[source][target].get(); }
 
 protected:
 	uint8_t num_modules_;
@@ -78,8 +95,8 @@ protected:
 
 	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>>> word_to_word_knowledge_bases_;
 	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint32_t, uint32_t>>>> phrase_to_phrase_knowledge_bases_;
-	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint32_t>>>> word_to_phrase_knowledge_bases_;
-	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint32_t, uint16_t>>>> phrase_to_word_knowledge_bases_;
+	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint32_t, uint16_t>>>> word_to_phrase_knowledge_bases_;
+	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint32_t>>>> phrase_to_word_knowledge_bases_;
 
 	bool CheckVocabulary(const std::vector<std::string>& symbols);
 	std::vector<std::unique_ptr<SymbolMapping>> ProduceSymbolMappings(const std::string &symbol_file, const std::string &master_file);
