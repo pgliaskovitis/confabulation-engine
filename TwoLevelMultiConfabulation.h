@@ -44,7 +44,6 @@ protected:
 	virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete);
 
 private:
-	uint8_t num_word_modules_;
 	std::vector<std::thread> threads_;
 
 	std::vector<std::string> InitializationAtIndex(int index);

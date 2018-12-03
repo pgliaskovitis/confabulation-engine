@@ -176,7 +176,11 @@ void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbol
 	}
 
 	// activate words
-	ConfabulationBase::Activate(symbols);
+	for (size_t i = 0; i < std::min(symbols.size(), modules_.size()); ++i) {
+		if ((!symbols[i].empty()) && (modules_[i] != nullptr)) {
+			modules_[i]->ActivateSymbol(symbols[i], 1);
+		}
+	}
 }
 
 std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::vector<std::string> &symbols, int8_t index_to_complete, bool expectation)

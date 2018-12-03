@@ -51,7 +51,7 @@ public:
 	void Clean();
 
 	virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation) = 0;
-	virtual void Activate(const std::vector<std::string>& symbols);
+	virtual void Activate(const std::vector<std::string>& symbols) = 0;
 
 	void TransferExcitation(Module<uint16_t>* source_module, KnowledgeBase<uint16_t, uint16_t>* kb, Module<uint16_t>* target_module);
 	void TransferAllExcitations(int8_t target_index, Module<uint16_t>* target_module);
@@ -61,18 +61,25 @@ public:
 
 protected:
 	uint8_t num_modules_;
+	uint8_t num_word_modules_;
+	uint8_t num_phrase_modules_;
+	uint8_t min_single_occurrences_;
+	uint8_t min_multi_occurrences_;
 	int8_t start_position_;
 	std::string symbol_file_;
 	std::string master_file_;
-	uint8_t min_single_occurrences_;
-	uint8_t min_multi_occurrences_;
 
 	std::unique_ptr<MultiLevelOrganizer> organizer_;
 	std::vector<std::vector<bool>> kb_specs_;
 	std::vector<uint8_t> level_specs_;
 
-	std::vector<std::unique_ptr<Module<uint16_t>>> modules_;
-	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>>> knowledge_bases_;
+	std::vector<std::unique_ptr<Module<uint16_t>>> word_modules_;
+	std::vector<std::unique_ptr<Module<uint32_t>>> phrase_modules_;
+
+	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>>> word_to_word_knowledge_bases_;
+	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint32_t, uint32_t>>>> phrase_to_phrase_knowledge_bases_;
+	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint32_t>>>> word_to_phrase_knowledge_bases_;
+	std::vector<std::vector<std::unique_ptr<KnowledgeBase<uint32_t, uint16_t>>>> phrase_to_word_knowledge_bases_;
 
 	bool CheckVocabulary(const std::vector<std::string>& symbols);
 	std::vector<std::unique_ptr<SymbolMapping>> ProduceSymbolMappings(const std::string &symbol_file, const std::string &master_file);

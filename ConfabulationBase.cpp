@@ -29,8 +29,12 @@ ConfabulationBase::ConfabulationBase() : start_position_(-1)
 
 ConfabulationBase::~ConfabulationBase()
 {
-	modules_.clear();
-	knowledge_bases_.clear();
+	word_modules_.clear();
+	phrase_modules_.clear();
+	word_to_word_knowledge_bases_.clear();
+	phrase_to_phrase_knowledge_bases_.clear();
+	word_to_phrase_knowledge_bases_.clear();
+	phrase_to_word_knowledge_bases_.clear();
 }
 
 int8_t ConfabulationBase::GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete)
@@ -51,7 +55,11 @@ void ConfabulationBase::Initialize(const std::vector<std::vector<bool>>& kb_spec
 								   uint8_t min_single_occurrences,
 								   uint8_t min_multi_occurrences)
 {
-	num_modules_ = kb_specs.size();
+	if (num_word_modules_ != kb_specs.size()) {
+		std::cout << "Initialize called with knowledge base specs size = "
+			<< kb_specs.size() << " and word modules size = " << num_word_modules <<"\n" << std::flush;
+		throw std::logic_error("Initialize called with wrong knowledge base specs");
+	}
 	kb_specs_ = kb_specs;
 	level_specs_ = level_specs;
 	symbol_file_ = symbol_file;
@@ -193,7 +201,14 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 
 void ConfabulationBase::Clean()
 {
-	for (const std::unique_ptr<Module<uint16_t>>& module : modules_) {
+	for (const std::unique_ptr<Module<uint16_t>>& module : word_modules_) {
+		if (module != nullptr) {
+			module->ExcitationsToZero();
+			module->TighteningLevelToZero();
+		}
+	}
+
+	for (const std::unique_ptr<Module<uint32_t>>& module : phrase_modules_) {
 		if (module != nullptr) {
 			module->ExcitationsToZero();
 			module->TighteningLevelToZero();
@@ -215,15 +230,6 @@ bool ConfabulationBase::CheckVocabulary(const std::vector<std::string> &symbols)
 	}
 
 	return true;
-}
-
-void ConfabulationBase::Activate(const std::vector<std::string> &symbols)
-{
-	for (size_t i = 0; i < std::min(symbols.size(), modules_.size()); ++i) {
-		if ((!symbols[i].empty()) && (modules_[i] != nullptr)) {
-			modules_[i]->ActivateSymbol(symbols[i], 1);
-		}
-	}
 }
 
 void ConfabulationBase::TransferExcitation(Module<uint16_t>* source_module, KnowledgeBase<uint16_t, uint16_t>* kb, Module<uint16_t>* target_module)
