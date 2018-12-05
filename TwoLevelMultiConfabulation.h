@@ -42,6 +42,7 @@ protected:
 	virtual int8_t AutoIndexToComplete(const std::vector<std::string>& symbols);
 	virtual bool CheckIndex(const std::vector<std::string>& symbols, int8_t index_to_complete);
 	virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete);
+	virtual int8_t GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete);
 
 private:
 	std::vector<std::thread> threads_;

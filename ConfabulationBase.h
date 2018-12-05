@@ -50,7 +50,8 @@ public:
 
 	~ConfabulationBase();
 
-	int8_t GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete);
+	ModuleType GetModuleType(size_t module_index);
+	KnowledgeBaseType GetKnowledgeBaseType(size_t source_module_index, size_t target_module_index);
 
 	void Initialize(const std::vector<std::vector<bool>>& kb_specs,
 					const std::vector<uint8_t> level_specs,
@@ -61,7 +62,6 @@ public:
 	void Build();
 	void Learn(size_t num_word_modules);
 	void Clean();
-	void GetKnowledgeBaseType(size_t source_module_index, size_t target_module_index);
 	MultiLevelOrganizer* GetOrganizer() { return organizer_.get(); }
 
 	virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation) = 0;
@@ -73,8 +73,24 @@ public:
 	template <typename TRow>
 	void TransferAllExcitations(int8_t target_index, Module<TRow>* target_module);
 
-	// Module<uint16_t>* GetModule(size_t index) { return modules_[index].get(); }
-	// KnowledgeBase<uint16_t, uint16_t>* GetKnowledgeBase(size_t source, size_t target) { return knowledge_bases_[source][target].get(); }
+	Module<uint16_t>* GetWordModule(size_t index) { return word_modules_[index].get(); }
+	Module<uint32_t>* GetPhraseModule(size_t index) { return phrase_modules_[index].get(); }
+	KnowledgeBase<uint16_t, uint16_t>* GetWordToWordKnowledgeBase(size_t source, size_t target)
+	{
+		return word_to_word_knowledge_bases_[source][target].get();
+	}
+	KnowledgeBase<uint32_t, uint32_t>* GetPhraseToPhraseKnowledgeBase(size_t source, size_t target)
+	{
+		return phrase_to_phrase_knowledge_bases_[source][target].get();
+	}
+	KnowledgeBase<uint32_t, uint16_t>* GetWordToPhraseKnowledgeBase(size_t source, size_t target)
+	{
+		return word_to_phrase_knowledge_bases_[source][target].get();
+	}
+	KnowledgeBase<uint16_t, uint32_t>* GetPhraseToWordKnowledgeBase(size_t source, size_t target)
+	{
+		return phrase_to_word_knowledge_bases_[source][target].get();
+	}
 
 protected:
 	uint8_t num_modules_;
@@ -109,4 +125,7 @@ protected:
 
 	// check arguments against current setup
 	virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete) = 0;
+
+	// index to complete taking into account non-activated modules
+	virtual int8_t GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete);
 };

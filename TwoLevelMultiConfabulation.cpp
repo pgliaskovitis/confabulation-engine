@@ -153,6 +153,17 @@ bool TwoLevelMultiConfabulation::CheckArguments(const std::vector<std::string> &
 	}
 }
 
+int8_t TwoLevelMultiConfabulation::GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete)
+{
+	int8_t index = std::min((int8_t)ConvertToSigned(symbols.size()), (int8_t)index_to_complete);
+	int8_t max_nonempty_pos = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
+	if (start_position_ >= 0) {
+	   return std::min(start_position_, max_nonempty_pos);
+	} else {
+	   return max_nonempty_pos;
+	}
+}
+
 void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbols)
 {
 	const std::vector<std::vector<std::string>>& primary_layout = organizer_->Organize(symbols);

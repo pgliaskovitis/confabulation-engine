@@ -37,14 +37,33 @@ ConfabulationBase::~ConfabulationBase()
 	phrase_to_word_knowledge_bases_.clear();
 }
 
-int8_t ConfabulationBase::GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete)
+ModuleType ConfabulationBase::GetModuleType(size_t module_index)
 {
-	int8_t index = std::min((int8_t)ConvertToSigned(symbols.size()), (int8_t)index_to_complete);
-	int8_t max_nonempty_pos = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
-	if (start_position_ >= 0) {
-	   return std::min(start_position_, max_nonempty_pos);
-	} else {
-	   return max_nonempty_pos;
+	if (module_index < num_word_modules_) {
+		return ModuleType::word_t;
+	}
+
+	if (module_index >= num_word_modules_) {
+		return ModuleType::phrase_t;
+	}
+}
+
+KnowledgeBaseType ConfabulationBase::GetKnowledgeBaseType(size_t source_module_index, size_t target_module_index)
+{
+	if (source_module_index < num_word_modules_ && target_module_index < num_word_modules_) {
+		return KnowledgeBaseType::word_to_word_t;
+	}
+
+	if (source_module_index >= num_word_modules_ && target_module_index >= num_word_modules_) {
+		return KnowledgeBaseType::phrase_to_phrase_t;
+	}
+
+	if (source_module_index < num_word_modules_ && target_module_index >= num_word_modules_) {
+		return KnowledgeBaseType::word_to_phrase_t;
+	}
+
+	if (source_module_index >= num_word_modules_ && target_module_index < num_word_modules_) {
+		return KnowledgeBaseType::phrase_to_word_t;
 	}
 }
 
@@ -213,23 +232,36 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 				for (const std::vector<std::string>& module_combination : module_combinations) {
 
 					// std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, '#') << "\n" << std::flush;
+
 					for (size_t src = 0; src < num_modules_; ++src) {
 						if (!module_combination[src].empty()) {
 							for (size_t targ = 0; targ < num_modules_; ++targ) {
-								if ((knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
-									knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
-									/*
-									if (src == 1 && targ == 7) {
-										std::cout << "Enhancing link [" << src << "][" << targ <<
-										"] between \"" << module_combination[src] <<
-										"\" and \"" << module_combination[targ] <<
-										"\"\n" << std::flush;
+								switch(GetKnowledgeBaseType(src, targ)) {
+								case KnowledgeBaseType::word_to_word_t:
+									if ((word_to_word_knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
+										word_to_word_knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
 									}
-									*/
+									break;
+								case KnowledgeBaseType::phrase_to_phrase_t:
+									if ((phrase_to_phrase_knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
+										phrase_to_phrase_knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
+									}
+									break;
+								case KnowledgeBaseType::word_to_phrase_t:
+									if ((word_to_phrase_knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
+										word_to_phrase_knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
+									}
+									break;
+								case KnowledgeBaseType::phrase_to_word_t:
+									if ((phrase_to_word_knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
+										phrase_to_word_knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
+									}
+									break;
 								}
 							}
 						}
 					}
+
 				}
 			}
 			large_sentence = false;
@@ -237,8 +269,41 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 	} while (!finished_reading);
 
 	// compute knowledge link strengths
-	for (const std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>>& kb_row : knowledge_bases_) {
+	for (const std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>>& kb_row : word_to_word_knowledge_bases_) {
 		for (const std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>& kb : kb_row) {
+			if (kb != nullptr) {
+				kb->ComputeLinkStrengths();
+				kb->ResetCooccurrenceCounts();
+				kb->ResetTargetSymbolSums();
+				log_info("Finished computing knowledge link strengths for knowledge base %s", kb->GetId().c_str());
+			}
+		}
+	}
+
+	for (const std::vector<std::unique_ptr<KnowledgeBase<uint32_t, uint32_t>>>& kb_row : phrase_to_phrase_knowledge_bases_) {
+		for (const std::unique_ptr<KnowledgeBase<uint32_t, uint32_t>>& kb : kb_row) {
+			if (kb != nullptr) {
+				kb->ComputeLinkStrengths();
+				kb->ResetCooccurrenceCounts();
+				kb->ResetTargetSymbolSums();
+				log_info("Finished computing knowledge link strengths for knowledge base %s", kb->GetId().c_str());
+			}
+		}
+	}
+
+	for (const std::vector<std::unique_ptr<KnowledgeBase<uint32_t, uint16_t>>>& kb_row : word_to_phrase_knowledge_bases_) {
+		for (const std::unique_ptr<KnowledgeBase<uint32_t, uint16_t>>& kb : kb_row) {
+			if (kb != nullptr) {
+				kb->ComputeLinkStrengths();
+				kb->ResetCooccurrenceCounts();
+				kb->ResetTargetSymbolSums();
+				log_info("Finished computing knowledge link strengths for knowledge base %s", kb->GetId().c_str());
+			}
+		}
+	}
+
+	for (const std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint32_t>>>& kb_row : phrase_to_word_knowledge_bases_) {
+		for (const std::unique_ptr<KnowledgeBase<uint16_t, uint32_t>>& kb : kb_row) {
 			if (kb != nullptr) {
 				kb->ComputeLinkStrengths();
 				kb->ResetCooccurrenceCounts();
@@ -270,12 +335,12 @@ void ConfabulationBase::Clean()
 
 bool ConfabulationBase::CheckVocabulary(const std::vector<std::string> &symbols)
 {
-	for (size_t i = 0; i < std::min(symbols.size(), modules_.size()); ++i) {
-		if ((!symbols[i].empty()) && (modules_[i] == nullptr)) {
+	for (size_t i = 0; i < std::min(symbols.size(), word_modules_.size()); ++i) {
+		if ((!symbols[i].empty()) && (word_modules_[i] == nullptr)) {
 			std::cout << "Input has activated symbol \"" << symbols[i] << "\" at position " << i
 					  << " and corresponding module is null" << "\n" << std::flush;
 			return false;
-		} else if ((!symbols[i].empty()) && (!modules_[i]->GetSymbolMapping().Contains(symbols[i]))) {
+		} else if ((!symbols[i].empty()) && (!word_modules_[i]->GetSymbolMapping().Contains(symbols[i]))) {
 			std::cout << "Input has activated symbol \"" << symbols[i] << "\" at position " << i
 					  << " not contained in corresponding module" << "\n" << std::flush;
 		}
@@ -316,9 +381,27 @@ template <typename TRow>
 void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<TRow>* target_module)
 {
 	// use only modules that can contribute to the given index as possible source modules
-	for (size_t i = 0; i < knowledge_bases_.size(); ++i) {
-		if (knowledge_bases_[i][target_index] != nullptr) {
-			TransferExcitation(modules_[i].get(), knowledge_bases_[i][target_index].get(), target_module);
+	for (size_t i = 0; i < word_to_word_knowledge_bases_.size(); ++i) {
+		if (word_to_word_knowledge_bases_[i][target_index] != nullptr) {
+			TransferExcitation(word_modules_[i].get(), word_to_word_knowledge_bases_[i][target_index].get(), target_module);
+		}
+	}
+
+	for (size_t i = 0; i < phrase_to_phrase_knowledge_bases_.size(); ++i) {
+		if (phrase_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
+			TransferExcitation(phrase_modules_[i].get(), phrase_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
+		}
+	}
+
+	for (size_t i = 0; i < word_to_phrase_knowledge_bases_.size(); ++i) {
+		if (word_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
+			TransferExcitation(word_modules_[i].get(), word_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
+		}
+	}
+
+	for (size_t i = 0; i < phrase_to_word_knowledge_bases_.size(); ++i) {
+		if (phrase_to_word_knowledge_bases_[i][target_index] != nullptr) {
+			TransferExcitation(phrase_modules_[i].get(), phrase_to_word_knowledge_bases_[i][target_index].get(), target_module);
 		}
 	}
 }
