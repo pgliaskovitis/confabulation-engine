@@ -349,63 +349,6 @@ bool ConfabulationBase::CheckVocabulary(const std::vector<std::string> &symbols)
 	return true;
 }
 
-template <typename TRow, typename TCol>
-void ConfabulationBase::TransferExcitation(Module<TCol>* source_module, KnowledgeBase<TRow, TCol>* kb, Module<TRow>* target_module)
-{
-	if (source_module->GetId() == target_module->GetId()) {
-		return;
-	}
-
-	if (source_module->GetId() < target_module->GetId()) {
-		source_module->Lock();
-		target_module->Lock();
-	} else {
-		target_module->Lock();
-		source_module->Lock();
-	}
-
-	std::unique_ptr<IExcitationVector<TCol, float>> source_excitation = source_module->GetNormalizedExcitations();
-	std::unique_ptr<IExcitationVector<TRow, float>> transmitted_excitation = kb->Transmit(*source_excitation);
-	target_module->AddExcitationVector(*transmitted_excitation);
-
-	if (source_module->GetId() < target_module->GetId()) {
-		target_module->UnLock();
-		source_module->UnLock();
-	} else {
-		source_module->UnLock();
-		target_module->UnLock();
-	}
-}
-
-template <typename TRow>
-void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<TRow>* target_module)
-{
-	// use only modules that can contribute to the given index as possible source modules
-	for (size_t i = 0; i < word_to_word_knowledge_bases_.size(); ++i) {
-		if (word_to_word_knowledge_bases_[i][target_index] != nullptr) {
-			TransferExcitation(word_modules_[i].get(), word_to_word_knowledge_bases_[i][target_index].get(), target_module);
-		}
-	}
-
-	for (size_t i = 0; i < phrase_to_phrase_knowledge_bases_.size(); ++i) {
-		if (phrase_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
-			TransferExcitation(phrase_modules_[i].get(), phrase_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
-		}
-	}
-
-	for (size_t i = 0; i < word_to_phrase_knowledge_bases_.size(); ++i) {
-		if (word_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
-			TransferExcitation(word_modules_[i].get(), word_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
-		}
-	}
-
-	for (size_t i = 0; i < phrase_to_word_knowledge_bases_.size(); ++i) {
-		if (phrase_to_word_knowledge_bases_[i][target_index] != nullptr) {
-			TransferExcitation(phrase_modules_[i].get(), phrase_to_word_knowledge_bases_[i][target_index].get(), target_module);
-		}
-	}
-}
-
 std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMappings(const std::string &symbol_file, const std::string &master_file)
 {
 	std::vector<std::unique_ptr<SymbolMapping>> result;

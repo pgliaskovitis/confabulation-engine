@@ -27,8 +27,8 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 													   const std::string &master_file,
 													   uint8_t min_single_occurrences,
 													   uint8_t min_multi_occurrences)
-	: num_word_modules_(num_word_modules)
 {
+	num_word_modules_ = num_word_modules;
 	num_phrase_modules_ = num_word_modules_;
 	num_modules_ = num_word_modules_ + num_phrase_modules_;
 
@@ -183,14 +183,14 @@ void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbol
 	// activate phrases
 	for (size_t i = 0; i < activated_multiwords.size(); ++i) {
 		if (!activated_multiwords[i].empty()) {
-			modules_[num_word_modules_ + i]->ActivateSymbol(activated_multiwords[i], 1);
+			phrase_modules_[i]->ActivateSymbol(activated_multiwords[i], 1);
 		}
 	}
 
 	// activate words
-	for (size_t i = 0; i < std::min(symbols.size(), modules_.size()); ++i) {
-		if ((!symbols[i].empty()) && (modules_[i] != nullptr)) {
-			modules_[i]->ActivateSymbol(symbols[i], 1);
+	for (size_t i = 0; i < std::min(symbols.size(), word_modules_.size()); ++i) {
+		if ((!symbols[i].empty()) && (word_modules_[i] != nullptr)) {
+			word_modules_[i]->ActivateSymbol(symbols[i], 1);
 		}
 	}
 }
@@ -243,8 +243,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 		if (!expectation) {
 			float word_excitation;
 			float phrase_excitation;
-			std::string next_word = modules_[index]->ElementaryConfabulation(start_pos, &word_excitation);
-			std::string next_phrase =  modules_[num_word_modules_ + index]->ElementaryConfabulation(start_pos, &phrase_excitation);
+			std::string next_word = word_modules_[index]->ElementaryConfabulation(start_pos, &word_excitation);
+			std::string next_phrase =  phrase_modules_[index]->ElementaryConfabulation(start_pos, &phrase_excitation);
 
 			result.push_back("{");
 			if (word_excitation > phrase_excitation) {
@@ -269,8 +269,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 // initialize expectation on target (phrase and) word modules once
 std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int index)
 {
-	TransferAllExcitations(num_word_modules_ + index, modules_[num_word_modules_ + index].get());
-	TransferAllExcitations(index, modules_[index].get());
+	TransferAllExcitations(index, word_modules_[index].get());
+	TransferAllExcitations(index, phrase_modules_[index].get());
 	return ExcitedSymbolsAtIndex(index);
 }
 
@@ -278,8 +278,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int i
 std::vector<std::string> TwoLevelMultiConfabulation::ExcitedSymbolsAtIndex(int index)
 {
 	std::vector<std::string> result;
-	const std::vector<std::string>& result_word = modules_[index]->TighteningPartialConfabulation(0);
-	const std::vector<std::string>& result_phrase = modules_[num_word_modules_ + index]->TighteningPartialConfabulation(0);
+	const std::vector<std::string>& result_word = word_modules_[index]->TighteningPartialConfabulation(0);
+	const std::vector<std::string>& result_phrase = phrase_modules_[index]->TighteningPartialConfabulation(0);
 	result.insert(result.end(), result_word.begin(), result_word.end());
 	result.insert(result.end(), result_phrase.begin(), result_phrase.end());
 	return result;
@@ -289,16 +289,43 @@ std::vector<std::string> TwoLevelMultiConfabulation::ExcitedSymbolsAtIndex(int i
 std::vector<std::string> TwoLevelMultiConfabulation::TransferAndTightenAtIndex(int source_index,
 																			   int target_index)
 {
-	const std::vector<std::string>& result_source = modules_[source_index]->TighteningPartialConfabulation(0);
+	std::vector<std::string> result_source;
+
+	switch(GetModuleType(source_index)) {
+	case ModuleType::word_t:
+		result_source = word_modules_[source_index]->TighteningPartialConfabulation(0);
+	case ModuleType::phrase_t:
+		result_source = phrase_modules_[source_index]->TighteningPartialConfabulation(0);
+	}
 
 	int8_t tighten = result_source.size() > 0 ? 1 : 0;
 	if (tighten) {
-		TransferExcitation(modules_[source_index].get(),
-						   knowledge_bases_[source_index][target_index].get(),
-						   modules_[target_index].get());
+		switch(GetKnowledgeBaseType(source_index, target_index)) {
+		case KnowledgeBaseType::word_to_word_t:
+			TransferExcitation(word_modules_[source_index].get(),
+							   word_to_word_knowledge_bases_[source_index][target_index].get(),
+							   word_modules_[target_index].get());
+		case KnowledgeBaseType::phrase_to_phrase_t:
+			TransferExcitation(phrase_modules_[source_index].get(),
+							   phrase_to_phrase_knowledge_bases_[source_index][target_index].get(),
+							   phrase_modules_[target_index].get());
+		case KnowledgeBaseType::word_to_phrase_t:
+			TransferExcitation(word_modules_[source_index].get(),
+						   word_to_phrase_knowledge_bases_[source_index][target_index].get(),
+						   phrase_modules_[target_index].get());
+		case KnowledgeBaseType::phrase_to_word_t:
+			TransferExcitation(phrase_modules_[source_index].get(),
+						   phrase_to_word_knowledge_bases_[source_index][target_index].get(),
+						   word_modules_[target_index].get());
+		}
 	}
 
-	return modules_[target_index]->TighteningPartialConfabulation(tighten);
+	switch(GetModuleType(target_index)) {
+	case ModuleType::word_t:
+		return word_modules_[target_index]->TighteningPartialConfabulation(tighten);
+	case ModuleType::phrase_t:
+		return phrase_modules_[target_index]->TighteningPartialConfabulation(tighten);
+	}
 }
 
 // tighten expectation on target (phrase and) word modules once

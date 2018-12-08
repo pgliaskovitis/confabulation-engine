@@ -314,34 +314,34 @@ void ConfabulationTest::TestProduceKnowledgeLinkCombinations() const
 
 void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, const std::string& masterfile) const
 {
-	size_t num_word_modules = 10;
+	size_t num_word_modules = 5;
 	TwoLevelMultiConfabulation confab_engine(num_word_modules, symbolfile, masterfile, 1, 1);
 	TextReader reader(symbolfile, masterfile);
 	reader.Initialize();
 
-	Module<uint16_t>* module_0 = confab_engine.GetModule(0);
-	Module<uint16_t>* module_1 = confab_engine.GetModule(1);
-	Module<uint16_t>* module_2 = confab_engine.GetModule(2);
-	Module<uint16_t>* module_3 = confab_engine.GetModule(3);
-	Module<uint16_t>* module_5 = confab_engine.GetModule(5);
-	Module<uint16_t>* module_4 = confab_engine.GetModule(4);
-	Module<uint16_t>* module_6 = confab_engine.GetModule(num_word_modules);
-	Module<uint16_t>* module_7 = confab_engine.GetModule(num_word_modules + 1);
+	Module<uint16_t>* module_0 = confab_engine.GetWordModule(0);
+	Module<uint16_t>* module_1 = confab_engine.GetWordModule(1);
+	Module<uint16_t>* module_2 = confab_engine.GetWordModule(2);
+	Module<uint16_t>* module_3 = confab_engine.GetWordModule(3);
+	Module<uint16_t>* module_4 = confab_engine.GetWordModule(4);
+	Module<uint32_t>* module_5 = confab_engine.GetPhraseModule(0);
+	Module<uint32_t>* module_6 = confab_engine.GetPhraseModule(1);
+	Module<uint32_t>* module_7 = confab_engine.GetPhraseModule(2);
 
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_0_6 = confab_engine.GetKnowledgeBase(0, num_word_modules);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_1_6 = confab_engine.GetKnowledgeBase(1, num_word_modules);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_1_7 = confab_engine.GetKnowledgeBase(1, num_word_modules + 1);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_2_7 = confab_engine.GetKnowledgeBase(2, num_word_modules + 1);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_6_0 = confab_engine.GetKnowledgeBase(num_word_modules, 0);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_6_1 = confab_engine.GetKnowledgeBase(num_word_modules, 1);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_6_2 = confab_engine.GetKnowledgeBase(num_word_modules, 2);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_6_3 = confab_engine.GetKnowledgeBase(num_word_modules, 3);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_6_4 = confab_engine.GetKnowledgeBase(num_word_modules, 4);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_7_1 = confab_engine.GetKnowledgeBase(num_word_modules + 1, 1);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_7_2 = confab_engine.GetKnowledgeBase(num_word_modules + 1, 2);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_7_3 = confab_engine.GetKnowledgeBase(num_word_modules + 1, 3);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_7_4 = confab_engine.GetKnowledgeBase(num_word_modules + 1, 4);
-	KnowledgeBase<uint16_t, uint16_t>* knowledge_base_7_5 = confab_engine.GetKnowledgeBase(num_word_modules + 1, 5);
+	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_0_6 = confab_engine.GetWordToPhraseKnowledgeBase(0, 1);
+	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_1_6 = confab_engine.GetWordToPhraseKnowledgeBase(1, 1);
+	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_1_7 = confab_engine.GetWordToPhraseKnowledgeBase(1, 2);
+	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_2_7 = confab_engine.GetWordToPhraseKnowledgeBase(2, 2);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_0 = confab_engine.GetPhraseToWordKnowledgeBase(1, 0);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_1 = confab_engine.GetPhraseToWordKnowledgeBase(1, 1);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_2 = confab_engine.GetPhraseToWordKnowledgeBase(1, 2);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_3 = confab_engine.GetPhraseToWordKnowledgeBase(1, 3);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_4 = confab_engine.GetPhraseToWordKnowledgeBase(1, 4);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_1 = confab_engine.GetPhraseToWordKnowledgeBase(2, 1);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_2 = confab_engine.GetPhraseToWordKnowledgeBase(2, 2);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_3 = confab_engine.GetPhraseToWordKnowledgeBase(2, 3);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_4 = confab_engine.GetPhraseToWordKnowledgeBase(2, 4);
+	KnowledgeBase<uint32_t, uint32_t>* knowledge_base_7_5 = confab_engine.GetPhraseToPhraseKnowledgeBase(2, 0);
 
 	std::cout << "Knowledge base 0-6: " << knowledge_base_0_6->GetNumKnowledgeLinks() << " links" << std::endl;
 	std::cout << "Knowledge base 1-6: " << knowledge_base_1_6->GetNumKnowledgeLinks() << " links" << std::endl;
