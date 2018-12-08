@@ -74,9 +74,9 @@ void ConfabulationBase::Initialize(const std::vector<std::vector<bool>>& kb_spec
 								   uint8_t min_single_occurrences,
 								   uint8_t min_multi_occurrences)
 {
-	if (num_word_modules_ != kb_specs.size()) {
+	if (2 * num_word_modules_ != kb_specs.size()) {
 		std::cout << "Initialize called with knowledge base specs size = "
-			<< kb_specs.size() << " and word modules size = " << num_word_modules_ <<"\n" << std::flush;
+			<< kb_specs.size() << " and word modules size = " << num_word_modules_ << "\n" << std::flush;
 		throw std::logic_error("Initialize called with wrong knowledge base specs");
 	}
 	kb_specs_ = kb_specs;
@@ -96,14 +96,22 @@ void ConfabulationBase::Build()
 	organizer_.reset(new MultiLevelOrganizer(level_specs_, ProduceSymbolMappings(symbol_file_, master_file_)));
 
 	// create the modules
-	for (size_t i = 0; i < num_word_modules_; ++i) {
-		const SymbolMapping* symbols_at_level = organizer_->GetMappingsForLevel(0);
-		word_modules_.emplace_back(new Module<uint16_t>(*symbols_at_level, i));
+	for (size_t i = 0; i < num_modules_; ++i) {
+		if (i < num_word_modules_) {
+			const SymbolMapping* symbols_at_level = organizer_->GetMappingsForLevel(0);
+			word_modules_.emplace_back(new Module<uint16_t>(*symbols_at_level, i));
+		} else {
+			word_modules_.emplace_back(nullptr);
+		}
 	}
 
-	for (size_t i = 0; i < num_phrase_modules_; ++i) {
-		const SymbolMapping* symbols_at_level = organizer_->GetMappingsForLevel(1);
-		phrase_modules_.emplace_back(new Module<uint32_t>(*symbols_at_level, i));
+	for (size_t i = 0; i < num_modules_; ++i) {
+		if (i >= num_word_modules_) {
+			const SymbolMapping* symbols_at_level = organizer_->GetMappingsForLevel(1);
+			phrase_modules_.emplace_back(new Module<uint32_t>(*symbols_at_level, i));
+		} else {
+			phrase_modules_.emplace_back(nullptr);
+		}
 	}
 
 	// create the knowledge bases according to specifications matrix
@@ -134,8 +142,8 @@ void ConfabulationBase::Build()
 				assert(i >= num_word_modules_);
 				assert(j >= num_word_modules_);
 				phrase_to_phrase_knowledge_bases_[i][j].reset(new KnowledgeBase<uint32_t, uint32_t>(id,
-															   phrase_modules_[i - num_word_modules_]->GetSymbolMapping(),
-															   phrase_modules_[j - num_word_modules_]->GetSymbolMapping()));
+															   phrase_modules_[i]->GetSymbolMapping(),
+															   phrase_modules_[j]->GetSymbolMapping()));
 			} else
 				phrase_to_phrase_knowledge_bases_[i][j].reset(nullptr);
 		}
@@ -152,7 +160,7 @@ void ConfabulationBase::Build()
 				assert(j >= num_word_modules_);
 				word_to_phrase_knowledge_bases_[i][j].reset(new KnowledgeBase<uint32_t, uint16_t>(id,
 															   word_modules_[i]->GetSymbolMapping(),
-															   phrase_modules_[j - num_word_modules_]->GetSymbolMapping()));
+															   phrase_modules_[j]->GetSymbolMapping()));
 			} else
 				word_to_phrase_knowledge_bases_[i][j].reset(nullptr);
 		}
@@ -168,7 +176,7 @@ void ConfabulationBase::Build()
 				id += std::to_string(j);
 				assert(i >= num_word_modules_);
 				phrase_to_word_knowledge_bases_[i][j].reset(new KnowledgeBase<uint16_t, uint32_t>(id,
-															   phrase_modules_[i - num_word_modules_]->GetSymbolMapping(),
+															   phrase_modules_[i]->GetSymbolMapping(),
 															   word_modules_[j]->GetSymbolMapping()));
 			} else
 				phrase_to_word_knowledge_bases_[i][j].reset(nullptr);
@@ -222,6 +230,7 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 			}
 
 			// make sure that sentence does not wholly consist of empty strings
+
 			if (!(FindFirstIndexNotOfSymbol(sentence, "") < 0)) {
 				const std::vector<std::vector<std::string>>& activated_modules = organizer_->Organize(sentence);
 
@@ -375,4 +384,38 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
 	// result.push_back(ngram_handler.GetAllSymbols()); // multi-word symbols (including single-word ones) at position [1]
 
 	return result; //at this point, NGramHandler is destroyed, so we save its internal memory
+}
+
+template <>
+void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint16_t>* target_module)
+{
+	// use only modules that can contribute to the given index as possible source modules
+	assert(GetModuleType(target_index) == ModuleType::word_t);
+	for (size_t i = 0; i < word_to_word_knowledge_bases_.size(); ++i) {
+		if (word_to_word_knowledge_bases_[i][target_index] != nullptr) {
+			TransferExcitation(word_modules_[i].get(), word_to_word_knowledge_bases_[i][target_index].get(), target_module);
+		}
+	}
+	for (size_t i = 0; i < phrase_to_word_knowledge_bases_.size(); ++i) {
+		if (phrase_to_word_knowledge_bases_[i][target_index] != nullptr) {
+			TransferExcitation(phrase_modules_[i].get(), phrase_to_word_knowledge_bases_[i][target_index].get(), target_module);
+		}
+	}
+}
+
+template <>
+void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint32_t>* target_module)
+{
+	// use only modules that can contribute to the given index as possible source modules
+	assert(GetModuleType(target_index) == ModuleType::phrase_t);
+	for (size_t i = 0; i < phrase_to_phrase_knowledge_bases_.size(); ++i) {
+		if (phrase_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
+			TransferExcitation(phrase_modules_[i].get(), phrase_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
+		}
+	}
+	for (size_t i = 0; i < word_to_phrase_knowledge_bases_.size(); ++i) {
+		if (word_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
+			TransferExcitation(word_modules_[i].get(), word_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
+		}
+	}
 }

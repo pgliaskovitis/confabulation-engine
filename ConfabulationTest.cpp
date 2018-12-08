@@ -324,24 +324,24 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 	Module<uint16_t>* module_2 = confab_engine.GetWordModule(2);
 	Module<uint16_t>* module_3 = confab_engine.GetWordModule(3);
 	Module<uint16_t>* module_4 = confab_engine.GetWordModule(4);
-	Module<uint32_t>* module_5 = confab_engine.GetPhraseModule(0);
-	Module<uint32_t>* module_6 = confab_engine.GetPhraseModule(1);
-	Module<uint32_t>* module_7 = confab_engine.GetPhraseModule(2);
+	Module<uint32_t>* module_5 = confab_engine.GetPhraseModule(5);
+	Module<uint32_t>* module_6 = confab_engine.GetPhraseModule(6);
+	Module<uint32_t>* module_7 = confab_engine.GetPhraseModule(7);
 
-	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_0_6 = confab_engine.GetWordToPhraseKnowledgeBase(0, 1);
-	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_1_6 = confab_engine.GetWordToPhraseKnowledgeBase(1, 1);
-	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_1_7 = confab_engine.GetWordToPhraseKnowledgeBase(1, 2);
-	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_2_7 = confab_engine.GetWordToPhraseKnowledgeBase(2, 2);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_0 = confab_engine.GetPhraseToWordKnowledgeBase(1, 0);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_1 = confab_engine.GetPhraseToWordKnowledgeBase(1, 1);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_2 = confab_engine.GetPhraseToWordKnowledgeBase(1, 2);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_3 = confab_engine.GetPhraseToWordKnowledgeBase(1, 3);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_4 = confab_engine.GetPhraseToWordKnowledgeBase(1, 4);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_1 = confab_engine.GetPhraseToWordKnowledgeBase(2, 1);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_2 = confab_engine.GetPhraseToWordKnowledgeBase(2, 2);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_3 = confab_engine.GetPhraseToWordKnowledgeBase(2, 3);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_4 = confab_engine.GetPhraseToWordKnowledgeBase(2, 4);
-	KnowledgeBase<uint32_t, uint32_t>* knowledge_base_7_5 = confab_engine.GetPhraseToPhraseKnowledgeBase(2, 0);
+	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_0_6 = confab_engine.GetWordToPhraseKnowledgeBase(0, 6);
+	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_1_6 = confab_engine.GetWordToPhraseKnowledgeBase(1, 6);
+	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_1_7 = confab_engine.GetWordToPhraseKnowledgeBase(1, 7);
+	KnowledgeBase<uint32_t, uint16_t>* knowledge_base_2_7 = confab_engine.GetWordToPhraseKnowledgeBase(2, 7);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_0 = confab_engine.GetPhraseToWordKnowledgeBase(6, 0);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_1 = confab_engine.GetPhraseToWordKnowledgeBase(6, 1);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_2 = confab_engine.GetPhraseToWordKnowledgeBase(6, 2);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_3 = confab_engine.GetPhraseToWordKnowledgeBase(6, 3);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_4 = confab_engine.GetPhraseToWordKnowledgeBase(6, 4);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_1 = confab_engine.GetPhraseToWordKnowledgeBase(7, 1);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_2 = confab_engine.GetPhraseToWordKnowledgeBase(7, 2);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_3 = confab_engine.GetPhraseToWordKnowledgeBase(7, 3);
+	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_4 = confab_engine.GetPhraseToWordKnowledgeBase(7, 4);
+	KnowledgeBase<uint32_t, uint32_t>* knowledge_base_7_5 = confab_engine.GetPhraseToPhraseKnowledgeBase(7, 5);
 
 	std::cout << "Knowledge base 0-6: " << knowledge_base_0_6->GetNumKnowledgeLinks() << " links" << std::endl;
 	std::cout << "Knowledge base 1-6: " << knowledge_base_1_6->GetNumKnowledgeLinks() << " links" << std::endl;
@@ -507,7 +507,7 @@ int main()
 
 	// test1->TestProduceKnowledgeLinkCombinations();
 
-	// test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
+	test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
 
 	// test1->TestTokenizePersistedKnowledge();
 

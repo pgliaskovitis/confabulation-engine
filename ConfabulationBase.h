@@ -48,7 +48,7 @@ public:
 	ConfabulationBase(ConfabulationBase&& rhs) = delete;
 	ConfabulationBase&& operator=(ConfabulationBase&& rhs) = delete;
 
-	~ConfabulationBase();
+	virtual ~ConfabulationBase();
 
 	ModuleType GetModuleType(size_t module_index);
 	KnowledgeBaseType GetKnowledgeBaseType(size_t source_module_index, size_t target_module_index);
@@ -127,7 +127,7 @@ protected:
 	virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete) = 0;
 
 	// index to complete taking into account non-activated modules
-	virtual int8_t GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete);
+	virtual int8_t GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete) = 0;
 };
 
 template <typename TRow, typename TCol>
@@ -155,34 +155,5 @@ void ConfabulationBase::TransferExcitation(Module<TCol>* source_module, Knowledg
 	} else {
 		source_module->UnLock();
 		target_module->UnLock();
-	}
-}
-
-template <typename TRow>
-void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<TRow>* target_module)
-{
-	// use only modules that can contribute to the given index as possible source modules
-	for (size_t i = 0; i < word_to_word_knowledge_bases_.size(); ++i) {
-		if (word_to_word_knowledge_bases_[i][target_index] != nullptr) {
-			TransferExcitation(word_modules_[i].get(), word_to_word_knowledge_bases_[i][target_index].get(), target_module);
-		}
-	}
-
-	for (size_t i = 0; i < phrase_to_phrase_knowledge_bases_.size(); ++i) {
-		if (phrase_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
-			TransferExcitation(phrase_modules_[i].get(), phrase_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
-		}
-	}
-
-	for (size_t i = 0; i < word_to_phrase_knowledge_bases_.size(); ++i) {
-		if (word_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
-			TransferExcitation(word_modules_[i].get(), word_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
-		}
-	}
-
-	for (size_t i = 0; i < phrase_to_word_knowledge_bases_.size(); ++i) {
-		if (phrase_to_word_knowledge_bases_[i][target_index] != nullptr) {
-			TransferExcitation(phrase_modules_[i].get(), phrase_to_word_knowledge_bases_[i][target_index].get(), target_module);
-		}
 	}
 }
