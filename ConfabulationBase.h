@@ -133,6 +133,10 @@ protected:
 template <typename TRow, typename TCol>
 void ConfabulationBase::TransferExcitation(Module<TCol>* source_module, KnowledgeBase<TRow, TCol>* kb, Module<TRow>* target_module)
 {
+	assert(source_module != nullptr);
+	assert(kb != nullptr);
+	assert(target_module != nullptr);
+
 	if (source_module->GetId() == target_module->GetId()) {
 		return;
 	}

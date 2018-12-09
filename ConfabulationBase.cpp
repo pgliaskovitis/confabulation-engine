@@ -119,10 +119,13 @@ void ConfabulationBase::Build()
 	for (size_t i = 0; i < num_modules_; ++i) {
 		word_to_word_knowledge_bases_[i].resize(num_modules_);
 		for (size_t j = 0; j < num_modules_; ++j) {
-			if (kb_specs_[i][j]) {
+			if (kb_specs_[i][j] &&
+				GetKnowledgeBaseType(i, j) == KnowledgeBaseType::word_to_word_t) {
 				std::string id(std::to_string(i));
 				id += "-";
 				id += std::to_string(j);
+				assert(i < num_word_modules_);
+				assert(j < num_word_modules_);
 				word_to_word_knowledge_bases_[i][j].reset(new KnowledgeBase<uint16_t, uint16_t>(id,
 															   word_modules_[i]->GetSymbolMapping(),
 															   word_modules_[j]->GetSymbolMapping()));
@@ -135,7 +138,8 @@ void ConfabulationBase::Build()
 	for (size_t i = 0; i < num_modules_; ++i) {
 		phrase_to_phrase_knowledge_bases_[i].resize(num_modules_);
 		for (size_t j = 0; j < num_modules_; ++j) {
-			if (kb_specs_[i][j]) {
+			if (kb_specs_[i][j] &&
+				GetKnowledgeBaseType(i, j) == KnowledgeBaseType::phrase_to_phrase_t) {
 				std::string id(std::to_string(i));
 				id += "-";
 				id += std::to_string(j);
@@ -153,7 +157,8 @@ void ConfabulationBase::Build()
 	for (size_t i = 0; i < num_modules_; ++i) {
 		word_to_phrase_knowledge_bases_[i].resize(num_modules_);
 		for (size_t j = 0; j < num_modules_; ++j) {
-			if (kb_specs_[i][j]) {
+			if (kb_specs_[i][j] &&
+				GetKnowledgeBaseType(i, j) == KnowledgeBaseType::word_to_phrase_t) {
 				std::string id(std::to_string(i));
 				id += "-";
 				id += std::to_string(j);
@@ -170,7 +175,8 @@ void ConfabulationBase::Build()
 	for (size_t i = 0; i < num_modules_; ++i) {
 		phrase_to_word_knowledge_bases_[i].resize(num_modules_);
 		for (size_t j = 0; j < num_modules_; ++j) {
-			if (kb_specs_[i][j]) {
+			if (kb_specs_[i][j] &&
+				GetKnowledgeBaseType(i, j) == KnowledgeBaseType::phrase_to_word_t) {
 				std::string id(std::to_string(i));
 				id += "-";
 				id += std::to_string(j);
