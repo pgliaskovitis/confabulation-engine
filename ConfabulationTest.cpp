@@ -394,8 +394,14 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 		std::cout << ListSymbolToSymbol(e, ' ') << "\n" << std::flush;
 	}
 
-	std::list<std::string> longest_subsequences_4 = level_1_trie->FindLongest({"secretly have given up"});
+	std::vector<std::list<std::string>> all_subsequences_4 = level_1_trie->FindAll({"secretly", "have", "given", "up"});
 	std::cout << ">========== Trie results IV: ==========<" << "\n" << std::flush;
+	for (const std::list<std::string>& e: all_subsequences_4) {
+		std::cout << ListSymbolToSymbol(e, ' ') << "\n" << std::flush;
+	}
+
+	std::list<std::string> longest_subsequences_4 = level_1_trie->FindLongest({"secretly", "have", "given", "up"});
+	std::cout << ">========== Trie results V: ==========<" << "\n" << std::flush;
 	std::cout << ListSymbolToSymbol(longest_subsequences_4, ' ') << "\n" << std::flush;
 
 	std::cout << ">========== Word-To-Phrase tests ==========<" << std::endl;

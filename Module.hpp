@@ -92,7 +92,7 @@ void Module<TRow>::ActivateSymbol(const std::string &word, int8_t band_add_level
 		excitations_->SetElement(index, band_add_level * Globals::kBandGap);
 		kb_inputs_->SetElement(index, band_add_level);
 	} catch (std::out_of_range&) {
-		std::cout << "Word \"" << word << "\" could not be found in symbol mapping of module during activation" << "\n" << std::flush;
+		std::cout << "Word \"" << word << "\" could not be found in symbol mapping of module " << GetId() << " during activation" << "\n" << std::flush;
 	}
 }
 

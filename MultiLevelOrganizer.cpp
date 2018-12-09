@@ -64,16 +64,33 @@ std::vector<std::vector<std::string>> MultiLevelOrganizer::Organize(const std::v
 		level.resize(level_sizes_[j]);
 	}
 
+	// expand symbols, if multiword
+	std::vector<std::string> internal_sumbols;
+	for (const std::string& symbol: symbols) {
+		if (!symbol.empty()) {
+			if (symbol.size() == 1) {
+				internal_sumbols.push_back(symbol);
+			} else {
+				const std::vector<std::string>& expanded_symbols = SymbolToVectorSymbol(symbol, ' ');
+				for (const std::string& expanded_symbol: expanded_symbols) {
+					internal_sumbols.push_back(expanded_symbol);
+				}
+			}
+		}
+	}
+
 	for (size_t j = 0; j < n_levels; ++j) {
-		std::list<std::string> temp_symbols_list(symbols.begin(), symbols.end());
+		std::list<std::string> temp_symbols_list(internal_sumbols.begin(), internal_sumbols.end());
 		std::vector<std::string>& level = level_combination[j];
 		const HashTrie<std::string>& trie = *(tries_.at(j));
 
 		// find longest match and remove matched symbols from beginning of sentence
 		size_t k = 0;
-		while (k < level.size() && !temp_symbols_list.empty()) {
+		while (!temp_symbols_list.empty()) {
 
 			std::list<std::string> match;
+
+			std::cout << "(Level " << j << ") Attempting to find longest match for symbol: " << ListSymbolToSymbol(temp_symbols_list, '#') << std::endl;
 			match = trie.FindLongest(temp_symbols_list);
 
 			// if unsuccesful, try with next position in sentence
@@ -85,6 +102,7 @@ std::vector<std::vector<std::string>> MultiLevelOrganizer::Organize(const std::v
 
 			// store found multisymbol
 			level[k] = ListSymbolToSymbol(match, ' ');
+			std::cout << "Found match: " << level[k] << std::endl;
 
 			// try with remaining sentence
 			size_t end = std::min(level.size(), k + match.size());

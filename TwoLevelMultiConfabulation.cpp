@@ -175,10 +175,8 @@ void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbol
 		return;
 	}
 
-	/*
 	std::cout << "Finding phrase activations for: " << VectorSymbolToSymbol(activated_multiwords, '#') << "\n" << std::flush;
 	std::cout << "Finding word activations for: " << VectorSymbolToSymbol(activated_words, '#') << "\n" << std::flush;
-	*/
 
 	// activate phrases
 	for (size_t i = 0; i < activated_multiwords.size(); ++i) {
