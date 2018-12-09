@@ -336,25 +336,9 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 
 	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_0 = confab_engine.GetPhraseToWordKnowledgeBase(num_word_modules, 0);
 	assert(knowledge_base_6_0);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_1 = confab_engine.GetPhraseToWordKnowledgeBase(num_word_modules, 1);
-	// assert(knowledge_base_6_1);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_2 = confab_engine.GetPhraseToWordKnowledgeBase(num_word_modules, 2);
-	// assert(knowledge_base_6_2);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_3 = confab_engine.GetPhraseToWordKnowledgeBase(num_word_modules, 3);
-	// assert(knowledge_base_6_3);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_6_4 = confab_engine.GetPhraseToWordKnowledgeBase(num_word_modules, 4);
-	// assert(knowledge_base_6_4);
 
 	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_1 = confab_engine.GetPhraseToWordKnowledgeBase(num_word_modules + 1, 1);
 	assert(knowledge_base_7_1);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_2 = confab_engine.GetPhraseToWordKnowledgeBase(num_word_modules + 1, 2);
-	// assert(knowledge_base_7_2);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_3 = confab_engine.GetPhraseToWordKnowledgeBase(num_word_modules + 1, 3);
-	// assert(knowledge_base_7_3);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_4 = confab_engine.GetPhraseToWordKnowledgeBase(num_word_modules + 1, 4);
-	// assert(knowledge_base_7_4);
-	KnowledgeBase<uint16_t, uint32_t>* knowledge_base_7_5 = confab_engine.GetPhraseToWordKnowledgeBase(num_word_modules + 1, 5);
-	// assert(knowledge_base_7_5);
 
 	std::cout << "Knowledge base 0-6: " << knowledge_base_0_6->GetNumKnowledgeLinks() << " links" << std::endl;
 	std::cout << "Knowledge base 1-6: " << knowledge_base_1_6->GetNumKnowledgeLinks() << " links" << std::endl;
@@ -455,10 +439,6 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 	std::cout << "Activated symbols at module " << num_word_modules << " are: \n" << VectorSymbolToSymbol(expectation_at_source_a, '\n') << "\n" << std::flush;
 
 	confab_engine.TransferExcitation(module_6, knowledge_base_6_0, module_0);
-	// confab_engine.TransferExcitation(module_6, knowledge_base_6_1, module_1);
-	// confab_engine.TransferExcitation(module_6, knowledge_base_6_2, module_2);
-	// confab_engine.TransferExcitation(module_6, knowledge_base_6_3, module_3);
-	// confab_engine.TransferExcitation(module_6, knowledge_base_6_4, module_4);
 
 	const std::vector<std::string>& expectation_at_target_d = module_0->GetExpectation();
 	std::cout << "C1F confabulated symbols at module 0 are: \n" << VectorSymbolToSymbol(expectation_at_target_d, '\n') << "\n" << std::flush;
@@ -481,10 +461,6 @@ void ConfabulationTest::TestTransferExcitations(const std::string& symbolfile, c
 	std::cout << "Activated symbols at module " << num_word_modules  + 1 << " are: \n" << VectorSymbolToSymbol(expectation_at_source_b, '\n') << "\n" << std::flush;
 
 	confab_engine.TransferExcitation(module_7, knowledge_base_7_1, module_1);
-	// confab_engine.TransferExcitation(module_7, knowledge_base_7_2, module_2);
-	// confab_engine.TransferExcitation(module_7, knowledge_base_7_3, module_3);
-	// confab_engine.TransferExcitation(module_7, knowledge_base_7_4, module_4);
-	// confab_engine.TransferExcitation(module_7, knowledge_base_7_5, module_5);
 
 	const std::vector<std::string>& expectation_at_target_i = module_1->GetExpectation();
 	std::cout << "C1F confabulated symbols at module 1 are: \n" << VectorSymbolToSymbol(expectation_at_target_i, '\n') << "\n" << std::flush;
@@ -543,7 +519,7 @@ int main()
 
 	// test1->TestProduceKnowledgeLinkCombinations();
 
-	test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
+	// test1->TestTransferExcitations("text_data/ascii_symbols.txt", "text_data/sample_master_debug.txt");
 
 	// test1->TestTokenizePersistedKnowledge();
 
