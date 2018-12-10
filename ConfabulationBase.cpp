@@ -259,6 +259,9 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 								switch(GetKnowledgeBaseType(src, targ)) {
 								case KnowledgeBaseType::word_to_word_t:
 									if (word_to_word_knowledge_bases_[src][targ] != nullptr) {
+										if (module_combination[src] == "strife" && module_combination[targ] == "plaything") {
+											std::cout << "Learning for \"plaything\" at " << targ << " from \"" << module_combination[src] << "\" at " << src << std::endl;
+										}
 										word_to_word_knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
 									}
 									break;

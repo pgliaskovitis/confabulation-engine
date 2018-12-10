@@ -186,8 +186,8 @@ void TwoLevelMultiConfabulation::Activate(const std::vector<std::string> &symbol
 	}
 
 	// activate words
-	for (size_t i = 0; i < std::min(symbols.size(), word_modules_.size()); ++i) {
-		if ((!symbols[i].empty()) && (word_modules_[i] != nullptr)) {
+	for (size_t i = 0; i < activated_words.size(); ++i) {
+		if (!activated_words[i].empty()) {
 			word_modules_[i]->ActivateSymbol(symbols[i], 1);
 		}
 	}
@@ -267,6 +267,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 // initialize expectation on target (phrase and) word modules once
 std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int index)
 {
+	assert(index < num_word_modules_);
+
 	TransferAllExcitations(index, word_modules_[index].get());
 	TransferAllExcitations(num_word_modules_ + index, phrase_modules_[num_word_modules_ + index].get());
 	return ExcitedSymbolsAtIndex(index);
@@ -275,6 +277,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int i
 // get excited symbols on target (phrase and) word modules
 std::vector<std::string> TwoLevelMultiConfabulation::ExcitedSymbolsAtIndex(int index)
 {
+	assert(index < num_word_modules_);
+
 	std::vector<std::string> result;
 	const std::vector<std::string>& result_word = word_modules_[index]->TighteningPartialConfabulation(0);
 	const std::vector<std::string>& result_phrase = phrase_modules_[num_word_modules_ + index]->TighteningPartialConfabulation(0);
@@ -337,6 +341,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::TransferAndTightenAtIndex(i
 // tighten expectation on target (phrase and) word modules once
 std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index)
 {
+	assert(index < num_word_modules_);
+
 	TransferAndTightenAtIndex(num_word_modules_ + index, index);
 
 	if (index + 1 < num_word_modules_) {
@@ -351,6 +357,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicSwirlAtIndex(int index
 // tighten expectation on target (phrase and) word modules once and move on to the next index phrase
 std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionAtIndex(int index)
 {
+	assert(index < num_word_modules_);
+
 	const std::vector<std::string>& result = BasicSwirlAtIndex(index);
 	TransferAndTightenAtIndex(index, num_word_modules_ + index + 1);
 	return result;
@@ -359,6 +367,9 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionAtIndex(int 
 // tighten expectation on target (phrase and) word modules once and all modules up to index + span
 std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultipleIndices(int index, int span)
 {
+	assert(index < num_word_modules_);
+	assert(span < num_word_modules_);
+
 	std::vector<std::string> result;
 
 	for (int cursor = 0; cursor < span; ++cursor) {
@@ -375,6 +386,9 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultiple
 // tighten expectation on target (phrase and) word modules and all modules up to index + span continuously
 std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices(int index, int span)
 {
+	assert(index < num_word_modules_);
+	assert(span < num_word_modules_);
+
 	std::vector<std::string> result = ExcitedSymbolsAtIndex(index);
 	size_t current_result_size = result.size();
 	size_t previous_result_size = 0;
