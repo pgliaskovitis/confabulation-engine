@@ -259,9 +259,6 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 								switch(GetKnowledgeBaseType(src, targ)) {
 								case KnowledgeBaseType::word_to_word_t:
 									if (word_to_word_knowledge_bases_[src][targ] != nullptr) {
-										if (module_combination[src] == "strife" && module_combination[targ] == "plaything") {
-											std::cout << "Learning for \"plaything\" at " << targ << " from \"" << module_combination[src] << "\" at " << src << std::endl;
-										}
 										word_to_word_knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
 									}
 									break;
@@ -404,12 +401,13 @@ void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint1
 {
 	// use only modules that can contribute to the given index as possible source modules
 	assert(GetModuleType(target_index) == ModuleType::word_t);
-	for (size_t i = 0; i < word_to_word_knowledge_bases_.size(); ++i) {
+	for (size_t i = 0; i < num_word_modules_; ++i) {
 		if (word_to_word_knowledge_bases_[i][target_index] != nullptr) {
 			TransferExcitation(word_modules_[i].get(), word_to_word_knowledge_bases_[i][target_index].get(), target_module);
 		}
 	}
-	for (size_t i = 0; i < phrase_to_word_knowledge_bases_.size(); ++i) {
+
+	for (size_t i = num_word_modules_; i < phrase_to_word_knowledge_bases_.size(); ++i) {
 		if (phrase_to_word_knowledge_bases_[i][target_index] != nullptr) {
 			TransferExcitation(phrase_modules_[i].get(), phrase_to_word_knowledge_bases_[i][target_index].get(), target_module);
 		}
@@ -421,12 +419,13 @@ void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint3
 {
 	// use only modules that can contribute to the given index as possible source modules
 	assert(GetModuleType(target_index) == ModuleType::phrase_t);
-	for (size_t i = 0; i < phrase_to_phrase_knowledge_bases_.size(); ++i) {
+	for (size_t i = num_word_modules_; i < phrase_to_phrase_knowledge_bases_.size(); ++i) {
 		if (phrase_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
 			TransferExcitation(phrase_modules_[i].get(), phrase_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
 		}
 	}
-	for (size_t i = 0; i < word_to_phrase_knowledge_bases_.size(); ++i) {
+
+	for (size_t i = 0; i < num_word_modules_; ++i) {
 		if (word_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
 			TransferExcitation(word_modules_[i].get(), word_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
 		}
