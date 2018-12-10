@@ -372,22 +372,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::BasicTransitionOverMultiple
 	return ExcitedSymbolsAtIndex(index);
 }
 
-// tighten expectation on target (phrase and) word modules continuously
-std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlAtIndex(int index)
-{
-	std::vector<std::string> result;
-	size_t current_result_size = std::numeric_limits<size_t>::max();
-	size_t previous_result_size = 0;
-
-	do {
-		previous_result_size = current_result_size;
-		result = BasicSwirlAtIndex(index);
-		current_result_size = result.size();
-	} while (current_result_size < previous_result_size);
-
-	return result;
-}
-
 // tighten expectation on target (phrase and) word modules and all modules up to index + span continuously
 std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndices(int index, int span)
 {

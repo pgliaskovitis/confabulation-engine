@@ -55,6 +55,5 @@ private:
 	std::vector<std::string> BasicTransitionAtIndex(int index);
 	std::vector<std::string> BasicTransitionOverMultipleIndices(int index, int span);
 
-	std::vector<std::string> FullSwirlAtIndex(int index);
 	std::vector<std::string> FullSwirlOverMultipleIndices(int index, int span);
 };
