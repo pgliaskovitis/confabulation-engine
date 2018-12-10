@@ -80,13 +80,24 @@ KnowledgeBase<TRow, TCol>::KnowledgeBase(const std::string& id, const SymbolMapp
 template <typename TRow, typename TCol>
 void KnowledgeBase<TRow, TCol>::Add(const std::string& src_symbol, const std::string& targ_symbol)
 {
-	try {
-		TRow row = targ_map_.IndexOf(targ_symbol);
-		TCol col = src_map_.IndexOf(src_symbol);
+	TCol col;
+	TRow row;
 
-		Add(row, col);
+	try {
+		col = src_map_.IndexOf(src_symbol);
 	} catch (std::out_of_range&) {
+		std::cout << "Could not find symbol " << src_symbol << " in source module for base " << GetId() << std::endl;
+		return;
 	}
+
+	try {
+		row = targ_map_.IndexOf(targ_symbol);
+	} catch (std::out_of_range&) {
+		std::cout << "Could not find symbol " << targ_symbol << " in target module for base " << GetId() << std::endl;
+		return;
+	}
+
+	Add(row, col);
 }
 
 template <typename TRow, typename TCol>

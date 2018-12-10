@@ -46,6 +46,8 @@ ModuleType ConfabulationBase::GetModuleType(size_t module_index)
 	if (module_index >= num_word_modules_) {
 		return ModuleType::phrase_t;
 	}
+
+	throw std::logic_error("Invalid module type");
 }
 
 KnowledgeBaseType ConfabulationBase::GetKnowledgeBaseType(size_t source_module_index, size_t target_module_index)
@@ -65,6 +67,8 @@ KnowledgeBaseType ConfabulationBase::GetKnowledgeBaseType(size_t source_module_i
 	if (source_module_index >= num_word_modules_ && target_module_index < num_word_modules_) {
 		return KnowledgeBaseType::phrase_to_word_t;
 	}
+
+	throw std::logic_error("Invalid knowledge base type");
 }
 
 void ConfabulationBase::Initialize(const std::vector<std::vector<bool>>& kb_specs,
@@ -248,27 +252,28 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 
 					// std::cout << "Finding module activations for combination: " << VectorSymbolToSymbol(module_combination, '#') << "\n" << std::flush;
 
+					// activation of all modules in a 1-D array
 					for (size_t src = 0; src < num_modules_; ++src) {
-						if (!module_combination[src].empty()) {
-							for (size_t targ = 0; targ < num_modules_; ++targ) {
+						for (size_t targ = 0; targ < num_modules_; ++targ) {
+							if (!module_combination[src].empty() && !module_combination[targ].empty()) {
 								switch(GetKnowledgeBaseType(src, targ)) {
 								case KnowledgeBaseType::word_to_word_t:
-									if ((word_to_word_knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
+									if (word_to_word_knowledge_bases_[src][targ] != nullptr) {
 										word_to_word_knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
 									}
 									break;
 								case KnowledgeBaseType::phrase_to_phrase_t:
-									if ((phrase_to_phrase_knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
+									if (phrase_to_phrase_knowledge_bases_[src][targ] != nullptr) {
 										phrase_to_phrase_knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
 									}
 									break;
 								case KnowledgeBaseType::word_to_phrase_t:
-									if ((word_to_phrase_knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
+									if (word_to_phrase_knowledge_bases_[src][targ] != nullptr) {
 										word_to_phrase_knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
 									}
 									break;
 								case KnowledgeBaseType::phrase_to_word_t:
-									if ((phrase_to_word_knowledge_bases_[src][targ] != nullptr) && (!module_combination[targ].empty())) {
+									if (phrase_to_word_knowledge_bases_[src][targ] != nullptr) {
 										phrase_to_word_knowledge_bases_[src][targ]->Add(module_combination[src], module_combination[targ]);
 									}
 									break;
@@ -276,7 +281,6 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 							}
 						}
 					}
-
 				}
 			}
 			large_sentence = false;
