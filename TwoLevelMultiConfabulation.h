@@ -45,6 +45,7 @@ protected:
 	virtual int8_t GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete);
 
 private:
+	std::mutex log_mutex_;
 	std::vector<std::thread> threads_;
 
 	std::vector<std::string> InitializationAtIndex(int index);
