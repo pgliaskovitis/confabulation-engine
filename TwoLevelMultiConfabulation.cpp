@@ -241,8 +241,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 		}
 
 		if (!expectation) {
-			float word_excitation;
-			float phrase_excitation;
+			float word_excitation = 0.f;
+			float phrase_excitation = 0.f;
 			std::string next_word = word_modules_[index]->ElementaryConfabulation(&word_excitation);
 			std::string next_phrase =  phrase_modules_[num_word_modules_ + index]->ElementaryConfabulation(&phrase_excitation);
 
