@@ -169,8 +169,8 @@ std::string Module<TRow>::ElementaryConfabulation(int8_t band_cut_level, float *
 	// try with all possible K, starting from the maximum one, until a solution is found
 	std::unique_ptr<std::pair<TRow, float>> max_excit;
 	do {
-		const std::set<std::pair<TRow, float>>& min_K_excit = ExcitationsAbove(band_cut_level, nz_excit);
-		max_excit = MaxExcitation(min_K_excit);
+		const std::set<std::pair<TRow, float>>& band_cut_excit = ExcitationsAbove(band_cut_level, nz_excit);
+		max_excit = MaxExcitation(band_cut_excit);
 
 		if (max_excit != nullptr) {
 			max_index = max_excit->first;
@@ -184,6 +184,7 @@ std::string Module<TRow>::ElementaryConfabulation(int8_t band_cut_level, float *
 	ExcitationsToZero();
 
 	if (max_excit == nullptr) {
+		*max_excitation = 0.f;
 		return Globals::kDummy;
 	}
 
