@@ -410,7 +410,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 		std::string next_word = word_modules_[index]->ElementaryConfabulation(&word_excitation);
 		float phrase_excitation;
 		std::string next_phrase = phrase_modules_[num_word_modules_ + index]->ElementaryConfabulation(&phrase_excitation);
-		std::cout << "Current result size of swirl: " << current_result_size
+		std::cout << "Result size of swirl: " << current_result_size
 				  << ", best word: " << next_word
 				  << ", best phrase: " << next_phrase << std::endl;
 		*/
