@@ -272,9 +272,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int i
 	assert(index < num_word_modules_);
 
 	TransferAllExcitations(index, word_modules_[index].get());
-	word_modules_[index]->TighteningPartialConfabulation(1);
 	TransferAllExcitations(num_word_modules_ + index, phrase_modules_[num_word_modules_ + index].get());
-	phrase_modules_[num_word_modules_ + index]->TighteningPartialConfabulation(1);
 	return ExcitedSymbolsAtIndex(index);
 }
 
@@ -410,7 +408,11 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 		/*
 		float word_excitation;
 		std::string next_word = word_modules_[index]->ElementaryConfabulation(&word_excitation);
-		std::cout << "Current result of multiple swirl: " << current_result_size << ", best: " << next_word << std::endl;
+		float phrase_excitation;
+		std::string next_phrase = phrase_modules_[num_word_modules_ + index]->ElementaryConfabulation(&phrase_excitation);
+		std::cout << "Current result size of swirl: " << current_result_size
+				  << ", best word: " << next_word
+				  << ", best phrase: " << next_phrase << std::endl;
 		*/
 
 	} while (current_result_size < previous_result_size);

@@ -399,8 +399,9 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
 template <>
 void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint16_t>* target_module)
 {
-	// use only modules that can contribute to the given index as possible source modules
 	assert(GetModuleType(target_index) == ModuleType::word_t);
+
+	// use only modules that can contribute to the given index as possible source modules
 	for (size_t i = 0; i < num_word_modules_; ++i) {
 		if (word_to_word_knowledge_bases_[i][target_index] != nullptr) {
 			TransferExcitation(word_modules_[i].get(), word_to_word_knowledge_bases_[i][target_index].get(), target_module);
@@ -417,8 +418,9 @@ void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint1
 template <>
 void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint32_t>* target_module)
 {
-	// use only modules that can contribute to the given index as possible source modules
 	assert(GetModuleType(target_index) == ModuleType::phrase_t);
+
+	// use only modules that can contribute to the given index as possible source modules
 	for (size_t i = num_word_modules_; i < phrase_to_phrase_knowledge_bases_.size(); ++i) {
 		if (phrase_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
 			TransferExcitation(phrase_modules_[i].get(), phrase_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
