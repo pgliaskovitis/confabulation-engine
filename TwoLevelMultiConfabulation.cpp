@@ -392,7 +392,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 	std::vector<std::string> result = ExcitedSymbolsAtIndex(index);
 	size_t current_result_size = result.size();
 	size_t previous_result_size = 0;
-	size_t swirl_count = 0;
 
 	do {
 		previous_result_size = current_result_size;
@@ -403,19 +402,6 @@ std::vector<std::string> TwoLevelMultiConfabulation::FullSwirlOverMultipleIndice
 		}
 		result = ExcitedSymbolsAtIndex(index);
 		current_result_size = result.size();
-		/*
-		log_mutex_.lock();
-		float word_excitation = 0.f;
-		std::string next_word = word_modules_[index]->ElementaryConfabulation(&word_excitation);
-		float phrase_excitation = 0.f;
-		std::string next_phrase = phrase_modules_[num_word_modules_ + index]->ElementaryConfabulation(&phrase_excitation);
-		std::cout << "Result size for swirl #" << swirl_count
-				  << " " << current_result_size
-				  << ", best word: " << next_word
-				  << ", best phrase: " << next_phrase << std::endl;
-		log_mutex_.unlock();
-		*/
-		swirl_count++;
 	} while (current_result_size < previous_result_size);
 
 	return result;
