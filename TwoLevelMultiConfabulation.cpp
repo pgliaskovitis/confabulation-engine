@@ -158,9 +158,9 @@ int8_t TwoLevelMultiConfabulation::GetStartPosition(const std::vector<std::strin
 	int8_t index = std::min((int8_t)ConvertToSigned(symbols.size()), (int8_t)index_to_complete);
 	int8_t max_nonempty_pos = index - FindNumberOfEmptyStringsBeforeIndex(symbols, index);
 	if (start_position_ >= 0) {
-	   return std::min(start_position_, max_nonempty_pos);
+		return std::min(start_position_, max_nonempty_pos);
 	} else {
-	   return max_nonempty_pos;
+		return max_nonempty_pos;
 	}
 }
 
@@ -215,6 +215,8 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 	std::vector<std::string> temp_input(symbols.begin(), symbols.end());
 
 	for (; index < end_completion && (uint8_t)index < num_word_modules_;) {
+		start_position_ = GetStartPosition(temp_input, index);
+
 		Clean();
 		Activate(temp_input);
 		const std::vector<std::string>& initial_result = InitializationAtIndex(index);
@@ -270,7 +272,11 @@ std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int i
 	assert(index < num_word_modules_);
 
 	TransferAllExcitations(index, word_modules_[index].get());
+	word_modules_[index]->TighteningPartialConfabulation(start_position_);
+
 	TransferAllExcitations(num_word_modules_ + index, phrase_modules_[num_word_modules_ + index].get());
+	phrase_modules_[num_word_modules_ + index]->TighteningPartialConfabulation(start_position_);
+
 	return ExcitedSymbolsAtIndex(index);
 }
 
