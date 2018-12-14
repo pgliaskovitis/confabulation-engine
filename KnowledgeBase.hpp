@@ -116,7 +116,10 @@ void KnowledgeBase<TRow, TCol>::ComputeLinkStrengths()
 	for (const std::pair<std::pair<TRow, TCol>, uint32_t>& e: cooccurrence_counts_->GetNzElements()) {
 		TRow row = e.first.first;
 		TCol col = e.first.second;
-		link_strengths->SetElement(row, col, ComputeLinkStrength(float(e.second) / (float) target_symbol_sums_[row]));
+		link_strengths->SetElement(row, col,
+								   ComputeLinkStrength(
+								   static_cast<float>(e.second) /
+								   static_cast<float>(target_symbol_sums_[row])));
 	}
 
 	kbase_.reset(new CSRLinksMatrix<TRow, TCol, float>(*link_strengths));

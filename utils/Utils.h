@@ -167,7 +167,7 @@ namespace
 	{
 		size_t result = 0;
 		for (int i = 0; i < index; ++i) {
-			if (symbols[i].empty()) {
+			if (symbols[i].empty() || symbols[i] == "DummySymbol") {
 				++result;
 			}
 		}

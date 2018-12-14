@@ -32,7 +32,7 @@ const std::vector<std::string> Globals::kPersistenceDelimiters = {":::", "{--->"
 
 const double Globals::kBaseProb = 0.0001f;
 const double Globals::kBaseLogProb = log2(Globals::kBaseProb);
-const double Globals::kBandGap = 2.0f;
+const double Globals::kBandGap = 30.0f;
 const double Globals::kSynapseAmplifier = 1.0f;
 const uint8_t Globals::kMaxMultiWordSize = 4;
 const uint8_t Globals::kReferenceFrameSize = 15 - 1;
