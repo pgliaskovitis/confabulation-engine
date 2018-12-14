@@ -68,7 +68,7 @@ private:
 	std::unique_ptr<IExcitationVector<TRow, uint16_t>> kb_inputs_;
 
 	std::unique_ptr<std::pair<TRow, float>> MaxExcitation(const std::set<std::pair<TRow, float> > &nz_excitations);
-	std::set<std::pair<TRow, float>> ExcitationsAbove(int8_t K, const std::set<std::pair<TRow, float>>& nz_excitations);
+	std::set<std::pair<TRow, float>> ExcitationsAbove(int8_t band_cut_level, const std::set<std::pair<TRow, float>>& nz_excitations);
 
 	size_t current_tightening_level_;
 };
@@ -290,12 +290,12 @@ std::unique_ptr<std::pair<TRow, float>> Module<TRow>::MaxExcitation(const std::s
 }
 
 template <typename TRow>
-std::set<std::pair<TRow, float>> Module<TRow>::ExcitationsAbove(int8_t K, const std::set<std::pair<TRow, float> > &nz_excitations)
+std::set<std::pair<TRow, float>> Module<TRow>::ExcitationsAbove(int8_t band_cut_level, const std::set<std::pair<TRow, float> > &nz_excitations)
 {
 	std::set<std::pair<TRow, float>> result;
 
 	for (const std::pair<TRow, float>& e : nz_excitations) {
-		if (kb_inputs_->GetElement(e.first) >= K) {
+		if (kb_inputs_->GetElement(e.first) >= band_cut_level) {
 			result.insert(e);
 		}
 	}
