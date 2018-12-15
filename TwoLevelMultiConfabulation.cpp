@@ -273,11 +273,13 @@ std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int i
 
 	uint8_t word_transfers = TransferAllExcitations(index, word_modules_[index].get());
 	// word_modules_[index]->TighteningPartialConfabulation(std::max(start_position_, word_transfers));
-	word_modules_[index]->TighteningPartialConfabulation(start_position_);
+	// word_modules_[index]->TighteningPartialConfabulation(start_position_);
+	word_modules_[index]->TighteningPartialConfabulation(0);
 
 	uint8_t phrase_transfers = TransferAllExcitations(num_word_modules_ + index, phrase_modules_[num_word_modules_ + index].get());
 	// phrase_modules_[num_word_modules_ + index]->TighteningPartialConfabulation(std::max(start_position_, phrase_transfers));
-	phrase_modules_[num_word_modules_ + index]->TighteningPartialConfabulation(start_position_);
+	// phrase_modules_[num_word_modules_ + index]->TighteningPartialConfabulation(start_position_);
+	phrase_modules_[num_word_modules_ + index]->TighteningPartialConfabulation(0);
 
 	return ExcitedSymbolsAtIndex(index);
 }
