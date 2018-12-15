@@ -157,7 +157,6 @@ std::string Module<TRow>::ElementaryConfabulation(int8_t band_cut_level, float *
 	const std::set<std::pair<TRow, float>>& nz_excit = excitations_->GetNzElements();
 
 	TRow max_index = 0;
-	TRow n_inputs_max = 0;
 
 	// try with all possible K, starting from the maximum one, until a solution is found
 	std::unique_ptr<std::pair<TRow, float>> max_excit;
@@ -280,6 +279,7 @@ std::set<std::pair<TRow, float>> Module<TRow>::ExcitationsAbove(int8_t band_cut_
 {
 	std::set<std::pair<TRow, float>> result;
 
+	// minimum knowledge base strength is kBandGap, not 0
 	double excitation_cutoff = static_cast<double>(band_cut_level) *
 							   static_cast<double>(Globals::kBandGap);
 	for (const std::pair<TRow, float>& e : nz_excitations) {
