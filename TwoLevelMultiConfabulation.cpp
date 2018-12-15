@@ -271,10 +271,12 @@ std::vector<std::string> TwoLevelMultiConfabulation::InitializationAtIndex(int i
 {
 	assert(index < num_word_modules_);
 
-	TransferAllExcitations(index, word_modules_[index].get());
+	uint8_t word_transfers = TransferAllExcitations(index, word_modules_[index].get());
+	// word_modules_[index]->TighteningPartialConfabulation(std::max(start_position_, word_transfers));
 	word_modules_[index]->TighteningPartialConfabulation(start_position_);
 
-	TransferAllExcitations(num_word_modules_ + index, phrase_modules_[num_word_modules_ + index].get());
+	uint8_t phrase_transfers = TransferAllExcitations(num_word_modules_ + index, phrase_modules_[num_word_modules_ + index].get());
+	// phrase_modules_[num_word_modules_ + index]->TighteningPartialConfabulation(std::max(start_position_, phrase_transfers));
 	phrase_modules_[num_word_modules_ + index]->TighteningPartialConfabulation(start_position_);
 
 	return ExcitedSymbolsAtIndex(index);
@@ -336,9 +338,11 @@ std::vector<std::string> TwoLevelMultiConfabulation::TransferAndTightenAtIndex(i
 
 	switch(GetModuleType(target_index)) {
 	case ModuleType::word_t:
-		return word_modules_[target_index]->TighteningPartialConfabulation(tighten);
+		// at most two incoming excitation transfers
+		return word_modules_[target_index]->TighteningPartialConfabulation(tighten + 1);
 		break;
 	case ModuleType::phrase_t:
+		// at most one incoming excitation transfer
 		return phrase_modules_[target_index]->TighteningPartialConfabulation(tighten);
 		break;
 	}

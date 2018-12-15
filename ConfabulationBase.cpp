@@ -397,39 +397,49 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
 }
 
 template <>
-void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint16_t>* target_module)
+uint8_t ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint16_t>* target_module)
 {
 	assert(GetModuleType(target_index) == ModuleType::word_t);
+	uint8_t num_transfers = 0;
 
 	// use only modules that can contribute to the given index as possible source modules
 	for (size_t i = 0; i < num_word_modules_; ++i) {
 		if (word_to_word_knowledge_bases_[i][target_index] != nullptr) {
 			TransferExcitation(word_modules_[i].get(), word_to_word_knowledge_bases_[i][target_index].get(), target_module);
+			num_transfers++;
 		}
 	}
 
 	for (size_t i = num_word_modules_; i < phrase_to_word_knowledge_bases_.size(); ++i) {
 		if (phrase_to_word_knowledge_bases_[i][target_index] != nullptr) {
 			TransferExcitation(phrase_modules_[i].get(), phrase_to_word_knowledge_bases_[i][target_index].get(), target_module);
+			num_transfers++;
 		}
 	}
+
+	return num_transfers;
 }
 
 template <>
-void ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint32_t>* target_module)
+uint8_t ConfabulationBase::TransferAllExcitations(int8_t target_index, Module<uint32_t>* target_module)
 {
 	assert(GetModuleType(target_index) == ModuleType::phrase_t);
+	uint8_t num_transfers = 0;
 
 	// use only modules that can contribute to the given index as possible source modules
 	for (size_t i = num_word_modules_; i < phrase_to_phrase_knowledge_bases_.size(); ++i) {
 		if (phrase_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
 			TransferExcitation(phrase_modules_[i].get(), phrase_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
+			num_transfers++;
 		}
 	}
 
 	for (size_t i = 0; i < num_word_modules_; ++i) {
 		if (word_to_phrase_knowledge_bases_[i][target_index] != nullptr) {
 			TransferExcitation(word_modules_[i].get(), word_to_phrase_knowledge_bases_[i][target_index].get(), target_module);
+			num_transfers++;
 		}
 	}
+
+	return num_transfers;
 }

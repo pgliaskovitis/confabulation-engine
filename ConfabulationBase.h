@@ -71,7 +71,7 @@ public:
 	void TransferExcitation(Module<TCol>* source_module, KnowledgeBase<TRow, TCol>* kb, Module<TRow>* target_module);
 
 	template <typename TRow>
-	void TransferAllExcitations(int8_t target_index, Module<TRow>* target_module);
+	uint8_t TransferAllExcitations(int8_t target_index, Module<TRow>* target_module);
 
 	Module<uint16_t>* GetWordModule(size_t index) { return word_modules_[index].get(); }
 	Module<uint32_t>* GetPhraseModule(size_t index) { return phrase_modules_[index].get(); }
