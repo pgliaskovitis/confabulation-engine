@@ -60,7 +60,7 @@ Possible Extensions
 
 In decreasing order of importance:
 
-1. Actually make language generation parallel. Right now it is single-threaded. --largely finished
+1. Actually make language generation run on multiple threads. Right now it is single-threaded with some infrastructure for multi-threading, but confabulation results are not being duplicated in the latter case.
 
 2. Capability to persist knowledge bases in files, most probably in their dictionary form. Learning and language generation currently happen only in-memory.
 

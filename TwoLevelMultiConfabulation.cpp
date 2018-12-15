@@ -298,6 +298,7 @@ std::vector<std::string> TwoLevelMultiConfabulation::TransferAndTightenAtIndex(i
 																			   int target_index)
 {
 	std::vector<std::string> result_source;
+	std::vector<std::string> result_target;
 
 	switch(GetModuleType(source_index)) {
 	case ModuleType::word_t:
@@ -337,13 +338,15 @@ std::vector<std::string> TwoLevelMultiConfabulation::TransferAndTightenAtIndex(i
 	switch(GetModuleType(target_index)) {
 	case ModuleType::word_t:
 		// at most two incoming excitation transfers
-		return word_modules_[target_index]->TighteningPartialConfabulation(tighten);
+		result_target = word_modules_[target_index]->TighteningPartialConfabulation(tighten);
 		break;
 	case ModuleType::phrase_t:
 		// at most one incoming excitation transfer
-		return phrase_modules_[target_index]->TighteningPartialConfabulation(tighten);
+		result_target = phrase_modules_[target_index]->TighteningPartialConfabulation(tighten);
 		break;
 	}
+
+	return result_target;
 }
 
 // tighten expectation on target (phrase and) word modules once
