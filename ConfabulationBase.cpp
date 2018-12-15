@@ -386,8 +386,8 @@ std::vector<std::unique_ptr<SymbolMapping>> ConfabulationBase::ProduceSymbolMapp
 
 	ngram_handler.CleanupNGrams();
 
-	log_info("NGramHandler has found %lu words", ngram_handler.GetSingleWordCount());
-	log_info("NGramHandler has found %lu multi-words", ngram_handler.GetMultiWordCount());
+	log_info("NGramHandler has found %zu words", ngram_handler.GetSingleWordCount());
+	log_info("NGramHandler has found %zu multi-words", ngram_handler.GetMultiWordCount());
 
 	result.push_back(ngram_handler.GetSingleWordSymbols()); // single-word symbols at position [0]
 	result.push_back(ngram_handler.GetMultiWordSymbols()); // multi-word symbols (excluding single-word ones) at position [1]
