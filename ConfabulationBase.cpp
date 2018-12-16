@@ -288,8 +288,8 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 	} while (!finished_reading);
 
 	// compute knowledge link strengths
-	for (const std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>>& kb_row : word_to_word_knowledge_bases_) {
-		for (const std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>& kb : kb_row) {
+	for (const std::vector<std::unique_ptr<KnowledgeBase<uint32_t, uint32_t>>>& kb_row : phrase_to_phrase_knowledge_bases_) {
+		for (const std::unique_ptr<KnowledgeBase<uint32_t, uint32_t>>& kb : kb_row) {
 			if (kb != nullptr) {
 				kb->ComputeLinkStrengths();
 				kb->ResetCooccurrenceCounts();
@@ -299,8 +299,8 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 		}
 	}
 
-	for (const std::vector<std::unique_ptr<KnowledgeBase<uint32_t, uint32_t>>>& kb_row : phrase_to_phrase_knowledge_bases_) {
-		for (const std::unique_ptr<KnowledgeBase<uint32_t, uint32_t>>& kb : kb_row) {
+	for (const std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint32_t>>>& kb_row : phrase_to_word_knowledge_bases_) {
+		for (const std::unique_ptr<KnowledgeBase<uint16_t, uint32_t>>& kb : kb_row) {
 			if (kb != nullptr) {
 				kb->ComputeLinkStrengths();
 				kb->ResetCooccurrenceCounts();
@@ -321,8 +321,8 @@ void ConfabulationBase::Learn(size_t num_word_modules)
 		}
 	}
 
-	for (const std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint32_t>>>& kb_row : phrase_to_word_knowledge_bases_) {
-		for (const std::unique_ptr<KnowledgeBase<uint16_t, uint32_t>>& kb : kb_row) {
+	for (const std::vector<std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>>& kb_row : word_to_word_knowledge_bases_) {
+		for (const std::unique_ptr<KnowledgeBase<uint16_t, uint16_t>>& kb : kb_row) {
 			if (kb != nullptr) {
 				kb->ComputeLinkStrengths();
 				kb->ResetCooccurrenceCounts();
