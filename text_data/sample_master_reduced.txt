@@ -44,6 +44,8 @@ text_data/Dostoyevsky_5.txt
 text_data/Dostoyevsky_6.txt
 text_data/Dostoyevsky_7.txt
 text_data/Dostoyevsky_8.txt
+text_data/Dostoyevsky_9.txt
+text_data/Dostoyevsky_10.txt
 text_data/Hemingway_1.txt
 text_data/Hemingway_2.txt
 text_data/Hemingway_3.txt
