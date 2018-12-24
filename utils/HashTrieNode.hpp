@@ -21,7 +21,7 @@
 
 #include <stdexcept>
 #include <memory>
-#include <unordered_map>
+#include "flat_hash_map/bytell_hash_map.hpp"
 
 template<typename T>
 class HashTrieNode {
@@ -38,7 +38,7 @@ public:
 	const T& GetValue() const { return value_; }
 
 private:
-	std::unordered_map<T, std::unique_ptr<HashTrieNode<T>>> map_;
+	ska::bytell_hash_map<T, std::unique_ptr<HashTrieNode<T>>> map_;
 
 	T value_;
 	bool leaf_node_; // leaf node is a separate extra node

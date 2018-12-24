@@ -3,13 +3,6 @@ text_data/Balzac_2.txt
 text_data/Balzac_3.txt
 text_data/Balzac_4.txt
 text_data/Balzac_5.txt
-text_data/Balzac_6.txt
-text_data/Balzac_7.txt
-text_data/Balzac_8.txt
-text_data/Balzac_9.txt
-text_data/Balzac_10.txt
-text_data/Balzac_11.txt
-text_data/Cervantes_1.txt
 text_data/Chesterton_1.txt
 text_data/Chesterton_2.txt
 text_data/Chesterton_3.txt
@@ -63,3 +56,4 @@ text_data/Stevenson_8.txt
 text_data/Stevenson_9.txt
 text_data/Stevenson_10.txt
 text_data/Stevenson_11.txt
+

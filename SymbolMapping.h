@@ -21,8 +21,8 @@
 
 #include <string>
 #include <set>
-#include <unordered_map>
 #include <memory>
+#include <flat_hash_map/bytell_hash_map.hpp>
 
 class SymbolMapping
 {
@@ -46,7 +46,7 @@ public:
 	std::string ToString() const;
 
 private:
-	std::unique_ptr<std::unordered_map<std::string, std::unique_ptr<std::string>>> all_symbols_;
-	std::unique_ptr<std::unordered_map<std::string*, uint32_t>> symbol_to_index_;
-	std::unique_ptr<std::unordered_map<uint32_t, std::string*>> index_to_symbol_;
+	std::unique_ptr<ska::bytell_hash_map<std::string, std::unique_ptr<std::string>>> all_symbols_;
+	std::unique_ptr<ska::bytell_hash_map<std::string*, uint32_t>> symbol_to_index_;
+	std::unique_ptr<ska::bytell_hash_map<uint32_t, std::string*>> index_to_symbol_;
 };
