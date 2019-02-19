@@ -26,7 +26,7 @@ Imagine a graph node that can take on any one of multiple values/features. These
 
 - A *thought process* is a highly concurrent program passing around excitations in the graph and contracting the nodes (confabulating), so that, in the end, every node in the architecture professes a single value, i.e., a single symbol. The thought process is essentially thus a parallelizable algorithm to perform _**maximum likelihood estimation globally**_ on the graph.
 
-- The symbols and knowledge links can be learned _**by any appropriate workable means**_, i.e., _**any mathematical model that learns features**_ (e.g., standard deep neural nets).
+- The symbols can be learned _**by any appropriate workable means**_, i.e., _**any mathematical model that learns features**_ (e.g., standard deep neural nets).
 
 - Thought processes are themselves confabulation architectures. The confabulation _swirl_ is such a thought process.
 
