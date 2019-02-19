@@ -37,7 +37,7 @@ The principles of the theory are very general and can be applied to all aspects 
 Relation to other models
 ------------------------
 
-- The primary difference compared to vanilla language models is that confabulation uses the likelihood function and not the conditional probability function. For example:
+- The primary difference compared to vanilla language models is that confabulation uses _**the likelihood function and not the conditional probability function**_. For example:
 
   Common trigram language model: Select w_3 that maximizes P(W_3 | W_1 = w_1, W_2 = w_2)
 
