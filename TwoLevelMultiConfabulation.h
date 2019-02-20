@@ -35,14 +35,14 @@ public:
 	TwoLevelMultiConfabulation(TwoLevelMultiConfabulation&& rhs) = delete;
 	TwoLevelMultiConfabulation&& operator=(TwoLevelMultiConfabulation&& rhs) = delete;
 
-	virtual void Activate(const std::vector<std::string>& symbols);
-	virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation);
+	virtual void Activate(const std::vector<std::string>& symbols) override final;
+	virtual std::vector<std::string> Confabulation(const std::vector<std::string>& symbols, int8_t index_to_complete, bool expectation) override final;
 
 protected:
-	virtual int8_t AutoIndexToComplete(const std::vector<std::string>& symbols);
-	virtual bool CheckIndex(const std::vector<std::string>& symbols, int8_t index_to_complete);
-	virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete);
-	virtual int8_t GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete);
+	virtual int8_t AutoIndexToComplete(const std::vector<std::string>& symbols) override final;
+	virtual bool CheckIndex(const std::vector<std::string>& symbols, int8_t index_to_complete) override final;
+	virtual bool CheckArguments(const std::vector<std::string>& symbols, int8_t index_to_complete) override final;
+	virtual int8_t GetStartPosition(const std::vector<std::string> &symbols, int8_t index_to_complete) override final;
 
 private:
 	std::mutex log_mutex_;

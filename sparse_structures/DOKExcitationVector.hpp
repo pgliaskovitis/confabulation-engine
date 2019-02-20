@@ -37,22 +37,22 @@ public:
 	DOKExcitationVector(DOKExcitationVector&& rhs) = delete;
 	DOKExcitationVector&& operator=(DOKExcitationVector&& rhs) = delete;
 
-	~DOKExcitationVector();
+	~DOKExcitationVector() override final;
 
-	virtual void SetElement(const TRow r, const T& value);
-	virtual void SetElementQuick(const TRow r, const T& value);
+	virtual void SetElement(const TRow r, const T& value) override final;
+	virtual void SetElementQuick(const TRow r, const T& value) override final;
 
-	virtual T GetElement(const TRow r) const;
-	virtual T GetElementQuick(const TRow r) const;
+	virtual T GetElement(const TRow r) const override final;
+	virtual T GetElementQuick(const TRow r) const override final;
 
-	virtual TRow GetNumRows() const { return num_rows_; }
+	virtual TRow GetNumRows() const override final { return num_rows_; }
 
-	virtual TRow GetNnz() const { return map_.size(); }
+	virtual TRow GetNnz() const override final { return map_.size(); }
 
-	virtual void Add(const IExcitationVector<TRow, T>& other);
-	virtual void Normalize();
-	virtual void Whiten();
-	virtual std::set<std::pair<TRow, T>> GetNzElements() const;
+	virtual void Add(const IExcitationVector<TRow, T>& other) override final;
+	virtual void Normalize() override final;
+	virtual void Whiten() override final;
+	virtual std::set<std::pair<TRow, T>> GetNzElements() const override final;
 
 private:
 	const TRow num_rows_;

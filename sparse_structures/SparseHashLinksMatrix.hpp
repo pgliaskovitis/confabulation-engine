@@ -34,21 +34,21 @@ public:
 	SparseHashLinksMatrix(SparseHashLinksMatrix&& rhs) = delete;
 	SparseHashLinksMatrix&& operator=(SparseHashLinksMatrix&& rhs) = delete;
 
-	~SparseHashLinksMatrix();
+	~SparseHashLinksMatrix() override final;
 
-	virtual void SetElement(TRow r, TCol c, const T& value);
-	virtual void SetElementQuick(TRow r, TCol c, const T& value);
+	virtual void SetElement(TRow r, TCol c, const T& value) override final;
+	virtual void SetElementQuick(TRow r, TCol c, const T& value) override final;
 
-	virtual T GetElement(TRow r, TCol c) const;
-	virtual T GetElementQuick(TRow r, TCol c) const;
+	virtual T GetElement(TRow r, TCol c) const override final;
+	virtual T GetElementQuick(TRow r, TCol c) const override final;
 
-	virtual TRow GetNumRows() const { return num_rows_; }
-	virtual TCol GetNumCols() const { return num_cols_; }
+	virtual TRow GetNumRows() const override final { return num_rows_; }
+	virtual TCol GetNumCols() const override final { return num_cols_; }
 
-	virtual uint32_t GetNnz() const { return map_.size(); }
+	virtual uint32_t GetNnz() const override final { return map_.size(); }
 
-	virtual std::unique_ptr<IExcitationVector<TRow, T>> Multiply(const IExcitationVector<TCol, T>& vec) const;
-	virtual std::set<std::pair<std::pair<TRow, TCol>, T> > GetNzElements() const;
+	virtual std::unique_ptr<IExcitationVector<TRow, T>> Multiply(const IExcitationVector<TCol, T>& vec) const override final;
+	virtual std::set<std::pair<std::pair<TRow, TCol>, T> > GetNzElements() const override final;
 
 private:
 	const TRow num_rows_;
