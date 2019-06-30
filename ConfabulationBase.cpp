@@ -97,24 +97,24 @@ void ConfabulationBase::Build()
 {
 	log_info("Starting Build phase for confabulation");
 
-	organizer_.reset(new MultiLevelOrganizer(level_specs_, ProduceSymbolMappings(symbol_file_, master_file_)));
+	organizer_ = std::make_unique<MultiLevelOrganizer>(level_specs_, ProduceSymbolMappings(symbol_file_, master_file_));
 
 	// create the modules
 	for (size_t i = 0; i < num_modules_; ++i) {
 		if (i < num_word_modules_) {
 			const SymbolMapping* symbols_at_level = organizer_->GetMappingsForLevel(0);
-			word_modules_.emplace_back(new Module<uint16_t>(*symbols_at_level, i));
+			word_modules_.push_back(std::make_unique<Module<uint16_t>>(*symbols_at_level, i));
 		} else {
-			word_modules_.emplace_back(nullptr);
+			word_modules_.push_back(nullptr);
 		}
 	}
 
 	for (size_t i = 0; i < num_modules_; ++i) {
 		if (i >= num_word_modules_) {
 			const SymbolMapping* symbols_at_level = organizer_->GetMappingsForLevel(1);
-			phrase_modules_.emplace_back(new Module<uint32_t>(*symbols_at_level, i));
+			phrase_modules_.push_back(std::make_unique<Module<uint32_t>>(*symbols_at_level, i));
 		} else {
-			phrase_modules_.emplace_back(nullptr);
+			phrase_modules_.push_back(nullptr);
 		}
 	}
 
@@ -130,9 +130,9 @@ void ConfabulationBase::Build()
 				id += std::to_string(j);
 				assert(i < num_word_modules_);
 				assert(j < num_word_modules_);
-				word_to_word_knowledge_bases_[i][j].reset(new KnowledgeBase<uint16_t, uint16_t>(id,
+				word_to_word_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint16_t, uint16_t>>(id,
 															   word_modules_[i]->GetSymbolMapping(),
-															   word_modules_[j]->GetSymbolMapping()));
+															   word_modules_[j]->GetSymbolMapping());
 			} else
 				word_to_word_knowledge_bases_[i][j].reset(nullptr);
 		}
@@ -149,9 +149,9 @@ void ConfabulationBase::Build()
 				id += std::to_string(j);
 				assert(i >= num_word_modules_);
 				assert(j >= num_word_modules_);
-				phrase_to_phrase_knowledge_bases_[i][j].reset(new KnowledgeBase<uint32_t, uint32_t>(id,
+				phrase_to_phrase_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint32_t, uint32_t>>(id,
 															   phrase_modules_[i]->GetSymbolMapping(),
-															   phrase_modules_[j]->GetSymbolMapping()));
+															   phrase_modules_[j]->GetSymbolMapping());
 			} else
 				phrase_to_phrase_knowledge_bases_[i][j].reset(nullptr);
 		}
@@ -167,9 +167,9 @@ void ConfabulationBase::Build()
 				id += "-";
 				id += std::to_string(j);
 				assert(j >= num_word_modules_);
-				word_to_phrase_knowledge_bases_[i][j].reset(new KnowledgeBase<uint32_t, uint16_t>(id,
+				word_to_phrase_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint32_t, uint16_t>>(id,
 															   word_modules_[i]->GetSymbolMapping(),
-															   phrase_modules_[j]->GetSymbolMapping()));
+															   phrase_modules_[j]->GetSymbolMapping());
 			} else
 				word_to_phrase_knowledge_bases_[i][j].reset(nullptr);
 		}
@@ -185,9 +185,9 @@ void ConfabulationBase::Build()
 				id += "-";
 				id += std::to_string(j);
 				assert(i >= num_word_modules_);
-				phrase_to_word_knowledge_bases_[i][j].reset(new KnowledgeBase<uint16_t, uint32_t>(id,
+				phrase_to_word_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint16_t, uint32_t>>(id,
 															   phrase_modules_[i]->GetSymbolMapping(),
-															   word_modules_[j]->GetSymbolMapping()));
+															   word_modules_[j]->GetSymbolMapping());
 			} else
 				phrase_to_word_knowledge_bases_[i][j].reset(nullptr);
 		}

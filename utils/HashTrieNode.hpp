@@ -57,7 +57,7 @@ HashTrieNode<T>& HashTrieNode<T>::Put(const T& child, bool final_node)
 	} catch (std::out_of_range& oor) {
 	}
 
-	std::unique_ptr<HashTrieNode<T>> new_child(new HashTrieNode<T>(child, final_node));
+	auto new_child = std::make_unique<HashTrieNode<T>>(child, final_node);
 	map_.insert(std::make_pair(child, std::move(new_child)));
 
 	return *(map_.at(child));

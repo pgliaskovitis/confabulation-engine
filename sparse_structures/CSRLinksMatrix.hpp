@@ -130,7 +130,7 @@ T CSRLinksMatrix<TRow, TCol, T>::GetElementQuick(TRow r, TCol c) const
 template <typename TRow, typename TCol, typename T>
 std::unique_ptr<IExcitationVector<TRow, T>> CSRLinksMatrix<TRow, TCol, T>::Multiply(const IExcitationVector<TCol, T>& vec) const
 {
-	std::unique_ptr<IExcitationVector<TRow, T>> result(new DOKExcitationVector<TRow, T>(num_rows_));
+	std::unique_ptr<IExcitationVector<TRow, T>> result = std::make_unique<DOKExcitationVector<TRow, T>>(num_rows_);
 	T row_sum;
 
 	for (TRow r = 0; r < num_rows_; ++r) {

@@ -73,7 +73,7 @@ KnowledgeBase<TRow, TCol>::KnowledgeBase(const std::string& id, const SymbolMapp
 	id_(id),
 	src_map_(src_map),
 	targ_map_(targ_map),
-	cooccurrence_counts_(new SparseHashLinksMatrix<TRow, TCol, uint32_t>(targ_map.Size(), src_map.Size())),
+	cooccurrence_counts_(std::make_unique<SparseHashLinksMatrix<TRow, TCol, uint32_t>>(targ_map.Size(), src_map.Size())),
 	target_symbol_sums_(targ_map.Size())
 {}
 
@@ -111,7 +111,8 @@ void KnowledgeBase<TRow, TCol>::Add(TRow targ_index, TCol src_index)
 template <typename TRow, typename TCol>
 void KnowledgeBase<TRow, TCol>::ComputeLinkStrengths()
 {
-	std::unique_ptr<IKnowledgeLinks<TRow, TCol, float>> link_strengths(new SparseHashLinksMatrix<TRow, TCol, float>(cooccurrence_counts_->GetNumRows(), cooccurrence_counts_->GetNumCols()));
+	std::unique_ptr<IKnowledgeLinks<TRow, TCol, float>> link_strengths =
+	std::make_unique<SparseHashLinksMatrix<TRow, TCol, float>>(cooccurrence_counts_->GetNumRows(), cooccurrence_counts_->GetNumCols());
 
 	for (const std::pair<std::pair<TRow, TCol>, uint32_t>& e: cooccurrence_counts_->GetNzElements()) {
 		TRow row = e.first.first;
@@ -122,7 +123,7 @@ void KnowledgeBase<TRow, TCol>::ComputeLinkStrengths()
 								   static_cast<float>(target_symbol_sums_[row])));
 	}
 
-	kbase_.reset(new CSRLinksMatrix<TRow, TCol, float>(*link_strengths));
+	kbase_ = std::make_unique<CSRLinksMatrix<TRow, TCol, float>>(*link_strengths);
 }
 
 template <typename TRow, typename TCol>

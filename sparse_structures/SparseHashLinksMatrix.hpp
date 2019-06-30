@@ -123,7 +123,7 @@ std::unique_ptr<IExcitationVector<TRow, T>> SparseHashLinksMatrix<TRow, TCol, T>
 	std::set<std::pair<TCol, T>> vec_elements = vec.GetNzElements();
 
 	T link_strength = 0.0;
-	std::unique_ptr<IExcitationVector<TRow, T>> result(new DOKExcitationVector<TRow, T>(num_rows_));
+	std::unique_ptr<IExcitationVector<TRow, T>> result = std::make_unique<DOKExcitationVector<TRow, T>>(num_rows_);
 
 	for (const std::pair<TCol, T>& element : vec_elements) {
 		uint32_t c = element.first;

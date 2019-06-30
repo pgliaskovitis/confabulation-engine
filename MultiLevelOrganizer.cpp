@@ -34,7 +34,7 @@ MultiLevelOrganizer::MultiLevelOrganizer(const std::vector<uint8_t>& level_sizes
 
 	// organize symbols in HashTries
 	for (const std::unique_ptr<SymbolMapping>& mapping : level_mappings_) {
-		tries_.emplace_back(new HashTrie<std::string>());
+		tries_.push_back(std::make_unique<HashTrie<std::string>>());
 		const std::set<std::string>& level_symbols = mapping->GetAllSymbols();
 		for (std::string level_symbol : level_symbols) {
 			tries_.back()->Add(SymbolToVectorSymbol(level_symbol, ' '));

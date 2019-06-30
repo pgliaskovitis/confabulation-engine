@@ -270,7 +270,7 @@ size_t NGramHandler::GetMultiWordCount()
 
 std::unique_ptr<SymbolMapping> NGramHandler::GetSingleWordSymbols()
 {
-	std::unique_ptr<SymbolMapping> result(new SymbolMapping());
+	auto result = std::make_unique<SymbolMapping>();
 
 	std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[0].begin();
 	for (; it != occurrence_counts_[0].end(); ++it) {
@@ -282,7 +282,7 @@ std::unique_ptr<SymbolMapping> NGramHandler::GetSingleWordSymbols()
 
 std::unique_ptr<SymbolMapping> NGramHandler::GetMultiWordSymbols()
 {
-	std::unique_ptr<SymbolMapping> result(new SymbolMapping());
+	auto result = std::make_unique<SymbolMapping>();
 
 	for (size_t i = 1; i < occurrence_counts_.size(); ++i) {
 		std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[i].begin();
@@ -296,7 +296,7 @@ std::unique_ptr<SymbolMapping> NGramHandler::GetMultiWordSymbols()
 
 std::unique_ptr<SymbolMapping> NGramHandler::GetAllSymbols()
 {
-	std::unique_ptr<SymbolMapping> result(new SymbolMapping());
+	auto result = std::make_unique<SymbolMapping>();
 
 	for (size_t i = 0; i < occurrence_counts_.size(); ++i) {
 		std::map<std::vector<std::string>, size_t, StringVector_Cmp>::iterator it = occurrence_counts_[i].begin();

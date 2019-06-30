@@ -20,9 +20,9 @@
 #include "SymbolMapping.h"
 
 SymbolMapping::SymbolMapping() :
-	all_symbols_(new ska::bytell_hash_map<std::string, std::unique_ptr<std::string>>),
-	symbol_to_index_(new ska::bytell_hash_map<std::string*, uint32_t>),
-	index_to_symbol_(new ska::bytell_hash_map<uint32_t, std::string*>)
+	all_symbols_(std::make_unique<ska::bytell_hash_map<std::string, std::unique_ptr<std::string>>>()),
+	symbol_to_index_(std::make_unique<ska::bytell_hash_map<std::string*, uint32_t>>()),
+	index_to_symbol_(std::make_unique<ska::bytell_hash_map<uint32_t, std::string*>>())
 {}
 
 void SymbolMapping::AddSymbol(const std::string &symbol)
@@ -30,7 +30,7 @@ void SymbolMapping::AddSymbol(const std::string &symbol)
 	ska::bytell_hash_map<std::string, std::unique_ptr<std::string>>::const_iterator existence_it = all_symbols_->find(symbol);
 	if (existence_it == all_symbols_->end()) {
 		uint32_t index = all_symbols_->size();
-		std::unique_ptr<std::string> symbol_ptr(new std::string(symbol));
+		auto symbol_ptr = std::make_unique<std::string>(symbol);
 		all_symbols_->insert(std::make_pair(symbol, std::move(symbol_ptr)));
 		std::unique_ptr<std::string>& storage_ptr = all_symbols_->at(symbol);
 		symbol_to_index_->insert(std::make_pair(storage_ptr.get(), index));

@@ -76,7 +76,7 @@ template <typename TRow>
 Module<TRow>::Module(const SymbolMapping &symbol_mapping, size_t id) :
 	symbol_mapping_(symbol_mapping),
 	id_(id),
-	excitations_(new KHashExcitationVector<TRow, float>(symbol_mapping.Size())),
+	excitations_(std::make_unique<KHashExcitationVector<TRow, float>>(symbol_mapping.Size())),
 	current_tightening_level_(0)
 {
 	ExcitationsToZero();
@@ -103,7 +103,7 @@ template <typename TRow>
 std::unique_ptr<IExcitationVector<TRow, float>> Module<TRow>::GetNormalizedExcitations() const
 {
 	std::unique_ptr<IExcitationVector<TRow, float>> normalized_excitations;
-	normalized_excitations.reset(new KHashExcitationVector<TRow, float>(symbol_mapping_.Size()));
+	normalized_excitations = std::make_unique<KHashExcitationVector<TRow, float>>(symbol_mapping_.Size());
 
 	for (const std::pair<TRow, float>& e : excitations_->GetNzElements()) {
 		normalized_excitations->SetElement(e.first, e.second);
@@ -118,7 +118,7 @@ template <typename TRow>
 std::unique_ptr<IExcitationVector<TRow, float>> Module<TRow>::GetWhitenedExcitations() const
 {
 	std::unique_ptr<IExcitationVector<TRow, float>> whitened_excitations;
-	whitened_excitations.reset(new KHashExcitationVector<TRow, float>(symbol_mapping_.Size()));
+	whitened_excitations = std::make_unique<KHashExcitationVector<TRow, float>>(symbol_mapping_.Size());
 
 	for (const std::pair<TRow, float>& e : excitations_->GetNzElements()) {
 		whitened_excitations->SetElement(e.first, e.second);
@@ -199,7 +199,7 @@ std::vector<std::string> Module<TRow>::PartialConfabulation(int8_t band_cut_leve
 
 	const std::set<std::pair<TRow, float>>& nz_excit = excitations_->GetNzElements();
 	const std::set<std::pair<TRow, float>>& band_cut_excit = ExcitationsAbove(band_cut_level, nz_excit);
-	expectations.reset(new std::vector<std::pair<TRow, float>>(band_cut_excit.begin(), band_cut_excit.end()));
+	expectations = std::make_unique<std::vector<std::pair<TRow, float>>>(band_cut_excit.begin(), band_cut_excit.end());
 
 	// cleanup intermediate state
 	ExcitationsToZero();
@@ -234,7 +234,7 @@ std::vector<std::string> Module<TRow>::TighteningPartialConfabulation(int8_t ban
 template <typename TRow>
 void Module<TRow>::ExcitationsToZero()
 {
-	excitations_.reset(new KHashExcitationVector<TRow, float>(symbol_mapping_.Size()));
+	excitations_ = std::make_unique<KHashExcitationVector<TRow, float>>(symbol_mapping_.Size());
 }
 
 template <typename TRow>
@@ -263,7 +263,7 @@ std::unique_ptr<std::pair<TRow, float>> Module<TRow>::MaxExcitation(const std::s
 
 	for (const std::pair<TRow, float>& e : nz_excitations) {
 		if (result == nullptr) {
-			result.reset(new std::pair<TRow, float>(e.first, e.second));
+			result = std::make_unique<std::pair<TRow, float>>(e.first, e.second);
 		} else if (e.second > max_value) {
 			result->first = e.first;
 			result->second = e.second;
