@@ -54,5 +54,5 @@ private:
 	std::vector<std::string>::iterator current_text_file_it_;
 	std::unique_ptr<std::ifstream> current_text_file_;
 
-	std::shared_ptr<std::string> left_over_sentence_;
+	std::unique_ptr<std::string> left_over_sentence_;
 };

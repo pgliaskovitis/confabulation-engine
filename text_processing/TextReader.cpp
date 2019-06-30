@@ -67,7 +67,7 @@ const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_
 			}
 
 			// remove the newly found sentence from the sentence buffer
-			left_over_sentence_ = std::make_shared<std::string>(left_over_sentence_->substr(end_of_phase));
+			left_over_sentence_ = std::make_unique<std::string>(left_over_sentence_->substr(end_of_phase));
 
 			const std::vector<std::string>& current_sentence_tokens = ExtractTokens(l_string.str().substr(0, end_of_phase));
 
@@ -96,13 +96,13 @@ const std::vector<std::string> TextReader::GetNextSentenceTokens(bool& finished_
 
 			if (end_of_delimiter != std::string::npos) {
 				//delimiter finishes in the current line
-				auto tempLeftover = std::make_shared<std::string>(l_string.str().substr(end_of_delimiter));
-				left_over_sentence_ = tempLeftover; //store the part of the line from the end of the delimiter to npos
+				auto tempLeftover = std::make_unique<std::string>(l_string.str().substr(end_of_delimiter));
+				left_over_sentence_ = std::move(tempLeftover); //store the part of the line from the end of the delimiter to npos
 				end_of_phase = end_of_delimiter;
 			} else {
 				//delimiter does not finish in the current line
-				auto tempLeftover = std::make_shared<std::string>(l_string.str().substr(end_of_sentence + 1));
-				left_over_sentence_ = tempLeftover; //store the part of the line from the start of the delimiter to npos
+				auto tempLeftover = std::make_unique<std::string>(l_string.str().substr(end_of_sentence + 1));
+				left_over_sentence_ = std::move(tempLeftover); //store the part of the line from the start of the delimiter to npos
 				end_of_phase = end_of_sentence + 1;
 			}
 
