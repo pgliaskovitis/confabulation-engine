@@ -65,7 +65,8 @@ void ConfabulationTest::TestTokenizeWithinSentences(const std::string& input) co
 
 void ConfabulationTest::TestDOKExcitationVector() const
 {
-	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr1(new DOKExcitationVector<uint16_t, float>(10));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr1 =
+		std::make_unique<DOKExcitationVector<uint16_t, float>>(10);
 
 	my_vec_ptr1->SetElement(1, 1.0);
 	my_vec_ptr1->SetElement(2, 2.0);
@@ -78,7 +79,8 @@ void ConfabulationTest::TestDOKExcitationVector() const
 
 	std::cout << "Vector before addition:" << std::endl << my_vec_ptr1->ToString();
 
-	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr2(new DOKExcitationVector<uint16_t, float>(10));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr2 =
+		std::make_unique<DOKExcitationVector<uint16_t, float>>(10);
 
 	my_vec_ptr2->SetElement(1, 1.5);
 	my_vec_ptr2->SetElement(2, 2.5);
@@ -97,7 +99,8 @@ void ConfabulationTest::TestDOKExcitationVector() const
 
 void ConfabulationTest::TestKHashExcitationVector() const
 {
-	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr1(new KHashExcitationVector<uint16_t, float>(10));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr1 =
+		std::make_unique<KHashExcitationVector<uint16_t, float>>(10);
 
 	my_vec_ptr1->SetElement(1, 1.0);
 	my_vec_ptr1->SetElement(2, 2.0);
@@ -110,7 +113,8 @@ void ConfabulationTest::TestKHashExcitationVector() const
 
 	std::cout << "Vector before addition:" << std::endl << my_vec_ptr1->ToString();
 
-	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr2(new KHashExcitationVector<uint16_t, float>(10));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr2 =
+		std::make_unique<KHashExcitationVector<uint16_t, float>>(10);
 
 	my_vec_ptr2->SetElement(1, 1.5);
 	my_vec_ptr2->SetElement(2, 2.5);
@@ -129,7 +133,8 @@ void ConfabulationTest::TestKHashExcitationVector() const
 
 void ConfabulationTest::TestDOKLinksMatrix() const
 {
-	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_matrix_ptr(new DOKLinksMatrix<uint16_t, uint16_t, float>(3, 4));
+	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_matrix_ptr =
+		std::make_unique<DOKLinksMatrix<uint16_t, uint16_t, float>>(3, 4);
 
 	my_matrix_ptr->SetElement(0, 1, 1.0);
 	my_matrix_ptr->SetElement(1, 3, 1.0);
@@ -137,7 +142,8 @@ void ConfabulationTest::TestDOKLinksMatrix() const
 
 	std::cout << "Matrix before multiplication:" << std::endl << my_matrix_ptr->ToString();
 
-	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr(new DOKExcitationVector<uint16_t, float>(4));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr =
+		std::make_unique<DOKExcitationVector<uint16_t, float>>(4);
 
 	my_vec_ptr->SetElement(0, 1.5);
 	my_vec_ptr->SetElement(1, 2.5);
@@ -152,7 +158,8 @@ void ConfabulationTest::TestDOKLinksMatrix() const
 
 void ConfabulationTest::TestSparseHashLinksMatrix() const
 {
-	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_matrix_ptr(new SparseHashLinksMatrix<uint16_t, uint16_t, float>(3, 4));
+	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_matrix_ptr =
+		std::make_unique<SparseHashLinksMatrix<uint16_t, uint16_t, float>>(3, 4);
 
 	my_matrix_ptr->SetElement(0, 1, 1.0);
 	my_matrix_ptr->SetElement(1, 3, 1.0);
@@ -160,7 +167,8 @@ void ConfabulationTest::TestSparseHashLinksMatrix() const
 
 	std::cout << "Matrix before multiplication:" << std::endl << my_matrix_ptr->ToString();
 
-	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr(new KHashExcitationVector<uint16_t, float>(4));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr =
+		std::make_unique<KHashExcitationVector<uint16_t, float>>(4);
 
 	my_vec_ptr->SetElement(0, 1.5);
 	my_vec_ptr->SetElement(1, 2.5);
@@ -175,17 +183,20 @@ void ConfabulationTest::TestSparseHashLinksMatrix() const
 
 void ConfabulationTest::TestCSRLinksMatrix() const
 {
-	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_dok_matrix_ptr(new DOKLinksMatrix<uint16_t, uint16_t, float>(3, 4));
+	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_dok_matrix_ptr =
+		std::make_unique<DOKLinksMatrix<uint16_t, uint16_t, float>>(3, 4);
 
 	my_dok_matrix_ptr->SetElement(0, 1 , 1.0);
 	my_dok_matrix_ptr->SetElement(1, 3, 1.0);
 	my_dok_matrix_ptr->SetElement(2, 2, 1.0);
 
-	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_csr_matrix_ptr(new CSRLinksMatrix<uint16_t, uint16_t, float>(*my_dok_matrix_ptr));
+	std::unique_ptr<IKnowledgeLinks<uint16_t, uint16_t, float>> my_csr_matrix_ptr =
+		std::make_unique<CSRLinksMatrix<uint16_t, uint16_t, float>>(*my_dok_matrix_ptr);
 
 	std::cout << "Matrix before multiplication:" << std::endl << my_csr_matrix_ptr->ToString();
 
-	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr(new DOKExcitationVector<uint16_t, float>(4));
+	std::unique_ptr<IExcitationVector<uint16_t, float>> my_vec_ptr =
+		std::make_unique<DOKExcitationVector<uint16_t, float>>(4);
 
 	my_vec_ptr->SetElement(0, 1.0);
 	my_vec_ptr->SetElement(1, 2.0);
@@ -200,7 +211,7 @@ void ConfabulationTest::TestCSRLinksMatrix() const
 
 void ConfabulationTest::TestSymbolMapping() const
 {
-	std::unique_ptr<SymbolMapping> my_symbol_mapping_ptr(new SymbolMapping());
+	auto my_symbol_mapping_ptr = std::make_unique<SymbolMapping>();
 
 	my_symbol_mapping_ptr->AddSymbol("perilous");
 	my_symbol_mapping_ptr->AddSymbol("cellar");
@@ -495,7 +506,7 @@ void ConfabulationTest::TestTwoLevelMultiConfabulation(const std::string& symbol
 
 int main()
 {
-	std::unique_ptr<ConfabulationTest> test1(new ConfabulationTest());
+	auto test1 = std::make_unique<ConfabulationTest>();
 
 	// test1->TestTokenizeSentences("This is, alas, the primal knowledge. The magic exists, but is not for everyone. \"My fumblings will be your quickening, minion.\"");
 
@@ -545,7 +556,7 @@ int main()
 	std::string copy_feed19 = "While the author and the victims alike treated "; // the whole matter as a silly public charade
 	std::string copy_feed20 = "The difficulty is therefore that the actual raising of "; // the standard of athletics has probably been
 
-	std::unique_ptr<std::vector<std::string>> allCopyFeeds(new std::vector<std::string>());
+	auto allCopyFeeds = std::make_unique<std::vector<std::string>>();
 
 	allCopyFeeds->push_back(copy_feed1);
 	allCopyFeeds->push_back(copy_feed2);
@@ -570,7 +581,7 @@ int main()
 
 	test1->TestTwoLevelMultiConfabulation("text_data/ascii_symbols.txt", "text_data/sample_master_reduced.txt", *allCopyFeeds);
 
-	std::unique_ptr<std::vector<std::string>> allOriginalFeeds(new std::vector<std::string>());
+	auto allOriginalFeeds = std::make_unique<std::vector<std::string>>();
 
 	std::string feed1 = "The hooded men were chanting beneath the ";
 	std::string feed2 = "An army of little insects had gathered on top of ";
