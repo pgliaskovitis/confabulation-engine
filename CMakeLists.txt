@@ -17,7 +17,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	set (CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2")
 	set (CMAKE_CXX_FLAGS_RELEASE "-O3")
 elseif (${CMAKE_C_COMPILER_ID} STREQUAL "MSVC")
-	set (CMAKE_CXX_FLAGS_RELEASE "/Ox")
+	set (CMAKE_CXX_FLAGS_RELEASE "/O2")
 endif ()
 
 include_directories (${CMAKE_SOURCE_DIR}/google ${CMAKE_SOURCE_DIR}/google/sparsehash)
