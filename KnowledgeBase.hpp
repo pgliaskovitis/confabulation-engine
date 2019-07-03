@@ -117,10 +117,9 @@ void KnowledgeBase<TRow, TCol>::ComputeLinkStrengths()
 	for (const std::pair<std::pair<TRow, TCol>, uint32_t>& e: cooccurrence_counts_->GetNzElements()) {
 		TRow row = e.first.first;
 		TCol col = e.first.second;
-		link_strengths->SetElement(row, col,
-								   ComputeLinkStrength(
-								   static_cast<float>(e.second) /
-								   static_cast<float>(target_symbol_sums_[row])));
+		link_strengths->SetElement(row, col, ComputeLinkStrength(
+						static_cast<float>(e.second) /
+						static_cast<float>(target_symbol_sums_[row])));
 	}
 
 	kbase_ = std::make_unique<CSRLinksMatrix<TRow, TCol, float>>(*link_strengths);
@@ -141,8 +140,7 @@ float KnowledgeBase<TRow, TCol>::ComputeLinkStrength(double antecedent_support_p
 {
 	if (antecedent_support_probability > Globals::kBaseProb) {
 		return static_cast<float>(Globals::kSynapseAmplifier *
-								  (log2(antecedent_support_probability) - Globals::kBaseLogProb) +
-								  Globals::kBandGap);
+					 (log2(antecedent_support_probability) - Globals::kBaseLogProb) + Globals::kBandGap);
 	} else if (antecedent_support_probability > 0.0) {
 		return static_cast<float>(Globals::kBandGap);
 	}

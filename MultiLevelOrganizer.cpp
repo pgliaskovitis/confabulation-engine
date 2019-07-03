@@ -24,7 +24,7 @@
 #include "utils/Utils.h"
 
 MultiLevelOrganizer::MultiLevelOrganizer(const std::vector<uint8_t>& level_sizes,
-										 std::vector<std::unique_ptr<SymbolMapping>>&& level_mappings) :
+					 std::vector<std::unique_ptr<SymbolMapping>>&& level_mappings) :
 	level_sizes_(level_sizes)
 {
 	// take control of all symbols

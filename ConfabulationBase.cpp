@@ -72,11 +72,11 @@ KnowledgeBaseType ConfabulationBase::GetKnowledgeBaseType(size_t source_module_i
 }
 
 void ConfabulationBase::Initialize(const std::vector<std::vector<bool>>& kb_specs,
-								   const std::vector<uint8_t> level_specs,
-								   const std::string &symbol_file,
-								   const std::string &master_file,
-								   uint8_t min_single_occurrences,
-								   uint8_t min_multi_occurrences)
+				   const std::vector<uint8_t> level_specs,
+				   const std::string &symbol_file,
+				   const std::string &master_file,
+				   uint8_t min_single_occurrences,
+				   uint8_t min_multi_occurrences)
 {
 	if (2 * num_word_modules_ != kb_specs.size()) {
 		std::cout << "Initialize called with knowledge base specs size = "
@@ -131,8 +131,8 @@ void ConfabulationBase::Build()
 				assert(i < num_word_modules_);
 				assert(j < num_word_modules_);
 				word_to_word_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint16_t, uint16_t>>(id,
-															   word_modules_[i]->GetSymbolMapping(),
-															   word_modules_[j]->GetSymbolMapping());
+															  word_modules_[i]->GetSymbolMapping(),
+															  word_modules_[j]->GetSymbolMapping());
 			} else
 				word_to_word_knowledge_bases_[i][j].reset(nullptr);
 		}
@@ -150,8 +150,8 @@ void ConfabulationBase::Build()
 				assert(i >= num_word_modules_);
 				assert(j >= num_word_modules_);
 				phrase_to_phrase_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint32_t, uint32_t>>(id,
-															   phrase_modules_[i]->GetSymbolMapping(),
-															   phrase_modules_[j]->GetSymbolMapping());
+															      phrase_modules_[i]->GetSymbolMapping(),
+															      phrase_modules_[j]->GetSymbolMapping());
 			} else
 				phrase_to_phrase_knowledge_bases_[i][j].reset(nullptr);
 		}
@@ -168,8 +168,8 @@ void ConfabulationBase::Build()
 				id += std::to_string(j);
 				assert(j >= num_word_modules_);
 				word_to_phrase_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint32_t, uint16_t>>(id,
-															   word_modules_[i]->GetSymbolMapping(),
-															   phrase_modules_[j]->GetSymbolMapping());
+															    word_modules_[i]->GetSymbolMapping(),
+															    phrase_modules_[j]->GetSymbolMapping());
 			} else
 				word_to_phrase_knowledge_bases_[i][j].reset(nullptr);
 		}
@@ -186,8 +186,8 @@ void ConfabulationBase::Build()
 				id += std::to_string(j);
 				assert(i >= num_word_modules_);
 				phrase_to_word_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint16_t, uint32_t>>(id,
-															   phrase_modules_[i]->GetSymbolMapping(),
-															   word_modules_[j]->GetSymbolMapping());
+															    phrase_modules_[i]->GetSymbolMapping(),
+															    word_modules_[j]->GetSymbolMapping());
 			} else
 				phrase_to_word_knowledge_bases_[i][j].reset(nullptr);
 		}
