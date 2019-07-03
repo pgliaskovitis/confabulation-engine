@@ -81,7 +81,7 @@ You will need to have Google SparseHash installed at the root source tree, in a 
 
 You will also need khash.h in a "klib" directory, obtainable from https://github.com/attractivechaos/klib (also check out the excellent blog). A suitable version has been included for convenience in later versions of this repo.
 
-Finally you will need bytell_hash_map.hpp in a "flat_hash_map" directory obtainable from https://github.com/skarupke/flat_hash_map (also check out another escellent blog). A suitable version has been included for convenience in later versions of this repo.
+Finally you will need bytell_hash_map.hpp in a "flat_hash_map" directory obtainable from https://github.com/skarupke/flat_hash_map (also check out another excellent blog). A suitable version has been included for convenience in later versions of this repo.
 
 The currently preferred way to build is through cmake:
 
