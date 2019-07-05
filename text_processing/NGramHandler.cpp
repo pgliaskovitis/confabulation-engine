@@ -24,8 +24,8 @@
 #include <algorithm>
 #include <assert.h>
 #include "Globals.h"
-#include "NGramHandler.h"
 #include "utils/Utils.h"
+#include "NGramHandler.h"
 #include "Dbg.h"
 
 NGramHandler::NGramHandler(uint8_t max_multi_words, uint8_t min_single_occurences, uint8_t min_multi_occurences) :

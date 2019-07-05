@@ -22,7 +22,7 @@
 #include <string>
 #include <set>
 #include <memory>
-#include <flat_hash_map/bytell_hash_map.hpp>
+#include "flat_hash_map/bytell_hash_map.hpp"
 
 class SymbolMapping
 {

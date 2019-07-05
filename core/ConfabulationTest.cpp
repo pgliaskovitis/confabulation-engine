@@ -22,7 +22,6 @@
 #include "Globals.h"
 #include "ConfabulationTest.h"
 #include "text_processing/SentenceTokenizer.h"
-#include "SymbolMapping.h"
 #include "text_processing/NGramHandler.h"
 #include "text_processing/TextReader.h"
 #include "sparse_structures/KHashExcitationVector.hpp"
@@ -32,6 +31,7 @@
 #include "sparse_structures/CSRLinksMatrix.hpp"
 #include "utils/HashTrie.hpp"
 #include "utils/Utils.h"
+#include "SymbolMapping.h"
 #include "TwoLevelMultiConfabulation.h"
 
 void ConfabulationTest::TestTokenizeSentences(const std::string& input) const
