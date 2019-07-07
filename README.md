@@ -112,25 +112,46 @@ Adding more books/documents to the corpus can greatly increase the engine's capa
 The main() function lies in ConfabulationTest.cpp. Test sentence beginnings can also be found and altered there. The output with default settings in Globals.cpp for the already included sentence beginnings should be as follows:
 
 Dissolve pearls and wreck thrones, turn old men into { boys } { and make } { young } { and } { and }
+
 All this he knew, not because he was a philosopher{ or a } { of the } { which }
+
 It was rather that creative curiosity which { comes } { when a } { man has } { the beginnings }
+
 A man who knows nothing of reason talks of reasoning { without } { strong } { undisputed } { first } { the }
-He meant, like all great souls, that his success { should be } { owing } { entirely } { as } { his }
+
+He meant, like all great souls, that his success { should be } { owing } { entirely } { to } { his }
+
 A miracle could extricate him now out of the gulf { into which } { he had } { of the }
+
 Bathed in a celestial light shed from their own { souls } { which } { reflects } { to } { the } { the }
+
 A man should study a woman very carefully before { in the } { will } { to see his }
+
 For, after all, the riddle as to where the anarchists { had got } { all these } { followers }
+
 His cheeks and chin were fully fringed with one of those { irritating } { beards } { that } { begin }
+
 And this dainty change of toilette { had been } { on the } { life and } { in the }
+
 She laid hands on the pears counted out { by her } { father } { and } { piled } { them in }
+
 Yet, for all his good impulses, he { did not } { bring } { himself to } { make profession }
+
 Only, if you want to avoid storms { at home } { for the future } { do not }
+
 To do really good work, my boy, means that { you will } { draw } { out the } { energy }
+
 Even the man's start and suspicious stare { as the } { priest } { of the } { and } { of the }
+
 Turnbull was of that more masculine type in which { a sense of } { responsibility } { increases } { the }
+
 The wheel grew larger and larger { till } { the } { the } { heaven } { like the } { wheel }
+
 While the author and the victims alike treated { the whole } { matter } { as a } { silly } { public }
+
 The difficulty is therefore that the actual raising of { the } { standard } { of } { athletics } { has } { probably }
+
+It should be stressed that these continuation results are not on novel sentences, they are on sentences the system has already read, i.e., they demonstrate language recall not language generation. As the theory states, to get proper generation results, the system should be trained on multi-gigaword data sets.
 
 Sample Results
 --------------
