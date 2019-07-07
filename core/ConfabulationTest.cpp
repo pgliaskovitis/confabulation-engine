@@ -534,16 +534,16 @@ int main()
 
 	// test1->TestTokenizePersistedKnowledge();
 
-	std::string copy_feed1 = "Tormented by reflection, or for whom strife has become a "; // plaything
-	std::string copy_feed2 = "I will accept the post three times and refuse it "; // afterwards
-	std::string copy_feed3 = "Then he turned his own rather fatuous face to the "; // company
-	std::string copy_feed4 = "Only a man who knows nothing of motors talks of motoring without "; // petrol
-	std::string copy_feed5 = "At night the wicket gate is replaced by a solid "; // door
-	std::string copy_feed6 = "He knew that he was doing wrong, and did it "; // deliberately
-	std::string copy_feed7 = "A second moan brought her to the landing near his "; // room
-	std::string copy_feed8 = "He noticed a group of busts mounted on wooden pedestals, painted to resemble "; // marble
-	std::string copy_feed9 = "Across these was still moving the square black mob like one monstrous "; // beetle
-	std::string copy_feed10 = "He was very pale, and he wore blue "; // spectacles
+	std::string copy_feed1 = "Dissolve pearls and wreck thrones, turn old men into "; // boys, and make young men prematurely old
+	std::string copy_feed2 = "All this he knew, not because he was a philosopher"; // or a genius, but because he was a child
+	std::string copy_feed3 = "It was rather that creative curiosity which "; // comes when a man has the beginnings of an idea
+	std::string copy_feed4 = "A man who knows nothing of reason talks of reasoning "; // without strong, undisputed first principles
+	std::string copy_feed5 = "He meant, like all great souls, that his success "; // should be owing entirely to his merits
+	std::string copy_feed6 = "A miracle could extricate him now out of the gulf "; // into which he had walked an hour ago
+	std::string copy_feed7 = "Bathed in a celestial light shed from their own "; // souls, which reflects its rays upon their lover
+	std::string copy_feed8 = "A man should study a woman very carefully before "; // he allows her to see his thoughts and emotions as they arise in him
+	std::string copy_feed9 = "For, after all, the riddle as to where the anarchists "; // had got all these followers was still unsolved
+	std::string copy_feed10 = "His cheeks and chin were fully fringed with one of those "; // irritating beards that begin far from the mouth
 
 	std::string copy_feed11 = "And this dainty change of toilette "; // had been made for me
 	std::string copy_feed12 = "She laid hands on the pears counted out "; // by her father, and piled them in a pyramid

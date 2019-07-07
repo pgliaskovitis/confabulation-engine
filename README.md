@@ -97,15 +97,40 @@ The currently preferred way to build is through cmake:
 
 Please ensure that the produced executable is run from the same directory that contains the text_data directory. The engine needs to read the texts contained there when it fires up (currently, literary books by authors of special appeal to me).
 
+- cp confabulation_engine ../
+
+- cd ..
+
+- ./confabulation_engine
+
 The filenames of the texts that are read can be found in the master file:
 
 text_data/sample_master_reduced.txt
 
 Adding more books/documents to the corpus can greatly increase the engine's capabilities. The text of a new document should be added under text_data/ and its filename appended to the above master file.
 
-The main() function lies in ConfabulationTest.cpp. Test sentence beginnings can also be found and altered there.
+The main() function lies in ConfabulationTest.cpp. Test sentence beginnings can also be found and altered there. The output with default settings in Globals.cpp for the already included sentence beginnings should be as follows:
 
-A high level schematic of the particular confabulation architectures implemented in this project can be found in Confabulation_Rationale.pdf
+Dissolve pearls and wreck thrones, turn old men into { boys } { and make } { young } { and } { and }
+All this he knew, not because he was a philosopher{ or a } { of the } { which }
+It was rather that creative curiosity which { comes } { when a } { man has } { the beginnings }
+A man who knows nothing of reason talks of reasoning { without } { strong } { undisputed } { first } { the }
+He meant, like all great souls, that his success { should be } { owing } { entirely } { as } { his }
+A miracle could extricate him now out of the gulf { into which } { he had } { of the }
+Bathed in a celestial light shed from their own { souls } { which } { reflects } { to } { the } { the }
+A man should study a woman very carefully before { in the } { will } { to see his }
+For, after all, the riddle as to where the anarchists { had got } { all these } { followers }
+His cheeks and chin were fully fringed with one of those { irritating } { beards } { that } { begin }
+And this dainty change of toilette { had been } { on the } { life and } { in the }
+She laid hands on the pears counted out { by her } { father } { and } { piled } { them in }
+Yet, for all his good impulses, he { did not } { bring } { himself to } { make profession }
+Only, if you want to avoid storms { at home } { for the future } { do not }
+To do really good work, my boy, means that { you will } { draw } { out the } { energy }
+Even the man's start and suspicious stare { as the } { priest } { of the } { and } { of the }
+Turnbull was of that more masculine type in which { a sense of } { responsibility } { increases } { the }
+The wheel grew larger and larger { till } { the } { the } { heaven } { like the } { wheel }
+While the author and the victims alike treated { the whole } { matter } { as a } { silly } { public }
+The difficulty is therefore that the actual raising of { the } { standard } { of } { athletics } { has } { probably }
 
 Sample Results
 --------------
