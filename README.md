@@ -111,6 +111,7 @@ Adding more books/documents to the corpus can greatly increase the engine's capa
 
 The main() function lies in ConfabulationTest.cpp. Test sentence beginnings can also be found and altered there. The output with default settings in Globals.cpp for the already included sentence beginnings should be as follows:
 
+```
 Dissolve pearls and wreck thrones, turn old men into { boys } { and make } { young } { and } { and }
 
 All this he knew, not because he was a philosopher{ or a } { of the } { which }
@@ -150,6 +151,7 @@ The wheel grew larger and larger { till } { the } { the } { heaven } { like the 
 While the author and the victims alike treated { the whole } { matter } { as a } { silly } { public }
 
 The difficulty is therefore that the actual raising of { the } { standard } { of } { athletics } { has } { probably }
+```
 
 It should be stressed that these continuation results are not on novel sentences, they are on sentences the system has already read, i.e., they demonstrate language recall not language generation. As the theory states, to get proper generation results, the system should be trained on multi-gigaword data sets.
 
@@ -158,6 +160,7 @@ Sample Results
 
 These are cherry-picked after training with default settings and 300 MB of text data:
 
+```
 His quest was one of *{ the battles of the heart }*
 
 He suddenly collapsed and started crying like a *{ child left alone }*
@@ -167,3 +170,4 @@ A dark winter was eating through the *{ plains of the north }*
 Hosts of archers stood ready along the *{ bridge road }*
 
 Enlightenment goes well with a *{ bucket of cold water }*
+```
