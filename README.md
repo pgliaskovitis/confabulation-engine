@@ -158,16 +158,16 @@ It should be stressed that these continuation results are not on novel sentences
 Sample Results
 --------------
 
-These are cherry-picked after training with default settings and 300 MB of text data:
+These are language generation results cherry-picked after training with default settings and 300 MB of text data:
 
 ```
-His quest was one of *{ the battles of the heart }*
+His quest was one of { the battles of the heart }
 
-He suddenly collapsed and started crying like a *{ child left alone }*
+He suddenly collapsed and started crying like a { child left alone }
 
-A dark winter was eating through the *{ plains of the north }*
+A dark winter was eating through the { plains of the north }
 
-Hosts of archers stood ready along the *{ bridge road }*
+Hosts of archers stood ready along the { bridge road }
 
-Enlightenment goes well with a *{ bucket of cold water }*
+Enlightenment goes well with a { bucket of cold water }
 ```
