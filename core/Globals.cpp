@@ -22,7 +22,7 @@
 #include "text_processing/NGramHandler.h"
 
 // Sentence delimiters are considered to enclose some full meaning
-// Token delimiters are noise in the raw documents
+// Token delimiters are stripped out from the raw documents
 
 const std::string Globals::kSentenceDelimiters = "\".!?;:";
 const std::string Globals::kTokenDelimiters = " `\",.!?;:@#$%^&*()-/\\_=+~[]{}<>0123456789";
@@ -36,7 +36,6 @@ const double Globals::kBandGap = 50.0f;
 const double Globals::kSynapseAmplifier = 1.0f;
 const uint8_t Globals::kMaxMultiWordSize = 4;
 const uint8_t Globals::kReferenceFrameSize = 15 - 1;
-const uint8_t Globals::kMaxCompletionSize = 7;
 const size_t Globals::kMaxSingleWordSymbols = 65536 - 1;
 const size_t Globals::kMaxMultiWordSymbols = 65536 - 1;
 const bool Globals::kDelimitersAsSymbols = false;

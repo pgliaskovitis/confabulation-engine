@@ -545,14 +545,14 @@ int main()
 	std::string copy_feed9 = "For, after all, the riddle as to where the anarchists "; // had got all these followers was still unsolved
 	std::string copy_feed10 = "His cheeks and chin were fully fringed with one of those "; // irritating beards that begin far from the mouth
 
-	std::string copy_feed11 = "And this dainty change of toilette "; // had been made for me
+	std::string copy_feed11 = "She left me alone for a little, and came back, "; // charming, with her hair newly arranged
 	std::string copy_feed12 = "She laid hands on the pears counted out "; // by her father, and piled them in a pyramid
-	std::string copy_feed13 = "Yet, for all his good impulses, he "; // could not bring himself to make profession of the
+	std::string copy_feed13 = "Yet, for all his good impulses, he "; // could not bring himself to make profession of the religion
 	std::string copy_feed14 = "Only, if you want to avoid storms "; // at home for the future, do not leave me for three weeks
 	std::string copy_feed15 = "To do really good work, my boy, means that "; // that you will draw out the energy
-	std::string copy_feed16 = "Even the man's start and suspicious stare "; // as the priest went by were consonant enough
+	std::string copy_feed16 = "In that there would have been a romantic or monkish "; // abandon quite alien to her masterful utilitarianism
 	std::string copy_feed17 = "Turnbull was of that more masculine type in which "; // a sense of responsibility increases the appetite
-	std::string copy_feed18 = "The wheel grew larger and larger "; // till it filled heaven like the wheel of stars
+	std::string copy_feed18 = "In the midst of it was an enormous elephant, "; // heaving and shuddering as such shapeless creatures do
 	std::string copy_feed19 = "While the author and the victims alike treated "; // the whole matter as a silly public charade
 	std::string copy_feed20 = "The difficulty is therefore that the actual raising of "; // the standard of athletics has probably been
 

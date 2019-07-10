@@ -38,7 +38,6 @@ public:
 	static const double kSynapseAmplifier;
 	static const uint8_t kMaxMultiWordSize;
 	static const uint8_t kReferenceFrameSize;
-	static const uint8_t kMaxCompletionSize;
 	static const size_t kMaxSingleWordSymbols;
 	static const size_t kMaxMultiWordSymbols;
 	static const bool kDelimitersAsSymbols;

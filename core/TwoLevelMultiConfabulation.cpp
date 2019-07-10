@@ -74,9 +74,12 @@ TwoLevelMultiConfabulation::TwoLevelMultiConfabulation(size_t num_word_modules,
 		}
 	}
 
-	// phrase-to-word knowledge bases (affects swirl)
+	// phrase-to-word knowledge bases (affects initialization and swirl)
 	for (size_t i = num_word_modules; i < 2 * num_word_modules; ++i) {
 		kb_specs[i][i - num_word_modules] = true;
+		for (size_t j = i - num_word_modules + 2 ; j < num_word_modules; ++j) {
+			kb_specs[i][j] = true;
+		}
 	}
 
 	std::vector<uint8_t> level_sizes;
@@ -210,11 +213,10 @@ std::vector<std::string> TwoLevelMultiConfabulation::Confabulation(const std::ve
 	} else {
 		index = index_to_complete;
 	}
-	int8_t end_completion = index + Globals::kMaxCompletionSize;
 
 	std::vector<std::string> temp_input(symbols.begin(), symbols.end());
 
-	for (; index < end_completion && (uint8_t)index < num_word_modules_;) {
+	for (; (uint8_t)index < num_word_modules_;) {
 		start_position_ = GetStartPosition(temp_input, index);
 
 		Clean();
