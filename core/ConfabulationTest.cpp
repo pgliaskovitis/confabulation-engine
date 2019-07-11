@@ -547,7 +547,7 @@ int main()
 
 	std::string copy_feed11 = "She left me alone for a little, and came back, "; // charming, with her hair newly arranged
 	std::string copy_feed12 = "She laid hands on the pears counted out "; // by her father, and piled them in a pyramid
-	std::string copy_feed13 = "Yet, for all his good impulses, he "; // could not bring himself to make profession of the religion
+	std::string copy_feed13 = "Yet, for all his good impulses, he could not "; // bring himself to make profession of the religion
 	std::string copy_feed14 = "Only, if you want to avoid storms "; // at home for the future, do not leave me for three weeks
 	std::string copy_feed15 = "To do really good work, my boy, means that "; // that you will draw out the energy
 	std::string copy_feed16 = "In that there would have been a romantic or monkish "; // abandon quite alien to her masterful utilitarianism

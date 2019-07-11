@@ -112,48 +112,49 @@ Adding more books/documents to the corpus can greatly increase the engine's capa
 The main() function lies in ConfabulationTest.cpp. Test sentence beginnings can also be found and altered there. The output with default settings in Globals.cpp for the already included sentence beginnings should be as follows:
 
 ```
-Dissolve pearls and wreck thrones, turn old men into { boys } { and make } { young } { and } { and }
+Dissolve pearls and wreck thrones, turn old men into { boys } { and make } { young } { for } { the }
 
-All this he knew, not because he was a philosopher{ or a } { of the } { which }
+All this he knew, not because he was a philosopher{ or a } { genius } { but because }
 
-It was rather that creative curiosity which { comes } { when a } { man has } { the beginnings }
+It was rather that creative curiosity which { comes } { when a } { man has } { the beginnings } { of }
 
-A man who knows nothing of reason talks of reasoning { without } { strong } { undisputed } { first } { the }
+A man who knows nothing of reason talks of reasoning { without } { strong } { undisputed } { first } { to }
 
 He meant, like all great souls, that his success { should be } { owing } { entirely } { to } { his }
 
-A miracle could extricate him now out of the gulf { into which } { he had } { of the }
+A miracle could extricate him now out of the gulf { into which } { the } { had } { the }
 
 Bathed in a celestial light shed from their own { souls } { which } { reflects } { to } { the } { the }
 
-A man should study a woman very carefully before { in the } { will } { to see his }
+A man should study a woman very carefully before { him } { and } { if } { his } { man } { to }
 
 For, after all, the riddle as to where the anarchists { had got } { all these } { followers }
 
 His cheeks and chin were fully fringed with one of those { irritating } { beards } { that } { begin }
 
-And this dainty change of toilette { had been } { on the } { life and } { in the }
+She left me alone for a little, and came back, { charming } { with her } { hair } { newly }
 
 She laid hands on the pears counted out { by her } { father } { and } { piled } { them in }
 
-Yet, for all his good impulses, he { did not } { bring } { himself to } { make profession }
+Yet, for all his good impulses, he could not { bring } { himself to } { make profession } { of }
 
-Only, if you want to avoid storms { at home } { for the future } { do not }
+Only, if you want to avoid storms { at home } { for the future } { do not } { leave }
 
 To do really good work, my boy, means that { you will } { draw } { out the } { energy }
 
-Even the man's start and suspicious stare { as the } { priest } { of the } { and } { of the }
+In that there would have been a romantic or monkish { abandon } { quite } { alien } { to her }
 
 Turnbull was of that more masculine type in which { a sense of } { responsibility } { increases } { the }
 
-The wheel grew larger and larger { till } { the } { the } { heaven } { like the } { wheel }
+In the midst of it was an enormous elephant, { heaving } { the } { shuddering } { as such } { shapeless }
 
 While the author and the victims alike treated { the whole } { matter } { as a } { silly } { public }
 
 The difficulty is therefore that the actual raising of { the } { standard } { of } { athletics } { has } { probably }
+
 ```
 
-It should be stressed that these continuation results are not on novel sentences, they are on sentences the system has already read, i.e., they demonstrate language recall not language generation. As the theory states, to get proper generation results, the system should be trained on multi-gigaword data sets.
+It should be stressed that these continuation results are not on novel sentences, they are on sentences the system has already read, i.e., they demonstrate language recall not language generation. As the theory states, to get proper original generation results, the system should be trained on multi-gigaword data sets.
 
 Sample Results
 --------------
