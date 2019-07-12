@@ -87,6 +87,8 @@ The currently preferred way to build is through cmake:
 
 - sudo apt install cmake
 
+- cd <confabulation_repository_directory_name> 
+
 - mkdir build
 
 - cd build
@@ -95,9 +97,7 @@ The currently preferred way to build is through cmake:
 
 - cmake --build . --config Release
 
-Please ensure that the produced executable is run from the same directory that contains the text_data directory. The engine needs to read the texts contained there when it fires up (currently, literary books by authors of special appeal to me).
-
-- cp confabulation_engine ../
+- cp ./confabulation_engine ../
 
 - cd ..
 
@@ -109,7 +109,9 @@ text_data/sample_master_reduced.txt
 
 Adding more books/documents to the corpus can greatly increase the engine's capabilities. The text of a new document should be added under text_data/ and its filename appended to the above master file.
 
-The main() function lies in ConfabulationTest.cpp. Test sentence beginnings can also be found and altered there. The output with default settings in Globals.cpp for the already included sentence beginnings should be as follows:
+The main() function lies in ConfabulationTest.cpp. Test sentence beginnings can also be found and altered there. 
+
+Expected output with default settings in Globals.cpp for the already included sentence beginnings should be as follows:
 
 ```
 Dissolve pearls and wreck thrones, turn old men into { boys } { and make } { young } { for } { the }
