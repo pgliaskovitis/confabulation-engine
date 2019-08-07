@@ -133,8 +133,9 @@ void ConfabulationBase::Build()
 				word_to_word_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint16_t, uint16_t>>(id,
 															  word_modules_[i]->GetSymbolMapping(),
 															  word_modules_[j]->GetSymbolMapping());
-			} else
+			} else {
 				word_to_word_knowledge_bases_[i][j].reset(nullptr);
+			}
 		}
 	}
 
@@ -152,8 +153,9 @@ void ConfabulationBase::Build()
 				phrase_to_phrase_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint32_t, uint32_t>>(id,
 															      phrase_modules_[i]->GetSymbolMapping(),
 															      phrase_modules_[j]->GetSymbolMapping());
-			} else
+			} else {
 				phrase_to_phrase_knowledge_bases_[i][j].reset(nullptr);
+			}
 		}
 	}
 
@@ -170,8 +172,9 @@ void ConfabulationBase::Build()
 				word_to_phrase_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint32_t, uint16_t>>(id,
 															    word_modules_[i]->GetSymbolMapping(),
 															    phrase_modules_[j]->GetSymbolMapping());
-			} else
+			} else {
 				word_to_phrase_knowledge_bases_[i][j].reset(nullptr);
+			}
 		}
 	}
 
@@ -188,8 +191,9 @@ void ConfabulationBase::Build()
 				phrase_to_word_knowledge_bases_[i][j] = std::make_unique<KnowledgeBase<uint16_t, uint32_t>>(id,
 															    phrase_modules_[i]->GetSymbolMapping(),
 															    word_modules_[j]->GetSymbolMapping());
-			} else
+			} else {
 				phrase_to_word_knowledge_bases_[i][j].reset(nullptr);
+			}
 		}
 	}
 
