@@ -27,7 +27,7 @@ SymbolMapping::SymbolMapping() :
 
 void SymbolMapping::AddSymbol(const std::string &symbol)
 {
-	ska::bytell_hash_map<std::string, std::unique_ptr<std::string>>::const_iterator existence_it = all_symbols_->find(symbol);
+	auto existence_it = all_symbols_->find(symbol);
 	if (existence_it == all_symbols_->end()) {
 		uint32_t index = all_symbols_->size();
 		auto symbol_ptr = std::make_unique<std::string>(symbol);
@@ -40,7 +40,7 @@ void SymbolMapping::AddSymbol(const std::string &symbol)
 
 bool SymbolMapping::Contains(const std::string &symbol) const
 {
-	ska::bytell_hash_map<std::string, std::unique_ptr<std::string>>::const_iterator it = all_symbols_->find(symbol);
+	auto it = all_symbols_->find(symbol);
 	return (it != all_symbols_->end());
 }
 
@@ -60,7 +60,7 @@ std::set<std::string> SymbolMapping::GetAllSymbols() const
 {
 	std::set<std::string> result;
 
-	ska::bytell_hash_map<std::string, std::unique_ptr<std::string>>::const_iterator it = all_symbols_->begin();
+	auto it = all_symbols_->begin();
 	for(; it != all_symbols_->end(); ++it) {
 		result.insert(it->first);
 	}
@@ -70,7 +70,7 @@ std::set<std::string> SymbolMapping::GetAllSymbols() const
 
 std::string SymbolMapping::ToString() const
 {
-	ska::bytell_hash_map<std::string*, uint32_t>::const_iterator it = symbol_to_index_->begin();
+	auto it = symbol_to_index_->begin();
 	std::string result;
 	for(; it != symbol_to_index_->end(); ++it) {
 		result += *(it->first) + " ";

@@ -82,7 +82,7 @@ void DOKExcitationVector<TRow, T>::SetElement(const TRow r, const T& value)
 {
 	IExcitationVector<TRow, T>::CheckBounds(r);
 	if (IsNearlyEqual(value, 0.0)) {
-		typename std::unordered_map<TRow, T>::iterator it = map_.find(r);
+		auto it = map_.find(r);
 		if (it != map_.end()) {
 			map_.erase(it);
 		}
@@ -131,12 +131,12 @@ void DOKExcitationVector<TRow, T>::Normalize()
 {
 	double sum = 0.0;
 
-	for (typename std::unordered_map<TRow, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+	for (auto it = map_.begin(); it != map_.end(); ++it) {
 		sum += it->second;
 	}
 
 	if (sum > 0.0) {
-		for (typename std::unordered_map<TRow, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
+		for (auto it = map_.begin(); it != map_.end(); ++it) {
 			it->second /= sum;
 		}
 	}
@@ -151,7 +151,7 @@ void DOKExcitationVector<TRow, T>::Whiten()
 	double variance = 0.0;
 	double std = 0.0;
 
-	for (typename std::unordered_map<TRow, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+	for (auto it = map_.begin(); it != map_.end(); ++it) {
 		sum += it->second;
 		squared_sum += it->second * it->second;
 	}
@@ -160,7 +160,7 @@ void DOKExcitationVector<TRow, T>::Whiten()
 	variance = squared_sum / map_.size() - mean * mean;
 	std = sqrt(variance) + 0.000001;
 
-	for (typename std::unordered_map<TRow, T>::iterator it = map_.begin(); it != map_.end(); ++it) {
+	for (auto it = map_.begin(); it != map_.end(); ++it) {
 		it->second = (it->second - mean) / std;
 	}
 }
@@ -170,7 +170,7 @@ std::set<std::pair<TRow, T>> DOKExcitationVector<TRow, T>::GetNzElements() const
 {
 	typename std::set<std::pair<TRow, T>> result;
 
-	for (typename std::unordered_map<TRow, T>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+	for (auto it = map_.begin(); it != map_.end(); ++it) {
 		result.insert(*it);
 	}
 

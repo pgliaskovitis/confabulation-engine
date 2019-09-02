@@ -37,11 +37,12 @@ namespace
 		return std::abs(x - y) <= epsilon * std::max(std::abs(x), std::abs(y));
 	}
 
-	uint32_t BinarySearch(const std::vector<uint32_t>::const_iterator& begin_it, const std::vector<uint32_t>::const_iterator& end_it,
-						uint32_t key, bool& found)
+	uint32_t BinarySearch(const std::vector<uint32_t>::const_iterator& begin_it,
+		const std::vector<uint32_t>::const_iterator& end_it,
+		uint32_t key, bool& found)
 	{
-		std::vector<uint32_t>::const_iterator lower = begin_it;
-		std::vector<uint32_t>::const_iterator upper = end_it - 1;
+		auto lower = begin_it;
+		auto upper = end_it - 1;
 		while (lower < upper) {
 			std::vector<uint32_t>::const_iterator mid = lower + (upper - lower) / 2;
 

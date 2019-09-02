@@ -114,8 +114,8 @@ T CSRLinksMatrix<TRow, TCol, T>::GetElement(TRow r, TCol c) const
 template <typename TRow, typename TCol, typename T>
 T CSRLinksMatrix<TRow, TCol, T>::GetElementQuick(TRow r, TCol c) const
 {
-	std::vector<uint32_t>::const_iterator begin_it = ja_.begin() + ia_[r];
-	std::vector<uint32_t>::const_iterator end_it = ja_.begin() + ia_[r + 1];
+	auto begin_it = ja_.begin() + ia_[r];
+	auto end_it = ja_.begin() + ia_[r + 1];
 
 	bool found_element = false;
 	const uint32_t index = BinarySearch(begin_it, end_it, c, found_element);

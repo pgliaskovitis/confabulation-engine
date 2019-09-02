@@ -39,7 +39,7 @@ bool SentenceTokenizer::IsSymbolAlphanumeric(const std::string& input)
 	  return false;
 	}
 
-	for (std::string::const_iterator it = input.begin(); it != input.end(); ++it) {
+	for (auto it = input.begin(); it != input.end(); ++it) {
 		if (!std::isalpha(*it, std::locale::global(std::locale("")))) {
 			return false;
 		}
@@ -72,7 +72,7 @@ bool SentenceTokenizer::Tokenize(const std::string& delimiters)
 	 *
 	size_t n = 0;
 	std::cout << "Delimiter list for tokenizer: " << "\n";
-	for (vector<std::string>::const_iterator it = delimiterSymbols.begin(); it != delimiterSymbols.end(); ++it) {
+	for (auto it = delimiterSymbols.begin(); it != delimiterSymbols.end(); ++it) {
 		std::cout << (*it) << " or " << delimiterSymbols.at(n++) << "\n";
 	}
 		   *

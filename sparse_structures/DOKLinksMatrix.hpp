@@ -102,7 +102,7 @@ void DOKLinksMatrix<TRow, TCol, T>::SetElement(TRow r, TCol c, const T &value)
 {
 	IKnowledgeLinks<TRow, TCol, T>::CheckBounds(r, c);
 	if (IsNearlyEqual(value, 0.0)) {
-		typename std::unordered_map<std::pair<TRow, TCol>, T, PairHash, PairEquals>::iterator it = map_.find(std::make_pair(r, c));
+		auto it = map_.find(std::make_pair(r, c));
 		if (it != map_.end()) {
 			map_.erase(it);
 		}
@@ -143,7 +143,7 @@ std::set<std::pair<std::pair<TRow, TCol>, T>> DOKLinksMatrix<TRow, TCol, T>::Get
 {
 	typename std::set<std::pair<std::pair<TRow, TCol>, T>> result;
 
-	for (typename std::unordered_map<std::pair<TRow, TCol>, T, PairHash, PairEquals>::const_iterator it = map_.begin(); it != map_.end(); ++it) {
+	for (auto it = map_.begin(); it != map_.end(); ++it) {
 		result.insert(*it);
 	}
 
