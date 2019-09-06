@@ -535,7 +535,7 @@ int main()
 	// test1->TestTokenizePersistedKnowledge();
 
 	std::string copy_feed1 = "Dissolve pearls and wreck thrones, turn old men into "; // boys, and make young men prematurely old
-	std::string copy_feed2 = "All this he knew, not because he was a philosopher"; // or a genius, but because he was a child
+	std::string copy_feed2 = "All this he knew, not because he was a philosopher "; // or a genius, but because he was a child
 	std::string copy_feed3 = "It was rather that creative curiosity which "; // comes when a man has the beginnings of an idea
 	std::string copy_feed4 = "A man who knows nothing of reason talks of reasoning "; // without strong, undisputed first principles
 	std::string copy_feed5 = "He meant, like all great souls, that his success "; // should be owing entirely to his merits

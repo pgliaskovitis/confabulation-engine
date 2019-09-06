@@ -116,7 +116,7 @@ Expected output with default settings in Globals.cpp for the already included se
 ```
 Dissolve pearls and wreck thrones, turn old men into { boys } { and make } { young } { for } { the }
 
-All this he knew, not because he was a philosopher{ or a } { genius } { but because }
+All this he knew, not because he was a philosopher { or a } { genius } { but because }
 
 It was rather that creative curiosity which { comes } { when a } { man has } { the beginnings } { of }
 
